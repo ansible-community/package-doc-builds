@@ -510,7 +510,8 @@ requires Python 2, you can also report a bug on our <a class="reference external
 <p>Also, this works for ANY interpreter, for example ruby: <code class="docutils literal notranslate"><span class="pre">ansible_ruby_interpreter</span></code>, perl: <code class="docutils literal notranslate"><span class="pre">ansible_perl_interpreter</span></code>, and so on,
 so you can use this for custom modules written in any scripting language and control the interpreter location.</p>
 <p>Keep in mind that if you put <code class="docutils literal notranslate"><span class="pre">env</span></code> in your module shebang line (<code class="docutils literal notranslate"><span class="pre">#!/usr/bin/env</span> <span class="pre">&lt;other&gt;</span></code>),
-this facility will be ignored so you will be at the mercy of the remote <cite>$PATH</cite>.</p>
+this won’t work and will be evaluated as one string (including the space between <code class="docutils literal notranslate"><span class="pre">env</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;other&gt;</span></code> space).
+Arguments are neither intended nor supported.</p>
 </section>
 <section id="how-do-i-handle-the-package-dependencies-required-by-ansible-package-dependencies-during-ansible-installation">
 <span id="installation-faqs"></span><h2>How do I handle the package dependencies required by Ansible package dependencies during Ansible installation ?<a class="headerlink" href="#how-do-i-handle-the-package-dependencies-required-by-ansible-package-dependencies-during-ansible-installation" title="Link to this heading"></a></h2>
@@ -967,12 +968,14 @@ The validation
 fails if the remote file name requires quotes to escape spaces or non-ascii characters in its path. To avoid this error:</p>
 <ul class="simple">
 <li><dl class="simple">
-<dt>Use SFTP instead of SCP by setting <code class="docutils literal notranslate"><span class="pre">scp_if_ssh</span></code> to <code class="docutils literal notranslate"><span class="pre">smart</span></code> (which tries SFTP first) or to <code class="docutils literal notranslate"><span class="pre">False</span></code>. You can do this in one of four ways:</dt><dd><ul>
-<li><p>Rely on the default setting, which is <code class="docutils literal notranslate"><span class="pre">smart</span></code> - this works if <code class="docutils literal notranslate"><span class="pre">scp_if_ssh</span></code> is not explicitly set anywhere</p></li>
-<li><p>Set a <a class="reference internal" href="../inventory_guide/intro_inventory.html#host-variables"><span class="std std-ref">host variable</span></a> or <a class="reference internal" href="../inventory_guide/intro_inventory.html#group-variables"><span class="std std-ref">group variable</span></a> in inventory: <code class="docutils literal notranslate"><span class="pre">ansible_scp_if_ssh:</span> <span class="pre">False</span></code></p></li>
-<li><p>Set an environment variable on your control node: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">ANSIBLE_SCP_IF_SSH=False</span></code></p></li>
-<li><p>Pass an environment variable when you run Ansible: <code class="docutils literal notranslate"><span class="pre">ANSIBLE_SCP_IF_SSH=smart</span> <span class="pre">ansible-playbook</span></code></p></li>
-<li><p>Modify your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file: add <code class="docutils literal notranslate"><span class="pre">scp_if_ssh=False</span></code> to the <code class="docutils literal notranslate"><span class="pre">[ssh_connection]</span></code> section</p></li>
+<dt>Ensure you are using SFTP, which is the optimal transfer method for security, speed and reliability. Check that you are doing one of the following:</dt><dd><ul>
+<li><p>Rely on the default setting, which is <code class="docutils literal notranslate"><span class="pre">smart</span></code> — this works if <code class="docutils literal notranslate"><span class="pre">ssh_transfer_method</span></code> is not explicitly set anywhere</p></li>
+<li><p>Set a <a class="reference internal" href="../inventory_guide/intro_inventory.html#host-variables"><span class="std std-ref">host variable</span></a> or <a class="reference internal" href="../inventory_guide/intro_inventory.html#group-variables"><span class="std std-ref">group variable</span></a> in inventory: <code class="docutils literal notranslate"><span class="pre">ansible_ssh_transfer_method:</span> <span class="pre">smart</span></code></p></li>
+<li><p>Set an environment variable on your control node: <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">ANSIBLE_SSH_TRANSFER_METHOD=smart</span></code></p></li>
+<li><p>Pass an environment variable when you run Ansible: <code class="docutils literal notranslate"><span class="pre">ANSIBLE_SSH_TRANSFER_METHOD=smart</span> <span class="pre">ansible-playbook</span></code></p></li>
+<li><p>Modify your <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file: add <code class="docutils literal notranslate"><span class="pre">ssh_transfer_method=smart</span></code> to the <code class="docutils literal notranslate"><span class="pre">[ssh_connection]</span></code> section.
+The <code class="docutils literal notranslate"><span class="pre">smart</span></code> setting attempts to use <code class="docutils literal notranslate"><span class="pre">sftp</span></code> for the transfer, then falls back to <code class="docutils literal notranslate"><span class="pre">scp</span></code> and then <code class="docutils literal notranslate"><span class="pre">dd</span></code>.
+If you want the transfer to fail if SFTP is not available, add <code class="docutils literal notranslate"><span class="pre">ssh_transfer_method=sftp</span></code> to the <code class="docutils literal notranslate"><span class="pre">[ssh_connection]</span></code> section.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1112,7 +1115,7 @@ So this:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 18, 2024.
+      <span class="lastupdated">Last updated on Sep 10, 2024.
       </span></p>
   </div>
 
