@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.11.0" name="antsibull-docs" />
+<meta content="2.14.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dellemc.openmanage.idrac_redfish_storage_controller module – Configures the physical disk, virtual disk, and storage controller settings &mdash; Ansible Community Documentation</title>
@@ -398,7 +398,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <h1>dellemc.openmanage.idrac_redfish_storage_controller module – Configures the physical disk, virtual disk, and storage controller settings<a class="headerlink" href="#dellemc-openmanage-idrac-redfish-storage-controller-module-configures-the-physical-disk-virtual-disk-and-storage-controller-settings" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/dellemc/openmanage/">dellemc.openmanage collection</a> (version 9.4.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/dellemc/openmanage/">dellemc.openmanage collection</a> (version 9.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -506,6 +506,7 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 <p><code class="docutils literal notranslate"><span class="pre">ChangePDStateToOffline</span></code> - To set the disk status to offline. <em>target</em> is required for this operation.</p>
 <p><code class="docutils literal notranslate"><span class="pre">LockVirtualDisk</span></code> - To encrypt the virtual disk. <em>volume_id</em> is required for this operation.</p>
 <p><code class="docutils literal notranslate"><span class="pre">OnlineCapacityExpansion</span></code> - To expand the size of virtual disk. <em>volume_id</em>, and <em>target</em> or <em>size</em> is required for this operation.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SecureErase</span></code> - To delete all the data on the physical disk securely. This option is available for Self-Encrypting Drives (SED), Instant Scramble Erase (ISE) drives, and PCIe SSD devices (drives and cards). The drives must be in a ready state. <em>controller_id</em> and <em>target</em> are required for this operation, <em>target</em> must be a single physical disk ID. If a secure erase needs a reboot, the job will get scheduled and waits for no of seconds specfied in <em>job_wait_time</em>, to reduce the wait time either give <em>job_wait_time</em> minimum or make <em>job_wait</em> as false.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ResetConfig&quot;</span></code></p></li>
@@ -523,6 +524,7 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ChangePDStateToOffline&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;LockVirtualDisk&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;OnlineCapacityExpansion&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;SecureErase&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -540,7 +542,7 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 <a class="ansibleOptionLink" href="#parameter-job_wait" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Provides the option if the module has to wait for the job to be completed.</p>
-<p>This is applicable for <em>attributes</em> when <em>apply_time</em> is <code class="docutils literal notranslate"><span class="pre">Immediate</span></code>.</p>
+<p>This is applicable for <em>attributes</em> when <em>apply_time</em> is <code class="docutils literal notranslate"><span class="pre">Immediate</span></code> and when <em>command</em> is <code class="docutils literal notranslate"><span class="pre">SecureErase</span></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -554,6 +556,7 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 </div></td>
 <td><div class="ansible-option-cell"><p>The maximum wait time of job completion in seconds before the job tracking is stopped.</p>
 <p>This option is applicable when <em>job_wait</em> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p>Note: When <em>command</em> is <code class="docutils literal notranslate"><span class="pre">SecureErase</span></code>, If a secure erase needs a reboot, the job will get scheduled and waits for no of seconds specfied in <em>job_wait_time</em>, to reduce the wait time either give <em>job_wait_time</em> a lesser value or make <em>job_wait</em> as false.</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">120</span></code></p>
 </div></td>
 </tr>
@@ -719,6 +722,7 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 <ul class="simple">
 <li><p>Run this module from a system that has direct access to Dell iDRAC.</p></li>
 <li><p>This module is supported on iDRAC9.</p></li>
+<li><p>This module supports IPv4 and IPv6 addresses.</p></li>
 <li><p>This module always reports as changes found when <em>command</em> is <code class="docutils literal notranslate"><span class="pre">ReKey</span></code>, <code class="docutils literal notranslate"><span class="pre">BlinkTarget</span></code>, and <code class="docutils literal notranslate"><span class="pre">UnBlinkTarget</span></code>.</p></li>
 <li><p>This module supports <code class="docutils literal notranslate"><span class="pre">check_mode</span></code>.</p></li>
 </ul>
@@ -987,6 +991,16 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 <span class="w">    </span><span class="nt">maintenance_window</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">start_time</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2022-09-30T05:15:40-05:00&quot;</span>
 <span class="w">      </span><span class="nt">duration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1200</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Perform Secure Erase operation on SED drive</span>
+<span class="w">  </span><span class="nt">dellemc.openmanage.idrac_redfish_storage_controller</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">baseuri</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1:443&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;user_name&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;user_password&quot;</span>
+<span class="w">    </span><span class="nt">ca_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/path/to/ca_cert.pem&quot;</span>
+<span class="w">    </span><span class="nt">controller_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RAID.Slot.1-1&quot;</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SecureErase&quot;</span>
+<span class="w">    </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Disk.Bay.1:Enclosure.Internal.0-1:RAID.Slot.1-1&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -1044,7 +1058,7 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 <li><p>Jagadeesh N V (&#64;jagadeeshnv)</p></li>
 <li><p>Felix Stephen (&#64;felixs88)</p></li>
 <li><p>Husniya Hameed (&#64;husniya_hameed)</p></li>
-<li><p>Abhishek Sinha (&#64;Abhishek-Dell)</p></li>
+<li><p>Abhishek Sinha (&#64;ABHISHEK-SINHA10)</p></li>
 </ul>
 </section>
 <section id="collection-links">
@@ -1072,7 +1086,7 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 12, 2024.
+      <span class="lastupdated">Last updated on Sep 12, 2024.
       </span></p>
   </div>
 
