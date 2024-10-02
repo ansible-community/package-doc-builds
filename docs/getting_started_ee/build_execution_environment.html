@@ -20,7 +20,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=c7b8e248"></script>
+        <script src="../_static/documentation_options.js?v=eb3ed21c"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -34,7 +34,7 @@
 
 
 <!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
-<meta class="swiftype" name="version" data-type="string" content="devel">
+<meta class="swiftype" name="version" data-type="string" content="10">
 
 <!-- Google Tag Manager Data Layer -->
 <script>
@@ -87,7 +87,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
             Ansible
           </a>
               <div class="version">
-                devel
+                10
               </div><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
 
 <div class="version">
@@ -96,8 +96,8 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
       <script>
         function switchVersionTo(slug) {
           var current_url_path = window.location.pathname;
-          var url_version = current_url_path.search("/devel/") > -1
-            ? "/devel/"
+          var url_version = current_url_path.search("/10/") > -1
+            ? "/10/"
             : "/latest/";
           var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
           window.location.replace(new_version_url);
@@ -133,7 +133,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
         
         <option
             value="devel"
-            selected="selected"
+            
         >
             devel
         </option>
@@ -348,7 +348,33 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 </pre></div>
 </div>
 </li>
-<li><p>Create a <code class="docutils literal notranslate"><span class="pre">execution-environment.yml</span></code> file that specifies dependencies to include in the image.</p></li>
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">execution-environment.yml</span></code> file that specifies dependencies to include in the image.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+
+<span class="nt">images</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_image</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">quay.io/fedora/fedora:latest</span>
+
+<span class="nt">dependencies</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ansible_core</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">package_pip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible-core</span>
+<span class="w">  </span><span class="nt">ansible_runner</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">package_pip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible-runner</span>
+<span class="w">  </span><span class="nt">system</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openssh-clients</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sshpass</span>
+<span class="w">  </span><span class="nt">galaxy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">collections</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.postgresql</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>psycopg2-binary</cite> Python package is included in the <cite>requirements.txt</cite> file for the collection.
+For collections that do not include <cite>requirements.txt</cite> files, you need to specify Python dependencies explicitly.
+See the <a class="reference external" href="https://ansible-builder.readthedocs.io/en/stable/definition/">Ansible Builder documentation</a> for details.</p>
+</div>
+</li>
 <li><p>Build a EE container image called <code class="docutils literal notranslate"><span class="pre">postgresql_ee</span></code>.</p>
 <p>If you use docker, add the <code class="docutils literal notranslate"><span class="pre">--container-runtime</span> <span class="pre">docker</span></code> argument.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-builder<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span>postgresql_ee
@@ -393,7 +419,7 @@ localhost/postgresql_ee<span class="w">          </span>latest<span class="w">  
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 20, 2024.
+      <span class="lastupdated">Last updated on Oct 02, 2024.
       </span></p>
   </div>
 
