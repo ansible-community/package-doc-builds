@@ -28,7 +28,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation Guide" href="../installation_guide/index.html" />
+    <link rel="next" title="Introduction to Execution Environments" href="introduction.html" />
     <link rel="prev" title="Ansible concepts" href="../getting_started/basic_concepts.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -156,7 +156,11 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started with Execution Environments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#ansible-ecosystem">Ansible ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction to Execution Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup_environment.html">Setting up your environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_execution_environment.html">Building your first Execution Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_execution_environment.html">Running your EE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_community_ee_image.html">Running Ansible with the community EE image</a></li>
 </ul>
 </li>
 </ul>
@@ -277,13 +281,12 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
     var banner = '';
       var extra_banner = '';
     /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-   /*  var extra_banner =
+    var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;">' +
-        'Discuss Ansible in the new <a href="https://forum.ansible.com/t/welcome-to-the-ansible-community/5">Ansible Forum!</a>' +
+        'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem by taking the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>.' +
         '</p>' +
       '</div>';
-      */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -335,29 +338,37 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
              
   <section id="getting-started-with-execution-environments">
 <span id="getting-started-ee-index"></span><h1>Getting started with Execution Environments<a class="headerlink" href="#getting-started-with-execution-environments" title="Link to this heading"></a></h1>
-<p>Execution Environments (EEs) are Ansible control nodes packaged as container images.
+<p>You can run Ansible automation in containers, like any other modern software application.
+Ansible uses container images known as Execution Environments (EE) that act as control nodes.
 EEs remove complexity to scale out automation projects and make things like deployment operations much more straightforward.</p>
-<p>EEs provide you with:</p>
+<p>An Execution Environment image contains the following packages as standard:</p>
 <ul class="simple">
-<li><p>Software dependency isolation</p></li>
-<li><p>Portability across teams and environments</p></li>
-<li><p>Separation from other automation content and tooling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ansible-runner</span></code></p></li>
+<li><p>Python</p></li>
+<li><p>Ansible content dependencies</p></li>
 </ul>
-<p>You can use Ansible community EEs to get up and running.
-Or you can easily build and deploy custom EEs with whatever packages and Ansible community collections you need for your project.</p>
-<p>Visit <a class="reference external" href="https://ansible.readthedocs.io/en/latest/getting_started_ee/index.html">Getting started with Execution Environments</a> in the Ansible ecosystem documentation.</p>
-<section id="ansible-ecosystem">
-<h2>Ansible ecosystem<a class="headerlink" href="#ansible-ecosystem" title="Link to this heading"></a></h2>
-<p>Using EEs with projects in the Ansible ecosystem lets you expand automation to lots of use cases:</p>
+<p>In addition to the standard packages, an EE can also contain:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://ansible.readthedocs.io/projects/builder/en/latest/">Ansible Builder</a></p></li>
-<li><p><a class="reference external" href="https://ansible.readthedocs.io/projects/navigator/">Ansible Navigator</a></p></li>
-<li><p><a class="reference external" href="https://ansible.readthedocs.io/projects/awx/en/latest/userguide/execution_environments.html#use-an-execution-environment-in-jobs">Ansible AWX</a></p></li>
-<li><p><a class="reference external" href="https://ansible.readthedocs.io/projects/runner/en/stable/">Ansible Runner</a></p></li>
-<li><p>VS Code <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=redhat.ansible">Ansible</a> and <a class="reference external" href="https://code.visualstudio.com/docs/devcontainers/containers">Dev Containers</a> extensions</p></li>
+<li><p>one or more Ansible collections and their dependencies</p></li>
+<li><p>other custom components</p></li>
 </ul>
-<p>Visit the <a class="reference external" href="https://ansible.readthedocs.io/en/latest/index.html">Ansible ecosystem documentation</a> to find How Tos and tutorials for using EEs with Ansible projects.</p>
-</section>
+<p>This getting started guide shows you how to build and test a simple Execution Environment.
+The resulting container image represents an Ansible control node that contains:</p>
+<ul class="simple">
+<li><p>standard EE packages</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">community.postgresql</span></code> collection</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">psycopg2-binary</span></code> Python package</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to Execution Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup_environment.html">Setting up your environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_execution_environment.html">Building your first Execution Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_execution_environment.html">Running your EE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_community_ee_image.html">Running Ansible with the community EE image</a></li>
+</ul>
+</div>
 </section>
 
 
@@ -367,14 +378,14 @@ Or you can easily build and deploy custom EEs with whatever packages and Ansible
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../getting_started/basic_concepts.html" class="btn btn-neutral float-left" title="Ansible concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../installation_guide/index.html" class="btn btn-neutral float-right" title="Installation Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="introduction.html" class="btn btn-neutral float-right" title="Introduction to Execution Environments" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 18, 2024.
+      <span class="lastupdated">Last updated on Oct 07, 2024.
       </span></p>
   </div>
 

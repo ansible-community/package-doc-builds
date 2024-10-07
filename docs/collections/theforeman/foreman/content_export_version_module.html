@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.11.0" name="antsibull-docs" />
+<meta content="2.14.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>theforeman.foreman.content_export_version module – Manage content view version content exports &mdash; Ansible Community Documentation</title>
@@ -29,7 +29,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="theforeman.foreman.content_upload module – Upload content to a repository" href="content_upload_module.html" />
+    <link rel="next" title="theforeman.foreman.content_import_info module – List content imports" href="content_import_info_module.html" />
     <link rel="prev" title="theforeman.foreman.content_export_repository module – Manage repository content exports" href="content_export_repository_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -232,6 +232,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kaytus/index.html">Collections in the Kaytus Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubevirt/index.html">Collections in the Kubevirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../lowlydba/index.html">Collections in the Lowlydba Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../microsoft/index.html">Collections in the Microsoft Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
@@ -335,13 +336,12 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
     var banner = '';
       var extra_banner = '';
     /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-   /*  var extra_banner =
+    var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;">' +
-        'Discuss Ansible in the new <a href="https://forum.ansible.com/t/welcome-to-the-ansible-community/5">Ansible Forum!</a>' +
+        'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem by taking the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>.' +
         '</p>' +
       '</div>';
-      */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -395,7 +395,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <h1>theforeman.foreman.content_export_version module – Manage content view version content exports<a class="headerlink" href="#theforeman-foreman-content-export-version-module-manage-content-view-version-content-exports" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/theforeman/foreman/">theforeman.foreman collection</a> (version 4.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/theforeman/foreman/">theforeman.foreman collection</a> (version 4.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -441,6 +441,7 @@ see <a class="reference internal" href="#ansible-collections-theforeman-foreman-
 <a class="ansibleOptionLink" href="#parameter-chunk_size_gb" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Split the exported content into archives no greater than the specified size in gigabytes.</p>
+<p>Only applicable for <code class="docutils literal notranslate"><span class="pre">format=importable</span></code>. <code class="docutils literal notranslate"><span class="pre">syncable</span></code> exports can’t be split.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -621,26 +622,26 @@ see <a class="reference internal" href="#ansible-collections-theforeman-foreman-
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Export</span><span class="nv"> </span><span class="s">content</span><span class="nv"> </span><span class="s">view</span><span class="nv"> </span><span class="s">version</span><span class="nv"> </span><span class="s">(incremental)</span><span class="nv"> </span><span class="s">since</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">most</span><span class="nv"> </span><span class="s">recent</span><span class="nv"> </span><span class="s">export&quot;</span>
 <span class="w">  </span><span class="nt">theforeman.foreman.content_export_version</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">content_view</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RHEL8</span>
-<span class="w">      </span><span class="nt">content_view_version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1.0&#39;</span>
-<span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin&quot;</span>
-<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;changeme&quot;</span>
-<span class="w">      </span><span class="nt">server_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://foreman.example.com&quot;</span>
-<span class="w">      </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">Organization&quot;</span>
-<span class="w">      </span><span class="nt">destination_server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;airgapped.example.com&quot;</span>
-<span class="w">      </span><span class="nt">incremental</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">content_view</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RHEL8</span>
+<span class="w">    </span><span class="nt">content_view_version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1.0&#39;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;changeme&quot;</span>
+<span class="w">    </span><span class="nt">server_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://foreman.example.com&quot;</span>
+<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">Organization&quot;</span>
+<span class="w">    </span><span class="nt">destination_server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;airgapped.example.com&quot;</span>
+<span class="w">    </span><span class="nt">incremental</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Export</span><span class="nv"> </span><span class="s">content</span><span class="nv"> </span><span class="s">view</span><span class="nv"> </span><span class="s">version</span><span class="nv"> </span><span class="s">(incremental)</span><span class="nv"> </span><span class="s">since</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">specific</span><span class="nv"> </span><span class="s">export&quot;</span>
 <span class="w">  </span><span class="nt">theforeman.foreman.content_export_version</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">content_view</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RHEL8</span>
-<span class="w">      </span><span class="nt">content_view_version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1.0&#39;</span>
-<span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin&quot;</span>
-<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;changeme&quot;</span>
-<span class="w">      </span><span class="nt">server_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://foreman.example.com&quot;</span>
-<span class="w">      </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">Organization&quot;</span>
-<span class="w">      </span><span class="nt">destination_server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;airgapped.example.com&quot;</span>
-<span class="w">      </span><span class="nt">incremental</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">from_history_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12345</span>
+<span class="w">    </span><span class="nt">content_view</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RHEL8</span>
+<span class="w">    </span><span class="nt">content_view_version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1.0&#39;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;changeme&quot;</span>
+<span class="w">    </span><span class="nt">server_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://foreman.example.com&quot;</span>
+<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">Organization&quot;</span>
+<span class="w">    </span><span class="nt">destination_server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;airgapped.example.com&quot;</span>
+<span class="w">    </span><span class="nt">incremental</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">from_history_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12345</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -667,14 +668,14 @@ see <a class="reference internal" href="#ansible-collections-theforeman-foreman-
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="content_export_repository_module.html" class="btn btn-neutral float-left" title="theforeman.foreman.content_export_repository module – Manage repository content exports" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="content_upload_module.html" class="btn btn-neutral float-right" title="theforeman.foreman.content_upload module – Upload content to a repository" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="content_import_info_module.html" class="btn btn-neutral float-right" title="theforeman.foreman.content_import_info module – List content imports" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 18, 2024.
+      <span class="lastupdated">Last updated on Oct 07, 2024.
       </span></p>
   </div>
 

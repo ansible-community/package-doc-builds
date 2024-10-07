@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.11.0" name="antsibull-docs" />
+<meta content="2.14.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>microsoft.ad.domain_child module – Manage domain children in an existing Active Directory forest. &mdash; Ansible Community Documentation</title>
@@ -232,6 +232,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kaytus/index.html">Collections in the Kaytus Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubevirt/index.html">Collections in the Kubevirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../lowlydba/index.html">Collections in the Lowlydba Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Microsoft Namespace</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Microsoft.Ad</a><ul class="current">
@@ -334,13 +335,12 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
     var banner = '';
       var extra_banner = '';
     /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-   /*  var extra_banner =
+    var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;">' +
-        'Discuss Ansible in the new <a href="https://forum.ansible.com/t/welcome-to-the-ansible-community/5">Ansible Forum!</a>' +
+        'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem by taking the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>.' +
         '</p>' +
       '</div>';
-      */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -394,13 +394,14 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <h1>microsoft.ad.domain_child module – Manage domain children in an existing Active Directory forest.<a class="headerlink" href="#microsoft-ad-domain-child-module-manage-domain-children-in-an-existing-active-directory-forest" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/microsoft/ad/">microsoft.ad collection</a> (version 1.6.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/microsoft/ad/">microsoft.ad collection</a> (version 1.7.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
 <p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">microsoft.ad</span></code>.</p>
 <p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">microsoft.ad.domain_child</span></code>.</p>
 </div>
+<p class="ansible-version-added">New in microsoft.ad 1.6.0</p>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
@@ -532,9 +533,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-reboot"></div><p class="ansible-option-title" id="ansible-collections-microsoft-ad-domain-child-module-parameter-reboot"><strong>reboot</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reboot" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>If <code class="docutils literal notranslate"><span class="pre">true</span></code>, this will reboot the host if a reboot was create the domain.</p>
+<td><div class="ansible-option-cell"><p>If <code class="docutils literal notranslate"><span class="pre">true</span></code>, this will reboot the host if a reboot was required by the module.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">false</span></code>, this will not reboot the host if a reboot was required and instead sets the <em>reboot_required</em> return value to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Multiple reboots may occur if the host required a reboot before the domain promotion.</p>
 <p>This cannot be used with async mode.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
@@ -544,20 +544,30 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-reboot_timeout"></div><p class="ansible-option-title" id="ansible-collections-microsoft-ad-domain-child-module-parameter-reboot-timeout"><strong>reboot_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-reboot_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in microsoft.ad 1.7.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Maximum seconds to wait for machine to re-appear after a reboot and respond to a test command.</p>
+<p>This timeout is evaluated separately for both the reboot verification and test command success so the total timeout can be twice this value.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">600</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-safe_mode_password"></div><p class="ansible-option-title" id="ansible-collections-microsoft-ad-domain-child-module-parameter-safe-mode-password"><strong>safe_mode_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-safe_mode_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Safe mode password for the domain controller.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-site_name"></div><p class="ansible-option-title" id="ansible-collections-microsoft-ad-domain-child-module-parameter-site-name"><strong>site_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-site_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the name of an existing site where you can place the new domain controller.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-sysvol_path"></div><p class="ansible-option-title" id="ansible-collections-microsoft-ad-domain-child-module-parameter-sysvol-path"><strong>sysvol_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-sysvol_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
@@ -639,6 +649,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>It is highly recommended to set <em>reboot=true</em> to have Ansible manage the host reboot phase as the actions done by this module puts the host in a state where it may not be possible for Ansible to reconnect in a subsequent task without a reboot.</p></li>
 <li><p>This module must be run on a Windows target host.</p></li>
+<li><p>If using <em>reboot=true</em>, multiple reboots may occur if the host required a reboot before the domain promotion.</p></li>
 </ul>
 </div>
 </section>
@@ -723,7 +734,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 18, 2024.
+      <span class="lastupdated">Last updated on Oct 07, 2024.
       </span></p>
   </div>
 

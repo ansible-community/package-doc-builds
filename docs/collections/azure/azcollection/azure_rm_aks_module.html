@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.11.0" name="antsibull-docs" />
+<meta content="2.14.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>azure.azcollection.azure_rm_aks module – Manage a managed Azure Container Service (AKS) instance &mdash; Ansible Community Documentation</title>
@@ -30,7 +30,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="azure.azcollection.azure_rm_aks_info module – Get Azure Kubernetes Service facts" href="azure_rm_aks_info_module.html" />
-    <link rel="prev" title="azure.azcollection.azure_rm_aduser_info module – Get Azure Active Directory user info" href="azure_rm_aduser_info_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="azure.azcollection.azure_rm_afdendpoint_info module – Get Azure Front Door Endpoint facts to be used with Standard or Premium Frontdoor Service" href="azure_rm_afdendpoint_info_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -239,6 +239,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kaytus/index.html">Collections in the Kaytus Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubevirt/index.html">Collections in the Kubevirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../lowlydba/index.html">Collections in the Lowlydba Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../microsoft/index.html">Collections in the Microsoft Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
@@ -335,13 +336,12 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
     var banner = '';
       var extra_banner = '';
     /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-   /*  var extra_banner =
+    var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;">' +
-        'Discuss Ansible in the new <a href="https://forum.ansible.com/t/welcome-to-the-ansible-community/5">Ansible Forum!</a>' +
+        'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem by taking the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>.' +
         '</p>' +
       '</div>';
-      */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -395,7 +395,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <h1>azure.azcollection.azure_rm_aks module – Manage a managed Azure Container Service (AKS) instance<a class="headerlink" href="#azure-azcollection-azure-rm-aks-module-manage-a-managed-azure-container-service-aks-instance" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 2.4.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 2.7.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -420,7 +420,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Create, update and delete a managed Azure Container Service (AKS) instance.</p></li>
-<li><p>You can only specify <code class="docutils literal notranslate"><span class="pre">identity</span></code> or <code class="docutils literal notranslate"><span class="pre">service_principal</span></code>, not both.  If you don’t specify either it will default to identity-&gt;type-&gt;SystemAssigned.</p></li>
+<li><p>You can only specify <code class="docutils literal notranslate"><span class="pre">identity</span></code> or <code class="docutils literal notranslate"><span class="pre">service_principal</span></code>, not both. If you don’t specify either it will default to identity-&gt;type-&gt;SystemAssigned.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -464,6 +464,18 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-aad_profile/enable_azure_rbac"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-aad-profile-enable-azure-rbac"><strong>enable_azure_rbac</strong></p>
+<a class="ansibleOptionLink" href="#parameter-aad_profile/enable_azure_rbac" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Whether to enable Azure RBAC for Kubernetes authorization.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-aad_profile/managed"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-aad-profile-managed"><strong>managed</strong></p>
 <a class="ansibleOptionLink" href="#parameter-aad_profile/managed" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -475,21 +487,21 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-aad_profile/server_app_id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-aad-profile-server-app-id"><strong>server_app_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-aad_profile/server_app_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The server AAD application ID.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-aad_profile/server_app_secret"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-aad-profile-server-app-secret"><strong>server_app_secret</strong></p>
 <a class="ansibleOptionLink" href="#parameter-aad_profile/server_app_secret" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The server AAD application secret.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-aad_profile/tenant_id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-aad-profile-tenant-id"><strong>tenant_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-aad_profile/tenant_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -497,14 +509,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>If not specified, will use the tenant of the deployment subscription.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ad_user"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-ad-user"><strong>ad_user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ad_user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Active Directory username. Use when authenticating with an Active Directory user rather than service principal.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon"><strong>addon</strong></p>
 <a class="ansibleOptionLink" href="#parameter-addon" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -513,7 +525,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Value must be a dict contains a bool variable <code class="docutils literal notranslate"><span class="pre">enabled</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon/http_application_routing"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/httpApplicationRouting"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-httpapplicationrouting"><span id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-http-application-routing"></span><strong>http_application_routing</strong></p>
 <a class="ansibleOptionLink" href="#parameter-addon/http_application_routing" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: httpApplicationRouting</span></p>
@@ -522,7 +534,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The HTTP application routing solution makes it easy to access applications that are deployed to your cluster.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon/http_application_routing/enabled"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/httpApplicationRouting/enabled"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-httpapplicationrouting-enabled"><span id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-http-application-routing-enabled"></span><strong>enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-addon/http_application_routing/enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
@@ -535,7 +547,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon/monitoring"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/omsagent"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-omsagent"><span id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-monitoring"></span><strong>monitoring</strong></p>
 <a class="ansibleOptionLink" href="#parameter-addon/monitoring" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: omsagent</span></p>
@@ -544,7 +556,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>It gives you performance visibility by collecting memory and processor metrics from controllers, nodes, and containers that are available in Kubernetes through the Metrics API.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon/monitoring/enabled"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/omsagent/enabled"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-omsagent-enabled"><span id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-monitoring-enabled"></span><strong>enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-addon/monitoring/enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
@@ -557,7 +569,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon/monitoring/log_analytics_workspace_resource_id"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/omsagent/log_analytics_workspace_resource_id"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/monitoring/logAnalyticsWorkspaceResourceID"></div>
@@ -568,7 +580,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Where to store the container metrics.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon/virtual_node"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/aciConnector"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-virtual-node"><span id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-aciconnector"></span><strong>virtual_node</strong></p>
 <a class="ansibleOptionLink" href="#parameter-addon/virtual_node" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: aciConnector</span></p>
@@ -578,7 +590,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>You don’t need to wait for Kubernetes cluster autoscaler to deploy VM compute nodes to run the additional pods.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon/virtual_node/enabled"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/aciConnector/enabled"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-virtual-node-enabled"><span id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-addon-aciconnector-enabled"></span><strong>enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-addon/virtual_node/enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
@@ -591,7 +603,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-addon/virtual_node/subnet_resource_id"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/aciConnector/subnet_resource_id"></div>
 <div class="ansibleOptionAnchor" id="parameter-addon/virtual_node/SubnetName"></div>
@@ -602,7 +614,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Subnet associated to the cluster.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-adfs_authority_url"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-adfs-authority-url"><strong>adfs_authority_url</strong></p>
 <a class="ansibleOptionLink" href="#parameter-adfs_authority_url" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 0.0.1</em></p>
@@ -610,14 +622,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <td><div class="ansible-option-cell"><p>Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles"><strong>agent_pool_profiles</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The agent pool profile suboptions.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/availability_zones"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-availability-zones"><strong>availability_zones</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/availability_zones" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=integer</span></p>
 </div></td>
@@ -630,7 +642,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/count"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-count"><strong>count</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -638,14 +650,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Allowed values must be in the range of <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">100</span></code> (inclusive).</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/dns_prefix"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-dns-prefix"><strong>dns_prefix</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/dns_prefix" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>DNS prefix specified when creating the managed cluster.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/enable_auto_scaling"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-enable-auto-scaling"><strong>enable_auto_scaling</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/enable_auto_scaling" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -657,7 +669,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/max_count"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-max-count"><strong>max_count</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/max_count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -665,14 +677,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Required if <em>enable_auto_scaling=True</em>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/max_pods"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-max-pods"><strong>max_pods</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/max_pods" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Maximum number of pods schedulable on nodes.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/min_count"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-min-count"><strong>min_count</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/min_count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -680,7 +692,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Required if <em>enable_auto_scaling=True</em>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/mode"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-mode"><strong>mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -694,35 +706,35 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Unique name of the agent pool profile in the context of the subscription and resource group.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/node_labels"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-node-labels"><strong>node_labels</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/node_labels" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Agent pool node labels to be persisted across all nodes in agent pool.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/orchestrator_version"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-orchestrator-version"><strong>orchestrator_version</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/orchestrator_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Version of kubernetes running on the node pool.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/os_disk_size_gb"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-os-disk-size-gb"><strong>os_disk_size_gb</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/os_disk_size_gb" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Size of the OS disk.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/os_type"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-os-type"><strong>os_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/os_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -734,14 +746,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/ports"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-ports"><strong>ports</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/ports" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>List of the agent pool’s port.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/storage_profiles"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-storage-profiles"><strong>storage_profiles</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/storage_profiles" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -753,7 +765,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/type"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-type"><strong>type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -766,21 +778,21 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/vm_size"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-vm-size"><strong>vm_size</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/vm_size" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The VM Size of each of the Agent Pool VM’s (e.g. <code class="docutils literal notranslate"><span class="pre">Standard_F1</span></code> / <code class="docutils literal notranslate"><span class="pre">Standard_D2v2</span></code>).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-agent_pool_profiles/vnet_subnet_id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-agent-pool-profiles-vnet-subnet-id"><strong>vnet_subnet_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-agent_pool_profiles/vnet_subnet_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the VNet’s subnet identifier.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_profile"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-api-profile"><strong>api_profile</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 0.0.1</em></p>
@@ -789,14 +801,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;latest&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_server_access_profile"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-api-server-access-profile"><strong>api_server_access_profile</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_server_access_profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Profile of API Access configuration.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_server_access_profile/authorized_ip_ranges"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-api-server-access-profile-authorized-ip-ranges"><strong>authorized_ip_ranges</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_server_access_profile/authorized_ip_ranges" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -804,7 +816,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Cannot be enabled when using private cluster</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_server_access_profile/enable_private_cluster"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-api-server-access-profile-enable-private-cluster"><strong>enable_private_cluster</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_server_access_profile/enable_private_cluster" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -817,7 +829,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-append_tags"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-append-tags"><strong>append_tags</strong></p>
 <a class="ansibleOptionLink" href="#parameter-append_tags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -830,7 +842,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-auth_source"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-auth-source"><strong>auth_source</strong></p>
 <a class="ansibleOptionLink" href="#parameter-auth_source" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 0.0.1</em></p>
@@ -850,6 +862,42 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;credential_file&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;env&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;msi&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auto_upgrade_profile"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-auto-upgrade-profile"><strong>auto_upgrade_profile</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auto_upgrade_profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Auto upgrade profile for a managed cluster.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auto_upgrade_profile/node_os_upgrade_channel"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-auto-upgrade-profile-node-os-upgrade-channel"><strong>node_os_upgrade_channel</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auto_upgrade_profile/node_os_upgrade_channel" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Manner in which the OS on your nodes is updated.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Unmanaged&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;SecurityPatch&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;NodeImage&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auto_upgrade_profile/upgrade_channel"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-auto-upgrade-profile-upgrade-channel"><strong>upgrade_channel</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auto_upgrade_profile/upgrade_channel" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Setting the AKS cluster auto-upgrade channel.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;rapid&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;stable&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;patch&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;node-image&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -1020,8 +1068,11 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <div class="ansibleOptionAnchor" id="parameter-network_profile/docker_bridge_cidr"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-network-profile-docker-bridge-cidr"><strong>docker_bridge_cidr</strong></p>
 <a class="ansibleOptionLink" href="#parameter-network_profile/docker_bridge_cidr" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A CIDR notation IP range assigned to the Docker bridge network.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>(deprecated) The docker bridge cidr.</p>
+<p>A CIDR notation IP range assigned to the Docker bridge network.</p>
 <p>It must not overlap with any Subnet IP ranges or the Kubernetes service address range.</p>
+<p>API version is higher than 23.0.0, Model ContainerServiceNetworkProfile no longer has parameter (docker_bridge_cidr).</p>
+<p>This parameter will be abandoned in the next version.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -1053,6 +1104,17 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-network_profile/network_plugin_mode"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-network-profile-network-plugin-mode"><strong>network_plugin_mode</strong></p>
+<a class="ansibleOptionLink" href="#parameter-network_profile/network_plugin_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Network plugin mode used for building the Kubernetes network.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Overlay&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-network_profile/network_policy"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-network-profile-network-policy"><strong>network_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-network_profile/network_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1064,7 +1126,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-network_profile/outbound_type"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-network-profile-outbound-type"><strong>outbound_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-network_profile/outbound_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1078,7 +1140,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-network_profile/pod_cidr"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-network-profile-pod-cidr"><strong>pod_cidr</strong></p>
 <a class="ansibleOptionLink" href="#parameter-network_profile/pod_cidr" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1087,7 +1149,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>This address range must be large enough to accommodate the number of nodes that you expect to scale up to.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-network_profile/service_cidr"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-network-profile-service-cidr"><strong>service_cidr</strong></p>
 <a class="ansibleOptionLink" href="#parameter-network_profile/service_cidr" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1096,7 +1158,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>It should be the *.10 address of your service IP address range.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-node_resource_group"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-node-resource-group"><strong>node_resource_group</strong></p>
 <a class="ansibleOptionLink" href="#parameter-node_resource_group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1104,21 +1166,21 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Unable to update.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Active Directory user password. Use when authenticating with an Active Directory user rather than service principal.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile"><strong>pod_identity_profile</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Config pod identities in managed Kubernetes cluster.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/allow_network_plugin_kubenet"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-allow-network-plugin-kubenet"><strong>allow_network_plugin_kubenet</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/allow_network_plugin_kubenet" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1130,7 +1192,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/enabled"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-enabled"><strong>enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1142,105 +1204,105 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/user_assigned_identities"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-user-assigned-identities"><strong>user_assigned_identities</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/user_assigned_identities" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The pod identities to use in the cluster.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/user_assigned_identities/binding_selector"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-user-assigned-identities-binding-selector"><strong>binding_selector</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/user_assigned_identities/binding_selector" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The binding selector to use for the AzureIdentityBinding resource.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/user_assigned_identities/identity"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-user-assigned-identities-identity"><strong>identity</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/user_assigned_identities/identity" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The user assigned identity details.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/user_assigned_identities/identity/client_id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-user-assigned-identities-identity-client-id"><strong>client_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/user_assigned_identities/identity/client_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The client ID of the user assigned identity.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/user_assigned_identities/identity/object_id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-user-assigned-identities-identity-object-id"><strong>object_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/user_assigned_identities/identity/object_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The object ID of the user assigned identity.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/user_assigned_identities/identity/resource_id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-user-assigned-identities-identity-resource-id"><strong>resource_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/user_assigned_identities/identity/resource_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The resource ID of the user assigned identity.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/user_assigned_identities/name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-user-assigned-identities-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/user_assigned_identities/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the pod identity.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pod_identity_profile/user_assigned_identities/namespace"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-pod-identity-profile-user-assigned-identities-namespace"><strong>namespace</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pod_identity_profile/user_assigned_identities/namespace" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The namespace of the pod identity.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-profile"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-profile"><strong>profile</strong></p>
 <a class="ansibleOptionLink" href="#parameter-profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Security profile found in ~/.azure/credentials file.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-resource_group"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-resource-group"><strong>resource_group</strong></p>
 <a class="ansibleOptionLink" href="#parameter-resource_group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of a resource group where the managed Azure Container Services (AKS) exists or will be created.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secret"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-secret"><strong>secret</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secret" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Azure client secret. Use when authenticating with a Service Principal.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-service_principal"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-service-principal"><strong>service_principal</strong></p>
 <a class="ansibleOptionLink" href="#parameter-service_principal" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The service principal suboptions.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-service_principal/client_id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-service-principal-client-id"><strong>client_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-service_principal/client_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The ID for the Service Principal.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-service_principal/client_secret"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-service-principal-client-secret"><strong>client_secret</strong></p>
 <a class="ansibleOptionLink" href="#parameter-service_principal/client_secret" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The secret password associated with the service principal.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1252,14 +1314,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subscription_id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-subscription-id"><strong>subscription_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subscription_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Your Azure subscription Id.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-tags"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-tags"><strong>tags</strong></p>
 <a class="ansibleOptionLink" href="#parameter-tags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -1271,14 +1333,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Azure Automation and Azure CDN only support 15 tags on resources.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-tenant"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-tenant"><strong>tenant</strong></p>
 <a class="ansibleOptionLink" href="#parameter-tenant" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Azure tenant ID. Use when authenticating with a Service Principal.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-thumbprint"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-thumbprint"><strong>thumbprint</strong></p>
 <a class="ansibleOptionLink" href="#parameter-thumbprint" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 1.14.0</em></p>
@@ -1288,7 +1350,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Required if <em>x509_certificate_path</em> is defined.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-x509_certificate_path"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-aks-module-parameter-x509-certificate-path"><strong>x509_certificate_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-x509_certificate_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 1.14.0</em></p>
@@ -1484,7 +1546,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </div></td>
 <td><div class="ansible-option-cell"><p>Current state of the Azure Container Service (AKS).</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;agent_pool_profiles&quot;:</span> <span class="pre">[{&quot;count&quot;:</span> <span class="pre">1,</span> <span class="pre">&quot;dns_prefix&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;moode&quot;:</span> <span class="pre">&quot;System&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;default&quot;,</span> <span class="pre">&quot;node_labels&quot;:</span> <span class="pre">{&quot;environment&quot;:</span> <span class="pre">&quot;dev&quot;,</span> <span class="pre">&quot;release&quot;:</span> <span class="pre">&quot;stable&quot;},</span> <span class="pre">&quot;os_disk_size_gb&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;os_type&quot;:</span> <span class="pre">&quot;Linux&quot;,</span> <span class="pre">&quot;ports&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;storage_profile&quot;:</span> <span class="pre">&quot;ManagedDisks&quot;,</span> <span class="pre">&quot;vm_size&quot;:</span> <span class="pre">&quot;Standard_B2s&quot;,</span> <span class="pre">&quot;vnet_subnet_id&quot;:</span> <span class="pre">null}],</span> <span class="pre">&quot;changed&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;dns_prefix&quot;:</span> <span class="pre">&quot;aks9860bdcd89&quot;,</span> <span class="pre">&quot;id&quot;:</span> <span class="pre">&quot;/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourcegroups/myResourceGroup/providers/Microsoft.ContainerService/managedClusters/aks9860bdc&quot;,</span> <span class="pre">&quot;identity&quot;:</span> <span class="pre">{&quot;type&quot;:</span> <span class="pre">&quot;UserAssigned&quot;,</span> <span class="pre">&quot;user_assigned_identities&quot;:</span> <span class="pre">{}},</span> <span class="pre">&quot;kube_config&quot;:</span> <span class="pre">[&quot;......&quot;],</span> <span class="pre">&quot;kubernetes_version&quot;:</span> <span class="pre">&quot;1.14.6&quot;,</span> <span class="pre">&quot;linux_profile&quot;:</span> <span class="pre">{&quot;admin_username&quot;:</span> <span class="pre">&quot;azureuser&quot;,</span> <span class="pre">&quot;ssh_key&quot;:</span> <span class="pre">&quot;ssh-rsa</span> <span class="pre">AAAAB3NzaC1yc2EAAAADA.....&quot;},</span> <span class="pre">&quot;location&quot;:</span> <span class="pre">&quot;eastus&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;aks9860bdc&quot;,</span> <span class="pre">&quot;pod_identity_profile&quot;:</span> <span class="pre">{&quot;allow_network_plugin_kubenet&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;user_assigned_identities&quot;:</span> <span class="pre">[{&quot;binding_selector&quot;:</span> <span class="pre">&quot;test&quot;,</span> <span class="pre">&quot;identity&quot;:</span> <span class="pre">{&quot;client_id&quot;:</span> <span class="pre">&quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&quot;,</span> <span class="pre">&quot;object_id&quot;:</span> <span class="pre">&quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\&quot;&quot;},</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;fredtest&quot;,</span> <span class="pre">&quot;namespace&quot;:</span> <span class="pre">&quot;fredtest&quot;,</span> <span class="pre">&quot;provisioning_state&quot;:</span> <span class="pre">&quot;Updating&quot;}]},</span> <span class="pre">&quot;provisioning_state&quot;:</span> <span class="pre">&quot;Succeeded&quot;,</span> <span class="pre">&quot;service_principal_profile&quot;:</span> <span class="pre">{&quot;client_id&quot;:</span> <span class="pre">&quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&quot;},</span> <span class="pre">&quot;tags&quot;:</span> <span class="pre">{},</span> <span class="pre">&quot;type&quot;:</span> <span class="pre">&quot;Microsoft.ContainerService/ManagedClusters&quot;}</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;agent_pool_profiles&quot;:</span> <span class="pre">[{&quot;count&quot;:</span> <span class="pre">1,</span> <span class="pre">&quot;dns_prefix&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;moode&quot;:</span> <span class="pre">&quot;System&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;default&quot;,</span> <span class="pre">&quot;node_labels&quot;:</span> <span class="pre">{&quot;environment&quot;:</span> <span class="pre">&quot;dev&quot;,</span> <span class="pre">&quot;release&quot;:</span> <span class="pre">&quot;stable&quot;},</span> <span class="pre">&quot;os_disk_size_gb&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;os_type&quot;:</span> <span class="pre">&quot;Linux&quot;,</span> <span class="pre">&quot;ports&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;storage_profile&quot;:</span> <span class="pre">&quot;ManagedDisks&quot;,</span> <span class="pre">&quot;vm_size&quot;:</span> <span class="pre">&quot;Standard_B2s&quot;,</span> <span class="pre">&quot;vnet_subnet_id&quot;:</span> <span class="pre">null}],</span> <span class="pre">&quot;auto_upgrade_profile&quot;:</span> <span class="pre">{&quot;node_os_upgrade_channel&quot;:</span> <span class="pre">&quot;NodeImage&quot;,</span> <span class="pre">&quot;upgrade_channel&quot;:</span> <span class="pre">&quot;patch&quot;},</span> <span class="pre">&quot;changed&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;dns_prefix&quot;:</span> <span class="pre">&quot;aks9860bdcd89&quot;,</span> <span class="pre">&quot;id&quot;:</span> <span class="pre">&quot;/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourcegroups/myResourceGroup/providers/Microsoft.ContainerService/managedClusters/aks9860bdc&quot;,</span> <span class="pre">&quot;identity&quot;:</span> <span class="pre">{&quot;type&quot;:</span> <span class="pre">&quot;UserAssigned&quot;,</span> <span class="pre">&quot;user_assigned_identities&quot;:</span> <span class="pre">{}},</span> <span class="pre">&quot;kube_config&quot;:</span> <span class="pre">[&quot;......&quot;],</span> <span class="pre">&quot;kubernetes_version&quot;:</span> <span class="pre">&quot;1.14.6&quot;,</span> <span class="pre">&quot;linux_profile&quot;:</span> <span class="pre">{&quot;admin_username&quot;:</span> <span class="pre">&quot;azureuser&quot;,</span> <span class="pre">&quot;ssh_key&quot;:</span> <span class="pre">&quot;ssh-rsa</span> <span class="pre">AAAAB3NzaC1yc2EAAAADA.....&quot;},</span> <span class="pre">&quot;location&quot;:</span> <span class="pre">&quot;eastus&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;aks9860bdc&quot;,</span> <span class="pre">&quot;pod_identity_profile&quot;:</span> <span class="pre">{&quot;allow_network_plugin_kubenet&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;user_assigned_identities&quot;:</span> <span class="pre">[{&quot;binding_selector&quot;:</span> <span class="pre">&quot;test&quot;,</span> <span class="pre">&quot;identity&quot;:</span> <span class="pre">{&quot;client_id&quot;:</span> <span class="pre">&quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&quot;,</span> <span class="pre">&quot;object_id&quot;:</span> <span class="pre">&quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\&quot;&quot;},</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;fredtest&quot;,</span> <span class="pre">&quot;namespace&quot;:</span> <span class="pre">&quot;fredtest&quot;,</span> <span class="pre">&quot;provisioning_state&quot;:</span> <span class="pre">&quot;Updating&quot;}]},</span> <span class="pre">&quot;provisioning_state&quot;:</span> <span class="pre">&quot;Succeeded&quot;,</span> <span class="pre">&quot;service_principal_profile&quot;:</span> <span class="pre">{&quot;client_id&quot;:</span> <span class="pre">&quot;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&quot;},</span> <span class="pre">&quot;tags&quot;:</span> <span class="pre">{},</span> <span class="pre">&quot;type&quot;:</span> <span class="pre">&quot;Microsoft.ContainerService/ManagedClusters&quot;}</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -1513,7 +1575,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="azure_rm_aduser_info_module.html" class="btn btn-neutral float-left" title="azure.azcollection.azure_rm_aduser_info module – Get Azure Active Directory user info" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="azure_rm_afdendpoint_info_module.html" class="btn btn-neutral float-left" title="azure.azcollection.azure_rm_afdendpoint_info module – Get Azure Front Door Endpoint facts to be used with Standard or Premium Frontdoor Service" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="azure_rm_aks_info_module.html" class="btn btn-neutral float-right" title="azure.azcollection.azure_rm_aks_info module – Get Azure Kubernetes Service facts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -1521,7 +1583,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 18, 2024.
+      <span class="lastupdated">Last updated on Oct 07, 2024.
       </span></p>
   </div>
 

@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.11.0" name="antsibull-docs" />
+<meta content="2.14.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cisco.dnac.inventory_intent module – Resource module for Network Device &mdash; Ansible Community Documentation</title>
@@ -249,6 +249,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kaytus/index.html">Collections in the Kaytus Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubevirt/index.html">Collections in the Kubevirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../lowlydba/index.html">Collections in the Lowlydba Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../microsoft/index.html">Collections in the Microsoft Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
@@ -345,13 +346,12 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
     var banner = '';
       var extra_banner = '';
     /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-   /*  var extra_banner =
+    var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;">' +
-        'Discuss Ansible in the new <a href="https://forum.ansible.com/t/welcome-to-the-ansible-community/5">Ansible Forum!</a>' +
+        'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem by taking the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>.' +
         '</p>' +
       '</div>';
-      */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -405,7 +405,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <h1>cisco.dnac.inventory_intent module – Resource module for Network Device<a class="headerlink" href="#cisco-dnac-inventory-intent-module-resource-module-for-network-device" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/dnac/">cisco.dnac collection</a> (version 6.16.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/dnac/">cisco.dnac collection</a> (version 6.18.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -439,7 +439,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <span id="ansible-collections-cisco-dnac-inventory-intent-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
-<li><p>dnacentersdk &gt;= 2.7.1</p></li>
+<li><p>dnacentersdk &gt;= 2.7.2</p></li>
 <li><p>python &gt;= 3.9</p></li>
 </ul>
 </section>
@@ -522,7 +522,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <div class="ansibleOptionAnchor" id="parameter-config/credential_update"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-credential-update"><strong>credential_update</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/credential_update" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Make this as true needed for the updation of device credentials and other device details.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Set this to ‘True’ to update device credentials and other device details. When this parameter is ‘True’, ensure that the devices are present in Cisco Catalyst Center; only then can update operations be performed on the respective devices. If the parameter is ‘True’ and any device is not present, the module will attempt to add it. If required parameters are missing during this addition, the module will fail and stop execution, preventing update operations for devices that are already present.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -550,48 +550,56 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-config/export_device_details_limit"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-export-device-details-limit"><strong>export_device_details_limit</strong></p>
+<a class="ansibleOptionLink" href="#parameter-config/export_device_details_limit" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the limit for updating device details or exporting device details/credentials to a file. The default limit is set to 500 devices. This limit is applied when exporting device details/credentials and editing device details. The maximum number of device details/credentials that can be exported in a single API call is 800.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">500</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/export_device_list"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-export-device-list"><strong>export_device_list</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/export_device_list" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>This operation take dictionary as parameter and export the device details as well as device credentials details in a csv file.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/export_device_list/operation_enum"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-export-device-list-operation-enum"><strong>operation_enum</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/export_device_list/operation_enum" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>enum(CREDENTIALDETAILS, DEVICEDETAILS) 0 to export Device Credential Details Or 1 to export Device Details. CREDENTIALDETAILS - Used for exporting device credentials details like snpm credntials, device crdentails etc. DEVICEDETAILS - Used for exporting device specific details like device hostname, serial number, type, family etc.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/export_device_list/parameters"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-export-device-list-parameters"><strong>parameters</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/export_device_list/parameters" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>List of device parameters that needs to be exported to file.(For example, [“componentName”, “SerialNumber”, “Last Sync Status”])</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/export_device_list/password"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-export-device-list-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/export_device_list/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the password for the encryption of file while exporting the device credentails into the file.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/export_device_list/site_name"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-export-device-list-site-name"><strong>site_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/export_device_list/site_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Indicates the exact location where the wired device will be provisioned. This is a string value that should represent the complete hierarchical path of the site (For example, “Global/USA/San Francisco/BGL_18/floor_pnp”).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/extended_discovery_info"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-extended-discovery-info"><strong>extended_discovery_info</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/extended_discovery_info" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Additional discovery information for the device.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/force_sync"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-force-sync"><strong>force_sync</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/force_sync" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -603,28 +611,28 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/hostname_list"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-hostname-list"><strong>hostname_list</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/hostname_list" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of hostnames representing devices. Operations such as updating, deleting, resyncing, or rebooting can be performed as alternatives to using IP addresses.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/http_password"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-http-password"><strong>http_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/http_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>HTTP password required for adding compute, Meraki, and Firepower Management Devices.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/http_port"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-http-port"><strong>http_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/http_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>HTTP port number required for adding compute and Firepower Management Devices.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/http_secure"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-http-secure"><strong>http_secure</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/http_secure" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -636,49 +644,49 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/http_username"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-http-username"><strong>http_username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/http_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>HTTP username required for adding compute and Firepower Management Devices.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/ip_address_list"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-ip-address-list"><strong>ip_address_list</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/ip_address_list" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of the IP addresses for the devices. It is required for tasks such as adding, updating, deleting, or resyncing devices, with Meraki devices being the exception.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/mac_address_list"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-mac-address-list"><strong>mac_address_list</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/mac_address_list" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of MAC addresses representing devices. Operations such as updating, deleting, resyncing, or rebooting can be performed as alternatives to using IP addresses.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/netconf_port"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-netconf-port"><strong>netconf_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/netconf_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the port number for connecting to devices using the Netconf protocol. Netconf (Network Configuration Protocol) is used for managing network devices. Ensure that the provided port number corresponds to the Netconf service port configured on your network devices. NETCONF with user privilege 15 is mandatory for enabling Wireless Services on Wireless capable devices such as Catalyst 9000 series Switches and C9800 Series Wireless Controllers. The NETCONF credentials are required to connect to C9800 Series Wireless Controllers as the majority of data collection is done using NETCONF for these Devices.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/password"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for accessing the device and for file encryption during device export. Required for adding Network Device. Also needed for file encryption while exporting device in a csv file.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/provision_wired_device"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-provision-wired-device"><strong>provision_wired_device</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/provision_wired_device" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>This parameter takes a list of dictionaries. Each dictionary provides the IP address of a wired device and the name of the site where the device will be provisioned.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/provision_wired_device/device_ip"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-provision-wired-device-device-ip"><strong>device_ip</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/provision_wired_device/device_ip" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in cisco.dnac 6.12.0</em></p>
@@ -686,7 +694,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the IP address of the wired device. This is a string value that should be in the format of standard IPv4 or IPv6 addresses.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/provision_wired_device/resync_retry_count"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-provision-wired-device-resync-retry-count"><strong>resync_retry_count</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/provision_wired_device/resync_retry_count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in cisco.dnac 6.12.0</em></p>
@@ -695,7 +703,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">200</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/provision_wired_device/resync_retry_interval"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-provision-wired-device-resync-retry-interval"><strong>resync_retry_interval</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/provision_wired_device/resync_retry_interval" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in cisco.dnac 6.12.0</em></p>
@@ -704,14 +712,14 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">2</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/provision_wired_device/site_name"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-provision-wired-device-site-name"><strong>site_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/provision_wired_device/site_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Indicates the exact location where the wired device will be provisioned. This is a string value that should represent the complete hierarchical path of the site (For example, “Global/USA/San Francisco/BGL_18/floor_pnp”).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/reboot_device"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-reboot-device"><strong>reboot_device</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/reboot_device" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -723,28 +731,44 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-config/resync_device_count"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-resync-device-count"><strong>resync_device_count</strong></p>
+<a class="ansibleOptionLink" href="#parameter-config/resync_device_count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the maximum number of devices to be resynced in the inventory. Ensure this count does not exceed 200, as attempting to resync more than 200 devices may cause the ‘sync_devices_using_forcesync’ API to enter an infinite loop.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">200</span></code></p>
+</div></td>
+</tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-config/resync_max_timeout"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-resync-max-timeout"><strong>resync_max_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-config/resync_max_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Sets the maximum timeout for the device resync process in the inventory, in seconds. The default is 600 seconds, which helps prevent infinite loops.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">600</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/role"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-role"><strong>role</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/role" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Role of device which can be ACCESS, CORE, DISTRIBUTION, BORDER ROUTER, UNKNOWN. ALL - This role typically represents all devices within the network, regardless of their specific roles or functions. UNKNOWN - This role is assigned to devices whose roles or functions have not been identified or classified within Cisco Catalsyt Center. This could happen if the platform is unable to determine the device’s role based on available information. ACCESS - This role typically represents switches or access points that serve as access points for end-user devices to connect to the network. These devices are often located at the edge of the network and provide connectivity to end-user devices. BORDER ROUTER - These are devices that connect different network domains or segments together. They often serve as gateways between different networks, such as connecting an enterprise network to the internet or connecting multiple branch offices. DISTRIBUTION - This role represents function as distribution switches or routers in hierarchical network designs. They aggregate traffic from access switches and route it toward the core of the network or toward other distribution switches. CORE - This role typically represents high-capacity switches or routers that form the backbone of the network. They handle large volumes of traffic and provide connectivity between different parts of network, such as connecting distribution switches or providing interconnection between different network segments.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/serial_number_list"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-serial-number-list"><strong>serial_number_list</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/serial_number_list" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of serial numbers representing devices. Operations such as updating, deleting, resyncing, or rebooting can be performed as alternatives to using IP addresses.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_auth_passphrase"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-auth-passphrase"><strong>snmp_auth_passphrase</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_auth_passphrase" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>SNMP authentication passphrase required for adding network, compute, and third-party devices.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_auth_protocol"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-auth-protocol"><strong>snmp_auth_protocol</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_auth_protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -752,28 +776,28 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;SHA&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_mode"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-mode"><strong>snmp_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Device’s snmp Mode refer to different SNMP (Simple Network Management Protocol) versions and their corresponding security levels. NOAUTHNOPRIV - This mode provides no authentication or encryption for SNMP messages. It means that devices communicating using SNMPv1 do not require any authentication (username/password) or encryption (data confidentiality). This makes it the least secure option. AUTHNOPRIV - This mode provides authentication but no encryption for SNMP messages. Authentication involves validating the source of the SNMP messages using a community string (similar to a password). However, the data transmitted between devices is not encrypted, so it’s susceptible to eavesdropping. AUTHPRIV - This mode provides both authentication and encryption for SNMP messages. It offers the highest level of security among the three options. Authentication ensures that the source of the messages is genuine, and encryption ensures that the data exchanged between devices is confidential and cannot be intercepted by unauthorized parties.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_priv_passphrase"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-priv-passphrase"><strong>snmp_priv_passphrase</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_priv_passphrase" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>SNMP private passphrase required for adding network, compute, and third-party devices.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_priv_protocol"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-priv-protocol"><strong>snmp_priv_protocol</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_priv_protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>SNMP private protocol required for adding network, compute, and third-party devices.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_retry"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-retry"><strong>snmp_retry</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_retry" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -781,21 +805,21 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">3</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_ro_community"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-ro-community"><strong>snmp_ro_community</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_ro_community" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>SNMP Read-Only community required for adding V2C devices.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_rw_community"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-rw-community"><strong>snmp_rw_community</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_rw_community" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>SNMP Read-Write community required for adding V2C devices.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_timeout"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-timeout"><strong>snmp_timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -803,21 +827,21 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">5</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_username"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-username"><strong>snmp_username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>SNMP username required for adding network, compute, and third-party devices.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/snmp_version"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-snmp-version"><strong>snmp_version</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/snmp_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>It is a standard protocol used for managing and monitoring network devices. v2 - In this communication between the SNMP manager (such as Cisco Catalyst) and the managed devices (such as routers, switches, or access points) is based on community strings.Community strings serve as form of authentication and they are transmitted in clear text, providing no encryption. v3 - It is the most secure version of SNMP, providing authentication, integrity, and encryption features. It allows for the use of usernames, authentication passwords, and encryption keys, providing stronger security compared to v2.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/type"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-type"><strong>type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -825,21 +849,21 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;NETWORK_DEVICE&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_interface_details"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-interface-details"><strong>update_interface_details</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_interface_details" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>This operation will take dictionary as a parameter and in this we give details to update interface details of device.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_interface_details/admin_status"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-interface-details-admin-status"><strong>admin_status</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_interface_details/admin_status" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Status of Interface of a device, it can be (UP/DOWN).</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_interface_details/clear_mac_address_table"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-interface-details-clear-mac-address-table"><strong>clear_mac_address_table</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_interface_details/clear_mac_address_table" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -851,7 +875,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_interface_details/deployment_mode"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-interface-details-deployment-mode"><strong>deployment_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_interface_details/deployment_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -859,63 +883,63 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;Deploy&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_interface_details/description"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-interface-details-description"><strong>description</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_interface_details/description" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the description of the interface of the device.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_interface_details/interface_name"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-interface-details-interface-name"><strong>interface_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_interface_details/interface_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specify the list of interface names to update the details of the device interface. (For example, GigabitEthernet1/0/11, FortyGigabitEthernet1/1/2)</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_interface_details/vlan_id"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-interface-details-vlan-id"><strong>vlan_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_interface_details/vlan_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Unique Id number assigned to a VLAN within a network used only while updating interface details.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_interface_details/voice_vlan_id"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-interface-details-voice-vlan-id"><strong>voice_vlan_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_interface_details/voice_vlan_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Identifier used to distinguish a specific VLAN that is dedicated to voice traffic used only while updating interface details.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_mgmt_ipaddresslist"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-mgmt-ipaddresslist"><strong>update_mgmt_ipaddresslist</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_mgmt_ipaddresslist" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>List of updated management IP addresses for network devices.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_mgmt_ipaddresslist/exist_mgmt_ipaddress"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-mgmt-ipaddresslist-exist-mgmt-ipaddress"><strong>exist_mgmt_ipaddress</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_mgmt_ipaddresslist/exist_mgmt_ipaddress" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Device’s existing Mgmt IpAddress.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/update_mgmt_ipaddresslist/new_mgmt_ipaddress"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-update-mgmt-ipaddresslist-new-mgmt-ipaddress"><strong>new_mgmt_ipaddress</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/update_mgmt_ipaddresslist/new_mgmt_ipaddress" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Device’s new Mgmt IpAddress.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/username"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for accessing the device. Required for Adding Network Device.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config_verify"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-config-verify"><strong>config_verify</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config_verify" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -927,7 +951,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_api_task_timeout"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-api-task-timeout"><strong>dnac_api_task_timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_api_task_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -935,7 +959,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">1200</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_debug"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-debug"><strong>dnac_debug</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_debug" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -947,14 +971,14 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_host"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-host"><strong>dnac_host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The Cisco DNA Center hostname.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_log"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-log"><strong>dnac_log</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_log" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -971,7 +995,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_log_append"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-log-append"><strong>dnac_log_append</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_log_append" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -983,7 +1007,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_log_file_path"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-log-file-path"><strong>dnac_log_file_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_log_file_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -993,7 +1017,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;dnac.log&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_log_level"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-log-level"><strong>dnac_log_level</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_log_level" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1006,14 +1030,14 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;WARNING&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_password"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-password"><strong>dnac_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The Cisco DNA Center password to authenticate.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_port"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-port"><strong>dnac_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1021,7 +1045,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;443&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_task_poll_interval"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-task-poll-interval"><strong>dnac_task_poll_interval</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_task_poll_interval" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -1029,7 +1053,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">2</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_username"></div>
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-user"><span id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-username"></span><strong>dnac_username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: user</span></p>
@@ -1039,7 +1063,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;admin&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_verify"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-verify"><strong>dnac_verify</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_verify" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1051,7 +1075,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dnac_version"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-dnac-version"><strong>dnac_version</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dnac_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1059,7 +1083,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;2.2.3.3&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1071,7 +1095,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_response_schema"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-inventory-intent-module-parameter-validate-response-schema"><strong>validate_response_schema</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_response_schema" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1509,7 +1533,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-inventor
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 18, 2024.
+      <span class="lastupdated">Last updated on Oct 07, 2024.
       </span></p>
   </div>
 

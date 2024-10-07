@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.11.0" name="antsibull-docs" />
+<meta content="2.14.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.postgresql.postgresql_user module – Create, alter, or remove a user (role) from a PostgreSQL server instance &mdash; Ansible Community Documentation</title>
@@ -264,6 +264,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kaytus/index.html">Collections in the Kaytus Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubevirt/index.html">Collections in the Kubevirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../lowlydba/index.html">Collections in the Lowlydba Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../microsoft/index.html">Collections in the Microsoft Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
@@ -357,13 +358,12 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
     var banner = '';
       var extra_banner = '';
     /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-   /*  var extra_banner =
+    var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;">' +
-        'Discuss Ansible in the new <a href="https://forum.ansible.com/t/welcome-to-the-ansible-community/5">Ansible Forum!</a>' +
+        'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem by taking the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>.' +
         '</p>' +
       '</div>';
-      */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -417,7 +417,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <h1>community.postgresql.postgresql_user module – Create, alter, or remove a user (role) from a PostgreSQL server instance<a class="headerlink" href="#community-postgresql-postgresql-user-module-create-alter-or-remove-a-user-role-from-a-postgresql-server-instance" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/postgresql/">community.postgresql collection</a> (version 3.4.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/postgresql/">community.postgresql collection</a> (version 3.5.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -485,13 +485,27 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-configuration"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-configuration"><strong>configuration</strong></p>
+<a class="ansibleOptionLink" href="#parameter-configuration" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+<p><em class="ansible-option-versionadded">added in community.postgresql 3.5.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Role-specific configuration parameters that would otherwise be set by <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">ROLE</span> <span class="pre">user</span> <span class="pre">SET</span> <span class="pre">variable</span> <span class="pre">TO</span> <span class="pre">value;</span></code>.</p>
+<p>Takes a dict where the key is the name of the configuration parameter. If the key includes special characters like <code class="docutils literal notranslate"><span class="pre">.</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code>, it needs to be quoted to ensure the YAML is valid.</p>
+<p>Sets or updates any parameter in the list that is not present or has the wrong value in the database.</p>
+<p>Removes any parameter from the user that is not listed here.</p>
+<p>Parameters that are present in the database but are not included in this list will only be reset, if <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-postgresql-postgresql-user-module-parameter-reset-unspecified-configuration"><span class="std std-ref"><span class="pre">reset_unspecified_configuration=true</span></span></a></code>.</p>
+<p>Inputs to <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-postgresql-postgresql-user-module-parameter-user"><span class="std std-ref"><span class="pre">user</span></span></a></strong></code> as well as keys and values in this parameter are quoted by the module. If you require the user to contain a <code class="docutils literal notranslate"><span class="pre">&quot;</span></code>, you need to double it, otherwise the module will fail. <code class="docutils literal notranslate"><span class="pre">&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">'</span></code> are not allowed in configuration keys and any <code class="docutils literal notranslate"><span class="pre">'</span></code> in the value of a configuration will be escaped by this module. Additionally, parameters and values are checked if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-postgresql-postgresql-user-module-parameter-trust-input"><span class="std std-ref"><span class="pre">trust_input</span></span></a></strong></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-conn_limit"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-conn-limit"><strong>conn_limit</strong></p>
 <a class="ansibleOptionLink" href="#parameter-conn_limit" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the user (role) connection limit.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-connect_params"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-connect-params"><strong>connect_params</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connect_params" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 <p><em class="ansible-option-versionadded">added in community.postgresql 2.3.0</em></p>
@@ -501,7 +515,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-db"></div>
 <div class="ansibleOptionAnchor" id="parameter-login_db"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-login-db"><span id="ansible-collections-community-postgresql-postgresql-user-module-parameter-db"></span><strong>db</strong></p>
 <a class="ansibleOptionLink" href="#parameter-db" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: login_db</span></p>
@@ -511,7 +525,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-encrypted"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-encrypted"><strong>encrypted</strong></p>
 <a class="ansibleOptionLink" href="#parameter-encrypted" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -526,7 +540,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-expires"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-expires"><strong>expires</strong></p>
 <a class="ansibleOptionLink" href="#parameter-expires" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -535,7 +549,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p>Note that this value must be a valid SQL date and time type.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-fail_on_user"></div>
 <div class="ansibleOptionAnchor" id="parameter-fail_on_role"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-fail-on-user"><span id="ansible-collections-community-postgresql-postgresql-user-module-parameter-fail-on-role"></span><strong>fail_on_user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-fail_on_user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: fail_on_role</span></p>
@@ -549,7 +563,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-login_host"></div>
 <div class="ansibleOptionAnchor" id="parameter-host"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-login-host"><span id="ansible-collections-community-postgresql-postgresql-user-module-parameter-host"></span><strong>login_host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-login_host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: host</span></p>
@@ -560,7 +574,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-login_password"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-login-password"><strong>login_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-login_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -568,7 +582,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-login_unix_socket"></div>
 <div class="ansibleOptionAnchor" id="parameter-unix_socket"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-unix-socket"><span id="ansible-collections-community-postgresql-postgresql-user-module-parameter-login-unix-socket"></span><strong>login_unix_socket</strong></p>
 <a class="ansibleOptionLink" href="#parameter-login_unix_socket" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: unix_socket</span></p>
@@ -578,7 +592,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-login_user"></div>
 <div class="ansibleOptionAnchor" id="parameter-login"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-login-user"><span id="ansible-collections-community-postgresql-postgresql-user-module-parameter-login"></span><strong>login_user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-login_user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: login</span></p>
@@ -588,7 +602,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;postgres&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div>
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-user"><span id="ansible-collections-community-postgresql-postgresql-user-module-parameter-name"></span><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: user</span></p>
@@ -597,7 +611,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <td><div class="ansible-option-cell"><p>Name of the user (role) to add or remove.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-no_password_changes"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-no-password-changes"><strong>no_password_changes</strong></p>
 <a class="ansibleOptionLink" href="#parameter-no_password_changes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -609,7 +623,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -620,7 +634,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p>Note that if the provided password string is already in MD5-hashed format, then it is used as-is, regardless of <em>encrypted</em> option.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-port"></div>
 <div class="ansibleOptionAnchor" id="parameter-login_port"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-port"><span id="ansible-collections-community-postgresql-postgresql-user-module-parameter-login-port"></span><strong>port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: login_port</span></p>
@@ -630,13 +644,26 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">5432</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-priv"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-priv"><strong>priv</strong></p>
 <a class="ansibleOptionLink" href="#parameter-priv" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>This option has been <strong>deprecated</strong> and will be removed in community.postgresql 4.0.0. Please use the <a class="reference internal" href="postgresql_privs_module.html#ansible-collections-community-postgresql-postgresql-privs-module"><span class="std std-ref">community.postgresql.postgresql_privs</span></a> module to GRANT/REVOKE permissions instead.</p>
 <p>Slash-separated PostgreSQL privileges string: <code class="docutils literal notranslate"><span class="pre">priv1/priv2</span></code>, where you can define the user’s privileges for the database ( allowed options - ‘CREATE’, ‘CONNECT’, ‘TEMPORARY’, ‘TEMP’, ‘ALL’. For example <code class="docutils literal notranslate"><span class="pre">CONNECT</span></code> ) or for table ( allowed options - ‘SELECT’, ‘INSERT’, ‘UPDATE’, ‘DELETE’, ‘TRUNCATE’, ‘REFERENCES’, ‘TRIGGER’, ‘ALL’. For example <code class="docutils literal notranslate"><span class="pre">table:SELECT</span></code> ). Mixed example of this string: <code class="docutils literal notranslate"><span class="pre">CONNECT/CREATE/table1:SELECT/table2:INSERT</span></code>.</p>
 <p>When <em>priv</em> contains tables, the module uses the schema <code class="docutils literal notranslate"><span class="pre">public</span></code> by default. If you need to specify a different schema, use the <code class="docutils literal notranslate"><span class="pre">schema_name.table_name</span></code> notation, for example, <code class="docutils literal notranslate"><span class="pre">pg_catalog.pg_stat_database:SELECT</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-reset_unspecified_configuration"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-user-module-parameter-reset-unspecified-configuration"><strong>reset_unspecified_configuration</strong></p>
+<a class="ansibleOptionLink" href="#parameter-reset_unspecified_configuration" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.postgresql 3.5.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the user’s default configuration parameters will be reset in case they are not included in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-postgresql-postgresql-user-module-parameter-configuration"><span class="std std-ref"><span class="pre">configuration</span></span></a></strong></code>, otherwise existing parameters will not be modified if not included in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-postgresql-postgresql-user-module-parameter-configuration"><span class="std std-ref"><span class="pre">configuration</span></span></a></strong></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -864,6 +891,23 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <span class="w">  </span><span class="nt">community.postgresql.postgresql_user</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>
 <span class="w">    </span><span class="nt">priv</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;pg_catalog.pg_stat_database:SELECT&#39;</span>
+
+<span class="c1"># Create a user and set a default-configuration that is active when they start a session</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a user with config-parameter</span>
+<span class="w">  </span><span class="nt">community.postgresql.postgresql_user</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appclient</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret123&quot;</span>
+<span class="w">    </span><span class="nt">configuration</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">work_mem</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16MB&quot;</span>
+
+<span class="c1"># Make sure user has only specified default configuration parameters</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Clear all configuration that is not explicitly defined for user</span>
+<span class="w">  </span><span class="nt">community.postgresql.postgresql_user</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appclient</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret123&quot;</span>
+<span class="w">    </span><span class="nt">configuration</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">work_mem</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16MB&quot;</span>
+<span class="w">    </span><span class="nt">reset_unspecified_configuration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 </section>
@@ -920,7 +964,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 18, 2024.
+      <span class="lastupdated">Last updated on Oct 07, 2024.
       </span></p>
   </div>
 
