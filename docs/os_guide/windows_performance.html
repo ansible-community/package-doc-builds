@@ -28,7 +28,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Windows Frequently Asked Questions" href="windows_faq.html" />
+    <link rel="next" title="Windows SSH" href="windows_ssh.html" />
     <link rel="prev" title="Desired State Configuration" href="windows_dsc.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -171,17 +171,27 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Using Ansible on Windows and BSD</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="windows_setup.html">Setting up a Windows Host</a></li>
-<li class="toctree-l2"><a class="reference internal" href="windows_usage.html">Using Ansible and Windows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="windows_winrm.html">Windows Remote Management</a></li>
-<li class="toctree-l2"><a class="reference internal" href="windows_dsc.html">Desired State Configuration</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Windows performance</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#optimize-powershell-performance-to-reduce-ansible-task-overhead">Optimize PowerShell performance to reduce Ansible task overhead</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fix-high-cpu-on-boot-for-vms-cloud-instances">Fix high-CPU-on-boot for VMs/cloud instances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_bsd.html">Managing BSD hosts with Ansible</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="intro_windows.html">Managing Windows hosts with Ansible</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="windows_dsc.html">Desired State Configuration</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Windows performance</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#optimize-powershell-performance-to-reduce-ansible-task-overhead">Optimize PowerShell performance to reduce Ansible task overhead</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fix-high-cpu-on-boot-for-vms-cloud-instances">Fix high-CPU-on-boot for VMs/cloud instances</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="windows_faq.html">Windows Frequently Asked Questions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro_bsd.html">Managing BSD hosts with Ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_ssh.html">Windows SSH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_usage.html">Using Ansible and Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_winrm.html">Windows Remote Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_winrm_certificate.html">WinRM Certificate Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_winrm_kerberos.html">Kerberos Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#bootstrapping-windows">Bootstrapping Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#connecting-to-windows-nodes">Connecting to Windows nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#which-modules-are-available">Which modules are available?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#using-windows-as-the-control-node">Using Windows as the control node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#windows-facts">Windows facts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#common-windows-problems">Common Windows problems</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
@@ -265,6 +275,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Using Ansible on Windows and BSD</a></li>
+          <li class="breadcrumb-item"><a href="intro_windows.html">Managing Windows hosts with Ansible</a></li>
       <li class="breadcrumb-item active">Windows performance</li>
   <li class="wy-breadcrumbs-aside">
             <!-- Remove main index page as it is no longer editable -->
@@ -288,13 +299,12 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
     var banner = '';
       var extra_banner = '';
     /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-   /*  var extra_banner =
+    var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;">' +
-        'Discuss Ansible in the new <a href="https://forum.ansible.com/t/welcome-to-the-ansible-community/5">Ansible Forum!</a>' +
+        'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem by taking the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>.' +
         '</p>' +
       '</div>';
-      */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -434,14 +444,14 @@ golden image build process and runtime.</p>
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="windows_dsc.html" class="btn btn-neutral float-left" title="Desired State Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="windows_faq.html" class="btn btn-neutral float-right" title="Windows Frequently Asked Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="windows_ssh.html" class="btn btn-neutral float-right" title="Windows SSH" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 12, 2024.
+      <span class="lastupdated">Last updated on Oct 07, 2024.
       </span></p>
   </div>
 
