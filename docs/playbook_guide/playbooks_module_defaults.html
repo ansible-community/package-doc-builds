@@ -312,9 +312,12 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
     /*use extra_banner for when we want something extra, like a survey or Community Day notice */
     var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="padding-bottom: 1.2rem;">' +
-        'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem by taking the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>.' +
+        '<p style="font-size: 1.5rem;text-align: center;">' +
+        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
         '</p>' +
+        '<p style="padding-bottom: 1.2rem;text-align: center">' +
+          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
+          '</p>' +
       '</div>';
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -452,58 +455,69 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 </div>
 <section id="module-defaults-groups">
 <span id="id2"></span><h2>Module defaults groups<a class="headerlink" href="#module-defaults-groups" title="Link to this heading"></a></h2>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 2.7.</span></p>
+<p>Module default groups allow to provide common parameters to groups of modules that belong together. Collections can define such groups in their <code class="docutils literal notranslate"><span class="pre">meta/runtime.yml</span></code> file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">module_defaults</span></code> does not take the <code class="docutils literal notranslate"><span class="pre">collections</span></code> keyword into account, so the fully qualified group name must be used for new groups in <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code>.</p>
 </div>
-<p>Ansible 2.7 adds a preview-status feature to group together modules that share common sets of parameters. This makes it easier to author playbooks making heavy use of API-based modules such as cloud modules.</p>
+<p>Here is an example <code class="docutils literal notranslate"><span class="pre">runtime.yml</span></code> file for the <code class="docutils literal notranslate"><span class="pre">ns.coll</span></code> collection.
+This file defines an action group named <code class="docutils literal notranslate"><span class="pre">ns.coll.my_group</span></code> and places the <code class="docutils literal notranslate"><span class="pre">sample_module</span></code> from <code class="docutils literal notranslate"><span class="pre">ns.coll</span></code> and <code class="docutils literal notranslate"><span class="pre">another_module</span></code> from <code class="docutils literal notranslate"><span class="pre">another.collection</span></code> into the group.</p>
+<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="c1"># collections/ansible_collections/ns/coll/meta/runtime.yml</span>
+<span class="nt">action_groups</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">my_group</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sample_module</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">another.collection.another_module</span>
+</pre></div>
+</div>
+<p>This group can now be used in a playbook like this:</p>
+<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">group/ns.coll.my_group</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">option_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">option_value</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ns.coll.sample_module</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">another.collection.another_module</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>For historical reasons and backwards compatibility, there are some special groups:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Group</p></th>
-<th class="head"><p>Purpose</p></th>
-<th class="head"><p>Ansible Version</p></th>
+<th class="head"><p>Extended module group</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>aws</p></td>
-<td><p>Amazon Web Services</p></td>
-<td><p>2.7</p></td>
+<td><p>amazon.aws.aws and community.aws.aws</p></td>
 </tr>
 <tr class="row-odd"><td><p>azure</p></td>
-<td><p>Azure</p></td>
-<td><p>2.7</p></td>
+<td><p>azure.azcollection.azure</p></td>
 </tr>
 <tr class="row-even"><td><p>gcp</p></td>
-<td><p>Google Cloud Platform</p></td>
-<td><p>2.7</p></td>
+<td><p>google.cloud.gcp</p></td>
 </tr>
 <tr class="row-odd"><td><p>k8s</p></td>
-<td><p>Kubernetes</p></td>
-<td><p>2.8</p></td>
+<td><p>community.kubernetes.k8s, community.general.k8s, community.kubevirt.k8s, community.okd.k8s, and kubernetes.core.k8s</p></td>
 </tr>
 <tr class="row-even"><td><p>os</p></td>
-<td><p>OpenStack</p></td>
-<td><p>2.8</p></td>
+<td><p>openstack.cloud.os</p></td>
 </tr>
 <tr class="row-odd"><td><p>acme</p></td>
-<td><p>ACME</p></td>
-<td><p>2.10</p></td>
+<td><p>community.crypto.acme</p></td>
 </tr>
 <tr class="row-even"><td><p>docker*</p></td>
-<td><p>Docker</p></td>
-<td><p>2.10</p></td>
+<td><p>community.general.docker and community.docker.docker</p></td>
 </tr>
 <tr class="row-odd"><td><p>ovirt</p></td>
-<td><p>oVirt</p></td>
-<td><p>2.10</p></td>
+<td><p>ovirt.ovirt.ovirt and community.general.ovirt</p></td>
 </tr>
 <tr class="row-even"><td><p>vmware</p></td>
-<td><p>VMware</p></td>
-<td><p>2.10</p></td>
+<td><p>community.vmware.vmware</p></td>
 </tr>
 </tbody>
 </table>
 <ul class="simple">
-<li><p>The <a class="reference external" href="docker_stack_module">docker_stack</a> module is not included in the <code class="docutils literal notranslate"><span class="pre">docker</span></code> defaults group.</p></li>
+<li><p>Check out the documentation for the collection or its meta/runtime.yml to see which action plugins and modules are included in the group.</p></li>
 </ul>
 <p>Use the groups with <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code> by prefixing the group name with <code class="docutils literal notranslate"><span class="pre">group/</span></code> - for example <code class="docutils literal notranslate"><span class="pre">group/aws</span></code>.</p>
 <p>In a playbook, you can set module defaults for whole groups of modules, such as setting a common AWS region.</p>
@@ -524,26 +538,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;RHEL*7.5*&#39;</span>
 </pre></div>
 </div>
-<p>In ansible-core 2.12, collections can define their own groups in the <code class="docutils literal notranslate"><span class="pre">meta/runtime.yml</span></code> file. <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code> does not take the <code class="docutils literal notranslate"><span class="pre">collections</span></code> keyword into account, so the fully qualified group name must be used for new groups in <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code>.</p>
-<p>Here is an example <code class="docutils literal notranslate"><span class="pre">runtime.yml</span></code> file for the <code class="docutils literal notranslate"><span class="pre">ns.coll</span></code> collection.
-This file defines an action group named <code class="docutils literal notranslate"><span class="pre">ns.coll.my_group</span></code> and places the <code class="docutils literal notranslate"><span class="pre">sample_module</span></code> from <code class="docutils literal notranslate"><span class="pre">ns.coll</span></code> and <code class="docutils literal notranslate"><span class="pre">another_module</span></code> from <code class="docutils literal notranslate"><span class="pre">another.collection</span></code> into the group.</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="c1"># collections/ansible_collections/ns/coll/meta/runtime.yml</span>
-<span class="nt">action_groups</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">my_group</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sample_module</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">another.collection.another_module</span>
-</pre></div>
-</div>
-<p>This group can now be used in a playbook like this:</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
-<span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">group/ns.coll.my_group</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">option_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">option_value</span>
-<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ns.coll.sample_module</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">another.collection.another_module</span><span class="p">:</span>
-</pre></div>
-</div>
+<p>More information on meta/runtime.yml, including the complete format for <cite>action_groups</cite>, can be found in <a class="reference internal" href="../dev_guide/developing_collections_structure.html#meta-runtime-yml"><span class="std std-ref">runtime.yml</span></a>.</p>
 </section>
 </section>
 
@@ -561,7 +556,7 @@ This file defines an action group named <code class="docutils literal notranslat
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 07, 2024.
+      <span class="lastupdated">Last updated on Nov 04, 2024.
       </span></p>
   </div>
 
