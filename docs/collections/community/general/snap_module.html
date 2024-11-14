@@ -364,9 +364,10 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
       });
     }
     var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-    var extra_banner =
+    /*
+      var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="font-size: 1.5rem;text-align: center;">' +
         'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
@@ -375,6 +376,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
           'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
           '</p>' +
       '</div>';
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -428,7 +430,7 @@ _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
 <h1>community.general.snap module – Manages snaps<a class="headerlink" href="#community-general-snap-module-manages-snaps" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 9.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 9.5.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -440,9 +442,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
 <li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#attributes" id="id3">Attributes</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id4">See Also</a></p></li>
-<li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
-<li><p><a class="reference internal" href="#return-values" id="id6">Return Values</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id5">See Also</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id7">Return Values</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
@@ -474,7 +477,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-classic"></div><p class="ansible-option-title" id="ansible-collections-community-general-snap-module-parameter-classic"><strong>classic</strong></p>
 <a class="ansibleOptionLink" href="#parameter-classic" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Confinement policy. The classic confinement allows a snap to have the same level of access to the system as “classic” packages, like those managed by APT. This option corresponds to the <code class="docutils literal notranslate"><span class="pre">--classic</span></code> argument. This option can only be specified if there is a single snap in the task.</p>
+<td><div class="ansible-option-cell"><p>Install a snap that has classic confinement.</p>
+<p>This option corresponds to the <code class="docutils literal notranslate"><span class="pre">--classic</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">snap</span> <span class="pre">install</span></code> command.</p>
+<p>This level of confinement is permissive, granting full system access, similar to that of traditionally packaged applications that do not use sandboxing mechanisms. This option can only be specified when the task involves a single snap.</p>
+<p>See <a class="reference external" href="https://snapcraft.io/docs/snap-confinement">https://snapcraft.io/docs/snap-confinement</a> for more details about classic confinement and confinement levels.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -487,7 +493,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-dangerous" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 7.2.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Install the given snap file even if there are no pre-acknowledged signatures for it, meaning it was not verified and could be dangerous.</p>
+<td><div class="ansible-option-cell"><p>Install the snap in dangerous mode, without validating its assertions and signatures.</p>
+<p>This is useful when installing local snaps that are either unsigned or have signatures that have not been acknowledged.</p>
+<p>See <a class="reference external" href="https://snapcraft.io/docs/install-modes">https://snapcraft.io/docs/install-modes</a> for more details about installation modes.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -501,7 +509,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the snaps to be installed.</p>
 <p>Any named snap accepted by the <code class="docutils literal notranslate"><span class="pre">snap</span></code> command is valid.</p>
-<p>Notice that snap files might require <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-snap-module-parameter-dangerous"><span class="std std-ref"><span class="pre">dangerous=true</span></span></a></code> to ignore the error “cannot find signatures with metadata for snap”.</p>
+<p><code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-snap-module-parameter-dangerous"><span class="std std-ref"><span class="pre">dangerous=true</span></span></a></code> may be necessary when installing `.snap` files. See <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-snap-module-parameter-dangerous"><span class="std std-ref"><span class="pre">dangerous</span></span></a></strong></code> for more details.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -510,6 +518,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p><em class="ansible-option-versionadded">added in community.general 4.4.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Set options with pattern <code class="docutils literal notranslate"><span class="pre">key=value</span></code> or <code class="docutils literal notranslate"><span class="pre">snap:key=value</span></code>. If a snap name is given, the option will be applied to that snap only. If the snap name is omitted, the options will be applied to all snaps listed in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-snap-module-parameter-name"><span class="std std-ref"><span class="pre">name</span></span></a></strong></code>. Options will only be applied to active snaps.</p>
+<p>Options will only be applied when <code class="docutils literal notranslate"><span class="pre">state</span></code> is set to <code class="ansible-value docutils literal notranslate"><span class="pre">present</span></code>. This is done after the necessary installation or refresh (upgrade/downgrade) of all the snaps listed in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-snap-module-parameter-name"><span class="std std-ref"><span class="pre">name</span></span></a></strong></code>.</p>
+<p>See <a class="reference external" href="https://snapcraft.io/docs/configuration-in-snaps">https://snapcraft.io/docs/configuration-in-snaps</a> for more details about snap configuration options.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -559,8 +569,17 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </tbody>
 </table>
 </section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Privileged operations, such as installing and configuring snaps, require root priviledges. This is only the case if the user has not logged in to the Snap Store.</p></li>
+</ul>
+</div>
+</section>
 <section id="see-also">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -570,7 +589,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div>
 </section>
 <section id="examples">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install &quot;foo&quot; and &quot;bar&quot; snap</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install foo</span>
 <span class="w">  </span><span class="nt">community.general.snap</span><span class="p">:</span>
@@ -619,7 +638,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div>
 </section>
 <section id="return-values">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
 <p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
 <table class="longtable ansible-option-table docutils align-default" style="width: 100%">
 <thead>
@@ -714,7 +733,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 04, 2024.
+      <span class="lastupdated">Last updated on Nov 14, 2024.
       </span></p>
   </div>
 
