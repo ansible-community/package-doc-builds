@@ -100,13 +100,6 @@
         </option>
         
         <option
-            value="9"
-            
-        >
-            9
-        </option>
-        
-        <option
             value="2.9"
             
         >
@@ -245,8 +238,7 @@
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-  <script>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article"><script>
     function startsWith(str, needle) {
       return str.slice(0, needle.length) == needle
     }
@@ -283,7 +275,7 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/10/"])) {
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
@@ -303,22 +295,24 @@
       }
       msg += '</p>';
 
-      banner += '<div id="banner_id" class="admonition ';
-      banner += important ? 'important' : 'caution';
-      banner += '">';
+      banner += '<div id="banner_id" class="admonition '; banner += important ? 'important' : 'caution'; banner += '">';
       banner += important ? '<br>' : '';
       banner += msg;
       banner += important ? '<br>' : '';
       banner += '</div>';
       document.write(banner);
     
-  </script>
-
+</script>
 
   
            <div itemprop="articleBody">
              
-  <section id="ansible-module-architecture">
+  
+<div id="banner" class="Admonition caution">
+    <p>
+      You are reading an unmaintained version of the Ansible documentation. Unmaintained Ansible versions can contain unfixed security vulnerabilities (CVE). Please upgrade to a maintained version. See <a href="/ansible/latest/">the latest Ansible documentation</a>.
+    </p>
+</div><section id="ansible-module-architecture">
 <span id="developing-program-flow-modules"></span><span id="flow-modules"></span><h1>Ansible module architecture<a class="headerlink" href="#ansible-module-architecture" title="Link to this heading"></a></h1>
 <p>If you are working on the <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> code, writing an Ansible module, or developing an action plugin, you may need to understand how Ansible’s program flow executes. If you are just using Ansible Modules in playbooks, you can skip this section.</p>
 <nav class="contents local" id="contents">
@@ -360,27 +354,26 @@
 <li><p><a class="reference internal" href="#ansible-syslog-facility" id="id26">_ansible_syslog_facility</a></p></li>
 <li><p><a class="reference internal" href="#ansible-version" id="id27">_ansible_version</a></p></li>
 <li><p><a class="reference internal" href="#ansible-module-name" id="id28">_ansible_module_name</a></p></li>
-<li><p><a class="reference internal" href="#ansible-string-conversion-action" id="id29">_ansible_string_conversion_action</a></p></li>
-<li><p><a class="reference internal" href="#ansible-keep-remote-files" id="id30">_ansible_keep_remote_files</a></p></li>
-<li><p><a class="reference internal" href="#ansible-socket" id="id31">_ansible_socket</a></p></li>
-<li><p><a class="reference internal" href="#ansible-shell-executable" id="id32">_ansible_shell_executable</a></p></li>
-<li><p><a class="reference internal" href="#ansible-tmpdir" id="id33">_ansible_tmpdir</a></p></li>
-<li><p><a class="reference internal" href="#ansible-remote-tmp" id="id34">_ansible_remote_tmp</a></p></li>
+<li><p><a class="reference internal" href="#ansible-keep-remote-files" id="id29">_ansible_keep_remote_files</a></p></li>
+<li><p><a class="reference internal" href="#ansible-socket" id="id30">_ansible_socket</a></p></li>
+<li><p><a class="reference internal" href="#ansible-shell-executable" id="id31">_ansible_shell_executable</a></p></li>
+<li><p><a class="reference internal" href="#ansible-tmpdir" id="id32">_ansible_tmpdir</a></p></li>
+<li><p><a class="reference internal" href="#ansible-remote-tmp" id="id33">_ansible_remote_tmp</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#module-return-values-unsafe-strings" id="id35">Module return values &amp; Unsafe strings</a></p></li>
-<li><p><a class="reference internal" href="#special-considerations" id="id36">Special considerations</a></p>
+<li><p><a class="reference internal" href="#module-return-values-unsafe-strings" id="id34">Module return values &amp; Unsafe strings</a></p></li>
+<li><p><a class="reference internal" href="#special-considerations" id="id35">Special considerations</a></p>
 <ul>
-<li><p><a class="reference internal" href="#pipelining" id="id37">Pipelining</a></p></li>
-<li><p><a class="reference internal" href="#why-pass-args-over-stdin" id="id38">Why pass args over stdin?</a></p></li>
+<li><p><a class="reference internal" href="#pipelining" id="id36">Pipelining</a></p></li>
+<li><p><a class="reference internal" href="#why-pass-args-over-stdin" id="id37">Why pass args over stdin?</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#ansiblemodule" id="id39">AnsibleModule</a></p>
+<li><p><a class="reference internal" href="#ansiblemodule" id="id38">AnsibleModule</a></p>
 <ul>
-<li><p><a class="reference internal" href="#argument-spec" id="id40">Argument spec</a></p></li>
-<li><p><a class="reference internal" href="#dependencies-between-module-options" id="id41">Dependencies between module options</a></p></li>
-<li><p><a class="reference internal" href="#declaring-check-mode-support" id="id42">Declaring check mode support</a></p></li>
-<li><p><a class="reference internal" href="#adding-file-options" id="id43">Adding file options</a></p></li>
+<li><p><a class="reference internal" href="#argument-spec" id="id39">Argument spec</a></p></li>
+<li><p><a class="reference internal" href="#dependencies-between-module-options" id="id40">Dependencies between module options</a></p></li>
+<li><p><a class="reference internal" href="#declaring-check-mode-support" id="id41">Declaring check mode support</a></p></li>
+<li><p><a class="reference internal" href="#adding-file-options" id="id42">Adding file options</a></p></li>
 </ul>
 </li>
 </ul>
@@ -775,26 +768,22 @@ Elements: <code class="docutils literal notranslate"><span class="pre">strings</
 <p>Type: <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 <p>This argument passes the information to modules about their name. For more details see, the configuration option <a class="reference internal" href="../reference_appendices/config.html#default-module-name"><span class="std std-ref">DEFAULT_MODULE_NAME</span></a>.</p>
 </section>
-<section id="ansible-string-conversion-action">
-<h4><a class="toc-backref" href="#id29" role="doc-backlink">_ansible_string_conversion_action</a><a class="headerlink" href="#ansible-string-conversion-action" title="Link to this heading"></a></h4>
-<p>This argument provides instructions about what modules should do after the values of the user-specified module parameters are converted to strings. For more details, see the <a class="reference external" href="https://docs.ansible.com/ansible/9/reference_appendices/config.html#string-conversion-action" title="(in Ansible v9)"><span>STRING_CONVERSION_ACTION</span></a> configuration option.</p>
-</section>
 <section id="ansible-keep-remote-files">
-<h4><a class="toc-backref" href="#id30" role="doc-backlink">_ansible_keep_remote_files</a><a class="headerlink" href="#ansible-keep-remote-files" title="Link to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id29" role="doc-backlink">_ansible_keep_remote_files</a><a class="headerlink" href="#ansible-keep-remote-files" title="Link to this heading"></a></h4>
 <p>Type: <code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 <p>This argument provides instructions that modules must be ready if they need to keep the remote files. For more details, see the <a class="reference internal" href="../reference_appendices/config.html#default-keep-remote-files"><span class="std std-ref">DEFAULT_KEEP_REMOTE_FILES</span></a> configuration option.</p>
 </section>
 <section id="ansible-socket">
-<h4><a class="toc-backref" href="#id31" role="doc-backlink">_ansible_socket</a><a class="headerlink" href="#ansible-socket" title="Link to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id30" role="doc-backlink">_ansible_socket</a><a class="headerlink" href="#ansible-socket" title="Link to this heading"></a></h4>
 <p>This argument provides modules with a socket for persistent connections. The argument is created using the <a class="reference internal" href="../reference_appendices/config.html#persistent-control-path-dir"><span class="std std-ref">PERSISTENT_CONTROL_PATH_DIR</span></a> configuration option.</p>
 </section>
 <section id="ansible-shell-executable">
-<h4><a class="toc-backref" href="#id32" role="doc-backlink">_ansible_shell_executable</a><a class="headerlink" href="#ansible-shell-executable" title="Link to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id31" role="doc-backlink">_ansible_shell_executable</a><a class="headerlink" href="#ansible-shell-executable" title="Link to this heading"></a></h4>
 <p>Type: <code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
 <p>This argument ensures that modules use the designated shell executable. For more details, see the <a class="reference internal" href="../inventory_guide/intro_inventory.html#ansible-shell-executable"><span class="std std-ref">ansible_shell_executable</span></a> remote host environment parameter.</p>
 </section>
 <section id="ansible-tmpdir">
-<h4><a class="toc-backref" href="#id33" role="doc-backlink">_ansible_tmpdir</a><a class="headerlink" href="#ansible-tmpdir" title="Link to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id32" role="doc-backlink">_ansible_tmpdir</a><a class="headerlink" href="#ansible-tmpdir" title="Link to this heading"></a></h4>
 <p>Type: <code class="docutils literal notranslate"><span class="pre">str</span></code></p>
 <p>This argument provides instructions to modules that all commands must use the designated temporary directory, if created. The action plugin designs this temporary directory.</p>
 <p>Modules can access this parameter by using the public <code class="docutils literal notranslate"><span class="pre">tmpdir</span></code> property. The <code class="docutils literal notranslate"><span class="pre">tmpdir</span></code> property will create a temporary directory if the action plugin did not set the parameter.</p>
@@ -807,12 +796,12 @@ Elements: <code class="docutils literal notranslate"><span class="pre">strings</
 <p>As a result, using the <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> configuration file to activate or customize this setting will not guarantee that you control the full value.</p>
 </section>
 <section id="ansible-remote-tmp">
-<h4><a class="toc-backref" href="#id34" role="doc-backlink">_ansible_remote_tmp</a><a class="headerlink" href="#ansible-remote-tmp" title="Link to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id33" role="doc-backlink">_ansible_remote_tmp</a><a class="headerlink" href="#ansible-remote-tmp" title="Link to this heading"></a></h4>
 <p>The module’s <code class="docutils literal notranslate"><span class="pre">tmpdir</span></code> property creates a randomized directory name in this directory if the action plugin did not set <code class="docutils literal notranslate"><span class="pre">_ansible_tmpdir</span></code>. For more details, see the <a class="reference external" href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/sh_shell.html#parameter-remote_tmp">remote_tmp</a> parameter of the shell plugin.</p>
 </section>
 </section>
 <section id="module-return-values-unsafe-strings">
-<span id="flow-module-return-values"></span><h3><a class="toc-backref" href="#id35" role="doc-backlink">Module return values &amp; Unsafe strings</a><a class="headerlink" href="#module-return-values-unsafe-strings" title="Link to this heading"></a></h3>
+<span id="flow-module-return-values"></span><h3><a class="toc-backref" href="#id34" role="doc-backlink">Module return values &amp; Unsafe strings</a><a class="headerlink" href="#module-return-values-unsafe-strings" title="Link to this heading"></a></h3>
 <p>At the end of a module’s execution, it formats the data that it wants to return as a JSON string and prints the string to its stdout. The normal action plugin receives the JSON string, parses it into a Python dictionary, and returns it to the executor.</p>
 <p>If Ansible templated every string return value, it would be vulnerable to an attack from users with access to managed nodes. If an unscrupulous user disguised malicious code as Ansible return value strings, and if those strings were then templated on the control node, Ansible could execute arbitrary code. To prevent this scenario, Ansible marks all strings inside returned data as <code class="docutils literal notranslate"><span class="pre">Unsafe</span></code>, emitting any Jinja2 templates in the strings verbatim, not expanded by Jinja2.</p>
 <p>Strings returned by invoking a module through <code class="docutils literal notranslate"><span class="pre">ActionPlugin._execute_module()</span></code> are automatically marked as <code class="docutils literal notranslate"><span class="pre">Unsafe</span></code> by the normal action plugin. If another action plugin retrieves information from a module through some other means, it must mark its return data as <code class="docutils literal notranslate"><span class="pre">Unsafe</span></code> on its own.</p>
@@ -820,9 +809,9 @@ Elements: <code class="docutils literal notranslate"><span class="pre">strings</
 marking all strings as <code class="docutils literal notranslate"><span class="pre">Unsafe</span></code>. The normal action plugin protects itself and any other code that it calls with the result data as a parameter. The check inside the executor protects the output of all other action plugins, ensuring that subsequent tasks run by Ansible will not template anything from those results either.</p>
 </section>
 <section id="special-considerations">
-<span id="flow-special-considerations"></span><h3><a class="toc-backref" href="#id36" role="doc-backlink">Special considerations</a><a class="headerlink" href="#special-considerations" title="Link to this heading"></a></h3>
+<span id="flow-special-considerations"></span><h3><a class="toc-backref" href="#id35" role="doc-backlink">Special considerations</a><a class="headerlink" href="#special-considerations" title="Link to this heading"></a></h3>
 <section id="pipelining">
-<span id="flow-pipelining"></span><h4><a class="toc-backref" href="#id37" role="doc-backlink">Pipelining</a><a class="headerlink" href="#pipelining" title="Link to this heading"></a></h4>
+<span id="flow-pipelining"></span><h4><a class="toc-backref" href="#id36" role="doc-backlink">Pipelining</a><a class="headerlink" href="#pipelining" title="Link to this heading"></a></h4>
 <p>Ansible can transfer a module to a remote machine in one of two ways:</p>
 <ul class="simple">
 <li><p>it can write out the module to a temporary file on the remote host and then
@@ -837,7 +826,7 @@ pipelining means that whatever format the module payload takes before being
 sent over the wire must be executable by Python through stdin.</p>
 </section>
 <section id="why-pass-args-over-stdin">
-<span id="flow-args-over-stdin"></span><h4><a class="toc-backref" href="#id38" role="doc-backlink">Why pass args over stdin?</a><a class="headerlink" href="#why-pass-args-over-stdin" title="Link to this heading"></a></h4>
+<span id="flow-args-over-stdin"></span><h4><a class="toc-backref" href="#id37" role="doc-backlink">Why pass args over stdin?</a><a class="headerlink" href="#why-pass-args-over-stdin" title="Link to this heading"></a></h4>
 <p>Passing arguments through stdin was chosen for the following reasons:</p>
 <ul class="simple">
 <li><p>When combined with <a class="reference internal" href="../reference_appendices/config.html#ansible-pipelining"><span class="std std-ref">ANSIBLE_PIPELINING</span></a>, this keeps the module’s arguments from
@@ -853,9 +842,9 @@ truncation of the parameters if we hit that limit.</p></li>
 </section>
 </section>
 <section id="ansiblemodule">
-<span id="flow-ansiblemodule"></span><h3><a class="toc-backref" href="#id39" role="doc-backlink">AnsibleModule</a><a class="headerlink" href="#ansiblemodule" title="Link to this heading"></a></h3>
+<span id="flow-ansiblemodule"></span><h3><a class="toc-backref" href="#id38" role="doc-backlink">AnsibleModule</a><a class="headerlink" href="#ansiblemodule" title="Link to this heading"></a></h3>
 <section id="argument-spec">
-<span id="id2"></span><h4><a class="toc-backref" href="#id40" role="doc-backlink">Argument spec</a><a class="headerlink" href="#argument-spec" title="Link to this heading"></a></h4>
+<span id="id2"></span><h4><a class="toc-backref" href="#id39" role="doc-backlink">Argument spec</a><a class="headerlink" href="#argument-spec" title="Link to this heading"></a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> provided to <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> defines the supported arguments for a module, as well as their type, defaults and more.</p>
 <p>Example <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="o">=</span> <span class="n">AnsibleModule</span><span class="p">(</span><span class="n">argument_spec</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
@@ -1023,7 +1012,7 @@ truncation of the parameters if we hit that limit.</p></li>
 </dl>
 </section>
 <section id="dependencies-between-module-options">
-<span id="argument-spec-dependencies"></span><h4><a class="toc-backref" href="#id41" role="doc-backlink">Dependencies between module options</a><a class="headerlink" href="#dependencies-between-module-options" title="Link to this heading"></a></h4>
+<span id="argument-spec-dependencies"></span><h4><a class="toc-backref" href="#id40" role="doc-backlink">Dependencies between module options</a><a class="headerlink" href="#dependencies-between-module-options" title="Link to this heading"></a></h4>
 <p>The following are optional arguments for <code class="docutils literal notranslate"><span class="pre">AnsibleModule()</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="o">=</span> <span class="n">AnsibleModule</span><span class="p">(</span>
   <span class="n">argument_spec</span><span class="p">,</span>
@@ -1104,7 +1093,7 @@ truncation of the parameters if we hit that limit.</p></li>
 </dl>
 </section>
 <section id="declaring-check-mode-support">
-<h4><a class="toc-backref" href="#id42" role="doc-backlink">Declaring check mode support</a><a class="headerlink" href="#declaring-check-mode-support" title="Link to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id41" role="doc-backlink">Declaring check mode support</a><a class="headerlink" href="#declaring-check-mode-support" title="Link to this heading"></a></h4>
 <p>To declare that a module supports check mode, supply <code class="docutils literal notranslate"><span class="pre">supports_check_mode=True</span></code> to the <code class="docutils literal notranslate"><span class="pre">AnsibleModule()</span></code> call:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="o">=</span> <span class="n">AnsibleModule</span><span class="p">(</span><span class="n">argument_spec</span><span class="p">,</span> <span class="n">supports_check_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -1113,7 +1102,7 @@ truncation of the parameters if we hit that limit.</p></li>
 <p>If <code class="docutils literal notranslate"><span class="pre">supports_check_mode=False</span></code> is specified, which is the default value, the module will exit in check mode with <code class="docutils literal notranslate"><span class="pre">skipped=True</span></code> and message <code class="docutils literal notranslate"><span class="pre">remote</span> <span class="pre">module</span> <span class="pre">(&lt;insert</span> <span class="pre">module</span> <span class="pre">name</span> <span class="pre">here&gt;)</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">support</span> <span class="pre">check</span> <span class="pre">mode</span></code>.</p>
 </section>
 <section id="adding-file-options">
-<h4><a class="toc-backref" href="#id43" role="doc-backlink">Adding file options</a><a class="headerlink" href="#adding-file-options" title="Link to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id42" role="doc-backlink">Adding file options</a><a class="headerlink" href="#adding-file-options" title="Link to this heading"></a></h4>
 <p>To declare that a module should add support for all common file options, supply <code class="docutils literal notranslate"><span class="pre">add_file_common_args=True</span></code> to the <code class="docutils literal notranslate"><span class="pre">AnsibleModule()</span></code> call:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="o">=</span> <span class="n">AnsibleModule</span><span class="p">(</span><span class="n">argument_spec</span><span class="p">,</span> <span class="n">add_file_common_args</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -1158,7 +1147,7 @@ truncation of the parameters if we hit that limit.</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 16, 2024.
+      <span class="lastupdated">Last updated on Dec 03, 2024.
       </span></p>
   </div>
 
