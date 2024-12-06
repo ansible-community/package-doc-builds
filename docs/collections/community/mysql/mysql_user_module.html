@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.0" name="antsibull-docs" />
+<meta content="2.16.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.mysql.mysql_user module – Adds or removes a user from a MySQL or MariaDB database &mdash; Ansible Community Documentation</title>
@@ -403,7 +403,7 @@
 <h1>community.mysql.mysql_user module – Adds or removes a user from a MySQL or MariaDB database<a class="headerlink" href="#community-mysql-mysql-user-module-adds-or-removes-a-user-from-a-mysql-or-mariadb-database" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/mysql/">community.mysql collection</a> (version 3.10.3).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/mysql/">community.mysql collection</a> (version 3.11.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -717,6 +717,7 @@ see <a class="reference internal" href="#ansible-collections-community-mysql-mys
 <a class="ansibleOptionLink" href="#parameter-priv" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>MySQL privileges string in the format: <code class="docutils literal notranslate"><span class="pre">db.table:priv1,priv2</span></code>.</p>
+<p>Additionally, there must be no spaces between the table and the privilege as this will yield a non-idempotent check mode.</p>
 <p>Multiple privileges can be specified by separating each one using a forward slash: <code class="docutils literal notranslate"><span class="pre">db.table1:priv/db.table2:priv</span></code>.</p>
 <p>The format is based on MySQL <code class="docutils literal notranslate"><span class="pre">GRANT</span></code> statement.</p>
 <p>Database and table names can be quoted, MySQL-style.</p>
@@ -851,7 +852,7 @@ see <a class="reference internal" href="#ansible-collections-community-mysql-mys
 <li><p>Compatible with MySQL or MariaDB.</p></li>
 <li><p>MySQL server installs with default <em>login_user</em> of <code class="docutils literal notranslate"><span class="pre">root</span></code> and no password. To secure this user as part of an idempotent playbook, you must create at least two tasks: 1) change the root user’s password, without providing any <em>login_user</em>/<em>login_password</em> details, 2) drop a <code class="docutils literal notranslate"><span class="pre">~/.my.cnf</span></code> file containing the new root credentials. Subsequent runs of the playbook will then succeed by reading the new credentials from the file.</p></li>
 <li><p>Currently, there is only support for the <code class="docutils literal notranslate"><span class="pre">mysql_native_password</span></code> encrypted password hash module.</p></li>
-<li><p>Requires the PyMySQL (Python 2.7 and Python 3.X) package installed on the remote host. The Python package may be installed with apt-get install python-pymysql (Ubuntu; see <a class="reference internal" href="../../ansible/builtin/apt_module.html#ansible-collections-ansible-builtin-apt-module"><span class="std std-ref">ansible.builtin.apt</span></a>) or yum install python2-PyMySQL (RHEL/CentOS/Fedora; see <a class="reference external" href="https://docs.ansible.com/ansible/9/collections/ansible/builtin/yum_module.html#ansible-collections-ansible-builtin-yum-module" title="(in Ansible v9)"><span class="xref std std-ref">ansible.builtin.yum</span></a>). You can also use dnf install python2-PyMySQL for newer versions of Fedora; see <a class="reference internal" href="../../ansible/builtin/dnf_module.html#ansible-collections-ansible-builtin-dnf-module"><span class="std std-ref">ansible.builtin.dnf</span></a>.</p></li>
+<li><p>Requires the PyMySQL (Python 2.7 and Python 3.X) package installed on the remote host. The Python package may be installed with apt-get install python-pymysql (Ubuntu; see <a class="reference internal" href="../../ansible/builtin/apt_module.html#ansible-collections-ansible-builtin-apt-module"><span class="std std-ref">ansible.builtin.apt</span></a>) or yum install python2-PyMySQL (RHEL/CentOS/Fedora; see <a class="reference internal" href="../../ansible/builtin/yum_module.html#ansible-collections-ansible-builtin-yum-module"><span class="std std-ref">ansible.builtin.yum</span></a>). You can also use dnf install python2-PyMySQL for newer versions of Fedora; see <a class="reference internal" href="../../ansible/builtin/dnf_module.html#ansible-collections-ansible-builtin-dnf-module"><span class="std std-ref">ansible.builtin.dnf</span></a>.</p></li>
 <li><p>Be sure you have PyMySQL library installed on the target machine for the Python interpreter Ansible discovers. For example if ansible discovers and uses Python 3, you need to install the Python 3 version of PyMySQL. If ansible discovers and uses Python 2, you need to install the Python 2 version of PyMySQL.</p></li>
 <li><p>If you have trouble, it may help to force Ansible to use the Python interpreter you need by specifying <code class="docutils literal notranslate"><span class="pre">ansible_python_interpreter</span></code>. For more information, see <a class="reference external" href="https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html">https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html</a>.</p></li>
 <li><p>Both <code class="docutils literal notranslate"><span class="pre">login_password</span></code> and <code class="docutils literal notranslate"><span class="pre">login_user</span></code> are required when you are passing credentials. If none are present, the module will attempt to read the credentials from <code class="docutils literal notranslate"><span class="pre">~/.my.cnf</span></code>, and finally fall back to using the MySQL default login of ‘root’ with no password.</p></li>
@@ -1087,7 +1088,7 @@ see <a class="reference internal" href="#ansible-collections-community-mysql-mys
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 19, 2024.
+      <span class="lastupdated">Last updated on Dec 06, 2024.
       </span></p>
   </div>
 
