@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.0" name="antsibull-docs" />
+<meta content="2.16.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>azure.azcollection.azure_rm_virtualmachinescaleset module – Manage Azure virtual machine scale sets &mdash; Ansible Community Documentation</title>
@@ -379,7 +379,7 @@
 <h1>azure.azcollection.azure_rm_virtualmachinescaleset module – Manage Azure virtual machine scale sets<a class="headerlink" href="#azure-azcollection-azure-rm-virtualmachinescaleset-module-manage-azure-virtual-machine-scale-sets" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 3.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 3.1.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -715,6 +715,8 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>If a dict with the keys <em>publisher</em>, <em>offer</em>, <em>sku</em>, and <em>version</em>, the image is sourced from a Marketplace image. Note that set <em>version=latest</em> to get the most recent version of a given image.</p>
 <p>If a dict with the keys <em>name</em> and <em>resource_group</em>, the image is sourced from a custom image based on the <em>name</em> and <em>resource_group</em> set. Note that the key <em>resource_group</em> is optional and if omitted, all images in the subscription will be searched for by <em>name</em>.</p>
 <p>Custom image support was added in Ansible 2.5.</p>
+<p>For community images, a dict with the keys <em>community_gallery_image_id</em>. Specified the community gallery image unique id for vm demployment.</p>
+<p>The <em>community_gallery_image_id</em> can be fetched from shared gallery image GET call.</p>
 <p>Required when creating.</p>
 </div></td>
 </tr>
@@ -1312,6 +1314,32 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <span class="w">    </span><span class="nt">managed_disk_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_LRS</span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">customimage001</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VMSS with a community gallery image ID</span>
+<span class="w">  </span><span class="nt">azure_rm_virtualmachinescaleset</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myResourceGroup</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testvmss</span>
+<span class="w">    </span><span class="nt">vm_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_D8_v4</span>
+<span class="w">    </span><span class="nt">admin_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testuser</span>
+<span class="w">    </span><span class="nt">single_placement_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">platform_fault_domain_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">public_ip_per_vm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">ssh_password_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">ssh_public_keys</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/testuser/.ssh/authorized_keys</span>
+<span class="w">        </span><span class="nt">key_data</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ssh-rsa</span><span class="nv"> </span><span class="s">*********</span><span class="nv"> </span><span class="s">xiuxi.sun@qq.com&quot;</span>
+<span class="w">    </span><span class="nt">virtual_network_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VMSStestVnet</span>
+<span class="w">    </span><span class="nt">subnet_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VMSStestSubnet</span>
+<span class="w">    </span><span class="nt">managed_disk_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_LRS</span>
+<span class="w">    </span><span class="nt">orchestration_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Flexible</span>
+<span class="w">    </span><span class="nt">os_disk_caching</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWrite</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">community_gallery_image_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/CommunityGalleries/yellowbrick-fc7e81f1-87dd-4989-9ca8-03743762e873/Images/Ubuntu-5.15.0-1035-azure_22.04&quot;</span>
+<span class="w">    </span><span class="nt">data_disks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lun</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">        </span><span class="nt">disk_size_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">        </span><span class="nt">caching</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ReadWrite</span>
+<span class="w">        </span><span class="nt">managed_disk_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_LRS</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VMSS with over 100 instances</span>
 <span class="w">  </span><span class="nt">azure_rm_virtualmachinescaleset</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myResourceGroup</span>
@@ -1449,7 +1477,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 19, 2024.
+      <span class="lastupdated">Last updated on Dec 06, 2024.
       </span></p>
   </div>
 
