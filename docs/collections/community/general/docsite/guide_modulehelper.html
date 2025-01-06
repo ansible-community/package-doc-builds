@@ -689,7 +689,9 @@ between <code class="docutils literal notranslate"><span class="pre">self.change
 <p>In MH, instead of calling <code class="docutils literal notranslate"><span class="pre">module.fail_json()</span></code> you can just raise an exception.
 The output variables are collected the same way they would be for a successful execution.
 However, you can set output variables specifically for that exception, if you so choose.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__init_module__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible_collections.community.general.plugins.module_utils.module_helper</span> <span class="kn">import</span> <span class="n">ModuleHelperException</span>
+
+<span class="k">def</span> <span class="nf">__init_module__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">complex_validation</span><span class="p">():</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_raise</span><span class="p">(</span><span class="s2">&quot;Validation failed!&quot;</span><span class="p">)</span>
 
@@ -697,11 +699,15 @@ However, you can set output variables specifically for that exception, if you so
     <span class="n">awesomeness</span> <span class="o">=</span> <span class="n">calculate_awesomeness</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">awesomeness</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_raise</span><span class="p">(</span><span class="s2">&quot;Over awesome, I cannot handle it!&quot;</span><span class="p">,</span> <span class="n">update_output</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;awesomeness&quot;</span><span class="p">:</span> <span class="n">awesomeness</span><span class="p">})</span>
+        <span class="c1"># which is just a convenience shortcut for</span>
+        <span class="k">raise</span> <span class="n">ModuleHelperException</span><span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="n">update_output</span><span class="o">=</span><span class="p">{</span><span class="o">...</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>All exceptions derived from <code class="docutils literal notranslate"><span class="pre">Exception</span></code> are captured and translated into a <code class="docutils literal notranslate"><span class="pre">fail_json()</span></code> call.
 However, if you do want to call <code class="docutils literal notranslate"><span class="pre">self.module.fail_json()</span></code> yourself it will work,
 just keep in mind that there will be no automatic handling of output variables in that case.</p>
+<p>Behind the curtains, all <code class="docutils literal notranslate"><span class="pre">do_raise()</span></code> does is to raise a <code class="docutils literal notranslate"><span class="pre">ModuleHelperException</span></code>.
+If you want to create specialized error handling for your code, the best way is to extend that clas and raise it when needed.</p>
 </section>
 </section>
 <section id="statemodulehelper">
@@ -877,7 +883,7 @@ where <code class="docutils literal notranslate"><span class="pre">self</span></
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 09, 2024.
+      <span class="lastupdated">Last updated on Jan 06, 2025.
       </span></p>
   </div>
 
