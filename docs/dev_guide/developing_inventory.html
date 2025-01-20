@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Developing dynamic inventory &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -97,13 +97,6 @@
             
         >
             latest
-        </option>
-        
-        <option
-            value="2.9"
-            
-        >
-            2.9
         </option>
         
         <option
@@ -386,18 +379,18 @@ However, you can use the <code class="docutils literal notranslate"><span class=
 <section id="developing-an-inventory-plugin">
 <span id="id2"></span><h3><a class="toc-backref" href="#id8" role="doc-backlink">Developing an inventory plugin</a><a class="headerlink" href="#developing-an-inventory-plugin" title="Link to this heading"></a></h3>
 <p>The first thing you want to do is use the base class:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.inventory</span> <span class="kn">import</span> <span class="n">BaseInventoryPlugin</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.inventory</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseInventoryPlugin</span>
 
-<span class="k">class</span> <span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">):</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>  <span class="c1"># used internally by Ansible, it should match the file name but not required</span>
 </pre></div>
 </div>
 <p>If the inventory plugin is in a collection, the NAME should be in the ‘namespace.collection_name.myplugin’ format. The base class has a couple of methods that each plugin should implement and a few helpers for parsing the inventory source and updating the inventory.</p>
 <p>After you have the basic plugin working, you can incorporate other features by adding more base classes:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.inventory</span> <span class="kn">import</span> <span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.inventory</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span>
 
-<span class="k">class</span> <span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span><span class="p">):</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>
 </pre></div>
@@ -406,7 +399,7 @@ However, you can use the <code class="docutils literal notranslate"><span class=
 <section id="verify-file-method">
 <span id="inventory-plugin-verify-file"></span><h4><a class="toc-backref" href="#id9" role="doc-backlink">verify_file method</a><a class="headerlink" href="#verify-file-method" title="Link to this heading"></a></h4>
 <p>Ansible uses this method to quickly determine if the inventory source is usable by the plugin. The determination does not need to be 100% accurate, as there might be an overlap in what plugins can handle and by default Ansible will try the enabled plugins as per their sequence.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">verify_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">verify_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39; return true/false if this is possibly a valid file for this plugin to consume &#39;&#39;&#39;</span>
     <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">verify_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -419,7 +412,7 @@ However, you can use the <code class="docutils literal notranslate"><span class=
 <p>In the above example, from the <a class="reference external" href="https://docs.ansible.com/ansible/2.9/plugins/inventory/virtualbox.html#virtualbox-inventory" title="(in Ansible v2.9)"><span class="xref std std-ref">virtualbox inventory plugin</span></a>, we screen for specific file name patterns to avoid attempting to consume any valid YAML file. You can add any type of condition here, but the most common one is ‘extension matching’. If you implement extension matching for YAML configuration files, the path suffix &lt;plugin_name&gt;.&lt;yml|yaml&gt; should be accepted. All valid extensions should be documented in the plugin description.</p>
 <p>The following is another example that does not use a ‘file’ but the inventory source string itself,
 from the <a class="reference internal" href="../collections/ansible/builtin/host_list_inventory.html#host-list-inventory"><span class="std std-ref">host list</span></a> plugin:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">verify_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">verify_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39; don&#39;t call base class as we don&#39;t expect a path, but a host list &#39;&#39;&#39;</span>
     <span class="n">host_list</span> <span class="o">=</span> <span class="n">path</span>
     <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
@@ -445,7 +438,7 @@ It takes the following parameters:</p>
 </ul>
 </div></blockquote>
 <p>The base class does some minimal assignment for reuse in other methods.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
      <span class="bp">self</span><span class="o">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">loader</span>
      <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span> <span class="o">=</span> <span class="n">inventory</span>
@@ -456,7 +449,7 @@ It takes the following parameters:</p>
 To facilitate this, the example below uses a few helper functions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>
 
-<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
      <span class="c1"># call base method to ensure properties are available for use with other helper methods</span>
      <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="p">)</span>
@@ -509,7 +502,7 @@ To facilitate this, the example below uses a few helper functions:</p>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inventory_cache</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">,</span> <span class="n">Cacheable</span><span class="p">):</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>
 </pre></div>
@@ -517,14 +510,14 @@ To facilitate this, the example below uses a few helper functions:</p>
 <p>Next, load the cache plugin specified by the user to read from and update the cache. If your inventory plugin uses YAML-based configuration files and the <code class="docutils literal notranslate"><span class="pre">_read_config_data</span></code> method, the cache plugin is loaded within that method. If your inventory plugin does not use <code class="docutils literal notranslate"><span class="pre">_read_config_data</span></code>, you must load the cache explicitly with <code class="docutils literal notranslate"><span class="pre">load_cache_plugin</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;myplugin&#39;</span>
 
-<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">load_cache_plugin</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Before using the cache plugin, you must retrieve a unique cache key by using the <code class="docutils literal notranslate"><span class="pre">get_cache_key</span></code> method. This task needs to be done by all inventory modules using the cache, so that you don’t use/overwrite other parts of the cache.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">load_cache_plugin</span><span class="p">()</span>
@@ -532,7 +525,7 @@ To facilitate this, the example below uses a few helper functions:</p>
 </pre></div>
 </div>
 <p>Now that you’ve enabled caching, loaded the correct plugin, and retrieved a unique cache key, you can set up the flow of data between the cache and your inventory using the <code class="docutils literal notranslate"><span class="pre">cache</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">parse</span></code> method. This value comes from the inventory manager and indicates whether the inventory is being refreshed (such as by the <code class="docutils literal notranslate"><span class="pre">--flush-cache</span></code> or the meta task <code class="docutils literal notranslate"><span class="pre">refresh_inventory</span></code>). Although the cache shouldn’t be used to populate the inventory when being refreshed, the cache should be updated with the new inventory if the user has enabled caching. You can use <code class="docutils literal notranslate"><span class="pre">self._cache</span></code> like a dictionary. The following pattern allows refreshing the inventory to work in conjunction with caching.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">load_cache_plugin</span><span class="p">()</span>
@@ -581,7 +574,7 @@ To facilitate this, the example below uses a few helper functions:</p>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">constructed</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">):</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;ns.coll.myplugin&#39;</span>
 </pre></div>
@@ -594,7 +587,7 @@ To facilitate this, the example below uses a few helper functions:</p>
 <p>By default, undefined variables are ignored. This is permitted by default for <code class="docutils literal notranslate"><span class="pre">compose</span></code> so you can make the variable definitions depend on variables that will be populated later in a play from other sources. For groups, it allows using variables that are not always present without having to use the <code class="docutils literal notranslate"><span class="pre">default</span></code> filter. To support configuring undefined variables to be an error, pass the constructed option <code class="docutils literal notranslate"><span class="pre">strict</span></code> to each of the methods as a keyword argument.</p>
 <p><code class="docutils literal notranslate"><span class="pre">keyed_groups</span></code> and <code class="docutils literal notranslate"><span class="pre">groups</span></code> use any variables already associated with the host (for example, from an earlier inventory source). <code class="docutils literal notranslate"><span class="pre">_add_host_to_keyed_groups</span></code> and <code class="docutils literal notranslate"><span class="pre">add_host_to_composed_groups</span></code> can turn this off by passing the keyword argument <code class="docutils literal notranslate"><span class="pre">fetch_hostvars</span></code>.</p>
 <p>Here is an example using all three methods:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">host_vars</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">add_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">host_vars</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span><span class="o">.</span><span class="n">add_host</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">var_value</span> <span class="ow">in</span> <span class="n">host_vars</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -611,17 +604,17 @@ To facilitate this, the example below uses a few helper functions:</p>
 </pre></div>
 </div>
 <p>By default, group names created with <code class="docutils literal notranslate"><span class="pre">_add_host_to_composed_groups()</span></code> and <code class="docutils literal notranslate"><span class="pre">_add_host_to_keyed_groups()</span></code> are valid Python identifiers. Invalid characters are replaced with an underscore <code class="docutils literal notranslate"><span class="pre">_</span></code>. A plugin can change the sanitization used for the constructed features by setting <code class="docutils literal notranslate"><span class="pre">self._sanitize_group_name</span></code> to a new function. The core engine also does sanitization, so if the custom function is less strict it should be used in conjunction with the configuration setting <code class="docutils literal notranslate"><span class="pre">TRANSFORM_INVALID_GROUP_CHARS</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.inventory.group</span> <span class="kn">import</span> <span class="n">to_safe_group_name</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.inventory.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_safe_group_name</span>
 
-<span class="k">class</span> <span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InventoryModule</span><span class="p">(</span><span class="n">BaseInventoryPlugin</span><span class="p">,</span> <span class="n">Constructable</span><span class="p">):</span>
 
     <span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;ns.coll.myplugin&#39;</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">custom_sanitizer</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">custom_sanitizer</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">to_safe_group_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">replacer</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sanitize_group_name</span> <span class="o">=</span> <span class="n">custom_sanitizer</span>
@@ -768,7 +761,7 @@ A skeleton example of this JSON object is:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 06, 2025.
+      <span class="lastupdated">Last updated on Jan 20, 2025.
       </span></p>
   </div>
 

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Developing plugins &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -97,13 +97,6 @@
             
         >
             latest
-        </option>
-        
-        <option
-            value="2.9"
-            
-        >
-            2.9
         </option>
         
         <option
@@ -348,7 +341,7 @@
 <section id="raising-errors">
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">Raising errors</a><a class="headerlink" href="#raising-errors" title="Link to this heading"></a></h2>
 <p>You should return errors encountered during plugin execution by raising <code class="docutils literal notranslate"><span class="pre">AnsibleError()</span></code> or a similar class with a message describing the error. When wrapping other exceptions into error messages, you should always use the <code class="docutils literal notranslate"><span class="pre">to_native</span></code> Ansible function to ensure proper string compatibility across Python versions:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.common.text.converters</span> <span class="kn">import</span> <span class="n">to_native</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.common.text.converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_native</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="n">cause_an_exception</span><span class="p">()</span>
@@ -363,7 +356,7 @@ Check the section on the specific plugin type you’re developing for type-speci
 <section id="string-encoding">
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">String encoding</a><a class="headerlink" href="#string-encoding" title="Link to this heading"></a></h2>
 <p>You must convert any strings returned by your plugin into Python’s unicode type. Converting to unicode ensures that these strings can run through Jinja2. To convert strings:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.common.text.converters</span> <span class="kn">import</span> <span class="n">to_text</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.common.text.converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_text</span>
 <span class="n">result_string</span> <span class="o">=</span> <span class="n">to_text</span><span class="p">(</span><span class="n">result_string</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -416,9 +409,9 @@ Some plugin types handle this differently:</p>
 <span id="developing-actions"></span><h3><a class="toc-backref" href="#id7" role="doc-backlink">Action plugins</a><a class="headerlink" href="#action-plugins" title="Link to this heading"></a></h3>
 <p>Action plugins let you integrate local processing and local data with module functionality.</p>
 <p>To create an action plugin, create a new class with the Base(ActionBase) class as the parent:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.action</span> <span class="kn">import</span> <span class="n">ActionBase</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.action</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionBase</span>
 
-<span class="k">class</span> <span class="nc">ActionModule</span><span class="p">(</span><span class="n">ActionBase</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ActionModule</span><span class="p">(</span><span class="n">ActionBase</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
 </div>
@@ -432,15 +425,15 @@ After successful execution of the module, you can modify the module return data.
 <p>For example, if you wanted to check the time difference between your Ansible control node and your target machine(s), you could write an action plugin to check the local time and compare it to the return data from Ansible’s <code class="docutils literal notranslate"><span class="pre">setup</span></code> module:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1"># Make coding more python3-ish, this is required for contributions to Ansible</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
 <span class="n">__metaclass__</span> <span class="o">=</span> <span class="nb">type</span>
 
-<span class="kn">from</span> <span class="nn">ansible.plugins.action</span> <span class="kn">import</span> <span class="n">ActionBase</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.action</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
 
-<span class="k">class</span> <span class="nc">ActionModule</span><span class="p">(</span><span class="n">ActionBase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ActionModule</span><span class="p">(</span><span class="n">ActionBase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ActionModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">task_vars</span><span class="p">)</span>
         <span class="n">module_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">module_return</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_module</span><span class="p">(</span><span class="n">module_name</span><span class="o">=</span><span class="s1">&#39;setup&#39;</span><span class="p">,</span>
@@ -472,7 +465,7 @@ see the source code for the <a class="reference external" href="https://github.c
 <span id="developing-cache-plugins"></span><h3><a class="toc-backref" href="#id8" role="doc-backlink">Cache plugins</a><a class="headerlink" href="#cache-plugins" title="Link to this heading"></a></h3>
 <p>Cache plugins store gathered facts and data retrieved by inventory plugins.</p>
 <p>Import cache plugins using the cache_loader so you can use <code class="docutils literal notranslate"><span class="pre">self.set_options()</span></code> and <code class="docutils literal notranslate"><span class="pre">self.get_option(&lt;option_name&gt;)</span></code>. If you import a cache plugin directly in the code base, you can only access options by the <code class="docutils literal notranslate"><span class="pre">ansible.constants</span></code>, and you break the cache plugin’s ability to be used by an inventory plugin.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.loader</span> <span class="kn">import</span> <span class="n">cache_loader</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache_loader</span>
 <span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="n">plugin</span> <span class="o">=</span> <span class="n">cache_loader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;custom_cache&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">cache_kwargs</span><span class="p">)</span>
 </pre></div>
@@ -480,10 +473,10 @@ see the source code for the <a class="reference external" href="https://github.c
 <p>There are two base classes for cache plugins, <code class="docutils literal notranslate"><span class="pre">BaseCacheModule</span></code> for database-backed caches, and <code class="docutils literal notranslate"><span class="pre">BaseCacheFileModule</span></code> for file-backed caches.</p>
 <p>To create a cache plugin, start by creating a new <code class="docutils literal notranslate"><span class="pre">CacheModule</span></code> class with the appropriate base class. If you’re creating a plugin using an <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method you should initialize the base class with any provided args and kwargs to be compatible with inventory plugin cache options. The base class calls <code class="docutils literal notranslate"><span class="pre">self.set_options(direct=kwargs)</span></code>. After the base class <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method is called <code class="docutils literal notranslate"><span class="pre">self.get_option(&lt;option_name&gt;)</span></code> should be used to access cache options.</p>
 <p>New cache plugins should take the options <code class="docutils literal notranslate"><span class="pre">_uri</span></code>, <code class="docutils literal notranslate"><span class="pre">_prefix</span></code>, and <code class="docutils literal notranslate"><span class="pre">_timeout</span></code> to be consistent with existing cache plugins.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.cache</span> <span class="kn">import</span> <span class="n">BaseCacheModule</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCacheModule</span>
 
-<span class="k">class</span> <span class="nc">CacheModule</span><span class="p">(</span><span class="n">BaseCacheModule</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CacheModule</span><span class="p">(</span><span class="n">BaseCacheModule</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CacheModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;_uri&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;_prefix&#39;</span><span class="p">)</span>
@@ -499,9 +492,9 @@ see the source code for the <a class="reference external" href="https://github.c
 <span id="developing-callbacks"></span><h3><a class="toc-backref" href="#id9" role="doc-backlink">Callback plugins</a><a class="headerlink" href="#callback-plugins" title="Link to this heading"></a></h3>
 <p>Callback plugins add new behaviors to Ansible when responding to events. By default, callback plugins control most of the output you see when running the command line programs.</p>
 <p>To create a callback plugin, create a new class with the Base(Callbacks) class as the parent:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.callback</span> <span class="kn">import</span> <span class="n">CallbackBase</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.callback</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBase</span>
 
-<span class="k">class</span> <span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
 </div>
@@ -512,7 +505,7 @@ For a complete list of methods that you can override, please see <code class="do
 <p>The following is a modified example of how Ansible’s timer plugin is implemented,
 but with an extra option so you can see how configuration works in Ansible version 2.4 and later:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make coding more python3-ish, this is required for contributions to Ansible</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
 <span class="n">__metaclass__</span> <span class="o">=</span> <span class="nb">type</span>
 
 <span class="c1"># not only visible to ansible-doc, it also &#39;declares&#39; the options the plugin requires and how to configure them.</span>
@@ -535,12 +528,12 @@ but with an extra option so you can see how configuration works in Ansible versi
 <span class="s1">      - name: ANSIBLE_CALLBACK_TIMER_FORMAT</span>
 <span class="s1">    default: &quot;Playbook run took </span><span class="si">%s</span><span class="s1"> days, </span><span class="si">%s</span><span class="s1"> hours, </span><span class="si">%s</span><span class="s1"> minutes, </span><span class="si">%s</span><span class="s1"> seconds&quot;</span>
 <span class="s1">&#39;&#39;&#39;</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
-<span class="kn">from</span> <span class="nn">ansible.plugins.callback</span> <span class="kn">import</span> <span class="n">CallbackBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.callback</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBase</span>
 
 
-<span class="k">class</span> <span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This callback module tells you how long your plays ran for.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -551,7 +544,7 @@ but with an extra option so you can see how configuration works in Ansible versi
     <span class="c1"># only needed if you ship it and don&#39;t want to enable by default</span>
     <span class="n">CALLBACK_NEEDS_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
       <span class="c1"># make sure the expected objects are present, calling the base&#39;s __init__</span>
       <span class="nb">super</span><span class="p">(</span><span class="n">CallbackModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -559,14 +552,14 @@ but with an extra option so you can see how configuration works in Ansible versi
       <span class="c1"># start the timer when the plugin is loaded, the first play should start a few milliseconds after.</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_days_hours_minutes_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runtime</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_days_hours_minutes_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runtime</span><span class="p">):</span>
 <span class="w">      </span><span class="sd">&#39;&#39;&#39; internal helper method for this callback &#39;&#39;&#39;</span>
       <span class="n">minutes</span> <span class="o">=</span> <span class="p">(</span><span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">//</span> <span class="mi">60</span><span class="p">)</span> <span class="o">%</span> <span class="mi">60</span>
       <span class="n">r_seconds</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">-</span> <span class="p">(</span><span class="n">minutes</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
       <span class="k">return</span> <span class="n">runtime</span><span class="o">.</span><span class="n">days</span><span class="p">,</span> <span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">//</span> <span class="mi">3600</span><span class="p">,</span> <span class="n">minutes</span><span class="p">,</span> <span class="n">r_seconds</span>
 
     <span class="c1"># this is only event we care about for display, when the play shows its summary stats; the rest are ignored by the base class</span>
-    <span class="k">def</span> <span class="nf">v2_playbook_on_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stats</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">v2_playbook_on_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stats</span><span class="p">):</span>
       <span class="n">end_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
       <span class="n">runtime</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
 
@@ -614,7 +607,7 @@ but with an extra option so you can see how configuration works in Ansible versi
 <p>Ansible includes many <a class="reference internal" href="../playbook_guide/playbooks_filters.html#playbooks-filters"><span class="std std-ref">filters</span></a> which can be used to manipulate the data returned by a lookup plugin. Sometimes it makes sense to do the filtering inside the lookup plugin, other times it is better to return results that can be filtered in the playbook. Keep in mind how the data will be referenced when determining the appropriate level of filtering to be done inside the lookup plugin.</p>
 <p>Here’s a simple lookup plugin implementation — this lookup returns the contents of a text file as a variable:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># python 3 headers, required if submitting to Ansible</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
 <span class="n">__metaclass__</span> <span class="o">=</span> <span class="nb">type</span>
 
 <span class="n">DOCUMENTATION</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
@@ -640,15 +633,15 @@ but with an extra option so you can see how configuration works in Ansible versi
 <span class="s2">    - if read in variable context, the file can be interpreted as YAML if the content is valid to the parser.</span>
 <span class="s2">    - this lookup does not understand globbing --- use the fileglob lookup instead.</span>
 <span class="s2">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">ansible.errors</span> <span class="kn">import</span> <span class="n">AnsibleError</span><span class="p">,</span> <span class="n">AnsibleParserError</span>
-<span class="kn">from</span> <span class="nn">ansible.plugins.lookup</span> <span class="kn">import</span> <span class="n">LookupBase</span>
-<span class="kn">from</span> <span class="nn">ansible.utils.display</span> <span class="kn">import</span> <span class="n">Display</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnsibleError</span><span class="p">,</span> <span class="n">AnsibleParserError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.lookup</span><span class="w"> </span><span class="kn">import</span> <span class="n">LookupBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.utils.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Display</span>
 
 <span class="n">display</span> <span class="o">=</span> <span class="n">Display</span><span class="p">()</span>
 
-<span class="k">class</span> <span class="nc">LookupModule</span><span class="p">(</span><span class="n">LookupBase</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LookupModule</span><span class="p">(</span><span class="n">LookupBase</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
       <span class="c1"># First of all populate options,</span>
       <span class="c1"># this will already take into account env vars and ini config</span>
@@ -721,13 +714,13 @@ but with an extra option so you can see how configuration works in Ansible versi
 <p>Vars plugins inject additional variable data into Ansible runs that did not come from an inventory source, playbook, or command line. Playbook constructs like ‘host_vars’ and ‘group_vars’ work using vars plugins.</p>
 <p>Vars plugins were partially implemented in Ansible 2.0 and rewritten to be fully implemented starting with Ansible 2.4. Vars plugins are supported by collections starting with Ansible 2.10.</p>
 <p>Older plugins used a <code class="docutils literal notranslate"><span class="pre">run</span></code> method as their main body/work:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vault_password</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vault_password</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">pass</span> <span class="c1"># your code goes here</span>
 </pre></div>
 </div>
 <p>Ansible 2.0 did not pass passwords to older plugins, so vaults were unavailable.
 Most of the work now  happens in the <code class="docutils literal notranslate"><span class="pre">get_vars</span></code> method which is called from the VariableManager when needed.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
     <span class="k">pass</span> <span class="c1"># your code goes here</span>
 </pre></div>
 </div>
@@ -743,7 +736,7 @@ Most of the work now  happens in the <code class="docutils literal notranslate">
 <p>Since Ansible version 2.4, vars plugins only execute as needed when preparing to execute a task. This avoids the costly ‘always execute’ behavior that occurred during inventory construction in older versions of Ansible. Since Ansible version 2.10, vars plugin execution can be toggled by the user to run when preparing to execute a task or after importing an inventory source.</p>
 <p>The user must explicitly enable vars plugins that reside in a collection. See <a class="reference internal" href="../plugins/vars.html#enable-vars"><span class="std std-ref">Enabling vars plugins</span></a> for details.</p>
 <p>Legacy vars plugins are always loaded and run by default. You can prevent them from automatically running by setting <code class="docutils literal notranslate"><span class="pre">REQUIRES_ENABLED</span></code> to True.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VarsModule</span><span class="p">(</span><span class="n">BaseVarsPlugin</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VarsModule</span><span class="p">(</span><span class="n">BaseVarsPlugin</span><span class="p">):</span>
     <span class="n">REQUIRES_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
 </pre></div>
 </div>
@@ -766,11 +759,11 @@ Most of the work now  happens in the <code class="docutils literal notranslate">
 </pre></div>
 </div>
 <p>At times a value provided by a vars plugin will contain unsafe values. The utility function <cite>wrap_var</cite> provided by <cite>ansible.utils.unsafe_proxy</cite> should be used to ensure that Ansible handles the variable and value correctly. The use cases for unsafe data is covered in <a class="reference internal" href="../playbook_guide/playbooks_advanced_syntax.html#unsafe-strings"><span class="std std-ref">Unsafe or raw strings</span></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.vars</span> <span class="kn">import</span> <span class="n">BaseVarsPlugin</span>
-<span class="kn">from</span> <span class="nn">ansible.utils.unsafe_proxy</span> <span class="kn">import</span> <span class="n">wrap_var</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.vars</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseVarsPlugin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.utils.unsafe_proxy</span><span class="w"> </span><span class="kn">import</span> <span class="n">wrap_var</span>
 
-<span class="k">class</span> <span class="nc">VarsPlugin</span><span class="p">(</span><span class="n">BaseVarsPlugin</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">VarsPlugin</span><span class="p">(</span><span class="n">BaseVarsPlugin</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">something_unsafe</span><span class="o">=</span><span class="n">wrap_var</span><span class="p">(</span><span class="s2">&quot;{{ SOMETHING_UNSAFE }}&quot;</span><span class="p">)</span>
         <span class="p">)</span>
@@ -812,7 +805,7 @@ Most of the work now  happens in the <code class="docutils literal notranslate">
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 06, 2025.
+      <span class="lastupdated">Last updated on Jan 20, 2025.
       </span></p>
   </div>
 

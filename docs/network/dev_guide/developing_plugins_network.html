@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Developing network plugins &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -97,13 +97,6 @@
             
         >
             latest
-        </option>
-        
-        <option
-            value="2.9"
-            
-        >
-            2.9
         </option>
         
         <option
@@ -356,9 +349,9 @@ way that will be sensible to users.</p>
 <p>Public methods of these plugins may be called from a module or module_utils with the connection
 proxy object just as other connection methods can. The following is a very simple example of using
 such a call in a module_utils file so it may be shared with other modules.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.connection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Connection</span>
 
-<span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
     <span class="c1"># module is your AnsibleModule instance.</span>
     <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">_socket_path</span><span class="p">)</span>
 
@@ -375,9 +368,9 @@ such a call in a module_utils file so it may be shared with other modules.</p>
 <section id="making-requests">
 <h3><a class="toc-backref" href="#id4" role="doc-backlink">Making requests</a><a class="headerlink" href="#making-requests" title="Link to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">httpapi</span></code> connection plugin has a <code class="docutils literal notranslate"><span class="pre">send()</span></code> method, but an httpapi plugin needs a <code class="docutils literal notranslate"><span class="pre">send_request(self,</span> <span class="pre">data,</span> <span class="pre">**message_kwargs)</span></code> method as a higher-level wrapper to <code class="docutils literal notranslate"><span class="pre">send()</span></code>. This method should prepare requests by adding fixed values like common headers or URL root paths. This method may do more complex work such as turning data into formatted payloads, or determining which path or method to request. It may then also unpack responses to be more easily consumed by the caller.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.six.moves.urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.six.moves.urllib.error</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span>
 
-<span class="k">def</span> <span class="nf">send_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">send_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">):</span>
     <span class="c1"># Fixed headers for requests</span>
     <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">}</span>
     <span class="k">try</span><span class="p">:</span>
@@ -395,7 +388,7 @@ such a call in a module_utils file so it may be shared with other modules.</p>
 <section id="authenticating">
 <h3><a class="toc-backref" href="#id5" role="doc-backlink">Authenticating</a><a class="headerlink" href="#authenticating" title="Link to this heading"></a></h3>
 <p>By default, all requests will authenticate with HTTP Basic authentication. If a request can return some kind of token to stand in place of HTTP Basic, the <code class="docutils literal notranslate"><span class="pre">update_auth(self,</span> <span class="pre">response,</span> <span class="pre">response_text)</span></code> method should be implemented to inspect responses for such tokens. If the token is meant to be included with the headers of each request, it is sufficient to return a dictionary which will be merged with the computed headers for each request. The default implementation of this method does exactly this for cookies. If the token is used in another way, say in a query string, you should instead save that token to an instance variable, where the <code class="docutils literal notranslate"><span class="pre">send_request()</span></code> method (above) can add it to each request</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">response_text</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">response_text</span><span class="p">):</span>
     <span class="n">cookie</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Set-Cookie&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">cookie</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;Cookie&#39;</span><span class="p">:</span> <span class="n">cookie</span><span class="p">}</span>
@@ -404,7 +397,7 @@ such a call in a module_utils file so it may be shared with other modules.</p>
 </pre></div>
 </div>
 <p>If instead an explicit login endpoint needs to be requested to receive an authentication token, the <code class="docutils literal notranslate"><span class="pre">login(self,</span> <span class="pre">username,</span> <span class="pre">password)</span></code> method can be implemented to call that endpoint. If implemented, this method will be called once before requesting any other resources of the server. By default, it will also be attempted once when a HTTP 401 is returned from a request.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
     <span class="n">login_path</span> <span class="o">=</span> <span class="s1">&#39;/my/login/path&#39;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="n">password</span><span class="p">}</span>
 
@@ -420,7 +413,7 @@ such a call in a module_utils file so it may be shared with other modules.</p>
 </pre></div>
 </div>
 <p>Similarly, <code class="docutils literal notranslate"><span class="pre">logout(self)</span></code> can be implemented to call an endpoint to invalidate and/or release the current token, if such an endpoint exists. This will be automatically called when the connection is closed (and, by extension, when reset).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">logout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">logout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="n">logout_path</span> <span class="o">=</span> <span class="s1">&#39;/my/logout/path&#39;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">send_request</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">logout_path</span><span class="p">)</span>
 
@@ -496,11 +489,11 @@ myorg/mycollection/plugins/cliconf/
 <p>You can use <code class="docutils literal notranslate"><span class="pre">cli_parse</span></code> as an entry point for a cli_parser plugin in
 your own collection.</p>
 <p>The following sample shows the start of a custom cli_parser plugin:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible_collections.ansible.netcommon.plugins.module_utils.cli_parser.cli_parserbase</span> <span class="kn">import</span> <span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.ansible.netcommon.plugins.module_utils.cli_parser.cli_parserbase</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">CliParserBase</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">CliParser</span><span class="p">(</span><span class="n">CliParserBase</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CliParser</span><span class="p">(</span><span class="n">CliParserBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; Sample cli_parser plugin</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -509,11 +502,11 @@ your own collection.</p>
     <span class="c1"># Provide the contents of the template to the parse function</span>
     <span class="n">PROVIDE_TEMPLATE_CONTENTS</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">myparser</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">template_contents</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">myparser</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">template_contents</span><span class="p">):</span>
       <span class="c1"># parse the text using the template contents</span>
       <span class="k">return</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Standard entry point for a cli_parse parse execution</span>
 
 <span class="sd">        :return: Errors or parsed text as structured data</span>
@@ -573,7 +566,7 @@ your own collection.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 06, 2025.
+      <span class="lastupdated">Last updated on Jan 20, 2025.
       </span></p>
   </div>
 
