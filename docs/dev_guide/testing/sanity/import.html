@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>import &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -97,13 +97,6 @@
             
         >
             latest
-        </option>
-        
-        <option
-            value="2.9"
-            
-        >
-            2.9
         </option>
         
         <option
@@ -393,12 +386,12 @@ on which HOST it is missing and the specific INTERPRETER that requires it.</p>
 <section id="in-modules">
 <h3>In modules<a class="headerlink" href="#in-modules" title="Link to this heading"></a></h3>
 <p>Instead of using <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">another_library</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">traceback</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
 
-<span class="kn">from</span> <span class="nn">ansible.module_utils.basic</span> <span class="kn">import</span> <span class="n">missing_required_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.basic</span><span class="w"> </span><span class="kn">import</span> <span class="n">missing_required_lib</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">another_library</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">another_library</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">HAS_ANOTHER_LIBRARY</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">ANOTHER_LIBRARY_IMPORT_ERROR</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
@@ -425,7 +418,7 @@ on which HOST it is missing and the specific INTERPRETER that requires it.</p>
 <h3>In plugins<a class="headerlink" href="#in-plugins" title="Link to this heading"></a></h3>
 <p>Instead of using <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">another_library</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">another_library</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">another_library</span>
 <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">imp_exc</span><span class="p">:</span>
     <span class="n">ANOTHER_LIBRARY_IMPORT_ERROR</span> <span class="o">=</span> <span class="n">imp_exc</span>
 <span class="k">else</span><span class="p">:</span>
@@ -434,7 +427,7 @@ on which HOST it is missing and the specific INTERPRETER that requires it.</p>
 </div>
 <p>Then in the plugin code, for example in the <code class="docutils literal notranslate"><span class="pre">run</span></code> method of the plugin (some plugins don’t have a <code class="docutils literal notranslate"><span class="pre">run</span></code> method and will require it in the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method instead):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">ANOTHER_LIBRARY_IMPORT_ERROR</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">AnsibleError</span><span class="p">(</span><span class="s1">&#39;another_library must be installed to use this plugin&#39;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ANOTHER_LIBRARY_IMPORT_ERROR</span>
+    <span class="k">raise</span> <span class="n">AnsibleError</span><span class="p">(</span><span class="s1">&#39;another_library must be installed to use this plugin&#39;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ANOTHER_LIBRARY_IMPORT_ERROR</span>
 </pre></div>
 </div>
 </section>
@@ -446,23 +439,23 @@ on which HOST it is missing and the specific INTERPRETER that requires it.</p>
 Make sure to pick the appropriate one before continuing with this solution.</p>
 </div>
 <p>Sometimes an import is used in a base class, for example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">another_library</span> <span class="kn">import</span> <span class="n">UsefulThing</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">another_library</span><span class="w"> </span><span class="kn">import</span> <span class="n">UsefulThing</span>
 
-<span class="k">class</span> <span class="nc">CustomThing</span><span class="p">(</span><span class="n">UsefulThing</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CustomThing</span><span class="p">(</span><span class="n">UsefulThing</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
 </div>
 <p>One option is make the entire class definition conditional:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">ANOTHER_LIBRARY_IMPORT_ERROR</span><span class="p">:</span>
-    <span class="k">class</span> <span class="nc">CustomThing</span><span class="p">(</span><span class="n">UsefulThing</span><span class="p">):</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">CustomThing</span><span class="p">(</span><span class="n">UsefulThing</span><span class="p">):</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
 <p>Another option is to define a substitute base class by modifying the exception handler:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">another_library</span> <span class="kn">import</span> <span class="n">UsefulThing</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">another_library</span><span class="w"> </span><span class="kn">import</span> <span class="n">UsefulThing</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">class</span> <span class="nc">UsefulThing</span><span class="p">:</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">UsefulThing</span><span class="p">:</span>
         <span class="k">pass</span>
     <span class="o">...</span>
 </pre></div>
@@ -547,7 +540,7 @@ However, it will create its own virtual environment using that Python interprete
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 06, 2024.
+      <span class="lastupdated">Last updated on Feb 13, 2025.
       </span></p>
   </div>
 

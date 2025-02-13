@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Creating collections &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -97,13 +97,6 @@
             
         >
             latest
-        </option>
-        
-        <option
-            value="2.9"
-            
-        >
-            2.9
         </option>
         
         <option
@@ -428,10 +421,10 @@
 <p>The built-in collection template is a simple example of a collection that works with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>, but if you want to simplify your development process you may want to create a custom collection template to pass to <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">init</span></code>.</p>
 <p>A collection skeleton is a directory that looks like a collection directory but any <code class="docutils literal notranslate"><span class="pre">.j2</span></code> files (excluding those in <code class="docutils literal notranslate"><span class="pre">templates/</span></code> and <code class="docutils literal notranslate"><span class="pre">roles/*/templates/</span></code>) will be templated by <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">init</span></code>. The skeleton’s <code class="docutils literal notranslate"><span class="pre">galaxy.yml.j2</span></code> file should use the variables <code class="docutils literal notranslate"><span class="pre">namespace</span></code> and <code class="docutils literal notranslate"><span class="pre">collection_name</span></code> which are derived from <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">init</span> <span class="pre">namespace.collection_name</span></code>, and will populate the metadata in the initialized collection’s <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> file. There are a few additional variables available by default (for example, <code class="docutils literal notranslate"><span class="pre">version</span></code> is <code class="docutils literal notranslate"><span class="pre">1.0.0</span></code>), and these can be supplemented/overridden using <code class="docutils literal notranslate"><span class="pre">--extra-vars</span></code>.</p>
 <p>An example <code class="docutils literal notranslate"><span class="pre">galaxy.yml.j2</span></code> file that accepts an optional dictionary variable <code class="docutils literal notranslate"><span class="pre">dependencies</span></code> could look like this:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">namespace</span><span class="w"> </span><span class="p p-Indicator">}}</span>
-<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">collection_name</span><span class="w"> </span><span class="p p-Indicator">}}</span>
-<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">(version|quote)</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">version(&quot;</span><span class="l l-Scalar l-Scalar-Plain">0.0.0&quot;, operator=&quot;gt&quot;, version_type=&quot;semver&quot;)|ternary(version, undef(&quot;version must be a valid semantic version greater than 0.0.0&quot;)) }}&quot;</span>
-<span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">dependencies|default(</span><span class="p p-Indicator">{},</span><span class="w"> </span><span class="nv">true)</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">namespace</span> <span class="cp">}}</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">collection_name</span> <span class="cp">}}</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">version</span><span class="o">|</span><span class="nf">quote</span><span class="o">)</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s2">&quot;0.0.0&quot;</span><span class="o">,</span> <span class="nv">operator</span><span class="o">=</span><span class="s2">&quot;gt&quot;</span><span class="o">,</span> <span class="nv">version_type</span><span class="o">=</span><span class="s2">&quot;semver&quot;</span><span class="o">)|</span><span class="nf">ternary</span><span class="o">(</span><span class="nv">version</span><span class="o">,</span> <span class="nv">undef</span><span class="o">(</span><span class="s2">&quot;version must be a valid semantic version greater than 0.0.0&quot;</span><span class="o">))</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">dependencies</span><span class="o">|</span><span class="nf">default</span><span class="o">({},</span> <span class="kp">true</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To initialize a collection using the new template, pass the path to the skeleton with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">init</span></code>:</p>
@@ -489,7 +482,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 06, 2024.
+      <span class="lastupdated">Last updated on Feb 13, 2025.
       </span></p>
   </div>
 
