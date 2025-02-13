@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ansible and Python 3 &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -157,8 +157,45 @@
 <li class="toctree-l1"><a class="reference internal" href="style_guide/index.html">Ansible documentation style guide</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Developer Guide</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="developing_locally.html">Adding modules and plugins locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules.html">Should you develop a module?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general.html">Developing modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_checklist.html">Contributing your module to an existing Ansible collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_best_practices.html">Conventions, tips, and pitfalls</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible and Python 3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#minimum-version-of-python-3-x-and-python-2-x">Minimum version of Python 3.x and Python 2.x</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#developing-ansible-code-that-supports-python-2-and-python-3">Developing Ansible code that supports Python 2 and Python 3</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#understanding-strings-in-python-2-and-python-3">Understanding strings in Python 2 and Python 3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unicode-sandwich-common-borders-places-to-convert-bytes-to-text-in-control-node-code">Unicode Sandwich common borders: places to convert bytes to text in control node code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tips-tricks-and-idioms-for-python-2-python-3-compatibility">Tips, tricks, and idioms for Python 2/Python 3 compatibility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#string-formatting-for-control-node-code">String formatting for control node code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_documenting.html">Module format and documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sidecar.html">Adjacent YAML documentation files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_windows.html">Windows module development walkthrough</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_in_groups.html">Creating a new collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_lifecycle.html">The lifecycle of an Ansible module or plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_plugins.html">Developing plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_inventory.html">Developing dynamic inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_core.html">Developing <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_program_flow_modules.html">Ansible module architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_api.html">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_collections_path.html">Ansible collection creator path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections_galaxy_meta.html">Collection Galaxy metadata structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_architecture.html">Ansible architecture</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
 <ul>
@@ -422,7 +459,7 @@ it gives you an idea of where to watch for problems.</p>
 <p>In Python 2, reading from files yields bytes.  In Python 3, it can yield text.
 To make code that’s portable to both we don’t make use of Python 3’s ability
 to yield text but instead do the conversion explicitly ourselves. For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.common.text.converters</span> <span class="kn">import</span> <span class="n">to_text</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.common.text.converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_text</span>
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;filename-with-utf8-data.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">my_file</span><span class="p">:</span>
     <span class="n">b_data</span> <span class="o">=</span> <span class="n">my_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -442,7 +479,7 @@ point, if there is demand for other encodings we may change that, but for
 now it is safe to assume that bytes are UTF-8.</p>
 </div>
 <p>Writing to files is the opposite process:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils.common.text.converters</span> <span class="kn">import</span> <span class="n">to_bytes</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.common.text.converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_bytes</span>
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;filename.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">my_file</span><span class="p">:</span>
     <span class="n">my_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">some_text_string</span><span class="p">))</span>
@@ -461,9 +498,9 @@ function and a traceback will occur if non-ASCII characters are present.  In
 Python 3, a traceback will only occur if the text string can’t be decoded in
 the current locale, but it is still good to be explicit and have code which
 works on both versions:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os.path</span>
 
-<span class="kn">from</span> <span class="nn">ansible.module_utils.common.text.converters</span> <span class="kn">import</span> <span class="n">to_bytes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.common.text.converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_bytes</span>
 
 <span class="n">filename</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;/var/tmp/くらとみ.txt&#39;</span>
 <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
@@ -476,7 +513,7 @@ works on both versions:</p>
 <p>When you are only manipulating a filename as a string without talking to the
 filesystem (or a C library which talks to the filesystem) you can often get
 away without converting to bytes:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os.path</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;/var/tmp/café&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;くらとみ&#39;</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;/var/tmp/café/くらとみ&#39;</span><span class="p">)</span>
@@ -551,7 +588,7 @@ or back to the string type that their parameters received.</p>
 <p>Use the following boilerplate code at the top of all python files
 to make certain constructs act the same way on Python 2 and Python 3:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make coding more python3-ish</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
 <span class="n">__metaclass__</span> <span class="o">=</span> <span class="nb">type</span>
 </pre></div>
 </div>
@@ -604,7 +641,7 @@ to help projects create code that runs on both Python 2 and Python 3.  Ansible
 includes a version of the library in module_utils so that other modules can use it
 without requiring that it is installed on the remote system.  To make use of
 it, import it like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils</span> <span class="kn">import</span> <span class="n">six</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">six</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -704,7 +741,7 @@ Upgrade to Python 3.5 to test.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 06, 2024.
+      <span class="lastupdated">Last updated on Feb 13, 2025.
       </span></p>
   </div>
 

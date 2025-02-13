@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Python API &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -157,8 +157,38 @@
 <li class="toctree-l1"><a class="reference internal" href="style_guide/index.html">Ansible documentation style guide</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Developer Guide</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="developing_locally.html">Adding modules and plugins locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules.html">Should you develop a module?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general.html">Developing modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_checklist.html">Contributing your module to an existing Ansible collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_best_practices.html">Conventions, tips, and pitfalls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_python_3.html">Ansible and Python 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Debugging modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_documenting.html">Module format and documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sidecar.html">Adjacent YAML documentation files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_general_windows.html">Windows module development walkthrough</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_modules_in_groups.html">Creating a new collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_lifecycle.html">The lifecycle of an Ansible module or plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_plugins.html">Developing plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_inventory.html">Developing dynamic inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_core.html">Developing <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_program_flow_modules.html">Ansible module architecture</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Python API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#python-api-example">Python API example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_collections_path.html">Ansible collection creator path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections_galaxy_meta.html">Collection Galaxy metadata structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_architecture.html">Ansible architecture</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
 <ul>
@@ -339,26 +369,26 @@ or have access control and logging demands, please see the <a class="reference e
 <p>This example is a simple demonstration that shows how to minimally run a couple of tasks:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
 <span class="n">__metaclass__</span> <span class="o">=</span> <span class="nb">type</span>
 
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 
-<span class="kn">import</span> <span class="nn">ansible.constants</span> <span class="k">as</span> <span class="nn">C</span>
-<span class="kn">from</span> <span class="nn">ansible.executor.task_queue_manager</span> <span class="kn">import</span> <span class="n">TaskQueueManager</span>
-<span class="kn">from</span> <span class="nn">ansible.module_utils.common.collections</span> <span class="kn">import</span> <span class="n">ImmutableDict</span>
-<span class="kn">from</span> <span class="nn">ansible.inventory.manager</span> <span class="kn">import</span> <span class="n">InventoryManager</span>
-<span class="kn">from</span> <span class="nn">ansible.parsing.dataloader</span> <span class="kn">import</span> <span class="n">DataLoader</span>
-<span class="kn">from</span> <span class="nn">ansible.playbook.play</span> <span class="kn">import</span> <span class="n">Play</span>
-<span class="kn">from</span> <span class="nn">ansible.plugins.callback</span> <span class="kn">import</span> <span class="n">CallbackBase</span>
-<span class="kn">from</span> <span class="nn">ansible.plugins.loader</span> <span class="kn">import</span> <span class="n">init_plugin_loader</span>
-<span class="kn">from</span> <span class="nn">ansible.vars.manager</span> <span class="kn">import</span> <span class="n">VariableManager</span>
-<span class="kn">from</span> <span class="nn">ansible</span> <span class="kn">import</span> <span class="n">context</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ansible.constants</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">C</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.executor.task_queue_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TaskQueueManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.common.collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImmutableDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.inventory.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">InventoryManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.parsing.dataloader</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.playbook.play</span><span class="w"> </span><span class="kn">import</span> <span class="n">Play</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.callback</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_plugin_loader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.vars.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">VariableManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible</span><span class="w"> </span><span class="kn">import</span> <span class="n">context</span>
 
 
 <span class="c1"># Create a callback plugin so we can capture the output</span>
-<span class="k">class</span> <span class="nc">ResultsCollectorJSONCallback</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResultsCollectorJSONCallback</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A sample callback plugin used for performing an action as results come in.</span>
 
 <span class="sd">    If you want to collect all results into a single object for processing at</span>
@@ -366,17 +396,17 @@ or have access control and logging demands, please see the <a class="reference e
 <span class="sd">    or writing your own custom callback plugin.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ResultsCollectorJSONCallback</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host_ok</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host_unreachable</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host_failed</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="nf">v2_runner_on_unreachable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">v2_runner_on_unreachable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
         <span class="n">host</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">_host</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host_unreachable</span><span class="p">[</span><span class="n">host</span><span class="o">.</span><span class="n">get_name</span><span class="p">()]</span> <span class="o">=</span> <span class="n">result</span>
 
-    <span class="k">def</span> <span class="nf">v2_runner_on_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">v2_runner_on_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Print a json representation of the result.</span>
 
 <span class="sd">        Also, store the result in an instance attribute for retrieval later</span>
@@ -385,12 +415,12 @@ or have access control and logging demands, please see the <a class="reference e
         <span class="bp">self</span><span class="o">.</span><span class="n">host_ok</span><span class="p">[</span><span class="n">host</span><span class="o">.</span><span class="n">get_name</span><span class="p">()]</span> <span class="o">=</span> <span class="n">result</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="n">host</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">_result</span><span class="p">},</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">v2_runner_on_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">v2_runner_on_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">host</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">_host</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host_failed</span><span class="p">[</span><span class="n">host</span><span class="o">.</span><span class="n">get_name</span><span class="p">()]</span> <span class="o">=</span> <span class="n">result</span>
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="n">init_plugin_loader</span><span class="p">()</span>
     <span class="n">host_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;www.example.com&#39;</span><span class="p">,</span> <span class="s1">&#39;www.google.com&#39;</span><span class="p">]</span>
     <span class="c1"># since the API is constructed for CLI it expects certain options to always be set in the context object</span>
@@ -507,7 +537,7 @@ command line tools (<code class="docutils literal notranslate"><span class="pre"
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 06, 2024.
+      <span class="lastupdated">Last updated on Feb 13, 2025.
       </span></p>
   </div>
 
