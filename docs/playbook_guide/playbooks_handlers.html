@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Handlers: running operations on change &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -100,13 +100,6 @@
         </option>
         
         <option
-            value="2.9"
-            
-        >
-            2.9
-        </option>
-        
-        <option
             value="devel"
             selected="selected"
         >
@@ -160,6 +153,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#notifying-handlers">Notifying handlers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#notifying-and-loops">Notifying and loops</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#naming-handlers">Naming handlers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#handler-insertion-order-into-the-play">Handler insertion order into the play</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#controlling-when-handlers-run">Controlling when handlers run</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#defining-when-tasks-change">Defining when tasks change</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#using-variables-with-handlers">Using variables with handlers</a></li>
@@ -364,13 +358,14 @@
 <li><p><a class="reference internal" href="#notifying-handlers" id="id2">Notifying handlers</a></p></li>
 <li><p><a class="reference internal" href="#notifying-and-loops" id="id3">Notifying and loops</a></p></li>
 <li><p><a class="reference internal" href="#naming-handlers" id="id4">Naming handlers</a></p></li>
-<li><p><a class="reference internal" href="#controlling-when-handlers-run" id="id5">Controlling when handlers run</a></p></li>
-<li><p><a class="reference internal" href="#defining-when-tasks-change" id="id6">Defining when tasks change</a></p></li>
-<li><p><a class="reference internal" href="#using-variables-with-handlers" id="id7">Using variables with handlers</a></p></li>
-<li><p><a class="reference internal" href="#handlers-in-roles" id="id8">Handlers in roles</a></p></li>
-<li><p><a class="reference internal" href="#includes-and-imports-in-handlers" id="id9">Includes and imports in handlers</a></p></li>
-<li><p><a class="reference internal" href="#meta-tasks-as-handlers" id="id10">Meta tasks as handlers</a></p></li>
-<li><p><a class="reference internal" href="#limitations" id="id11">Limitations</a></p></li>
+<li><p><a class="reference internal" href="#handler-insertion-order-into-the-play" id="id5">Handler insertion order into the play</a></p></li>
+<li><p><a class="reference internal" href="#controlling-when-handlers-run" id="id6">Controlling when handlers run</a></p></li>
+<li><p><a class="reference internal" href="#defining-when-tasks-change" id="id7">Defining when tasks change</a></p></li>
+<li><p><a class="reference internal" href="#using-variables-with-handlers" id="id8">Using variables with handlers</a></p></li>
+<li><p><a class="reference internal" href="#handlers-in-roles" id="id9">Handlers in roles</a></p></li>
+<li><p><a class="reference internal" href="#includes-and-imports-in-handlers" id="id10">Includes and imports in handlers</a></p></li>
+<li><p><a class="reference internal" href="#meta-tasks-as-handlers" id="id11">Meta tasks as handlers</a></p></li>
+<li><p><a class="reference internal" href="#limitations" id="id12">Limitations</a></p></li>
 </ul>
 </nav>
 <section id="handler-example">
@@ -490,11 +485,21 @@
 </div>
 <p>Notifying the <code class="docutils literal notranslate"><span class="pre">restart</span> <span class="pre">web</span> <span class="pre">services</span></code> topic results in executing all handlers listening to that topic regardless of how those handlers are named.</p>
 <p>This use makes it much easier to trigger multiple handlers. It also decouples handlers from their names, making it easier to share handlers among playbooks and roles (especially when using third-party roles from a shared source such as Ansible Galaxy).</p>
-<p>Each handler should have a globally unique name. If multiple handlers are defined with the same name, only the last one loaded into the play can be notified and executed, effectively shadowing all of the previous handlers with the same name.</p>
-<p>There is only one global scope for handlers (handler names and listen topics) regardless of where the handlers are defined. This also includes handlers defined in roles.</p>
+<p>Each handler should have a globally unique name. If multiple handlers are defined with the same name, only the last one loaded into the play (see <a class="reference internal" href="#handlers-insertion-order">handlers_insertion_order</a>) can be notified and executed, effectively shadowing all of the previous handlers with the same name.</p>
+</section>
+<section id="handler-insertion-order-into-the-play">
+<span id="handlers-insertion-order"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">Handler insertion order into the play</a><a class="headerlink" href="#handler-insertion-order-into-the-play" title="Link to this heading"></a></h2>
+<p>There is only one global, play-level scope for handlers regardless of where the handlers are defined, either in the <code class="docutils literal notranslate"><span class="pre">handlers:</span></code> section or in roles. The order in which handlers are added into the play is as follows:</p>
+<ol class="arabic simple">
+<li><p>Handlers from roles in the <code class="docutils literal notranslate"><span class="pre">roles:</span></code> section.</p></li>
+<li><p>Handlers from the <code class="docutils literal notranslate"><span class="pre">handlers:</span></code> section.</p></li>
+<li><p>Handlers from roles statically imported via <code class="docutils literal notranslate"><span class="pre">import_role</span></code> tasks.</p></li>
+<li><p>Handlers from roles dynamically included via <code class="docutils literal notranslate"><span class="pre">include_role</span></code> tasks (available at runtime only after the <code class="docutils literal notranslate"><span class="pre">include_role</span></code> task executed).</p></li>
+</ol>
+<p>In case handlers having the same name the last one loaded into the play, as per the above order, can be notified and executed.</p>
 </section>
 <section id="controlling-when-handlers-run">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Controlling when handlers run</a><a class="headerlink" href="#controlling-when-handlers-run" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Controlling when handlers run</a><a class="headerlink" href="#controlling-when-handlers-run" title="Link to this heading"></a></h2>
 <p>By default, handlers run after all the tasks in a particular play have been completed. Notified handlers are executed automatically after each of the following sections, in the following order: <code class="docutils literal notranslate"><span class="pre">pre_tasks</span></code>, <code class="docutils literal notranslate"><span class="pre">roles</span></code>/<code class="docutils literal notranslate"><span class="pre">tasks</span></code> and <code class="docutils literal notranslate"><span class="pre">post_tasks</span></code>. This approach is efficient, because the handler only runs once, regardless of how many tasks notify it. For example, if multiple tasks update a configuration file and notify a handler to restart Apache, Ansible only bounces Apache once to avoid unnecessary restarts.</p>
 <p>If you need handlers to run before the end of the play, add a task to flush them using the <a class="reference internal" href="../collections/ansible/builtin/meta_module.html#meta-module"><span class="std std-ref">meta module</span></a>, which executes Ansible actions:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
@@ -512,7 +517,7 @@
 <p>Once handlers are executed, either automatically after each mentioned section or manually by the <code class="docutils literal notranslate"><span class="pre">flush_handlers</span></code> meta task, they can be notified and run again in later sections of the play.</p>
 </section>
 <section id="defining-when-tasks-change">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Defining when tasks change</a><a class="headerlink" href="#defining-when-tasks-change" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Defining when tasks change</a><a class="headerlink" href="#defining-when-tasks-change" title="Link to this heading"></a></h2>
 <p>You can control when handlers are notified about task changes using the <code class="docutils literal notranslate"><span class="pre">changed_when</span></code> keyword.</p>
 <p>In the following example, the handler restarts the service each time the configuration file is copied:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
@@ -528,7 +533,7 @@
 <p>See <a class="reference internal" href="playbooks_error_handling.html#override-the-changed-result"><span class="std std-ref">Defining “changed”</span></a> for more about <code class="docutils literal notranslate"><span class="pre">changed_when</span></code>.</p>
 </section>
 <section id="using-variables-with-handlers">
-<h2><a class="toc-backref" href="#id7" role="doc-backlink">Using variables with handlers</a><a class="headerlink" href="#using-variables-with-handlers" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Using variables with handlers</a><a class="headerlink" href="#using-variables-with-handlers" title="Link to this heading"></a></h2>
 <p>You may want your Ansible handlers to use variables. For example, if the name of a service varies slightly by distribution, you want your output to show the exact name of the restarted service for each target machine. Avoid placing variables in the name of the handler. Since handler names are templated early on, Ansible may not have a value available for a handler name like this:</p>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">handlers</span><span class="p">:</span>
 <span class="c1"># This handler name may cause your play to fail!</span>
@@ -551,21 +556,21 @@
 <p>While handler names can contain a template, <code class="docutils literal notranslate"><span class="pre">listen</span></code> topics cannot.</p>
 </section>
 <section id="handlers-in-roles">
-<h2><a class="toc-backref" href="#id8" role="doc-backlink">Handlers in roles</a><a class="headerlink" href="#handlers-in-roles" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Handlers in roles</a><a class="headerlink" href="#handlers-in-roles" title="Link to this heading"></a></h2>
 <p>Handlers from roles are not just contained in their roles but rather inserted into the global scope with all other handlers from a play. As such they can be used outside of the role they are defined in. It also means that their name can conflict with handlers from outside the role. To ensure that a handler from a role is notified as opposed to one from outside the role with the same name, notify the handler by using its name in the following form: <code class="docutils literal notranslate"><span class="pre">role_name</span> <span class="pre">:</span> <span class="pre">handler_name</span></code>.</p>
-<p>Handlers notified within the <code class="docutils literal notranslate"><span class="pre">roles</span></code> section are automatically flushed at the end of the <code class="docutils literal notranslate"><span class="pre">tasks</span></code> section but before any <code class="docutils literal notranslate"><span class="pre">tasks</span></code> handlers.</p>
+<p>Handlers notified within the <code class="docutils literal notranslate"><span class="pre">roles</span></code> section are automatically flushed at the end of the <code class="docutils literal notranslate"><span class="pre">tasks</span></code> section.</p>
 </section>
 <section id="includes-and-imports-in-handlers">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink">Includes and imports in handlers</a><a class="headerlink" href="#includes-and-imports-in-handlers" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Includes and imports in handlers</a><a class="headerlink" href="#includes-and-imports-in-handlers" title="Link to this heading"></a></h2>
 <p>Notifying a dynamic include such as <code class="docutils literal notranslate"><span class="pre">include_task</span></code> as a handler results in executing all tasks from within the include. It is not possible to notify a handler defined inside a dynamic include.</p>
 <p>Having a static include such as <code class="docutils literal notranslate"><span class="pre">import_task</span></code> as a handler results in that handler being effectively rewritten by handlers from within that import before the play execution. A static include itself cannot be notified; the tasks from within that include, on the other hand, can be notified individually.</p>
 </section>
 <section id="meta-tasks-as-handlers">
-<h2><a class="toc-backref" href="#id10" role="doc-backlink">Meta tasks as handlers</a><a class="headerlink" href="#meta-tasks-as-handlers" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Meta tasks as handlers</a><a class="headerlink" href="#meta-tasks-as-handlers" title="Link to this heading"></a></h2>
 <p>Since Ansible 2.14 <a class="reference internal" href="../collections/ansible/builtin/meta_module.html#ansible-collections-ansible-builtin-meta-module"><span class="std std-ref">meta tasks</span></a> are allowed to be used and notified as handlers. Note that however <code class="docutils literal notranslate"><span class="pre">flush_handlers</span></code> cannot be used as a handler to prevent unexpected behavior.</p>
 </section>
 <section id="limitations">
-<h2><a class="toc-backref" href="#id11" role="doc-backlink">Limitations</a><a class="headerlink" href="#limitations" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Limitations</a><a class="headerlink" href="#limitations" title="Link to this heading"></a></h2>
 <p>A handler cannot run <code class="docutils literal notranslate"><span class="pre">import_role</span></code> nor <code class="docutils literal notranslate"><span class="pre">include_role</span></code>.
 Handlers <a class="reference internal" href="playbooks_tags.html#tags-on-handlers"><span class="std std-ref">ignore tags</span></a>.</p>
 </section>
@@ -585,7 +590,7 @@ Handlers <a class="reference internal" href="playbooks_tags.html#tags-on-handler
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 06, 2024.
+      <span class="lastupdated">Last updated on Feb 13, 2025.
       </span></p>
   </div>
 

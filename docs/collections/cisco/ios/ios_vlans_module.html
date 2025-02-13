@@ -4,11 +4,11 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.1" name="antsibull-docs" />
+<meta content="2.16.3" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cisco.ios.ios_vlans module – Resource module to configure VLANs. &mdash; Ansible Community Documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5707b69d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -101,13 +101,6 @@
         </option>
         
         <option
-            value="2.9"
-            
-        >
-            2.9
-        </option>
-        
-        <option
             value="devel"
             selected="selected"
         >
@@ -188,7 +181,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Cisco Namespace</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../aci/index.html">Cisco.Aci</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../asa/index.html">Cisco.Asa</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../dnac/index.html">Cisco.Dnac</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../intersight/index.html">Cisco.Intersight</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Cisco.Ios</a><ul class="current">
@@ -389,7 +381,7 @@
 <h1>cisco.ios.ios_vlans module – Resource module to configure VLANs.<a class="headerlink" href="#cisco-ios-ios-vlans-module-resource-module-to-configure-vlans" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/ios/">cisco.ios collection</a> (version 9.0.3).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/ios/">cisco.ios collection</a> (version 9.1.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -508,7 +500,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-config/shutdown"></div><p class="ansible-option-title" id="ansible-collections-cisco-ios-ios-vlans-module-parameter-config-shutdown"><strong>shutdown</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/shutdown" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Shutdown VLAN switching.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies whether VLAN switching should be administratively enabled or disabled.</p>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">enabled</span></code>, the VLAN interface is administratively shut down, which prevents it from forwarding traffic.</p>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">disabled</span></code>, the VLAN interface is administratively enabled by issuing the internal <code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">shutdown</span></code> command, allowing it to forward traffic.</p>
+<p>The operational state of the VLAN depends on both the administrative state (<code class="docutils literal notranslate"><span class="pre">shutdown</span></code> or <code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">shutdown</span></code>) and the physical link status.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;enabled&quot;</span></code></p></li>
@@ -695,40 +690,152 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
-<span class="c1"># vios_l2#show vlan</span>
+<span class="c1"># S1#show vlan</span>
+
 <span class="c1"># VLAN Name                             Status    Ports</span>
 <span class="c1"># ---- -------------------------------- --------- -------------------------------</span>
-<span class="c1"># 1    default                          active    Gi0/1, Gi0/2</span>
-<span class="c1"># 10   vlan_10                          active</span>
-<span class="c1"># 20   vlan_20                          act/lshut</span>
-<span class="c1"># 30   vlan_30                          sus/lshut</span>
+<span class="c1"># 1    default                          active    Gi0/0, Gi0/1, Gi0/2, Gi0/3</span>
+<span class="c1"># 10   Vlan_10                          active</span>
+<span class="c1"># 20   Vlan_20                          active</span>
+<span class="c1"># 30   Vlan_30                          suspended</span>
+<span class="c1"># 44   Vlan_44                          suspended</span>
 <span class="c1"># 1002 fddi-default                     act/unsup</span>
 <span class="c1"># 1003 token-ring-default               act/unsup</span>
 <span class="c1"># 1004 fddinet-default                  act/unsup</span>
 <span class="c1"># 1005 trnet-default                    act/unsup</span>
-<span class="c1">#</span>
+
 <span class="c1"># VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2</span>
 <span class="c1"># ---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------</span>
 <span class="c1"># 1    enet  100001     1500  -      -      -        -    -        0      0</span>
 <span class="c1"># 10   enet  100010     1500  -      -      -        -    -        0      0</span>
 <span class="c1"># 20   enet  100020     610   -      -      -        -    -        0      0</span>
 <span class="c1"># 30   enet  100030     1500  -      -      -        -    -        0      0</span>
+<span class="c1"># 44   enet  100044     1500  -      -      -        -    -        0      0</span>
 <span class="c1"># 1002 fddi  101002     1500  -      -      -        -    -        0      0</span>
 <span class="c1"># 1003 tr    101003     1500  -      -      -        -    -        0      0</span>
 <span class="c1"># 1004 fdnet 101004     1500  -      -      -        ieee -        0      0</span>
 <span class="c1"># 1005 trnet 101005     1500  -      -      -        ibm  -        0      0</span>
-<span class="c1">#</span>
+
 <span class="c1"># Remote SPAN VLANs</span>
 <span class="c1"># ------------------------------------------------------------------------------</span>
-<span class="c1"># 10</span>
+
+
+<span class="c1"># Primary Secondary Type              Ports</span>
+<span class="c1"># ------- --------- ----------------- ------------------------------------------</span>
+<span class="c1"># S1#</span>
+
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Override device configuration of all VLANs with provided configuration</span>
 <span class="w">  </span><span class="nt">cisco.ios.ios_vlans</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vlan_10</span>
-<span class="w">        </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">        </span><span class="nt">mtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vlan_2020</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">active</span>
+<span class="w">        </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">        </span><span class="nt">shutdown</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disabled</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overridden</span>
+
+<span class="c1"># Task output:</span>
+<span class="c1"># ------------</span>
+
+<span class="c1"># after:</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: default</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: Vlan_2020</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 20</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: fddi-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1002</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: token-ring-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1003</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: fddinet-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1004</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: trnet-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1005</span>
+
+<span class="c1"># before:</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: default</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: Vlan_10</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 10</span>
+<span class="c1"># - mtu: 610</span>
+<span class="c1">#   name: Vlan_20</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 20</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: Vlan_30</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: suspend</span>
+<span class="c1">#   vlan_id: 30</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: Vlan_44</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: suspend</span>
+<span class="c1">#   vlan_id: 44</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: fddi-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1002</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: token-ring-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1003</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: fddinet-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1004</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: trnet-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1005</span>
+
+<span class="c1"># commands:</span>
+<span class="c1"># - no vlan 1</span>
+<span class="c1"># - no vlan 10</span>
+<span class="c1"># - no vlan 30</span>
+<span class="c1"># - no vlan 44</span>
+<span class="c1"># - no vlan 1002</span>
+<span class="c1"># - no vlan 1003</span>
+<span class="c1"># - no vlan 1004</span>
+<span class="c1"># - no vlan 1005</span>
+<span class="c1"># - vlan 20</span>
+<span class="c1"># - name Vlan_2020</span>
+<span class="c1"># - no mtu 610</span>
+<span class="c1"># - no vlan configuration 1</span>
+<span class="c1"># - no vlan configuration 10</span>
+<span class="c1"># - no vlan configuration 30</span>
+<span class="c1"># - no vlan configuration 44</span>
+<span class="c1"># - no vlan configuration 1002</span>
+<span class="c1"># - no vlan configuration 1003</span>
+<span class="c1"># - no vlan configuration 1004</span>
+<span class="c1"># - no vlan configuration 1005</span>
 
 <span class="c1"># After state:</span>
 <span class="c1"># ------------</span>
@@ -736,59 +843,177 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># vios_l2#show vlan</span>
 <span class="c1"># VLAN Name                             Status    Ports</span>
 <span class="c1"># ---- -------------------------------- --------- -------------------------------</span>
-<span class="c1"># 1    default                          active    Gi0/1, Gi0/2</span>
-<span class="c1"># 10   Vlan_10                          active</span>
+<span class="c1"># 1    default                          active    Gi0/0, Gi0/1, Gi0/2, Gi0/3</span>
+<span class="c1"># 20   Vlan_2020                        active</span>
 <span class="c1"># 1002 fddi-default                     act/unsup</span>
 <span class="c1"># 1003 token-ring-default               act/unsup</span>
 <span class="c1"># 1004 fddinet-default                  act/unsup</span>
 <span class="c1"># 1005 trnet-default                    act/unsup</span>
-<span class="c1">#</span>
+
 <span class="c1"># VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2</span>
 <span class="c1"># ---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------</span>
 <span class="c1"># 1    enet  100001     1500  -      -      -        -    -        0      0</span>
-<span class="c1"># 10   enet  100010     1000  -      -      -        -    -        0      0</span>
+<span class="c1"># 20   enet  100020     1500  -      -      -        -    -        0      0</span>
 <span class="c1"># 1002 fddi  101002     1500  -      -      -        -    -        0      0</span>
 <span class="c1"># 1003 tr    101003     1500  -      -      -        -    -        0      0</span>
 <span class="c1"># 1004 fdnet 101004     1500  -      -      -        ieee -        0      0</span>
 <span class="c1"># 1005 trnet 101005     1500  -      -      -        ibm  -        0      0</span>
 
+<span class="c1"># Remote SPAN VLANs</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
 
-<span class="c1"># Using overridden</span>
+
+<span class="c1"># Primary Secondary Type              Ports</span>
+<span class="c1"># ------- --------- ----------------- ------------------------------------------</span>
+
+<span class="c1"># Using purged</span>
 
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
-<span class="c1"># Leaf-01#show run nve | sec ^vlan configuration</span>
-<span class="c1"># vlan configuration 101</span>
-<span class="c1">#  member evpn-instance 101 vni 10101</span>
-<span class="c1"># vlan configuration 102</span>
-<span class="c1">#  member evpn-instance 102 vni 10102</span>
-<span class="c1"># vlan configuration 201</span>
-<span class="c1">#  member evpn-instance 201 vni 10201</span>
-<span class="c1"># vlan configuration 901</span>
-<span class="c1">#  member vni 50901</span>
+<span class="c1"># S1#show vlan</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Override device configuration of all VLANs with provided configuration</span>
+<span class="c1"># VLAN Name                             Status    Ports</span>
+<span class="c1"># ---- -------------------------------- --------- -------------------------------</span>
+<span class="c1"># 1    default                          active    Gi0/0, Gi0/1, Gi0/2, Gi0/3</span>
+<span class="c1"># 20   Vlan_2020                        active</span>
+<span class="c1"># 1002 fddi-default                     act/unsup</span>
+<span class="c1"># 1003 token-ring-default               act/unsup</span>
+<span class="c1"># 1004 fddinet-default                  act/unsup</span>
+<span class="c1"># 1005 trnet-default                    act/unsup</span>
+
+<span class="c1"># VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2</span>
+<span class="c1"># ---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------</span>
+<span class="c1"># 1    enet  100001     1500  -      -      -        -    -        0      0</span>
+<span class="c1"># 20   enet  100020     1500  -      -      -        -    -        0      0</span>
+<span class="c1"># 1002 fddi  101002     1500  -      -      -        -    -        0      0</span>
+<span class="c1"># 1003 tr    101003     1500  -      -      -        -    -        0      0</span>
+<span class="c1"># 1004 fdnet 101004     1500  -      -      -        ieee -        0      0</span>
+<span class="c1"># 1005 trnet 101005     1500  -      -      -        ibm  -        0      0</span>
+
+<span class="c1"># Remote SPAN VLANs</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<span class="c1"># Primary Secondary Type              Ports</span>
+<span class="c1"># ------- --------- ----------------- ------------------------------------------</span>
+
+<span class="c1"># S1#show running-config | section ^vlan configuration .+</span>
+<span class="c1"># vlan configuration 20</span>
+
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Purge all vlans configuration</span>
 <span class="w">  </span><span class="nt">cisco.ios.ios_vlans</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
-<span class="w">        </span><span class="nt">member</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">vni</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10102</span>
-<span class="w">          </span><span class="nt">evi</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">102</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">102</span>
-<span class="w">        </span><span class="nt">member</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">vni</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10101</span>
-<span class="w">          </span><span class="nt">evi</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overridden</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">purged</span>
+
+<span class="c1"># Task output:</span>
+<span class="c1"># ------------</span>
+
+<span class="c1"># after:</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: default</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: fddi-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1002</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: token-ring-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1003</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: fddinet-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1004</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: trnet-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1005</span>
+
+<span class="c1"># before:</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: default</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: Vlan_2020</span>
+<span class="c1">#   shutdown: disabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 20</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: fddi-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1002</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: token-ring-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1003</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: fddinet-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1004</span>
+<span class="c1"># - mtu: 1500</span>
+<span class="c1">#   name: trnet-default</span>
+<span class="c1">#   shutdown: enabled</span>
+<span class="c1">#   state: active</span>
+<span class="c1">#   vlan_id: 1005</span>
+
+<span class="c1"># commands:</span>
+<span class="c1"># - no vlan 1</span>
+<span class="c1"># - no vlan 20</span>
+<span class="c1"># - no vlan 1002</span>
+<span class="c1"># - no vlan 1003</span>
+<span class="c1"># - no vlan 1004</span>
+<span class="c1"># - no vlan 1005</span>
+<span class="c1"># - no vlan configuration 1</span>
+<span class="c1"># - no vlan configuration 20</span>
+<span class="c1"># - no vlan configuration 1002</span>
+<span class="c1"># - no vlan configuration 1003</span>
+<span class="c1"># - no vlan configuration 1004</span>
+<span class="c1"># - no vlan configuration 1005</span>
 
 <span class="c1"># After state:</span>
 <span class="c1"># ------------</span>
 <span class="c1">#</span>
-<span class="c1"># Leaf-01#show run nve | sec ^vlan configuration</span>
-<span class="c1"># vlan configuration 101</span>
-<span class="c1">#  member evpn-instance 102 vni 10102</span>
-<span class="c1"># vlan configuration 102</span>
-<span class="c1">#  member evpn-instance 101 vni 10101</span>
+<span class="c1"># S1#show vlan</span>
+
+<span class="c1"># VLAN Name                             Status    Ports</span>
+<span class="c1"># ---- -------------------------------- --------- -------------------------------</span>
+<span class="c1"># 1    default                          active    Gi0/0, Gi0/1, Gi0/2, Gi0/3</span>
+<span class="c1"># 1002 fddi-default                     act/unsup</span>
+<span class="c1"># 1003 token-ring-default               act/unsup</span>
+<span class="c1"># 1004 fddinet-default                  act/unsup</span>
+<span class="c1"># 1005 trnet-default                    act/unsup</span>
+
+<span class="c1"># VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2</span>
+<span class="c1"># ---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------</span>
+<span class="c1"># 1    enet  100001     1500  -      -      -        -    -        0      0</span>
+<span class="c1"># 1002 fddi  101002     1500  -      -      -        -    -        0      0</span>
+<span class="c1"># 1003 tr    101003     1500  -      -      -        -    -        0      0</span>
+<span class="c1"># 1004 fdnet 101004     1500  -      -      -        ieee -        0      0</span>
+<span class="c1"># 1005 trnet 101005     1500  -      -      -        ibm  -        0      0</span>
+
+<span class="c1"># Remote SPAN VLANs</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<span class="c1"># Primary Secondary Type              Ports</span>
+<span class="c1"># ------- --------- ----------------- ------------------------------------------</span>
+
+<span class="c1"># S1#show running-config | section ^vlan configuration .+</span>
+<span class="c1"># S1#</span>
+
 
 <span class="c1"># Using replaced</span>
 
@@ -1565,7 +1790,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 06, 2024.
+      <span class="lastupdated">Last updated on Feb 13, 2025.
       </span></p>
   </div>
 
