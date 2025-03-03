@@ -194,8 +194,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-speed-up-run-of-ansible-for-servers-from-cloud-providers-ec2-openstack">How do I speed up run of ansible for servers from cloud providers (EC2, openstack,.. )?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-handle-not-having-a-python-interpreter-at-usr-bin-python-on-a-remote-machine">How do I handle not having a Python interpreter at /usr/bin/python on a remote machine?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-handle-the-package-dependencies-required-by-ansible-package-dependencies-during-ansible-installation">How do I handle the package dependencies required by Ansible package dependencies during Ansible installation ?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#common-platform-issues">Common Platform Issues</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#what-customer-platforms-does-red-hat-support">What customer platforms does Red Hat support?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-system-issues">Common System Issues</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#running-in-a-virtualenv">Running in a virtualenv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#running-on-macos-as-a-control-node">Running on macOS as a control node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#running-on-macos-as-a-target">Running on macOS as a target</a></li>
@@ -494,12 +493,8 @@ For example, <cite>libffi</cite> package is dependency of <cite>pynacl</cite> an
 the OS native package managers, such as <cite>yum</cite>, <cite>dnf</cite>, or <cite>apt</cite>, or as mentioned in the package installation guide.</p>
 <p>Refer to the documentation of the respective package for such dependencies and their installation methods.</p>
 </section>
-<section id="common-platform-issues">
-<h2>Common Platform Issues<a class="headerlink" href="#common-platform-issues" title="Link to this heading"></a></h2>
-<section id="what-customer-platforms-does-red-hat-support">
-<h3>What customer platforms does Red Hat support?<a class="headerlink" href="#what-customer-platforms-does-red-hat-support" title="Link to this heading"></a></h3>
-<p>A number of them! For a definitive list please see this <a class="reference external" href="https://access.redhat.com/articles/3168091">Knowledge Base article</a>.</p>
-</section>
+<section id="common-system-issues">
+<h2>Common System Issues<a class="headerlink" href="#common-system-issues" title="Link to this heading"></a></h2>
 <section id="running-in-a-virtualenv">
 <h3>Running in a virtualenv<a class="headerlink" href="#running-in-a-virtualenv" title="Link to this heading"></a></h3>
 <p>You can install Ansible into a virtualenv on the control node quite simply:</p>
@@ -997,14 +992,14 @@ and backups, which most file based modules also support:</p>
 <span class="w">      </span><span class="nt">environment</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">WEIRD_REQUIREMENT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updated is changed</span>
-<span class="w w-Error"> </span><span class="nt">rescue</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">rescue</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore backup file to original, in the hope the previous configuration was working.</span>
 <span class="w">      </span><span class="nt">copy</span><span class="p">:</span>
 <span class="w">         </span><span class="nt">remote_src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">         </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/x/y/z</span>
 <span class="w">         </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">updated[&#39;backup_file&#39;]</span><span class="nv"> </span><span class="s">}}&quot;</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updated is changed</span>
-<span class="w"> </span><span class="nt">always</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">always</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">We choose to always delete backup, but could copy or move, or only delete in rescue.</span>
 <span class="w">      </span><span class="nt">file</span><span class="p">:</span>
 <span class="w">         </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">updated[&#39;backup_file&#39;]</span><span class="nv"> </span><span class="s">}}&quot;</span>
@@ -1017,7 +1012,7 @@ and backups, which most file based modules also support:</p>
 <span id="jinja2-faqs"></span><h2>Why does the <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> filter return <cite>None</cite> instead of an empty string?<a class="headerlink" href="#why-does-the-regex-search-filter-return-none-instead-of-an-empty-string" title="Link to this heading"></a></h2>
 <p>Until the jinja2 2.10 release, Jinja was only able to return strings, but Ansible needed Python objects in some cases. Ansible uses <code class="docutils literal notranslate"><span class="pre">safe_eval</span></code> and  only sends strings that look like certain types of Python objects through this function. With <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> that does not find a match, the result (<code class="docutils literal notranslate"><span class="pre">None</span></code>) is converted to the string “None” which is not useful in non-native jinja2.</p>
 <p>The following example of a single templating action shows this behavior:</p>
-<div class="highlight-Jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>This example does not result in a Python <code class="docutils literal notranslate"><span class="pre">None</span></code>, so Ansible historically converted it to “” (empty string).</p>
@@ -1025,15 +1020,15 @@ and backups, which most file based modules also support:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Native jinja2 functionality is not needed when <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> is used as an intermediate result that is then compared to the jinja2 <code class="docutils literal notranslate"><span class="pre">none</span></code> test.</p>
-<div class="highlight-Jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="k">is</span> <span class="nf">none</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="k">is</span> <span class="nf">none</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="how-do-i-submit-a-change-to-the-documentation">
 <span id="docs-contributions"></span><h2>How do I submit a change to the documentation?<a class="headerlink" href="#how-do-i-submit-a-change-to-the-documentation" title="Link to this heading"></a></h2>
-<p>Documentation for Ansible is kept in the main project Git repository, and complete instructions
-for contributing can be found in the docs README <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/docs/docsite/README.md">viewable on GitHub</a>. Thanks!</p>
+<p>Documentation for Ansible is kept in the <a class="reference external" href="https://github.com/ansible/ansible-documentation">ansible/ansible-documentation</a>
+project Git repository. See <a class="reference internal" href="../community/documentation_contributions.html#community-documentation-contributions"><span class="std std-ref">Contributing to the Ansible Documentation</span></a> for details.</p>
 </section>
 <section id="what-is-the-difference-between-ansible-legacy-and-ansible-builtin-collections">
 <span id="legacy-vs-builtin"></span><h2>What is the difference between <code class="docutils literal notranslate"><span class="pre">ansible.legacy</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible.builtin</span></code> collections?<a class="headerlink" href="#what-is-the-difference-between-ansible-legacy-and-ansible-builtin-collections" title="Link to this heading"></a></h2>
@@ -1087,7 +1082,7 @@ So this:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 20, 2025.
+      <span class="lastupdated">Last updated on Mar 03, 2025.
       </span></p>
   </div>
 

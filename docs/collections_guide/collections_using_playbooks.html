@@ -331,7 +331,7 @@
 </pre></div>
 </div>
 <p>This works for roles or any type of plugin distributed within the collection:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Reference collections contents using their FQCNs</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Reference collections contents using their FQCNs</span>
 <span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 
@@ -345,7 +345,7 @@
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Call a debug task</span>
 <span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">lookup(&quot;my_namespace.my_collection.lookup1&quot;,</span><span class="nv"> </span><span class="s">&#39;</span><span class="l l-Scalar l-Scalar-Plain">param1&#39;)| my_namespace.my_collection.filter1 }}&#39;</span>
+<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s2">&quot;my_namespace.my_collection.lookup1&quot;</span><span class="o">,</span> <span class="s2">&quot;param1&quot;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">my_namespace</span><span class="nv">.my_collection.filter1</span> <span class="cp">}}</span><span class="s">&#39;</span>
 </pre></div>
 </div>
 <section id="simplifying-module-names-with-the-collections-keyword">
@@ -370,7 +370,7 @@
 <section id="using-collections-in-playbooks">
 <span id="collections-keyword"></span><h2>Using <code class="docutils literal notranslate"><span class="pre">collections</span></code> in playbooks<a class="headerlink" href="#using-collections-in-playbooks" title="Link to this heading"></a></h2>
 <p>In a playbook, you can control the collections Ansible searches for modules and action plugins to execute. However, any roles you call in your playbook define their own collections search order; they do not inherit the calling playbook’s settings. This is true even if the role does not define its own <code class="docutils literal notranslate"><span class="pre">collections</span></code> keyword.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a play using the collections keyword</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a play using the collections keyword</span>
 <span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
 <span class="w">  </span><span class="nt">collections</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_namespace.my_collection</span>
@@ -387,7 +387,7 @@
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a debug task</span>
 <span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">lookup(&quot;my_namespace.my_collection.lookup1&quot;,</span><span class="nv"> </span><span class="s">&quot;param1&quot;)|</span><span class="nv"> </span><span class="s">my_namespace.my_collection.filter1</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s2">&quot;my_namespace.my_collection.lookup1&quot;</span><span class="o">,</span> <span class="s2">&quot;param1&quot;</span><span class="o">)|</span> <span class="nf">my_namespace</span><span class="nv">.my_collection.filter1</span> <span class="cp">}}</span><span class="s">&#39;</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">collections</span></code> keyword merely creates an ordered ‘search path’ for non-namespaced plugins and role references. It does not install content or otherwise change Ansible’s behavior around the loading of plugins or roles. Note that an FQCN is still required for non-action or module plugins (for example, lookups, filters, and tests).</p>
@@ -413,11 +413,11 @@
 </pre></div>
 </div>
 <p>A few recommendations when creating such playbooks, <code class="docutils literal notranslate"><span class="pre">hosts:</span></code> should be generic or at least have a variable input.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span><span class="w">  </span><span class="c1"># Use --limit or customized inventory to restrict hosts targeted</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span><span class="w">  </span><span class="c1"># Use --limit or customized inventory to restrict hosts targeted</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w">  </span><span class="c1"># For things you want to restrict to the control node</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{target|default(&quot;webservers&quot;)}}&#39;</span><span class="w">  </span><span class="c1"># Assumes inventory provides a &#39;webservers&#39; group, but can also use ``-e &#39;target=host1,host2&#39;``</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span><span class="nv">target</span><span class="o">|</span><span class="nf">default</span><span class="o">(</span><span class="s2">&quot;webservers&quot;</span><span class="o">)</span><span class="cp">}}</span><span class="s">&#39;</span><span class="w">  </span><span class="c1"># Assumes inventory provides a &#39;webservers&#39; group, but can also use ``-e &#39;target=host1,host2&#39;``</span>
 </pre></div>
 </div>
 <p>This will have an implied entry in the <code class="docutils literal notranslate"><span class="pre">collections:</span></code> keyword of <code class="docutils literal notranslate"><span class="pre">my_namespace.my_collection</span></code> just as with roles.</p>
@@ -447,7 +447,7 @@ Playbooks whose names contain invalid characters are not addressable: this is a 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 20, 2025.
+      <span class="lastupdated">Last updated on Mar 03, 2025.
       </span></p>
   </div>
 

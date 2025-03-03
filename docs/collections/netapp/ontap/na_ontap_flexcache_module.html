@@ -374,7 +374,7 @@
 <h1>netapp.ontap.na_ontap_flexcache module – NetApp ONTAP FlexCache - create/delete relationship<a class="headerlink" href="#netapp-ontap-na-ontap-flexcache-module-netapp-ontap-flexcache-create-delete-relationship" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 22.13.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 22.14.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -396,8 +396,8 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Create/Delete FlexCache volume relationships.</p></li>
-<li><p>This module does not modify an existing FlexCache volume with two exceptions.</p></li>
+<li><p>Create/Modify/Delete FlexCache volume relationships.</p></li>
+<li><p>This module does not modify an existing FlexCache volume when using ZAPI.</p></li>
 <li><p>When using REST, a prepopulate can be started on an exising FlexCache volume.</p></li>
 <li><p>When using REST, the volume can be mounted or unmounted. Set path to ‘’ to unmount it.</p></li>
 <li><p>It is required the volume is mounted to prepopulate it.</p></li>
@@ -444,6 +444,33 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-atime_scrub"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-atime-scrub"><strong>atime_scrub</strong></p>
+<a class="ansibleOptionLink" href="#parameter-atime_scrub" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+<p><em class="ansible-option-versionadded">added in netapp.ontap 22.14.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Only supported with REST and requires ONTAP 9.14.1 or later.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-atime_scrub/enabled"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-atime-scrub-enabled"><strong>enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-atime_scrub/enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies whether scrubbing of inactive files based on atime is enabled for the FlexCache volume.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-atime_scrub/period"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-atime-scrub-period"><strong>period</strong></p>
+<a class="ansibleOptionLink" href="#parameter-atime_scrub/period" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the atime duration in days after which a cached file is considered inactive.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-auto_provision_as"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-auto-provision-as"><strong>auto_provision_as</strong></p>
 <a class="ansibleOptionLink" href="#parameter-auto_provision_as" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -452,7 +479,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Ignored when using REST - omit aggr_list for automatic selection.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-cert_filepath"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-cert-filepath"><strong>cert_filepath</strong></p>
 <a class="ansibleOptionLink" href="#parameter-cert_filepath" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 20.6.0</em></p>
@@ -461,7 +488,35 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>not supported with python 2.6.</p>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-cifs_change_notify_enabled"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-cifs-change-notify-enabled"><strong>cifs_change_notify_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-cifs_change_notify_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in netapp.ontap 22.14.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies whether a CIFS change notification is enabled for the FlexCache volume.</p>
+<p>Only supported with REST and requires ONTAP 9.15.1 or later.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-dr_cache"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-dr-cache"><strong>dr_cache</strong></p>
+<a class="ansibleOptionLink" href="#parameter-dr_cache" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in netapp.ontap 22.14.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If set to true, a DR cache is created.</p>
+<p>Only supported with REST and requires ONTAP 9.9 or later.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-feature_flags"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-feature-flags"><strong>feature_flags</strong></p>
 <a class="ansibleOptionLink" href="#parameter-feature_flags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 20.5.0</em></p>
@@ -471,7 +526,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Supported keys and values are subject to change without notice. Unknown keys are ignored.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-force_offline"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-force-offline"><strong>force_offline</strong></p>
 <a class="ansibleOptionLink" href="#parameter-force_offline" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -484,7 +539,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-force_ontap_version"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-force-ontap-version"><strong>force_ontap_version</strong></p>
 <a class="ansibleOptionLink" href="#parameter-force_ontap_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 21.23.0</em></p>
@@ -497,7 +552,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Ignored with ZAPI.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-force_unmount"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-force-unmount"><strong>force_unmount</strong></p>
 <a class="ansibleOptionLink" href="#parameter-force_unmount" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -509,21 +564,52 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-global_file_locking_enabled"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-global-file-locking-enabled"><strong>global_file_locking_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-global_file_locking_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in netapp.ontap 22.14.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies whether or not a FlexCache volume has global file locking mode enabled.</p>
+<p>When global file locking mode is enabled, the ‘is_disconnected_mode_off_for_locks’ flag is always set to ‘true’.</p>
+<p>Only supported with REST and requires ONTAP 9.9 or later.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-guarantee_type"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-guarantee-type"><strong>guarantee_type</strong></p>
+<a class="ansibleOptionLink" href="#parameter-guarantee_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in netapp.ontap 22.14.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies The type of space guarantee of this volume in the aggregate.</p>
+<p>A value of ‘volume’ reserves space on the aggregates for the entire volume.</p>
+<p>A value of ‘none’ reserves no space on the aggregates, meaning that writes can fail if an aggregate runs out of space.</p>
+<p>Only supported with REST and requires ONTAP 9.7 or later.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;volume&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-hostname"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-hostname"><strong>hostname</strong></p>
 <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The hostname or IP address of the ONTAP instance.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-http_port"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-http-port"><strong>http_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-http_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Override the default port (80 or 443) with this port</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-https"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-https"><strong>https</strong></p>
 <a class="ansibleOptionLink" href="#parameter-https" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -537,7 +623,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-junction_path"></div>
 <div class="ansibleOptionAnchor" id="parameter-path"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-path"><span id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-junction-path"></span><strong>junction_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-junction_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: path</span></p>
@@ -546,7 +632,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <td><div class="ansible-option-cell"><p>Junction path of the cache volume.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-key_filepath"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-key-filepath"><strong>key_filepath</strong></p>
 <a class="ansibleOptionLink" href="#parameter-key_filepath" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 20.6.0</em></p>
@@ -554,7 +640,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <td><div class="ansible-option-cell"><p>path to SSL client key file.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div>
 <div class="ansibleOptionAnchor" id="parameter-volume"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-volume"><span id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-name"></span><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: volume</span></p>
@@ -564,14 +650,14 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <td><div class="ansible-option-cell"><p>Name of the target volume for the FlexCache.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ontapi"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-ontapi"><strong>ontapi</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ontapi" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The ontap api version to use</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-origin_cluster"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-origin-cluster"><strong>origin_cluster</strong></p>
 <a class="ansibleOptionLink" href="#parameter-origin_cluster" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -580,7 +666,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Not used for creation.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-origin_volume"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-origin-volume"><strong>origin_volume</strong></p>
 <a class="ansibleOptionLink" href="#parameter-origin_volume" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -588,12 +674,26 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Required for creation.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-origin_vserver"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-origin-vserver"><strong>origin_vserver</strong></p>
 <a class="ansibleOptionLink" href="#parameter-origin_vserver" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the origin vserver for the FlexCache.</p>
 <p>Required for creation.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-override_encryption"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-override-encryption"><strong>override_encryption</strong></p>
+<a class="ansibleOptionLink" href="#parameter-override_encryption" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in netapp.ontap 22.14.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If set to true, a plaintext FlexCache volume for an encrypted origin volume is created.</p>
+<p>Only supported with REST and requires ONTAP 9.14.1 or later.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -659,13 +759,40 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-relative_size"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-relative-size"><strong>relative_size</strong></p>
+<a class="ansibleOptionLink" href="#parameter-relative_size" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+<p><em class="ansible-option-versionadded">added in netapp.ontap 22.14.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Only supported with REST and requires ONTAP 9.13.1 or later.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-relative_size/enabled"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-relative-size-enabled"><strong>enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-relative_size/enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies whether the relative sizing is enabled for the FlexCache volume.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-relative_size/percentage"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-relative-size-percentage"><strong>percentage</strong></p>
+<a class="ansibleOptionLink" href="#parameter-relative_size/percentage" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the percent size the FlexCache volume should have relative to the total size of the origin volume.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-size"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-size"><strong>size</strong></p>
 <a class="ansibleOptionLink" href="#parameter-size" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Size of cache volume.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-size_unit"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-size-unit"><strong>size_unit</strong></p>
 <a class="ansibleOptionLink" href="#parameter-size_unit" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -685,7 +812,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -697,7 +824,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-time_out"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-time-out"><strong>time_out</strong></p>
 <a class="ansibleOptionLink" href="#parameter-time_out" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -707,7 +834,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">180</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_rest"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-use-rest"><strong>use_rest</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_rest" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -718,23 +845,23 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div>
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-username"><span id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-user"></span><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: user</span></p>
 <p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>This can be a Cluster-scoped or SVM-scoped account, depending on whether a Cluster-level or SVM-level API is required.</p>
-<p>For more information, please read the documentation <a class="reference external" href="https://mysupport.netapp.com/NOW/download/software/nmsdk/9.4/">https://mysupport.netapp.com/NOW/download/software/nmsdk/9.4/</a>.</p>
+<p>For more information, please read the documentation <a class="reference external" href="https://docs.netapp.com/us-en/ontap/authentication/create-svm-user-accounts-task.html">https://docs.netapp.com/us-en/ontap/authentication/create-svm-user-accounts-task.html</a>.</p>
 <p>Two authentication methods are supported</p>
 <ol class="arabic simple">
-<li><p>basic authentication, using username and password,</p></li>
+<li><p>Basic authentication, using username and password.</p></li>
 <li><p>SSL certificate authentication, using a ssl client cert file, and optionally a private key file.</p></li>
 </ol>
 <p>To use a certificate, the certificate must have been installed in the ONTAP cluster, and cert authentication must have been enabled.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -747,7 +874,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vserver"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-vserver"><strong>vserver</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vserver" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -755,7 +882,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Note that hostname, username, password are intended for the target vserver.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-writeback"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-writeback"><strong>writeback</strong></p>
 <a class="ansibleOptionLink" href="#parameter-writeback" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 22.13.0</em></p>
@@ -764,7 +891,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Requires ONTAP 9.12 or later and only supported with REST.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-writeback/enabled"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-flexcache-module-parameter-writeback-enabled"><strong>enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-writeback/enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -844,7 +971,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 20, 2025.
+      <span class="lastupdated">Last updated on Mar 03, 2025.
       </span></p>
   </div>
 

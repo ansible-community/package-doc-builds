@@ -439,10 +439,10 @@ lrwxr-xr-x  1 root wheel      17 Oct 31 11:40 python3-config -&gt; python3.11-co
 </pre></div>
 </div>
 <p>The playbook below</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">shell&gt; cat playbook.yml</span>
-<span class="l l-Scalar l-Scalar-Plain">- hosts</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_11</span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">gather_facts</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">tasks</span><span class="p p-Indicator">:</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># playbook.yml</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_11</span>
+<span class="w">  </span><span class="nt">gather_facts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">which python</span>
 <span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
@@ -458,34 +458,34 @@ lrwxr-xr-x  1 root wheel      17 Oct 31 11:40 python3-config -&gt; python3.11-co
 </pre></div>
 </div>
 <p>displays the details</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">shell&gt; ANSIBLE_STDOUT_CALLBACK=yaml ansible-playbook -i hosts playbook.yml</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">shell&gt; ANSIBLE_STDOUT_CALLBACK=yaml ansible-playbook -i hosts playbook.yml</span>
 
-<span class="l l-Scalar l-Scalar-Plain">PLAY [test_11] *******************************************************************************</span>
+<span class="go">PLAY [test_11] *******************************************************************************</span>
 
-<span class="l l-Scalar l-Scalar-Plain">TASK [command] *******************************************************************************</span>
-<span class="l l-Scalar l-Scalar-Plain">[WARNING]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Platform freebsd on host test_11 is using the discovered Python interpreter at</span>
-<span class="l l-Scalar l-Scalar-Plain">/usr/local/bin/python, but future installation of another Python interpreter could change the</span>
-<span class="l l-Scalar l-Scalar-Plain">meaning of that path. See https://docs.ansible.com/ansible-</span>
-<span class="l l-Scalar l-Scalar-Plain">core/2.18/reference_appendices/interpreter_discovery.html for more information.</span>
-<span class="nt">changed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">test_11</span><span class="p p-Indicator">]</span>
+<span class="go">TASK [command] *******************************************************************************</span>
+<span class="go">[WARNING]: Platform freebsd on host test_11 is using the discovered Python interpreter at</span>
+<span class="go">/usr/local/bin/python, but future installation of another Python interpreter could change the</span>
+<span class="go">meaning of that path. See https://docs.ansible.com/ansible-</span>
+<span class="go">core/2.18/reference_appendices/interpreter_discovery.html for more information.</span>
+<span class="go">changed: [test_11]</span>
 
-<span class="l l-Scalar l-Scalar-Plain">TASK [debug] *********************************************************************************</span>
-<span class="nt">ok</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">test_11</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">=&gt;</span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">result.stdout</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/local/bin/python</span>
+<span class="go">TASK [debug] *********************************************************************************</span>
+<span class="go">ok: [test_11] =&gt;</span>
+<span class="go">  result.stdout: /usr/local/bin/python</span>
 
-<span class="l l-Scalar l-Scalar-Plain">TASK [debug] *********************************************************************************</span>
-<span class="nt">ok</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">test_11</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">=&gt;</span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">msg</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
-<span class="w">    </span><span class="no">ansible_interpreter_python_fallback:</span>
-<span class="w">      </span><span class="no">- /usr/local/bin/python</span>
-<span class="w">      </span><span class="no">- /usr/local/bin/python3</span>
-<span class="w">      </span><span class="no">- /usr/local/bin/python3.11</span>
+<span class="go">TASK [debug] *********************************************************************************</span>
+<span class="go">ok: [test_11] =&gt;</span>
+<span class="go">  msg: |-</span>
+<span class="go">    ansible_interpreter_python_fallback:</span>
+<span class="go">      - /usr/local/bin/python</span>
+<span class="go">      - /usr/local/bin/python3</span>
+<span class="go">      - /usr/local/bin/python3.11</span>
 
-<span class="w">    </span><span class="no">discovered_interpreter_python:</span>
-<span class="w">      </span><span class="no">/usr/local/bin/python</span>
+<span class="go">    discovered_interpreter_python:</span>
+<span class="go">      /usr/local/bin/python</span>
 
-<span class="w">    </span><span class="no">ansible_playbook_python:</span>
-<span class="w">      </span><span class="no">/usr/bin/python3</span>
+<span class="go">    ansible_playbook_python:</span>
+<span class="go">      /usr/bin/python3</span>
 </pre></div>
 </div>
 <p>You can see that the first item from the list <code class="docutils literal notranslate"><span class="pre">ansible_interpreter_python_fallback</span></code> was discovered at the FreeBSD remote host. The variable <code class="docutils literal notranslate"><span class="pre">ansible_playbook_python</span></code> keeps the path to Python at the Linux control node that ran the playbook.</p>
@@ -578,7 +578,7 @@ Please feel free to report any issues or incompatibilities you discover with BSD
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 20, 2025.
+      <span class="lastupdated">Last updated on Mar 03, 2025.
       </span></p>
   </div>
 

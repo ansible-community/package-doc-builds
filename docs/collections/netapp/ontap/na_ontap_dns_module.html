@@ -374,7 +374,7 @@
 <h1>netapp.ontap.na_ontap_dns module – NetApp ONTAP Create, delete, modify DNS servers.<a class="headerlink" href="#netapp-ontap-na-ontap-dns-module-netapp-ontap-create-delete-modify-dns-servers" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 22.13.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 22.14.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -563,10 +563,10 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>This can be a Cluster-scoped or SVM-scoped account, depending on whether a Cluster-level or SVM-level API is required.</p>
-<p>For more information, please read the documentation <a class="reference external" href="https://mysupport.netapp.com/NOW/download/software/nmsdk/9.4/">https://mysupport.netapp.com/NOW/download/software/nmsdk/9.4/</a>.</p>
+<p>For more information, please read the documentation <a class="reference external" href="https://docs.netapp.com/us-en/ontap/authentication/create-svm-user-accounts-task.html">https://docs.netapp.com/us-en/ontap/authentication/create-svm-user-accounts-task.html</a>.</p>
 <p>Two authentication methods are supported</p>
 <ol class="arabic simple">
-<li><p>basic authentication, using username and password,</p></li>
+<li><p>Basic authentication, using username and password.</p></li>
 <li><p>SSL certificate authentication, using a ssl client cert file, and optionally a private key file.</p></li>
 </ol>
 <p>To use a certificate, the certificate must have been installed in the ONTAP cluster, and cert authentication must have been enabled.</p>
@@ -590,7 +590,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <a class="ansibleOptionLink" href="#parameter-vserver" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The name of the vserver to use.</p>
-<p>With REST, for cluster scoped DNS, omit this option or set it to NULL.</p>
+<p>With REST, for cluster scoped DNS, omit this option or set it to NULL for ONTAP 9.13.1 or later and provide cluster vserver as its value for ONTAP 9.12.1 or earlier.</p>
 <p>With ZAPI or REST, for cluster scoped DNS, this can also be set to the cluster vserver name.</p>
 </div></td>
 </tr>
@@ -609,23 +609,23 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id5" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create or modify DNS</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create or modify DNS</span>
 <span class="w">  </span><span class="nt">netapp.ontap.na_ontap_dns</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">hostname</span><span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">username</span><span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">password</span><span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">vserver</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">vservername</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">vserver</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vservername</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">domains</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sales.bar.com</span>
 <span class="w">    </span><span class="nt">nameservers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.193.0.250,10.192.0.250</span>
 <span class="w">    </span><span class="nt">skip_validation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create or modify cluster DNS with REST</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create or modify cluster DNS with REST</span>
 <span class="w">  </span><span class="nt">netapp.ontap.na_ontap_dns</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">hostname</span><span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">username</span><span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">password</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">domains</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sales.bar.com</span>
 <span class="w">    </span><span class="nt">nameservers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.193.0.250,10.192.0.250</span>
 </pre></div>
@@ -661,7 +661,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 20, 2025.
+      <span class="lastupdated">Last updated on Mar 03, 2025.
       </span></p>
   </div>
 

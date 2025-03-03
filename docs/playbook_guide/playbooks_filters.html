@@ -437,14 +437,14 @@
 <section id="providing-default-values">
 <span id="defaulting-undefined-variables"></span><h3><a class="toc-backref" href="#id3" role="doc-backlink">Providing default values</a><a class="headerlink" href="#providing-default-values" title="Link to this heading"></a></h3>
 <p>You can provide default values for variables directly in your templates using the Jinja2 ‘default’ filter. This is often a better approach than failing if a variable is not defined:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="m">5</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="m">5</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>In the above example, if the variable ‘some_variable’ is not defined, Ansible uses the default value 5, rather than raising an “undefined variable” error and failing. If you are working within a role, you can also add role defaults to define the default values for variables in your role. To learn more about role defaults see <a class="reference internal" href="playbooks_reuse_roles.html#role-directory-structure"><span class="std std-ref">Role directory structure</span></a>.</p>
 <p>Beginning in version 2.8, attempting to access an attribute of an Undefined value in Jinja will return another Undefined value, rather than throwing an error immediately. This means that you can now simply use
 a default with a value in a nested data structure (in other words, <code class="code docutils literal notranslate"><span class="pre">{{</span> <span class="pre">foo.bar.baz</span> <span class="pre">|</span> <span class="pre">default('DEFAULT')</span> <span class="pre">}}</span></code>) when you do not know if the intermediate values are defined.</p>
 <p>If you want to use the default value when variables evaluate to false or an empty string you have to set the second parameter to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;env&#39;</span><span class="o">,</span> <span class="s1">&#39;MY_USER&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="s1">&#39;admin&#39;</span><span class="o">,</span> <span class="kp">true</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;env&#39;</span><span class="o">,</span> <span class="s1">&#39;MY_USER&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="s1">&#39;admin&#39;</span><span class="o">,</span> <span class="kp">true</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 </section>
@@ -473,7 +473,7 @@ a default with a value in a nested data structure (in other words, <code class="
 <section id="defining-mandatory-values">
 <span id="forcing-variables-to-be-defined"></span><h3><a class="toc-backref" href="#id5" role="doc-backlink">Defining mandatory values</a><a class="headerlink" href="#defining-mandatory-values" title="Link to this heading"></a></h3>
 <p>If you configure Ansible to ignore undefined variables, you may want to define some values as mandatory. By default, Ansible fails if a variable in your playbook or command is undefined. You can configure Ansible to allow undefined variables by setting <a class="reference internal" href="../reference_appendices/config.html#default-undefined-var-behavior"><span class="std std-ref">DEFAULT_UNDEFINED_VAR_BEHAVIOR</span></a> to <code class="docutils literal notranslate"><span class="pre">false</span></code>. In that case, you may want to require some variables to be defined. You can do this with:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">variable</span> <span class="o">|</span> <span class="nf">mandatory</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">variable</span> <span class="o">|</span> <span class="nf">mandatory</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>The variable value will be used as is, but the template evaluation will raise an error if it is undefined.</p>
@@ -487,11 +487,11 @@ a default with a value in a nested data structure (in other words, <code class="
 <section id="defining-different-values-for-true-false-null-ternary">
 <h2><a class="toc-backref" href="#id6" role="doc-backlink">Defining different values for true/false/null (ternary)</a><a class="headerlink" href="#defining-different-values-for-true-false-null-ternary" title="Link to this heading"></a></h2>
 <p>You can create a test, then define one value to use when the test returns true and another when the test returns false (new in version 1.9):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">(</span><span class="nv">status</span> <span class="o">==</span> <span class="s1">&#39;needs_restart&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">ternary</span><span class="o">(</span><span class="s1">&#39;restart&#39;</span><span class="o">,</span> <span class="s1">&#39;continue&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">(</span><span class="nv">status</span> <span class="o">==</span> <span class="s1">&#39;needs_restart&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">ternary</span><span class="o">(</span><span class="s1">&#39;restart&#39;</span><span class="o">,</span> <span class="s1">&#39;continue&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>In addition, you can define one value to use on true, one value on false and a third value on null (new in version 2.8):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">enabled</span> <span class="o">|</span> <span class="nf">ternary</span><span class="o">(</span><span class="s1">&#39;no shutdown&#39;</span><span class="o">,</span> <span class="s1">&#39;shutdown&#39;</span><span class="o">,</span> <span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">enabled</span> <span class="o">|</span> <span class="nf">ternary</span><span class="o">(</span><span class="s1">&#39;no shutdown&#39;</span><span class="o">,</span> <span class="s1">&#39;shutdown&#39;</span><span class="o">,</span> <span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 </section>
@@ -504,7 +504,7 @@ a default with a value in a nested data structure (in other words, <code class="
 <p><span class="versionmodified added">New in version 2.3.</span></p>
 </div>
 <p>If you are unsure of the underlying Python type of a variable, you can use the <a class="reference internal" href="../collections/ansible/builtin/type_debug_filter.html#ansible-collections-ansible-builtin-type-debug-filter"><span class="std std-ref">ansible.builtin.type_debug</span></a> filter to display it. This is useful in debugging when you need a particular type of variable:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">myvar</span> <span class="o">|</span> <span class="nf">type_debug</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">myvar</span> <span class="o">|</span> <span class="nf">type_debug</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>You should note that, while this may seem like a useful filter for checking that you have the right type of data in a variable, you should often prefer <a class="reference internal" href="playbooks_tests.html#type-tests"><span class="std std-ref">type tests</span></a>, which will allow you to test for specific data types.</p>
@@ -512,7 +512,7 @@ a default with a value in a nested data structure (in other words, <code class="
 <section id="transforming-strings-into-lists">
 <h3><a class="toc-backref" href="#id9" role="doc-backlink">Transforming strings into lists</a><a class="headerlink" href="#transforming-strings-into-lists" title="Link to this heading"></a></h3>
 <p>Use the <a class="reference internal" href="../collections/ansible/builtin/split_filter.html#ansible-collections-ansible-builtin-split-filter"><span class="std std-ref">ansible.builtin.split</span></a> filter to transform a character/string delimited string into a list of items suitable for <a class="reference internal" href="playbooks_loops.html#playbooks-loops"><span class="std std-ref">looping</span></a>. For example, if you want to split a string variable <cite>fruits</cite> by commas, you can use:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">fruits</span> <span class="o">|</span> <span class="nf">split</span><span class="o">(</span><span class="s1">&#39;,&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">fruits</span> <span class="o">|</span> <span class="nf">split</span><span class="o">(</span><span class="s1">&#39;,&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>String data (before applying the <a class="reference internal" href="../collections/ansible/builtin/split_filter.html#ansible-collections-ansible-builtin-split-filter"><span class="std std-ref">ansible.builtin.split</span></a> filter):</p>
@@ -576,7 +576,7 @@ a default with a value in a nested data structure (in other words, <code class="
 <p><span class="versionmodified added">New in version 2.7.</span></p>
 </div>
 <p>Use the <a class="reference internal" href="../collections/ansible/builtin/items2dict_filter.html#ansible-collections-ansible-builtin-items2dict-filter"><span class="std std-ref">ansible.builtin.items2dict</span></a> filter to transform a list into a dictionary, mapping the content into <code class="docutils literal notranslate"><span class="pre">key:</span> <span class="pre">value</span></code> pairs:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">tags</span> <span class="o">|</span> <span class="nf">items2dict</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">tags</span> <span class="o">|</span> <span class="nf">items2dict</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>List data (before applying the <a class="reference internal" href="../collections/ansible/builtin/items2dict_filter.html#ansible-collections-ansible-builtin-items2dict-filter"><span class="std std-ref">ansible.builtin.items2dict</span></a> filter):</p>
@@ -604,7 +604,7 @@ Environment: dev
 </pre></div>
 </div>
 <p>In this example, you must pass the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="../collections/ansible/builtin/items2dict_filter.html#ansible-collections-ansible-builtin-items2dict-filter-parameter-key-name"><span class="std std-ref"><span class="pre">key_name</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="../collections/ansible/builtin/items2dict_filter.html#ansible-collections-ansible-builtin-items2dict-filter-parameter-value-name"><span class="std std-ref"><span class="pre">value_name</span></span></a></strong></code> arguments to configure the transformation. For example:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">fruits</span> <span class="o">|</span> <span class="nf">items2dict</span><span class="o">(</span><span class="nv">key_name</span><span class="o">=</span><span class="s1">&#39;fruit&#39;</span><span class="o">,</span> <span class="nv">value_name</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">fruits</span> <span class="o">|</span> <span class="nf">items2dict</span><span class="o">(</span><span class="nv">key_name</span><span class="o">=</span><span class="s1">&#39;fruit&#39;</span><span class="o">,</span> <span class="nv">value_name</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>If you do not pass these arguments, or do not pass the correct values for your list, you will see <code class="docutils literal notranslate"><span class="pre">KeyError:</span> <span class="pre">key</span></code> or <code class="docutils literal notranslate"><span class="pre">KeyError:</span> <span class="pre">my_typo</span></code>.</p>
@@ -630,31 +630,31 @@ Environment: dev
 <section id="formatting-data-yaml-and-json">
 <span id="filters-for-formatting-data"></span><h2><a class="toc-backref" href="#id13" role="doc-backlink">Formatting data: YAML and JSON</a><a class="headerlink" href="#formatting-data-yaml-and-json" title="Link to this heading"></a></h2>
 <p>You can switch a data structure in a template from or to JSON or YAML format, with options for formatting, indenting, and loading data. The basic filters are occasionally useful for debugging:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_json</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_json</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_yaml</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="../collections/ansible/builtin/to_json_filter.html#ansible-collections-ansible-builtin-to-json-filter"><span class="std std-ref">ansible.builtin.to_json</span></a> and <a class="reference internal" href="../collections/ansible/builtin/to_yaml_filter.html#ansible-collections-ansible-builtin-to-yaml-filter"><span class="std std-ref">ansible.builtin.to_yaml</span></a> for documentation on these filters.</p>
 <p>For human readable output, you can use:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_nice_json</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_nice_json</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_nice_yaml</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="../collections/ansible/builtin/to_nice_json_filter.html#ansible-collections-ansible-builtin-to-nice-json-filter"><span class="std std-ref">ansible.builtin.to_nice_json</span></a> and <a class="reference internal" href="../collections/ansible/builtin/to_nice_yaml_filter.html#ansible-collections-ansible-builtin-to-nice-yaml-filter"><span class="std std-ref">ansible.builtin.to_nice_yaml</span></a> for documentation on these filters.</p>
 <p>You can change the indentation of either format:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_nice_json</span><span class="o">(</span><span class="nv">indent</span><span class="o">=</span><span class="m">2</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_nice_json</span><span class="o">(</span><span class="nv">indent</span><span class="o">=</span><span class="m">2</span><span class="o">)</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_nice_yaml</span><span class="o">(</span><span class="nv">indent</span><span class="o">=</span><span class="m">8</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/to_yaml_filter.html#ansible-collections-ansible-builtin-to-yaml-filter"><span class="std std-ref">ansible.builtin.to_yaml</span></a> and <a class="reference internal" href="../collections/ansible/builtin/to_nice_yaml_filter.html#ansible-collections-ansible-builtin-to-nice-yaml-filter"><span class="std std-ref">ansible.builtin.to_nice_yaml</span></a> filters use the <a class="reference external" href="https://pyyaml.org/">PyYAML library</a> which has a default 80 symbol string length limit. That causes an unexpected line break after 80th symbol (if there is a space after 80th symbol)
 To avoid such behavior and generate long lines, use the <code class="ansible-option docutils literal notranslate"><strong><span><span class="pre">width</span></span></strong></code> option. You must use a hardcoded number to define the width, instead of a construction like <code class="docutils literal notranslate"><span class="pre">float(&quot;inf&quot;)</span></code>, because the filter does not support proxying Python functions. For example:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_yaml</span><span class="o">(</span><span class="nv">indent</span><span class="o">=</span><span class="m">8</span><span class="o">,</span> <span class="nv">width</span><span class="o">=</span><span class="m">1337</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_yaml</span><span class="o">(</span><span class="nv">indent</span><span class="o">=</span><span class="m">8</span><span class="o">,</span> <span class="nv">width</span><span class="o">=</span><span class="m">1337</span><span class="o">)</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">to_nice_yaml</span><span class="o">(</span><span class="nv">indent</span><span class="o">=</span><span class="m">8</span><span class="o">,</span> <span class="nv">width</span><span class="o">=</span><span class="m">1337</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>The filter does support passing through other YAML parameters. For a full list, see the <a class="reference external" href="https://pyyaml.org/wiki/PyYAMLDocumentation">PyYAML documentation</a> for <code class="docutils literal notranslate"><span class="pre">dump()</span></code>.</p>
 <p>If you are reading in some already formatted data:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">from_json</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">from_json</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">some_variable</span> <span class="o">|</span> <span class="nf">from_yaml</span> <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -672,7 +672,7 @@ To avoid such behavior and generate long lines, use the <code class="ansible-opt
 <section id="filter-to-json-and-unicode-support">
 <h3><a class="toc-backref" href="#id14" role="doc-backlink">Filter <cite>to_json</cite> and Unicode support</a><a class="headerlink" href="#filter-to-json-and-unicode-support" title="Link to this heading"></a></h3>
 <p>By default <a class="reference internal" href="../collections/ansible/builtin/to_json_filter.html#ansible-collections-ansible-builtin-to-json-filter"><span class="std std-ref">ansible.builtin.to_json</span></a> and <a class="reference internal" href="../collections/ansible/builtin/to_nice_json_filter.html#ansible-collections-ansible-builtin-to-nice-json-filter"><span class="std std-ref">ansible.builtin.to_nice_json</span></a> will convert data received to ASCII, so:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;München&#39;</span><span class="o">|</span> <span class="nf">to_json</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;München&#39;</span><span class="o">|</span> <span class="nf">to_json</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>will return:</p>
@@ -680,9 +680,9 @@ To avoid such behavior and generate long lines, use the <code class="ansible-opt
 </pre></div>
 </div>
 <p>To keep Unicode characters, pass the parameter <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="../collections/ansible/builtin/to_json_filter.html#ansible-collections-ansible-builtin-to-json-filter-parameter-ensure-ascii"><span class="std std-ref"><span class="pre">ensure_ascii=False</span></span></a></code> to the filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;München&#39;</span><span class="o">|</span> <span class="nf">to_json</span><span class="o">(</span><span class="nv">ensure_ascii</span><span class="o">=</span><span class="kp">False</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;München&#39;</span><span class="o">|</span> <span class="nf">to_json</span><span class="o">(</span><span class="nv">ensure_ascii</span><span class="o">=</span><span class="kp">False</span><span class="o">)</span> <span class="cp">}}</span>
 
-<span class="s">&#39;München&#39;</span>
+<span class="x">&#39;München&#39;</span>
 </pre></div>
 </div>
 <div class="versionadded">
@@ -735,7 +735,7 @@ The <a class="reference internal" href="../collections/ansible/builtin/from_yaml
 </pre></div>
 </div>
 <p>Similarly to the output of the <a class="reference internal" href="../collections/ansible/builtin/items2dict_filter.html#ansible-collections-ansible-builtin-items2dict-filter"><span class="std std-ref">ansible.builtin.items2dict</span></a> filter mentioned above, these filters can be used to construct a <code class="docutils literal notranslate"><span class="pre">dict</span></code>:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">dict</span><span class="o">(</span><span class="nv">keys_list</span> <span class="o">|</span> <span class="nf">zip</span><span class="o">(</span><span class="nv">values_list</span><span class="o">))</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">dict</span><span class="o">(</span><span class="nv">keys_list</span> <span class="o">|</span> <span class="nf">zip</span><span class="o">(</span><span class="nv">values_list</span><span class="o">))</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>List data (before applying the <a class="reference internal" href="../collections/ansible/builtin/zip_filter.html#ansible-collections-ansible-builtin-zip-filter"><span class="std std-ref">ansible.builtin.zip</span></a> filter):</p>
@@ -759,7 +759,7 @@ The <a class="reference internal" href="../collections/ansible/builtin/from_yaml
 <p><span class="versionmodified added">New in version 2.7.</span></p>
 </div>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/subelements_filter.html#ansible-collections-ansible-builtin-subelements-filter"><span class="std std-ref">ansible.builtin.subelements</span></a> filter produces a product of an object and the subelement values of that object, similar to the <a class="reference internal" href="../collections/ansible/builtin/subelements_lookup.html#ansible-collections-ansible-builtin-subelements-lookup"><span class="std std-ref">ansible.builtin.subelements</span></a> lookup. This lets you specify individual subelements to use in a template. For example, this expression:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">users</span> <span class="o">|</span> <span class="nf">subelements</span><span class="o">(</span><span class="s1">&#39;groups&#39;</span><span class="o">,</span> <span class="nv">skip_missing</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">users</span> <span class="o">|</span> <span class="nf">subelements</span><span class="o">(</span><span class="s1">&#39;groups&#39;</span><span class="o">,</span> <span class="nv">skip_missing</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>Data before applying the <a class="reference internal" href="../collections/ansible/builtin/subelements_filter.html#ansible-collections-ansible-builtin-subelements-filter"><span class="std std-ref">ansible.builtin.subelements</span></a> filter:</p>
@@ -821,7 +821,7 @@ The <a class="reference internal" href="../collections/ansible/builtin/from_yaml
 <p><span class="versionmodified added">New in version 2.0.</span></p>
 </div>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/combine_filter.html#ansible-collections-ansible-builtin-combine-filter"><span class="std std-ref">ansible.builtin.combine</span></a> filter allows hashes to be merged. For example, the following would override keys in one hash:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">{</span><span class="s1">&#39;a&#39;</span><span class="o">:</span><span class="m">1</span><span class="o">,</span> <span class="s1">&#39;b&#39;</span><span class="o">:</span><span class="m">2</span><span class="o">}</span> <span class="o">|</span> <span class="nf">combine</span><span class="o">({</span><span class="s1">&#39;b&#39;</span><span class="o">:</span><span class="m">3</span><span class="o">})</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">{</span><span class="s1">&#39;a&#39;</span><span class="o">:</span><span class="m">1</span><span class="o">,</span> <span class="s1">&#39;b&#39;</span><span class="o">:</span><span class="m">2</span><span class="o">}</span> <span class="o">|</span> <span class="nf">combine</span><span class="o">({</span><span class="s1">&#39;b&#39;</span><span class="o">:</span><span class="m">3</span><span class="o">})</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>The resulting hash would be:</p>
@@ -829,7 +829,7 @@ The <a class="reference internal" href="../collections/ansible/builtin/from_yaml
 </pre></div>
 </div>
 <p>The filter can also take multiple arguments to merge:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">a</span> <span class="o">|</span> <span class="nf">combine</span><span class="o">(</span><span class="nv">b</span><span class="o">,</span> <span class="nv">c</span><span class="o">,</span> <span class="nv">d</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">a</span> <span class="o">|</span> <span class="nf">combine</span><span class="o">(</span><span class="nv">b</span><span class="o">,</span> <span class="nv">c</span><span class="o">,</span> <span class="nv">d</span><span class="o">)</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="o">[</span><span class="nv">a</span><span class="o">,</span> <span class="nv">b</span><span class="o">,</span> <span class="nv">c</span><span class="o">,</span> <span class="nv">d</span><span class="o">]</span> <span class="o">|</span> <span class="nf">combine</span> <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -1028,7 +1028,7 @@ It modifies the behavior of <a class="reference internal" href="../collections/a
 <p><span class="versionmodified added">New in version 2.1.</span></p>
 </div>
 <p>The <cite>extract</cite> filter is used to map from a list of indices to a list of values from a container (hash or array):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">0</span><span class="o">,</span><span class="m">2</span><span class="o">]</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="o">[</span><span class="s1">&#39;x&#39;</span><span class="o">,</span><span class="s1">&#39;y&#39;</span><span class="o">,</span><span class="s1">&#39;z&#39;</span><span class="o">])</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">0</span><span class="o">,</span><span class="m">2</span><span class="o">]</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="o">[</span><span class="s1">&#39;x&#39;</span><span class="o">,</span><span class="s1">&#39;y&#39;</span><span class="o">,</span><span class="s1">&#39;z&#39;</span><span class="o">])</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;x&#39;</span><span class="o">,</span><span class="s1">&#39;y&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="o">{</span><span class="s1">&#39;x&#39;</span><span class="o">:</span> <span class="m">42</span><span class="o">,</span> <span class="s1">&#39;y&#39;</span><span class="o">:</span> <span class="m">31</span><span class="o">})</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -1038,12 +1038,12 @@ It modifies the behavior of <a class="reference internal" href="../collections/a
 </pre></div>
 </div>
 <p>The filter can take another argument:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;x&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="nv">hostvars</span><span class="o">,</span> <span class="s1">&#39;ec2_ip_address&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;x&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="nv">hostvars</span><span class="o">,</span> <span class="s1">&#39;ec2_ip_address&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>This takes the list of hosts in group ‘x’, looks them up in <cite>hostvars</cite>, and then looks up the <cite>ec2_ip_address</cite> of the result. The final result is a list of IP addresses for the hosts in group ‘x’.</p>
 <p>The third argument to the filter can also be a list, for a recursive lookup inside the container:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="nv">b</span><span class="o">,</span> <span class="o">[</span><span class="s1">&#39;x&#39;</span><span class="o">,</span><span class="s1">&#39;y&#39;</span><span class="o">])</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;extract&#39;</span><span class="o">,</span> <span class="nv">b</span><span class="o">,</span> <span class="o">[</span><span class="s1">&#39;x&#39;</span><span class="o">,</span><span class="s1">&#39;y&#39;</span><span class="o">])</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>This would return a list containing the value of <cite>b[‘a’][‘x’][‘y’]</cite>.</p>
@@ -1269,19 +1269,19 @@ It modifies the behavior of <a class="reference internal" href="../collections/a
 </pre></div>
 </div>
 <p>To get a random number from 0 to 100 but in steps of 10:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">101</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="nv">step</span><span class="o">=</span><span class="m">10</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 70</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">101</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="nv">step</span><span class="o">=</span><span class="m">10</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; 70</span>
 </pre></div>
 </div>
 <p>To get a random number from 1 to 100 but in steps of 10:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">101</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="m">1</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 31</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">101</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="m">1</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; 31</span>
 <span class="cp">{{</span> <span class="m">101</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="nv">start</span><span class="o">=</span><span class="m">1</span><span class="o">,</span> <span class="nv">step</span><span class="o">=</span><span class="m">10</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 51</span>
+<span class="x"># =&gt; 51</span>
 </pre></div>
 </div>
 <p>You can initialize the random number generator from a seed to create random-but-idempotent numbers:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;</span><span class="cp">{{</span> <span class="m">60</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="nv">seed</span><span class="o">=</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">root</span><span class="nv"> </span><span class="s">/script/from/cron&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">&quot;</span><span class="cp">{{</span> <span class="m">60</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="nv">seed</span><span class="o">=</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="cp">}}</span><span class="x"> * * * * root /script/from/cron&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -1289,15 +1289,15 @@ It modifies the behavior of <a class="reference internal" href="../collections/a
 <h3><a class="toc-backref" href="#id28" role="doc-backlink">Shuffling a list</a><a class="headerlink" href="#shuffling-a-list" title="Link to this heading"></a></h3>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/shuffle_filter.html#ansible-collections-ansible-builtin-shuffle-filter"><span class="std std-ref">ansible.builtin.shuffle</span></a> filter randomizes an existing list, giving a different order for every invocation.</p>
 <p>To get a random list from an existing  list:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="o">,</span><span class="s1">&#39;b&#39;</span><span class="o">,</span><span class="s1">&#39;c&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">shuffle</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [&#39;c&#39;,&#39;a&#39;,&#39;b&#39;]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="o">,</span><span class="s1">&#39;b&#39;</span><span class="o">,</span><span class="s1">&#39;c&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">shuffle</span> <span class="cp">}}</span>
+<span class="x"># =&gt; [&#39;c&#39;,&#39;a&#39;,&#39;b&#39;]</span>
 <span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="o">,</span><span class="s1">&#39;b&#39;</span><span class="o">,</span><span class="s1">&#39;c&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">shuffle</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [&#39;b&#39;,&#39;c&#39;,&#39;a&#39;]</span>
+<span class="x"># =&gt; [&#39;b&#39;,&#39;c&#39;,&#39;a&#39;]</span>
 </pre></div>
 </div>
 <p>You can initialize the shuffle generator from a seed to generate a random-but-idempotent order:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="o">,</span><span class="s1">&#39;b&#39;</span><span class="o">,</span><span class="s1">&#39;c&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">shuffle</span><span class="o">(</span><span class="nv">seed</span><span class="o">=</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [&#39;b&#39;,&#39;a&#39;,&#39;c&#39;]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="s1">&#39;a&#39;</span><span class="o">,</span><span class="s1">&#39;b&#39;</span><span class="o">,</span><span class="s1">&#39;c&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">shuffle</span><span class="o">(</span><span class="nv">seed</span><span class="o">=</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; [&#39;b&#39;,&#39;a&#39;,&#39;c&#39;]</span>
 </pre></div>
 </div>
 <p>The shuffle filter returns a list whenever possible. If you use it with a non ‘listable’ item, the filter does nothing.</p>
@@ -1307,46 +1307,46 @@ It modifies the behavior of <a class="reference internal" href="../collections/a
 <span id="list-filters"></span><h2><a class="toc-backref" href="#id29" role="doc-backlink">Managing list variables</a><a class="headerlink" href="#managing-list-variables" title="Link to this heading"></a></h2>
 <p>You can search for the minimum or maximum value in a list, or flatten a multi-level list.</p>
 <p>To get the minimum value from the list of numbers:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">list1</span> <span class="o">|</span> <span class="nf">min</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">list1</span> <span class="o">|</span> <span class="nf">min</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p>To get the minimum value in a list of objects:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[{</span><span class="s1">&#39;val&#39;</span><span class="o">:</span> <span class="m">1</span><span class="o">},</span> <span class="o">{</span><span class="s1">&#39;val&#39;</span><span class="o">:</span> <span class="m">2</span><span class="o">}]</span> <span class="o">|</span> <span class="nf">min</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">&#39;val&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[{</span><span class="s1">&#39;val&#39;</span><span class="o">:</span> <span class="m">1</span><span class="o">},</span> <span class="o">{</span><span class="s1">&#39;val&#39;</span><span class="o">:</span> <span class="m">2</span><span class="o">}]</span> <span class="o">|</span> <span class="nf">min</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">&#39;val&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get the maximum value from a list of numbers:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3</span><span class="o">,</span> <span class="m">4</span><span class="o">,</span> <span class="m">2</span><span class="o">]</span> <span class="o">|</span> <span class="nf">max</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3</span><span class="o">,</span> <span class="m">4</span><span class="o">,</span> <span class="m">2</span><span class="o">]</span> <span class="o">|</span> <span class="nf">max</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p>To get the maximum value in a list of objects:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[{</span><span class="s1">&#39;val&#39;</span><span class="o">:</span> <span class="m">1</span><span class="o">},</span> <span class="o">{</span><span class="s1">&#39;val&#39;</span><span class="o">:</span> <span class="m">2</span><span class="o">}]</span> <span class="o">|</span> <span class="nf">max</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">&#39;val&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[{</span><span class="s1">&#39;val&#39;</span><span class="o">:</span> <span class="m">1</span><span class="o">},</span> <span class="o">{</span><span class="s1">&#39;val&#39;</span><span class="o">:</span> <span class="m">2</span><span class="o">}]</span> <span class="o">|</span> <span class="nf">max</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">&#39;val&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.5.</span></p>
 </div>
 <p>Flatten a list (same thing the <cite>flatten</cite> lookup does):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3</span><span class="o">,</span> <span class="o">[</span><span class="m">4</span><span class="o">,</span> <span class="m">2</span><span class="o">]</span> <span class="o">]</span> <span class="o">|</span> <span class="nf">flatten</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [3, 4, 2]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3</span><span class="o">,</span> <span class="o">[</span><span class="m">4</span><span class="o">,</span> <span class="m">2</span><span class="o">]</span> <span class="o">]</span> <span class="o">|</span> <span class="nf">flatten</span> <span class="cp">}}</span>
+<span class="x"># =&gt; [3, 4, 2]</span>
 </pre></div>
 </div>
 <p>Flatten only the first level of a list (akin to the <cite>items</cite> lookup):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3</span><span class="o">,</span> <span class="o">[</span><span class="m">4</span><span class="o">,</span> <span class="o">[</span><span class="m">2</span><span class="o">]]</span> <span class="o">]</span> <span class="o">|</span> <span class="nf">flatten</span><span class="o">(</span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [3, 4, [2]]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3</span><span class="o">,</span> <span class="o">[</span><span class="m">4</span><span class="o">,</span> <span class="o">[</span><span class="m">2</span><span class="o">]]</span> <span class="o">]</span> <span class="o">|</span> <span class="nf">flatten</span><span class="o">(</span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; [3, 4, [2]]</span>
 </pre></div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p>Preserve nulls in a list, by default flatten removes them. :</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3</span><span class="o">,</span> <span class="kp">None</span><span class="o">,</span> <span class="o">[</span><span class="m">4</span><span class="o">,</span> <span class="o">[</span><span class="m">2</span><span class="o">]]</span> <span class="o">]</span> <span class="o">|</span> <span class="nf">flatten</span><span class="o">(</span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span><span class="o">,</span> <span class="nv">skip_nulls</span><span class="o">=</span><span class="kp">False</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [3, None, 4, [2]]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3</span><span class="o">,</span> <span class="kp">None</span><span class="o">,</span> <span class="o">[</span><span class="m">4</span><span class="o">,</span> <span class="o">[</span><span class="m">2</span><span class="o">]]</span> <span class="o">]</span> <span class="o">|</span> <span class="nf">flatten</span><span class="o">(</span><span class="nv">levels</span><span class="o">=</span><span class="m">1</span><span class="o">,</span> <span class="nv">skip_nulls</span><span class="o">=</span><span class="kp">False</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; [3, None, 4, [2]]</span>
 </pre></div>
 </div>
 </section>
@@ -1357,37 +1357,37 @@ It modifies the behavior of <a class="reference internal" href="../collections/a
 <p><span class="versionmodified added">New in version 1.4.</span></p>
 </div>
 <p>To get a unique set from a list:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># list1: [1, 2, 5, 1, 3, 4, 10]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># list1: [1, 2, 5, 1, 3, 4, 10]</span>
 <span class="cp">{{</span> <span class="nv">list1</span> <span class="o">|</span> <span class="nf">unique</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [1, 2, 5, 3, 4, 10]</span>
+<span class="x"># =&gt; [1, 2, 5, 3, 4, 10]</span>
 </pre></div>
 </div>
 <p>To get a union of two lists:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># list1: [1, 2, 5, 1, 3, 4, 10]</span>
-<span class="c1"># list2: [1, 2, 3, 4, 5, 11, 99]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># list1: [1, 2, 5, 1, 3, 4, 10]</span>
+<span class="x"># list2: [1, 2, 3, 4, 5, 11, 99]</span>
 <span class="cp">{{</span> <span class="nv">list1</span> <span class="o">|</span> <span class="nf">union</span><span class="o">(</span><span class="nv">list2</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [1, 2, 5, 1, 3, 4, 10, 11, 99]</span>
+<span class="x"># =&gt; [1, 2, 5, 1, 3, 4, 10, 11, 99]</span>
 </pre></div>
 </div>
 <p>To get the intersection of 2 lists (unique list of all items in both):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># list1: [1, 2, 5, 3, 4, 10]</span>
-<span class="c1"># list2: [1, 2, 3, 4, 5, 11, 99]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># list1: [1, 2, 5, 3, 4, 10]</span>
+<span class="x"># list2: [1, 2, 3, 4, 5, 11, 99]</span>
 <span class="cp">{{</span> <span class="nv">list1</span> <span class="o">|</span> <span class="nf">intersect</span><span class="o">(</span><span class="nv">list2</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [1, 2, 5, 3, 4]</span>
+<span class="x"># =&gt; [1, 2, 5, 3, 4]</span>
 </pre></div>
 </div>
 <p>To get the difference of 2 lists (items in 1 that don’t exist in 2):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># list1: [1, 2, 5, 1, 3, 4, 10]</span>
-<span class="c1"># list2: [1, 2, 3, 4, 5, 11, 99]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># list1: [1, 2, 5, 1, 3, 4, 10]</span>
+<span class="x"># list2: [1, 2, 3, 4, 5, 11, 99]</span>
 <span class="cp">{{</span> <span class="nv">list1</span> <span class="o">|</span> <span class="nf">difference</span><span class="o">(</span><span class="nv">list2</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [10]</span>
+<span class="x"># =&gt; [10]</span>
 </pre></div>
 </div>
 <p>To get the symmetric difference of 2 lists (items exclusive to each list):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># list1: [1, 2, 5, 1, 3, 4, 10]</span>
-<span class="c1"># list2: [1, 2, 3, 4, 5, 11, 99]</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># list1: [1, 2, 5, 1, 3, 4, 10]</span>
+<span class="x"># list2: [1, 2, 3, 4, 5, 11, 99]</span>
 <span class="cp">{{</span> <span class="nv">list1</span> <span class="o">|</span> <span class="nf">symmetric_difference</span><span class="o">(</span><span class="nv">list2</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [10, 11, 99]</span>
+<span class="x"># =&gt; [10, 11, 99]</span>
 </pre></div>
 </div>
 </section>
@@ -1398,26 +1398,26 @@ It modifies the behavior of <a class="reference internal" href="../collections/a
 </div>
 <p>You can calculate logs, powers, and roots of numbers with Ansible filters. Jinja2 provides other mathematical functions like abs() and round().</p>
 <p>Get the logarithm (default is e):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">log</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 2.0794415416798357</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">log</span> <span class="cp">}}</span>
+<span class="x"># =&gt; 2.0794415416798357</span>
 </pre></div>
 </div>
 <p>Get the base 10 logarithm:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">log</span><span class="o">(</span><span class="m">10</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 0.9030899869919435</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">log</span><span class="o">(</span><span class="m">10</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; 0.9030899869919435</span>
 </pre></div>
 </div>
 <p>Give me the power of 2! (or 5):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">pow</span><span class="o">(</span><span class="m">5</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 32768.0</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">pow</span><span class="o">(</span><span class="m">5</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; 32768.0</span>
 </pre></div>
 </div>
 <p>Square root, or the 5th:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">root</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 2.8284271247461903</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">root</span> <span class="cp">}}</span>
+<span class="x"># =&gt; 2.8284271247461903</span>
 
 <span class="cp">{{</span> <span class="m">8</span> <span class="o">|</span> <span class="nf">root</span><span class="o">(</span><span class="m">5</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 1.5157165665103982</span>
+<span class="x"># =&gt; 1.5157165665103982</span>
 </pre></div>
 </div>
 </section>
@@ -1434,18 +1434,18 @@ It modifies the behavior of <a class="reference internal" href="../collections/a
 <p><span class="versionmodified added">New in version 1.9.</span></p>
 </div>
 <p>To test if a string is a valid IP address:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">myvar</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.utils.ipaddr</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">myvar</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.utils.ipaddr</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>You can also require a specific IP protocol version:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">myvar</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.utils.ipv4</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">myvar</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.utils.ipv4</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">myvar</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.utils.ipv6</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>IP address filter can also be used to extract specific information from an IP
 address. For example, to get the IP address itself from a CIDR, you can use:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;192.0.2.1/24&#39;</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.utils.ipaddr</span><span class="o">(</span><span class="s1">&#39;address&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; 192.0.2.1</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;192.0.2.1/24&#39;</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.utils.ipaddr</span><span class="o">(</span><span class="s1">&#39;address&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; 192.0.2.1</span>
 </pre></div>
 </div>
 <p>More information about <a class="reference internal" href="../collections/ansible/utils/ipaddr_filter.html#ansible-collections-ansible-utils-ipaddr-filter"><span class="std std-ref">ansible.utils.ipaddr</span></a> filter and complete usage guide can be found
@@ -1466,17 +1466,17 @@ through it, returning JSON output. The YAML spec file defines how to parse the C
 <p>The spec file should be valid formatted YAML.  It defines how to parse the CLI
 output and return JSON data.  Below is an example of a valid spec file that
 will parse the output from the <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">vlan</span></code> command.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vlan</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.vlan_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.name</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.state</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">&#39;act/lshut&#39;</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.state</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.vlan_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.state</span> <span class="o">!=</span> <span class="s1">&#39;act/lshut&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.state</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
 <span class="nt">keys</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vlans</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">vlan</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vlan</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">items</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^(?P&lt;vlan_id&gt;\\d+)\\s+(?P&lt;name&gt;\\w+)\\s+(?P&lt;state&gt;active|act/lshut|suspended)&quot;</span>
 <span class="w">  </span><span class="nt">state_static</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
@@ -1487,19 +1487,19 @@ with the parsed VLAN information.</p>
 <p>The same command could be parsed into a hash by using the key and values
 directives.  Here is an example of how to parse the output into a hash
 value using the same <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">vlan</span></code> command.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vlan</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.vlan_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.vlan_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">values</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.vlan_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.name</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.state</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">&#39;act/lshut&#39;</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.state</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">      </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.vlan_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.state</span> <span class="o">!=</span> <span class="s1">&#39;act/lshut&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.state</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
 <span class="nt">keys</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vlans</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">vlan</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vlan</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">items</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^(?P&lt;vlan_id&gt;\\d+)\\s+(?P&lt;name&gt;\\w+)\\s+(?P&lt;state&gt;active|act/lshut|suspended)&quot;</span>
 <span class="w">  </span><span class="nt">state_static</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
@@ -1508,16 +1508,16 @@ value using the same <code class="docutils literal notranslate"><span class="pre
 <p>Another common use case for parsing CLI commands is to break a large command
 into blocks that can be parsed.  This can be done using the <code class="docutils literal notranslate"><span class="pre">start_block</span></code> and
 <code class="docutils literal notranslate"><span class="pre">end_block</span></code> directives to break the command into blocks that can be parsed.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">interface</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item[0].match[0]</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item[1].state</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item[2].match[0]</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="nv">.match</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span><span class="o">[</span><span class="m">1</span><span class="o">]</span><span class="nv">.state</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span><span class="o">[</span><span class="m">2</span><span class="o">]</span><span class="nv">.match</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
 <span class="nt">keys</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">interfaces</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">interface</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">interface</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">start_block</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^Ethernet.*$&quot;</span>
 <span class="w">    </span><span class="nt">end_block</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^$&quot;</span>
 <span class="w">    </span><span class="nt">items</span><span class="p">:</span>
@@ -1531,7 +1531,7 @@ hashes.</p>
 <p>The network filters also support parsing the output of a CLI command using the
 TextFSM library.  To parse the CLI output with TextFSM use the following
 filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">output.stdout</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.netcommon.parse_cli_textfsm</span><span class="o">(</span><span class="s1">&#39;path/to/fsm&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">output.stdout</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.netcommon.parse_cli_textfsm</span><span class="o">(</span><span class="s1">&#39;path/to/fsm&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>Use of the TextFSM filter requires the TextFSM library to be installed.</p>
@@ -1543,7 +1543,7 @@ filter:</p>
 </div>
 <p>To convert the XML output of a network device command into structured JSON
 output, use the <a class="reference internal" href="../collections/ansible/netcommon/parse_xml_filter.html#ansible-collections-ansible-netcommon-parse-xml-filter"><span class="std std-ref">ansible.netcommon.parse_xml</span></a> filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">output</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.netcommon.parse_xml</span><span class="o">(</span><span class="s1">&#39;path/to/spec&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">output</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.netcommon.parse_xml</span><span class="o">(</span><span class="s1">&#39;path/to/spec&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="../collections/ansible/netcommon/parse_xml_filter.html#ansible-collections-ansible-netcommon-parse-xml-filter"><span class="std std-ref">ansible.netcommon.parse_xml</span></a> filter will load the spec file and pass the command output
@@ -1552,18 +1552,18 @@ through formatted as JSON.</p>
 output and return JSON data.</p>
 <p>Below is an example of a valid spec file that
 will parse the output from the <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">vlan</span> <span class="pre">|</span> <span class="pre">display</span> <span class="pre">xml</span></code> command.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vlan</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.vlan_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.name</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.desc</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.state.get(&#39;inactive&#39;)</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">&#39;inactive&#39;</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{%</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">item.state.get(&#39;inactive&#39;)</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;inactive&#39;%}</span><span class="nv"> </span><span class="s">inactive</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">else</span><span class="nv"> </span><span class="s">%}</span><span class="nv"> </span><span class="s">active</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">endif</span><span class="nv"> </span><span class="s">%}&quot;</span>
+<span class="w">    </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.vlan_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.desc</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.state.get</span><span class="o">(</span><span class="s1">&#39;inactive&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="s1">&#39;inactive&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">item.state.get</span><span class="o">(</span><span class="s1">&#39;inactive&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;inactive&#39;</span><span class="cp">%}</span><span class="nv"> </span><span class="s">inactive</span><span class="nv"> </span><span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span><span class="nv"> </span><span class="s">active</span><span class="nv"> </span><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="s">&quot;</span>
 
 <span class="nt">keys</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vlans</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">vlan</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vlan</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">top</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration/vlans/vlan</span>
 <span class="w">    </span><span class="nt">items</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vlan-id</span>
@@ -1577,20 +1577,20 @@ with the parsed VLAN information.</p>
 <p>The same command could be parsed into a hash by using the key and values
 directives.  Here is an example of how to parse the output into a hash
 value using the same <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">vlan</span> <span class="pre">|</span> <span class="pre">display</span> <span class="pre">xml</span></code> command.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vlan</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.vlan_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.vlan_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">values</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.vlan_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.name</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">        </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.desc</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item.state.get(&#39;inactive&#39;)</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">&#39;inactive&#39;</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{%</span><span class="nv"> </span><span class="s">if</span><span class="nv"> </span><span class="s">item.state.get(&#39;inactive&#39;)</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;inactive&#39;%}</span><span class="nv"> </span><span class="s">inactive</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">else</span><span class="nv"> </span><span class="s">%}</span><span class="nv"> </span><span class="s">active</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">endif</span><span class="nv"> </span><span class="s">%}&quot;</span>
+<span class="w">        </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.vlan_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.desc</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.state.get</span><span class="o">(</span><span class="s1">&#39;inactive&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="s1">&#39;inactive&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">item.state.get</span><span class="o">(</span><span class="s1">&#39;inactive&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;inactive&#39;</span><span class="cp">%}</span><span class="nv"> </span><span class="s">inactive</span><span class="nv"> </span><span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span><span class="nv"> </span><span class="s">active</span><span class="nv"> </span><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="s">&quot;</span>
 
 <span class="nt">keys</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vlans</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">vlan</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vlan</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">top</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration/vlans/vlan</span>
 <span class="w">    </span><span class="nt">items</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vlan-id</span>
@@ -1642,7 +1642,7 @@ sorted string list of integers according to IOS-like VLAN list rules. This list 
 <li><p>Subsequent list lines can be other_line_len characters.</p></li>
 </ul>
 <p>To sort a VLAN list:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3003</span><span class="o">,</span> <span class="m">3004</span><span class="o">,</span> <span class="m">3005</span><span class="o">,</span> <span class="m">100</span><span class="o">,</span> <span class="m">1688</span><span class="o">,</span> <span class="m">3002</span><span class="o">,</span> <span class="m">3999</span><span class="o">]</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.netcommon.vlan_parser</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">[</span><span class="m">3003</span><span class="o">,</span> <span class="m">3004</span><span class="o">,</span> <span class="m">3005</span><span class="o">,</span> <span class="m">100</span><span class="o">,</span> <span class="m">1688</span><span class="o">,</span> <span class="m">3002</span><span class="o">,</span> <span class="m">3999</span><span class="o">]</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.netcommon.vlan_parser</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>This example renders the following sorted list:</p>
@@ -1650,10 +1650,10 @@ sorted string list of integers according to IOS-like VLAN list rules. This list 
 </pre></div>
 </div>
 <p>Another example Jinja template:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">set</span> <span class="nv">parsed_vlans</span> <span class="o">=</span> <span class="nv">vlans</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.netcommon.vlan_parser</span> <span class="cp">%}</span>
-<span class="l l-Scalar l-Scalar-Plain">switchport trunk allowed vlan</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">parsed_vlans</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">set</span> <span class="nv">parsed_vlans</span> <span class="o">=</span> <span class="nv">vlans</span> <span class="o">|</span> <span class="nf">ansible</span><span class="nv">.netcommon.vlan_parser</span> <span class="cp">%}</span>
+<span class="x">switchport trunk allowed vlan </span><span class="cp">{{</span> <span class="nv">parsed_vlans</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="cp">}}</span>
 <span class="cp">{%</span> <span class="k">for</span> <span class="nv">i</span> <span class="k">in</span> <span class="nv">range</span> <span class="o">(</span><span class="m">1</span><span class="o">,</span> <span class="nv">parsed_vlans</span> <span class="o">|</span> <span class="nf">count</span><span class="o">)</span> <span class="cp">%}</span>
-<span class="l l-Scalar l-Scalar-Plain">switchport trunk allowed vlan add</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">parsed_vlans</span><span class="o">[</span><span class="nv">i</span><span class="o">]</span> <span class="cp">}}</span>
+<span class="x">switchport trunk allowed vlan add </span><span class="cp">{{</span> <span class="nv">parsed_vlans</span><span class="o">[</span><span class="nv">i</span><span class="o">]</span> <span class="cp">}}</span>
 <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
 </pre></div>
 </div>
@@ -1666,37 +1666,37 @@ sorted string list of integers according to IOS-like VLAN list rules. This list 
 <p><span class="versionmodified added">New in version 1.9.</span></p>
 </div>
 <p>To get the sha1 hash of a string:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;test1&#39;</span> <span class="o">|</span> <span class="nf">hash</span><span class="o">(</span><span class="s1">&#39;sha1&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;b444ac06613fc8d63795be9ad0beaf55011936ac&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;test1&#39;</span> <span class="o">|</span> <span class="nf">hash</span><span class="o">(</span><span class="s1">&#39;sha1&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;b444ac06613fc8d63795be9ad0beaf55011936ac&quot;</span>
 </pre></div>
 </div>
 <p>To get the md5 hash of a string:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;test1&#39;</span> <span class="o">|</span> <span class="nf">hash</span><span class="o">(</span><span class="s1">&#39;md5&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;5a105e8b9d40e1329780d62ea2265d8a&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;test1&#39;</span> <span class="o">|</span> <span class="nf">hash</span><span class="o">(</span><span class="s1">&#39;md5&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;5a105e8b9d40e1329780d62ea2265d8a&quot;</span>
 </pre></div>
 </div>
 <p>Get a string checksum:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;test2&#39;</span> <span class="o">|</span> <span class="nf">checksum</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;109f4b3c50d7b0df729d299bc6f8e9ef9066971f&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;test2&#39;</span> <span class="o">|</span> <span class="nf">checksum</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;109f4b3c50d7b0df729d299bc6f8e9ef9066971f&quot;</span>
 </pre></div>
 </div>
 <p>Other hashes (platform dependent):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;test2&#39;</span> <span class="o">|</span> <span class="nf">hash</span><span class="o">(</span><span class="s1">&#39;blowfish&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;test2&#39;</span> <span class="o">|</span> <span class="nf">hash</span><span class="o">(</span><span class="s1">&#39;blowfish&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get a sha512 password hash (random salt):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;passwordsaresecret&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha512&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;$6$UIv3676O/ilZzWEE$ktEfFF19NQPF2zyxqxGkAceTnbEgpEKuGBtk6MlU4v2ZorWaVQUMyurgmHCh2Fr4wpmQ/Y.AlXMJkRnIS4RfH/&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;passwordsaresecret&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha512&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;$6$UIv3676O/ilZzWEE$ktEfFF19NQPF2zyxqxGkAceTnbEgpEKuGBtk6MlU4v2ZorWaVQUMyurgmHCh2Fr4wpmQ/Y.AlXMJkRnIS4RfH/&quot;</span>
 </pre></div>
 </div>
 <p>To get a sha256 password hash with a specific salt:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha256&#39;</span><span class="o">,</span> <span class="s1">&#39;mysecretsalt&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;$5$mysecretsalt$ReKNyDYjkKNqRVwouShhsEqZ3VOE8eoVO4exihOfvG4&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha256&#39;</span><span class="o">,</span> <span class="s1">&#39;mysecretsalt&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;$5$mysecretsalt$ReKNyDYjkKNqRVwouShhsEqZ3VOE8eoVO4exihOfvG4&quot;</span>
 </pre></div>
 </div>
 <p>An idempotent method to generate unique hashes per system is to use a salt that is consistent between runs:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha512&#39;</span><span class="o">,</span> <span class="m">65534</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="nv">seed</span><span class="o">=</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="o">|</span> <span class="nf">string</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;$6$43927$lQxPKz2M2X.NWO.gK.t7phLwOKQMcSq72XxDZQ0XzYV6DlL1OD72h417aj16OnHTGxNzhftXJQBcjbunLEepM0&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha512&#39;</span><span class="o">,</span> <span class="m">65534</span> <span class="o">|</span> <span class="nf">random</span><span class="o">(</span><span class="nv">seed</span><span class="o">=</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="o">|</span> <span class="nf">string</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;$6$43927$lQxPKz2M2X.NWO.gK.t7phLwOKQMcSq72XxDZQ0XzYV6DlL1OD72h417aj16OnHTGxNzhftXJQBcjbunLEepM0&quot;</span>
 </pre></div>
 </div>
 <p>Hash types available depend on the control system running Ansible, <a class="reference internal" href="../collections/ansible/builtin/hash_filter.html#ansible-collections-ansible-builtin-hash-filter"><span class="std std-ref">ansible.builtin.hash</span></a> depends on <a class="reference external" href="https://docs.python.org/3.8/library/hashlib.html">hashlib</a>, <a class="reference internal" href="../collections/ansible/builtin/password_hash_filter.html#ansible-collections-ansible-builtin-password-hash-filter"><span class="std std-ref">ansible.builtin.password_hash</span></a> depends on <a class="reference external" href="https://passlib.readthedocs.io/en/stable/lib/passlib.hash.html">passlib</a>. The <a class="reference external" href="https://docs.python.org/3.8/library/crypt.html">crypt</a> is used as a fallback if <code class="docutils literal notranslate"><span class="pre">passlib</span></code> is not installed.</p>
@@ -1704,19 +1704,19 @@ sorted string list of integers according to IOS-like VLAN list rules. This list 
 <p><span class="versionmodified added">New in version 2.7.</span></p>
 </div>
 <p>Some hash types allow providing a rounds parameter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha256&#39;</span><span class="o">,</span> <span class="s1">&#39;mysecretsalt&#39;</span><span class="o">,</span> <span class="nv">rounds</span><span class="o">=</span><span class="m">10000</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;$5$rounds=10000$mysecretsalt$Tkm80llAxD4YHll6AgNIztKn0vzAACsuuEfYeGP7tm7&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha256&#39;</span><span class="o">,</span> <span class="s1">&#39;mysecretsalt&#39;</span><span class="o">,</span> <span class="nv">rounds</span><span class="o">=</span><span class="m">10000</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;$5$rounds=10000$mysecretsalt$Tkm80llAxD4YHll6AgNIztKn0vzAACsuuEfYeGP7tm7&quot;</span>
 </pre></div>
 </div>
 <p>The filter <cite>password_hash</cite> produces different results depending on whether you installed <cite>passlib</cite> or not.</p>
 <p>To ensure idempotency, specify <cite>rounds</cite> to be neither <cite>crypt</cite>’s nor <cite>passlib</cite>’s default, which is <cite>5000</cite> for <cite>crypt</cite> and a variable value (<cite>535000</cite> for sha256, <cite>656000</cite> for sha512) for <cite>passlib</cite>:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha256&#39;</span><span class="o">,</span> <span class="s1">&#39;mysecretsalt&#39;</span><span class="o">,</span> <span class="nv">rounds</span><span class="o">=</span><span class="m">5001</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;$5$rounds=5001$mysecretsalt$wXcTWWXbfcR8er5IVf7NuquLvnUA6s8/qdtOhAZ.xN.&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;sha256&#39;</span><span class="o">,</span> <span class="s1">&#39;mysecretsalt&#39;</span><span class="o">,</span> <span class="nv">rounds</span><span class="o">=</span><span class="m">5001</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;$5$rounds=5001$mysecretsalt$wXcTWWXbfcR8er5IVf7NuquLvnUA6s8/qdtOhAZ.xN.&quot;</span>
 </pre></div>
 </div>
 <p>Hash type ‘blowfish’ (BCrypt) provides the facility to specify the version of the BCrypt algorithm.</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;blowfish&#39;</span><span class="o">,</span> <span class="s1">&#39;1234567890123456789012&#39;</span><span class="o">,</span> <span class="nv">ident</span><span class="o">=</span><span class="s1">&#39;2b&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;$2b$12$123456789012345678901uuJ4qFdej6xnWjOQT.FStqfdoY8dYUPC&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;secretpassword&#39;</span> <span class="o">|</span> <span class="nf">password_hash</span><span class="o">(</span><span class="s1">&#39;blowfish&#39;</span><span class="o">,</span> <span class="s1">&#39;1234567890123456789012&#39;</span><span class="o">,</span> <span class="nv">ident</span><span class="o">=</span><span class="s1">&#39;2b&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &quot;$2b$12$123456789012345678901uuJ4qFdej6xnWjOQT.FStqfdoY8dYUPC&quot;</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -1733,6 +1733,7 @@ Valid values for this parameter are: [‘2’, ‘2a’, ‘2y’, ‘2b’]</p>
 <span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">myvaultedkey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">keyrawdata</span><span class="o">|</span><span class="nf">vault</span><span class="o">(</span><span class="nv">passphrase</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
+<span class="nt">tasks</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">save templated vaulted data</span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src=dump_template_data.j2 dest=/some/key/vault.txt</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
@@ -1745,6 +1746,7 @@ Valid values for this parameter are: [‘2’, ‘2a’, ‘2y’, ‘2b’]</p>
 <span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">mykey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">myvaultedkey</span><span class="o">|</span><span class="nf">unvault</span><span class="o">(</span><span class="nv">passphrase</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
+<span class="nt">tasks</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">save templated unvaulted data</span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src=dump_template_data.j2 dest=/some/key/clear.txt</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
@@ -1758,7 +1760,7 @@ Valid values for this parameter are: [‘2’, ‘2a’, ‘2y’, ‘2b’]</p>
 <section id="adding-comments-to-files">
 <span id="comment-filter"></span><h3><a class="toc-backref" href="#id39" role="doc-backlink">Adding comments to files</a><a class="headerlink" href="#adding-comments-to-files" title="Link to this heading"></a></h3>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/comment_filter.html#ansible-collections-ansible-builtin-comment-filter"><span class="std std-ref">ansible.builtin.comment</span></a> filter lets you create comments in a file from text in a template, with a variety of comment styles. By default, Ansible uses <code class="docutils literal notranslate"><span class="pre">#</span></code> to start a comment line and adds a blank comment line above and below your comment text. For example the following:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;Plain style (default)&quot;</span> <span class="o">|</span> <span class="nf">comment</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;Plain style (default)&quot;</span> <span class="o">|</span> <span class="nf">comment</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>produces this output:</p>
@@ -1769,14 +1771,14 @@ Valid values for this parameter are: [‘2’, ‘2a’, ‘2y’, ‘2b’]</p>
 </div>
 <p>Ansible offers styles for comments in C (<code class="docutils literal notranslate"><span class="pre">//...</span></code>), C block
 (<code class="docutils literal notranslate"><span class="pre">/*...*/</span></code>), Erlang (<code class="docutils literal notranslate"><span class="pre">%...</span></code>) and XML (<code class="docutils literal notranslate"><span class="pre">&lt;!--...--&gt;</span></code>):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;C style&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="s1">&#39;c&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;C style&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="s1">&#39;c&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="s2">&quot;C block style&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="s1">&#39;cblock&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="s2">&quot;Erlang style&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="s1">&#39;erlang&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="s2">&quot;XML style&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="s1">&#39;xml&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>You can define a custom comment character. This filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;My Special Case&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="nv">decoration</span><span class="o">=</span><span class="s2">&quot;! &quot;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;My Special Case&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="nv">decoration</span><span class="o">=</span><span class="s2">&quot;! &quot;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>produces:</p>
@@ -1786,7 +1788,7 @@ Valid values for this parameter are: [‘2’, ‘2a’, ‘2y’, ‘2b’]</p>
 </pre></div>
 </div>
 <p>You can fully customize the comment style:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;Custom style&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="s1">&#39;plain&#39;</span><span class="o">,</span> <span class="nv">prefix</span><span class="o">=</span><span class="s1">&#39;#######\n#&#39;</span><span class="o">,</span> <span class="nv">postfix</span><span class="o">=</span><span class="s1">&#39;#\n#######\n   ###\n    #&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;Custom style&quot;</span> <span class="o">|</span> <span class="nf">comment</span><span class="o">(</span><span class="s1">&#39;plain&#39;</span><span class="o">,</span> <span class="nv">prefix</span><span class="o">=</span><span class="s1">&#39;#######\n#&#39;</span><span class="o">,</span> <span class="nv">postfix</span><span class="o">=</span><span class="s1">&#39;#\n#######\n   ###\n    #&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>That creates the following output:</p>
@@ -1812,7 +1814,7 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 </pre></div>
 </div>
 <p>and then use the variable with the <cite>comment</cite> filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">ansible_managed</span> <span class="o">|</span> <span class="nf">comment</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">ansible_managed</span> <span class="o">|</span> <span class="nf">comment</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>which produces this output:</p>
@@ -1830,8 +1832,8 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <section id="urlencode-variables">
 <h3><a class="toc-backref" href="#id40" role="doc-backlink">URLEncode Variables</a><a class="headerlink" href="#urlencode-variables" title="Link to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">urlencode</span></code> filter quotes data for use in a URL path or query using UTF-8:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;Trollhättan&#39;</span> <span class="o">|</span> <span class="nf">urlencode</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;Trollh%C3%A4ttan&#39;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;Trollhättan&#39;</span> <span class="o">|</span> <span class="nf">urlencode</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &#39;Trollh%C3%A4ttan&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -1841,82 +1843,82 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <p><span class="versionmodified added">New in version 2.4.</span></p>
 </div>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/urlsplit_filter.html#ansible-collections-ansible-builtin-urlsplit-filter"><span class="std std-ref">ansible.builtin.urlsplit</span></a> filter extracts the fragment, hostname, netloc, password, path, port, query, scheme, and username from an URL. With no arguments, returns a dictionary of all the fields:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;hostname&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;www.acme.com&#39;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;hostname&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &#39;www.acme.com&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;netloc&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;user:password@www.acme.com:9000&#39;</span>
+<span class="x"># =&gt; &#39;user:password@www.acme.com:9000&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;username&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;user&#39;</span>
+<span class="x"># =&gt; &#39;user&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;password&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;password&#39;</span>
+<span class="x"># =&gt; &#39;password&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;path&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;/dir/index.html&#39;</span>
+<span class="x"># =&gt; &#39;/dir/index.html&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;port&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;9000&#39;</span>
+<span class="x"># =&gt; &#39;9000&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;scheme&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;http&#39;</span>
+<span class="x"># =&gt; &#39;http&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;query&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;query=term&#39;</span>
+<span class="x"># =&gt; &#39;query=term&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span><span class="o">(</span><span class="s1">&#39;fragment&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;fragment&#39;</span>
+<span class="x"># =&gt; &#39;fragment&#39;</span>
 
 <span class="cp">{{</span> <span class="s2">&quot;http://user:password@www.acme.com:9000/dir/index.html?query=term#fragment&quot;</span> <span class="o">|</span> <span class="nf">urlsplit</span> <span class="cp">}}</span>
-<span class="c1"># =&gt;</span>
-<span class="c1">#   {</span>
-<span class="c1">#       &quot;fragment&quot;: &quot;fragment&quot;,</span>
-<span class="c1">#       &quot;hostname&quot;: &quot;www.acme.com&quot;,</span>
-<span class="c1">#       &quot;netloc&quot;: &quot;user:password@www.acme.com:9000&quot;,</span>
-<span class="c1">#       &quot;password&quot;: &quot;password&quot;,</span>
-<span class="c1">#       &quot;path&quot;: &quot;/dir/index.html&quot;,</span>
-<span class="c1">#       &quot;port&quot;: 9000,</span>
-<span class="c1">#       &quot;query&quot;: &quot;query=term&quot;,</span>
-<span class="c1">#       &quot;scheme&quot;: &quot;http&quot;,</span>
-<span class="c1">#       &quot;username&quot;: &quot;user&quot;</span>
-<span class="c1">#   }</span>
+<span class="x"># =&gt;</span>
+<span class="x">#   {</span>
+<span class="x">#       &quot;fragment&quot;: &quot;fragment&quot;,</span>
+<span class="x">#       &quot;hostname&quot;: &quot;www.acme.com&quot;,</span>
+<span class="x">#       &quot;netloc&quot;: &quot;user:password@www.acme.com:9000&quot;,</span>
+<span class="x">#       &quot;password&quot;: &quot;password&quot;,</span>
+<span class="x">#       &quot;path&quot;: &quot;/dir/index.html&quot;,</span>
+<span class="x">#       &quot;port&quot;: 9000,</span>
+<span class="x">#       &quot;query&quot;: &quot;query=term&quot;,</span>
+<span class="x">#       &quot;scheme&quot;: &quot;http&quot;,</span>
+<span class="x">#       &quot;username&quot;: &quot;user&quot;</span>
+<span class="x">#   }</span>
 </pre></div>
 </div>
 </section>
 <section id="searching-strings-with-regular-expressions">
 <h3><a class="toc-backref" href="#id42" role="doc-backlink">Searching strings with regular expressions</a><a class="headerlink" href="#searching-strings-with-regular-expressions" title="Link to this heading"></a></h3>
 <p>To search in a string or extract parts of a string with a regular expression, use the <a class="reference internal" href="../collections/ansible/builtin/regex_search_filter.html#ansible-collections-ansible-builtin-regex-search-filter"><span class="std std-ref">ansible.builtin.regex_search</span></a> filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extracts the database name from a string</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># Extracts the database name from a string</span>
 <span class="cp">{{</span> <span class="s1">&#39;server1/database42&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;database[0-9]+&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;database42&#39;</span>
+<span class="x"># =&gt; &#39;database42&#39;</span>
 
-<span class="c1"># Example for a case insensitive search in multiline mode</span>
+<span class="x"># Example for a case insensitive search in multiline mode</span>
 <span class="cp">{{</span> <span class="s1">&#39;foo\nBAR&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;^bar&#39;</span><span class="o">,</span> <span class="nv">multiline</span><span class="o">=</span><span class="kp">True</span><span class="o">,</span> <span class="nv">ignorecase</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;BAR&#39;</span>
+<span class="x"># =&gt; &#39;BAR&#39;</span>
 
-<span class="c1"># Example for a case insensitive search in multiline mode using inline regex flags</span>
+<span class="x"># Example for a case insensitive search in multiline mode using inline regex flags</span>
 <span class="cp">{{</span> <span class="s1">&#39;foo\nBAR&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;(?im)^bar&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;BAR&#39;</span>
+<span class="x"># =&gt; &#39;BAR&#39;</span>
 
-<span class="c1"># Extracts server and database id from a string</span>
+<span class="x"># Extracts server and database id from a string</span>
 <span class="cp">{{</span> <span class="s1">&#39;server1/database42&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;server([0-9]+)/database([0-9]+)&#39;</span><span class="o">,</span> <span class="s1">&#39;\\1&#39;</span><span class="o">,</span> <span class="s1">&#39;\\2&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [&#39;1&#39;, &#39;42&#39;]</span>
+<span class="x"># =&gt; [&#39;1&#39;, &#39;42&#39;]</span>
 
-<span class="c1"># Extracts dividend and divisor from a division</span>
+<span class="x"># Extracts dividend and divisor from a division</span>
 <span class="cp">{{</span> <span class="s1">&#39;21/42&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;(?P&lt;dividend&gt;[0-9]+)/(?P&lt;divisor&gt;[0-9]+)&#39;</span><span class="o">,</span> <span class="s1">&#39;\\g&lt;dividend&gt;&#39;</span><span class="o">,</span> <span class="s1">&#39;\\g&lt;divisor&gt;&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [&#39;21&#39;, &#39;42&#39;]</span>
+<span class="x"># =&gt; [&#39;21&#39;, &#39;42&#39;]</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/regex_search_filter.html#ansible-collections-ansible-builtin-regex-search-filter"><span class="std std-ref">ansible.builtin.regex_search</span></a> filter returns an empty string if it cannot find a match:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;&#39;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="x"># =&gt; &#39;&#39;</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/regex_search_filter.html#ansible-collections-ansible-builtin-regex-search-filter"><span class="std std-ref">ansible.builtin.regex_search</span></a> filter returns <code class="docutils literal notranslate"><span class="pre">None</span></code> when used in a Jinja expression (for example in conjunction with operators, other filters, and so on). See the two examples below.</p>
-<div class="highlight-Jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="cp">}}</span>
 <span class="x"># =&gt; False</span>
 <span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="k">is</span> <span class="nf">none</span> <span class="cp">}}</span>
 <span class="x"># =&gt; True</span>
@@ -1925,65 +1927,65 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <p>This is due to historic behavior and the custom re-implementation of some of the Jinja internals in Ansible. Enable the <code class="docutils literal notranslate"><span class="pre">jinja2_native</span></code> setting if you want the <a class="reference internal" href="../collections/ansible/builtin/regex_search_filter.html#ansible-collections-ansible-builtin-regex-search-filter"><span class="std std-ref">ansible.builtin.regex_search</span></a> filter to always return <code class="docutils literal notranslate"><span class="pre">None</span></code> if it cannot find a match. See <a class="reference internal" href="../reference_appendices/faq.html#jinja2-faqs"><span class="std std-ref">Why does the regex_search filter return None instead of an empty string?</span></a> for details.</p>
 </div>
 <p>To extract all occurrences of regex matches in a string, use the <a class="reference internal" href="../collections/ansible/builtin/regex_findall_filter.html#ansible-collections-ansible-builtin-regex-findall-filter"><span class="std std-ref">ansible.builtin.regex_findall</span></a> filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Returns a list of all IPv4 addresses in the string</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># Returns a list of all IPv4 addresses in the string</span>
 <span class="cp">{{</span> <span class="s1">&#39;Some DNS servers are 8.8.8.8 and 8.8.4.4&#39;</span> <span class="o">|</span> <span class="nf">regex_findall</span><span class="o">(</span><span class="s1">&#39;\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [&#39;8.8.8.8&#39;, &#39;8.8.4.4&#39;]</span>
+<span class="x"># =&gt; [&#39;8.8.8.8&#39;, &#39;8.8.4.4&#39;]</span>
 
-<span class="c1"># Returns all lines that end with &quot;ar&quot;</span>
+<span class="x"># Returns all lines that end with &quot;ar&quot;</span>
 <span class="cp">{{</span> <span class="s1">&#39;CAR\ntar\nfoo\nbar\n&#39;</span> <span class="o">|</span> <span class="nf">regex_findall</span><span class="o">(</span><span class="s1">&#39;^.ar$&#39;</span><span class="o">,</span> <span class="nv">multiline</span><span class="o">=</span><span class="kp">True</span><span class="o">,</span> <span class="nv">ignorecase</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [&#39;CAR&#39;, &#39;tar&#39;, &#39;bar&#39;]</span>
+<span class="x"># =&gt; [&#39;CAR&#39;, &#39;tar&#39;, &#39;bar&#39;]</span>
 
-<span class="c1"># Returns all lines that end with &quot;ar&quot; using inline regex flags for multiline and ignorecase</span>
+<span class="x"># Returns all lines that end with &quot;ar&quot; using inline regex flags for multiline and ignorecase</span>
 <span class="cp">{{</span> <span class="s1">&#39;CAR\ntar\nfoo\nbar\n&#39;</span> <span class="o">|</span> <span class="nf">regex_findall</span><span class="o">(</span><span class="s1">&#39;(?im)^.ar$&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; [&#39;CAR&#39;, &#39;tar&#39;, &#39;bar&#39;]</span>
+<span class="x"># =&gt; [&#39;CAR&#39;, &#39;tar&#39;, &#39;bar&#39;]</span>
 </pre></div>
 </div>
 <p>To replace text in a string with regex, use the <a class="reference internal" href="../collections/ansible/builtin/regex_replace_filter.html#ansible-collections-ansible-builtin-regex-replace-filter"><span class="std std-ref">ansible.builtin.regex_replace</span></a> filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert &quot;ansible&quot; to &quot;able&quot;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># Convert &quot;ansible&quot; to &quot;able&quot;</span>
 <span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_replace</span><span class="o">(</span><span class="s1">&#39;^a.*i(.*)$&#39;</span><span class="o">,</span> <span class="s1">&#39;a\\1&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;able&#39;</span>
+<span class="x"># =&gt; &#39;able&#39;</span>
 
-<span class="c1"># Convert &quot;foobar&quot; to &quot;bar&quot;</span>
+<span class="x"># Convert &quot;foobar&quot; to &quot;bar&quot;</span>
 <span class="cp">{{</span> <span class="s1">&#39;foobar&#39;</span> <span class="o">|</span> <span class="nf">regex_replace</span><span class="o">(</span><span class="s1">&#39;^f.*o(.*)$&#39;</span><span class="o">,</span> <span class="s1">&#39;\\1&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;bar&#39;</span>
+<span class="x"># =&gt; &#39;bar&#39;</span>
 
-<span class="c1"># Convert &quot;localhost:80&quot; to &quot;localhost, 80&quot; using named groups</span>
+<span class="x"># Convert &quot;localhost:80&quot; to &quot;localhost, 80&quot; using named groups</span>
 <span class="cp">{{</span> <span class="s1">&#39;localhost:80&#39;</span> <span class="o">|</span> <span class="nf">regex_replace</span><span class="o">(</span><span class="s1">&#39;^(?P&lt;host&gt;.+):(?P&lt;port&gt;\\d+)$&#39;</span><span class="o">,</span> <span class="s1">&#39;\\g&lt;host&gt;, \\g&lt;port&gt;&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;localhost, 80&#39;</span>
+<span class="x"># =&gt; &#39;localhost, 80&#39;</span>
 
-<span class="c1"># Convert &quot;localhost:80&quot; to &quot;localhost&quot;</span>
+<span class="x"># Convert &quot;localhost:80&quot; to &quot;localhost&quot;</span>
 <span class="cp">{{</span> <span class="s1">&#39;localhost:80&#39;</span> <span class="o">|</span> <span class="nf">regex_replace</span><span class="o">(</span><span class="s1">&#39;:80&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;localhost&#39;</span>
+<span class="x"># =&gt; &#39;localhost&#39;</span>
 
-<span class="c1"># Comment all lines that end with &quot;ar&quot;</span>
+<span class="x"># Comment all lines that end with &quot;ar&quot;</span>
 <span class="cp">{{</span> <span class="s1">&#39;CAR\ntar\nfoo\nbar\n&#39;</span> <span class="o">|</span> <span class="nf">regex_replace</span><span class="o">(</span><span class="s1">&#39;^(.ar)$&#39;</span><span class="o">,</span> <span class="s1">&#39;#\\1&#39;</span><span class="o">,</span> <span class="nv">multiline</span><span class="o">=</span><span class="kp">True</span><span class="o">,</span> <span class="nv">ignorecase</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;#CAR\n#tar\nfoo\n#bar\n&#39;</span>
+<span class="x"># =&gt; &#39;#CAR\n#tar\nfoo\n#bar\n&#39;</span>
 
-<span class="c1"># Comment all lines that end with &quot;ar&quot; using inline regex flags for multiline and ignorecase</span>
+<span class="x"># Comment all lines that end with &quot;ar&quot; using inline regex flags for multiline and ignorecase</span>
 <span class="cp">{{</span> <span class="s1">&#39;CAR\ntar\nfoo\nbar\n&#39;</span> <span class="o">|</span> <span class="nf">regex_replace</span><span class="o">(</span><span class="s1">&#39;(?im)^(.ar)$&#39;</span><span class="o">,</span> <span class="s1">&#39;#\\1&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &#39;#CAR\n#tar\nfoo\n#bar\n&#39;</span>
+<span class="x"># =&gt; &#39;#CAR\n#tar\nfoo\n#bar\n&#39;</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you want to match the whole string and you are using <code class="docutils literal notranslate"><span class="pre">*</span></code> make sure to always wraparound your regular expression with the start/end anchors. For example <code class="docutils literal notranslate"><span class="pre">^(.*)$</span></code> will always match only one result, while <code class="docutils literal notranslate"><span class="pre">(.*)</span></code> on some Python versions will match the whole string and an empty string at the end, which means it will make two replacements:</p>
 </div>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># add &quot;https://&quot; prefix to each item in a list</span>
-<span class="nt">GOOD</span><span class="p">:</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># add &quot;https://&quot; prefix to each item in a list</span>
+<span class="x">GOOD:</span>
 <span class="cp">{{</span> <span class="nv">hosts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;regex_replace&#39;</span><span class="o">,</span> <span class="s1">&#39;^(.*)$&#39;</span><span class="o">,</span> <span class="s1">&#39;https://\\1&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">hosts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;regex_replace&#39;</span><span class="o">,</span> <span class="s1">&#39;(.+)&#39;</span><span class="o">,</span> <span class="s1">&#39;https://\\1&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">hosts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;regex_replace&#39;</span><span class="o">,</span> <span class="s1">&#39;^&#39;</span><span class="o">,</span> <span class="s1">&#39;https://&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 
-<span class="nt">BAD</span><span class="p">:</span>
+<span class="x">BAD:</span>
 <span class="cp">{{</span> <span class="nv">hosts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;regex_replace&#39;</span><span class="o">,</span> <span class="s1">&#39;(.*)&#39;</span><span class="o">,</span> <span class="s1">&#39;https://\\1&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 
-<span class="c1"># append &#39;:80&#39; to each item in a list</span>
-<span class="nt">GOOD</span><span class="p">:</span>
+<span class="x"># append &#39;:80&#39; to each item in a list</span>
+<span class="x">GOOD:</span>
 <span class="cp">{{</span> <span class="nv">hosts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;regex_replace&#39;</span><span class="o">,</span> <span class="s1">&#39;^(.*)$&#39;</span><span class="o">,</span> <span class="s1">&#39;\\1:80&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">hosts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;regex_replace&#39;</span><span class="o">,</span> <span class="s1">&#39;(.+)&#39;</span><span class="o">,</span> <span class="s1">&#39;\\1:80&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">hosts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;regex_replace&#39;</span><span class="o">,</span> <span class="s1">&#39;$&#39;</span><span class="o">,</span> <span class="s1">&#39;:80&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 
-<span class="nt">BAD</span><span class="p">:</span>
+<span class="x">BAD:</span>
 <span class="cp">{{</span> <span class="nv">hosts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="s1">&#39;regex_replace&#39;</span><span class="o">,</span> <span class="s1">&#39;(.*)&#39;</span><span class="o">,</span> <span class="s1">&#39;\\1:80&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -1995,7 +1997,7 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <p><span class="versionmodified added">New in version 2.0.</span></p>
 </div>
 <p>To escape special characters within a standard Python regex, use the <a class="reference internal" href="../collections/ansible/builtin/regex_escape_filter.html#ansible-collections-ansible-builtin-regex-escape-filter"><span class="std std-ref">ansible.builtin.regex_escape</span></a> filter (using the default <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="../collections/ansible/builtin/regex_escape_filter.html#ansible-collections-ansible-builtin-regex-escape-filter-parameter-re-type"><span class="std std-ref"><span class="pre">re_type='python'</span></span></a></code> option):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># convert &#39;^f.*o(.*)$&#39; to &#39;\^f\.\*o\(\.\*\)\$&#39;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># convert &#39;^f.*o(.*)$&#39; to &#39;\^f\.\*o\(\.\*\)\$&#39;</span>
 <span class="cp">{{</span> <span class="s1">&#39;^f.*o(.*)$&#39;</span> <span class="o">|</span> <span class="nf">regex_escape</span><span class="o">()</span> <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -2003,7 +2005,7 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <p><span class="versionmodified added">New in version 2.8.</span></p>
 </div>
 <p>To escape special characters within a POSIX basic regex, use the <a class="reference internal" href="../collections/ansible/builtin/regex_escape_filter.html#ansible-collections-ansible-builtin-regex-escape-filter"><span class="std std-ref">ansible.builtin.regex_escape</span></a> filter with the <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="../collections/ansible/builtin/regex_escape_filter.html#ansible-collections-ansible-builtin-regex-escape-filter-parameter-re-type"><span class="std std-ref"><span class="pre">re_type='posix_basic'</span></span></a></code> option:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># convert &#39;^f.*o(.*)$&#39; to &#39;\^f\.\*o(\.\*)\$&#39;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># convert &#39;^f.*o(.*)$&#39; to &#39;\^f\.\*o(\.\*)\$&#39;</span>
 <span class="cp">{{</span> <span class="s1">&#39;^f.*o(.*)$&#39;</span> <span class="o">|</span> <span class="nf">regex_escape</span><span class="o">(</span><span class="s1">&#39;posix_basic&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -2011,39 +2013,39 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <section id="managing-file-names-and-path-names">
 <h3><a class="toc-backref" href="#id43" role="doc-backlink">Managing file names and path names</a><a class="headerlink" href="#managing-file-names-and-path-names" title="Link to this heading"></a></h3>
 <p>To get the last name of a file path, like ‘foo.txt’ out of ‘/etc/asdf/foo.txt’:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">basename</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">basename</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get the last name of a Windows style file path (new in version 2.0):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_basename</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_basename</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To separate the Windows drive letter from the rest of a file path (new in version 2.0):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_splitdrive</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_splitdrive</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get only the Windows drive letter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_splitdrive</span> <span class="o">|</span> <span class="nf">first</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_splitdrive</span> <span class="o">|</span> <span class="nf">first</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get the rest of the path without the drive letter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_splitdrive</span> <span class="o">|</span> <span class="nf">last</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_splitdrive</span> <span class="o">|</span> <span class="nf">last</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get the directory from a path:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">dirname</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">dirname</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get the directory from a Windows path (new version 2.0):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_dirname</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">win_dirname</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To expand a path containing a tilde (<cite>~</cite>) character (new in version 1.5):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">expanduser</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">expanduser</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To expand a path containing environment variables:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">expandvars</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">expandvars</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -2054,28 +2056,28 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <p><span class="versionmodified added">New in version 2.6.</span></p>
 </div>
 <p>To get the real path of a link (new in version 1.8):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">realpath</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">realpath</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get the relative path of a link, from a start point (new in version 1.7):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">relpath</span><span class="o">(</span><span class="s1">&#39;/etc&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">relpath</span><span class="o">(</span><span class="s1">&#39;/etc&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To get the root and extension of a path or file name (new in version 2.0):</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># with path == &#39;nginx.conf&#39; the return would be (&#39;nginx&#39;, &#39;.conf&#39;)</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># with path == &#39;nginx.conf&#39; the return would be (&#39;nginx&#39;, &#39;.conf&#39;)</span>
 <span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">splitext</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>The <a class="reference internal" href="../collections/ansible/builtin/splitext_filter.html#ansible-collections-ansible-builtin-splitext-filter"><span class="std std-ref">ansible.builtin.splitext</span></a> filter always returns a pair of strings. The individual components can be accessed by using the <code class="docutils literal notranslate"><span class="pre">first</span></code> and <code class="docutils literal notranslate"><span class="pre">last</span></code> filters:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># with path == &#39;nginx.conf&#39; the return would be &#39;nginx&#39;</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># with path == &#39;nginx.conf&#39; the return would be &#39;nginx&#39;</span>
 <span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">splitext</span> <span class="o">|</span> <span class="nf">first</span> <span class="cp">}}</span>
 
-<span class="c1"># with path == &#39;nginx.conf&#39; the return would be &#39;.conf&#39;</span>
+<span class="x"># with path == &#39;nginx.conf&#39; the return would be &#39;.conf&#39;</span>
 <span class="cp">{{</span> <span class="nv">path</span> <span class="o">|</span> <span class="nf">splitext</span> <span class="o">|</span> <span class="nf">last</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To join one or more path components:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">(</span><span class="s1">&#39;/etc&#39;</span><span class="o">,</span> <span class="nv">path</span><span class="o">,</span> <span class="s1">&#39;subdir&#39;</span><span class="o">,</span> <span class="nv">file</span><span class="o">)</span> <span class="o">|</span> <span class="nf">path_join</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="o">(</span><span class="s1">&#39;/etc&#39;</span><span class="o">,</span> <span class="nv">path</span><span class="o">,</span> <span class="s1">&#39;subdir&#39;</span><span class="o">,</span> <span class="nv">file</span><span class="o">)</span> <span class="o">|</span> <span class="nf">path_join</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <div class="versionadded">
@@ -2092,24 +2094,24 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 </div>
 <p>(Documentation: <a class="reference internal" href="../collections/ansible/builtin/quote_filter.html#ansible-collections-ansible-builtin-quote-filter"><span class="std std-ref">ansible.builtin.quote</span></a>)</p>
 <p>To concatenate a list into a string:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">list</span> <span class="o">|</span> <span class="nf">join</span><span class="o">(</span><span class="s2">&quot; &quot;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">list</span> <span class="o">|</span> <span class="nf">join</span><span class="o">(</span><span class="s2">&quot; &quot;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To split a string into a list:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">csv_string</span> <span class="o">|</span> <span class="nf">split</span><span class="o">(</span><span class="s2">&quot;,&quot;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">csv_string</span> <span class="o">|</span> <span class="nf">split</span><span class="o">(</span><span class="s2">&quot;,&quot;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p>To work with Base64 encoded strings:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">encoded</span> <span class="o">|</span> <span class="nf">b64decode</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">encoded</span> <span class="o">|</span> <span class="nf">b64decode</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">decoded</span> <span class="o">|</span> <span class="nf">string</span> <span class="o">|</span> <span class="nf">b64encode</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>(Documentation: <a class="reference internal" href="../collections/ansible/builtin/b64encode_filter.html#ansible-collections-ansible-builtin-b64encode-filter"><span class="std std-ref">ansible.builtin.b64encode</span></a>)</p>
 <p>As of version 2.6, you can define the type of encoding to use, the default is <code class="docutils literal notranslate"><span class="pre">utf-8</span></code>:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">encoded</span> <span class="o">|</span> <span class="nf">b64decode</span><span class="o">(</span><span class="nv">encoding</span><span class="o">=</span><span class="s1">&#39;utf-16-le&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">encoded</span> <span class="o">|</span> <span class="nf">b64decode</span><span class="o">(</span><span class="nv">encoding</span><span class="o">=</span><span class="s1">&#39;utf-16-le&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 <span class="cp">{{</span> <span class="nv">decoded</span> <span class="o">|</span> <span class="nf">string</span> <span class="o">|</span> <span class="nf">b64encode</span><span class="o">(</span><span class="nv">encoding</span><span class="o">=</span><span class="s1">&#39;utf-16-le&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -2129,21 +2131,21 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <section id="managing-uuids">
 <h2><a class="toc-backref" href="#id45" role="doc-backlink">Managing UUIDs</a><a class="headerlink" href="#managing-uuids" title="Link to this heading"></a></h2>
 <p>To create a namespaced UUIDv5:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">string</span> <span class="o">|</span> <span class="nf">to_uuid</span><span class="o">(</span><span class="nv">namespace</span><span class="o">=</span><span class="s1">&#39;11111111-2222-3333-4444-555555555555&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">string</span> <span class="o">|</span> <span class="nf">to_uuid</span><span class="o">(</span><span class="nv">namespace</span><span class="o">=</span><span class="s1">&#39;11111111-2222-3333-4444-555555555555&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.10.</span></p>
 </div>
 <p>To create a namespaced UUIDv5 using the default Ansible namespace ‘361E6D51-FAEC-444A-9079-341386DA8E2E’:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">string</span> <span class="o">|</span> <span class="nf">to_uuid</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">string</span> <span class="o">|</span> <span class="nf">to_uuid</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 1.9.</span></p>
 </div>
 <p>To make use of one attribute from each item in a list of complex variables, use the <a class="reference external" href="https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.map" title="(in Jinja v3.1.x)"><code class="xref py py-func docutils literal notranslate"><span class="pre">Jinja2</span> <span class="pre">map</span> <span class="pre">filter</span></code></a>:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># get a comma-separated list of the mount points (for example, &quot;/,/mnt/stuff&quot;) on a host</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># get a comma-separated list of the mount points (for example, &quot;/,/mnt/stuff&quot;) on a host</span>
 <span class="cp">{{</span> <span class="nv">ansible_mounts</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="s1">&#39;mount&#39;</span><span class="o">)</span> <span class="o">|</span> <span class="nf">join</span><span class="o">(</span><span class="s1">&#39;,&#39;</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -2151,14 +2153,14 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <section id="handling-dates-and-times">
 <h2><a class="toc-backref" href="#id46" role="doc-backlink">Handling dates and times</a><a class="headerlink" href="#handling-dates-and-times" title="Link to this heading"></a></h2>
 <p>To get a date object from a string use the <cite>to_datetime</cite> filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the total amount of seconds between two dates. Default date format is %Y-%m-%d %H:%M:%S but you can pass your own format</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># Get the total amount of seconds between two dates. Default date format is %Y-%m-%d %H:%M:%S but you can pass your own format</span>
 <span class="cp">{{</span> <span class="o">((</span><span class="s2">&quot;2016-08-14 20:00:12&quot;</span> <span class="o">|</span> <span class="nf">to_datetime</span><span class="o">)</span> <span class="o">-</span> <span class="o">(</span><span class="s2">&quot;2015-12-25&quot;</span> <span class="o">|</span> <span class="nf">to_datetime</span><span class="o">(</span><span class="s1">&#39;%Y-%m-%d&#39;</span><span class="o">)))</span><span class="nv">.total_seconds</span><span class="o">()</span>  <span class="cp">}}</span>
 
-<span class="c1"># Get remaining seconds after delta has been calculated. NOTE: This does NOT convert years, days, hours, and so on to seconds. For that, use total_seconds()</span>
+<span class="x"># Get remaining seconds after delta has been calculated. NOTE: This does NOT convert years, days, hours, and so on to seconds. For that, use total_seconds()</span>
 <span class="cp">{{</span> <span class="o">((</span><span class="s2">&quot;2016-08-14 20:00:12&quot;</span> <span class="o">|</span> <span class="nf">to_datetime</span><span class="o">)</span> <span class="o">-</span> <span class="o">(</span><span class="s2">&quot;2016-08-14 18:00:00&quot;</span> <span class="o">|</span> <span class="nf">to_datetime</span><span class="o">))</span><span class="nv">.seconds</span>  <span class="cp">}}</span>
-<span class="c1"># This expression evaluates to &quot;12&quot; and not &quot;132&quot;. Delta is 2 hours, 12 seconds</span>
+<span class="x"># This expression evaluates to &quot;12&quot; and not &quot;132&quot;. Delta is 2 hours, 12 seconds</span>
 
-<span class="c1"># get amount of days between two dates. This returns only the number of days and discards remaining hours, minutes, and seconds</span>
+<span class="x"># get amount of days between two dates. This returns only the number of days and discards remaining hours, minutes, and seconds</span>
 <span class="cp">{{</span> <span class="o">((</span><span class="s2">&quot;2016-08-14 20:00:12&quot;</span> <span class="o">|</span> <span class="nf">to_datetime</span><span class="o">)</span> <span class="o">-</span> <span class="o">(</span><span class="s2">&quot;2015-12-25&quot;</span> <span class="o">|</span> <span class="nf">to_datetime</span><span class="o">(</span><span class="s1">&#39;%Y-%m-%d&#39;</span><span class="o">)))</span><span class="nv">.days</span>  <span class="cp">}}</span>
 </pre></div>
 </div>
@@ -2170,29 +2172,29 @@ change the definition in the <code class="docutils literal notranslate"><span cl
 <p><span class="versionmodified added">New in version 2.4.</span></p>
 </div>
 <p>To format a date using a string (like with the shell date command), use the “strftime” filter:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display year-month-day</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x"># Display year-month-day</span>
 <span class="cp">{{</span> <span class="s1">&#39;%Y-%m-%d&#39;</span> <span class="o">|</span> <span class="nf">strftime</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;2021-03-19&quot;</span>
+<span class="x"># =&gt; &quot;2021-03-19&quot;</span>
 
-<span class="c1"># Display hour:min:sec</span>
+<span class="x"># Display hour:min:sec</span>
 <span class="cp">{{</span> <span class="s1">&#39;%H:%M:%S&#39;</span> <span class="o">|</span> <span class="nf">strftime</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;21:51:04&quot;</span>
+<span class="x"># =&gt; &quot;21:51:04&quot;</span>
 
-<span class="c1"># Use ansible_date_time.epoch fact</span>
+<span class="x"># Use ansible_date_time.epoch fact</span>
 <span class="cp">{{</span> <span class="s1">&#39;%Y-%m-%d %H:%M:%S&#39;</span> <span class="o">|</span> <span class="nf">strftime</span><span class="o">(</span><span class="nv">ansible_date_time.epoch</span><span class="o">)</span> <span class="cp">}}</span>
-<span class="c1"># =&gt; &quot;2021-03-19 21:54:09&quot;</span>
+<span class="x"># =&gt; &quot;2021-03-19 21:54:09&quot;</span>
 
-<span class="c1"># Use arbitrary epoch value</span>
-<span class="cp">{{</span> <span class="s1">&#39;%Y-%m-%d&#39;</span> <span class="o">|</span> <span class="nf">strftime</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="cp">}}</span><span class="w">          </span><span class="c1"># =&gt; 1970-01-01</span>
-<span class="cp">{{</span> <span class="s1">&#39;%Y-%m-%d&#39;</span> <span class="o">|</span> <span class="nf">strftime</span><span class="o">(</span><span class="m">1441357287</span><span class="o">)</span> <span class="cp">}}</span><span class="w"> </span><span class="c1"># =&gt; 2015-09-04</span>
+<span class="x"># Use arbitrary epoch value</span>
+<span class="cp">{{</span> <span class="s1">&#39;%Y-%m-%d&#39;</span> <span class="o">|</span> <span class="nf">strftime</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="cp">}}</span><span class="x">          # =&gt; 1970-01-01</span>
+<span class="cp">{{</span> <span class="s1">&#39;%Y-%m-%d&#39;</span> <span class="o">|</span> <span class="nf">strftime</span><span class="o">(</span><span class="m">1441357287</span><span class="o">)</span> <span class="cp">}}</span><span class="x"> # =&gt; 2015-09-04</span>
 </pre></div>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.13.</span></p>
 </div>
 <p>strftime takes an optional utc argument, defaulting to False, meaning times are in the local timezone:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;%H:%M:%S&#39;</span> <span class="o">|</span> <span class="nf">strftime</span> <span class="cp">}}</span><span class="w">           </span><span class="c1"># time now in local timezone</span>
-<span class="cp">{{</span> <span class="s1">&#39;%H:%M:%S&#39;</span> <span class="o">|</span> <span class="nf">strftime</span><span class="o">(</span><span class="nv">utc</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span><span class="w"> </span><span class="c1"># time now in UTC</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;%H:%M:%S&#39;</span> <span class="o">|</span> <span class="nf">strftime</span> <span class="cp">}}</span><span class="x">           # time now in local timezone</span>
+<span class="cp">{{</span> <span class="s1">&#39;%H:%M:%S&#39;</span> <span class="o">|</span> <span class="nf">strftime</span><span class="o">(</span><span class="nv">utc</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span><span class="x"> # time now in UTC</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -2269,7 +2271,7 @@ including its hash:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 20, 2025.
+      <span class="lastupdated">Last updated on Mar 03, 2025.
       </span></p>
   </div>
 
