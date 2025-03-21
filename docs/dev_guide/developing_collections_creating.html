@@ -138,7 +138,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -244,17 +244,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -353,7 +350,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Both the namespace and collection names use the same strict set of requirements. See <a class="reference external" href="https://galaxy.ansible.com/docs/contributing/namespaces.html#galaxy-namespaces">Galaxy namespaces</a> on the Galaxy docsite for those requirements.</p>
+<p>Both the namespace and collection names use the same strict set of requirements. Both are limited to alphanumeric characters and underscores, must have a minimum length of two characters, and cannot start with an underscore.</p>
 </div>
 <p>It will create the structure <code class="docutils literal notranslate"><span class="pre">[my_namespace]/[my_collection]/[collection</span> <span class="pre">skeleton]</span></code>.</p>
 <div class="admonition hint">
@@ -376,10 +373,10 @@
 <p>The built-in collection template is a simple example of a collection that works with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>, but if you want to simplify your development process you may want to create a custom collection template to pass to <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">init</span></code>.</p>
 <p>A collection skeleton is a directory that looks like a collection directory but any <code class="docutils literal notranslate"><span class="pre">.j2</span></code> files (excluding those in <code class="docutils literal notranslate"><span class="pre">templates/</span></code> and <code class="docutils literal notranslate"><span class="pre">roles/*/templates/</span></code>) will be templated by <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">init</span></code>. The skeleton’s <code class="docutils literal notranslate"><span class="pre">galaxy.yml.j2</span></code> file should use the variables <code class="docutils literal notranslate"><span class="pre">namespace</span></code> and <code class="docutils literal notranslate"><span class="pre">collection_name</span></code> which are derived from <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">init</span> <span class="pre">namespace.collection_name</span></code>, and will populate the metadata in the initialized collection’s <code class="docutils literal notranslate"><span class="pre">galaxy.yml</span></code> file. There are a few additional variables available by default (for example, <code class="docutils literal notranslate"><span class="pre">version</span></code> is <code class="docutils literal notranslate"><span class="pre">1.0.0</span></code>), and these can be supplemented/overridden using <code class="docutils literal notranslate"><span class="pre">--extra-vars</span></code>.</p>
 <p>An example <code class="docutils literal notranslate"><span class="pre">galaxy.yml.j2</span></code> file that accepts an optional dictionary variable <code class="docutils literal notranslate"><span class="pre">dependencies</span></code> could look like this:</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">namespace</span> <span class="cp">}}</span>
-<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">collection_name</span> <span class="cp">}}</span>
-<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">version</span><span class="o">|</span><span class="nf">quote</span><span class="o">)</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s2">&quot;0.0.0&quot;</span><span class="o">,</span> <span class="nv">operator</span><span class="o">=</span><span class="s2">&quot;gt&quot;</span><span class="o">,</span> <span class="nv">version_type</span><span class="o">=</span><span class="s2">&quot;semver&quot;</span><span class="o">)|</span><span class="nf">ternary</span><span class="o">(</span><span class="nv">version</span><span class="o">,</span> <span class="nv">undef</span><span class="o">(</span><span class="s2">&quot;version must be a valid semantic version greater than 0.0.0&quot;</span><span class="o">))</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="nt">dependencies</span><span class="p">:</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">dependencies</span><span class="o">|</span><span class="nf">default</span><span class="o">({},</span> <span class="kp">true</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">namespace: </span><span class="cp">{{</span> <span class="nv">namespace</span> <span class="cp">}}</span>
+<span class="x">name: </span><span class="cp">{{</span> <span class="nv">collection_name</span> <span class="cp">}}</span>
+<span class="x">version: </span><span class="cp">{{</span> <span class="o">(</span><span class="nv">version</span><span class="o">|</span><span class="nf">quote</span><span class="o">)</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;0.0.0&#39;</span><span class="o">,</span> <span class="nv">operator</span><span class="o">=</span><span class="s1">&#39;gt&#39;</span><span class="o">,</span> <span class="nv">version_type</span><span class="o">=</span><span class="s1">&#39;semver&#39;</span><span class="o">)|</span><span class="nf">ternary</span><span class="o">(</span><span class="nv">version</span><span class="o">,</span> <span class="nv">undef</span><span class="o">(</span><span class="s1">&#39;version must be a valid semantic version greater than 0.0.0&#39;</span><span class="o">))</span> <span class="cp">}}</span>
+<span class="x">dependencies: </span><span class="cp">{{</span> <span class="nv">dependencies</span> <span class="o">|</span> <span class="nf">default</span><span class="o">({},</span> <span class="kp">true</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 <p>To initialize a collection using the new template, pass the path to the skeleton with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">init</span></code>:</p>
@@ -402,9 +399,9 @@
 <p class="admonition-title">Note</p>
 <p>The <a class="reference external" href="https://ansible.readthedocs.io/projects/dev-tools/">Ansible Development Tools</a> package offers a convenient way to install <code class="docutils literal notranslate"><span class="pre">ansible-creator</span></code> along with a curated set of tools for developing automation content.</p>
 </div>
-<p>After <a class="reference external" href="https://ansible.readthedocs.io/projects/creator/installing/#installation">installing</a> <code class="docutils literal notranslate"><span class="pre">ansible-creator</span></code> you can initialize a project in one of the following ways:</p>
+<p>After <a class="reference external" href="https://ansible.readthedocs.io/projects/creator/installing">installing</a> <code class="docutils literal notranslate"><span class="pre">ansible-creator</span></code> you can initialize a project in one of the following ways:</p>
 <ul class="simple">
-<li><p>Use the <a class="reference external" href="https://ansible.readthedocs.io/projects/creator/installing/#initialize-ansible-collection-init-subcommand">init</a> subcommand.</p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">init</span></code> subcommand.</p></li>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">ansible-creator</span></code> with the <a class="reference external" href="https://ansible.readthedocs.io/projects/creator/collection_creation/#step-1-installing-ansible-creator-in-the-environment">Ansible extension</a> in Visual Studio Code.</p></li>
 </ul>
 <div class="admonition seealso">
@@ -437,7 +434,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 13, 2025.
+      <span class="lastupdated">Last updated on Mar 21, 2025.
       </span></p>
   </div>
 

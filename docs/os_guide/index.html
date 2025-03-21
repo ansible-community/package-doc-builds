@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using Ansible on Windows and BSD &mdash; Ansible Community Documentation</title>
+  <title>Using Ansible on Windows, BSD, and z/OS UNIX &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
@@ -138,9 +138,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Using Ansible on Windows and BSD</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using Ansible on Windows, BSD, and z/OS UNIX</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="intro_bsd.html">Managing BSD hosts with Ansible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="intro_windows.html">Managing Windows hosts with Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html">Managing z/OS UNIX hosts with Ansible</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
@@ -223,7 +224,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Using Ansible on Windows and BSD</li>
+      <li class="breadcrumb-item active">Using Ansible on Windows, BSD, and z/OS UNIX</li>
   <li class="wy-breadcrumbs-aside">
             <!-- Remove main index page as it is no longer editable -->
             
@@ -246,17 +247,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -306,8 +304,8 @@
   
            <div itemprop="articleBody">
              
-  <section id="using-ansible-on-windows-and-bsd">
-<span id="os-guide-index"></span><h1>Using Ansible on Windows and BSD<a class="headerlink" href="#using-ansible-on-windows-and-bsd" title="Link to this heading"></a></h1>
+  <section id="using-ansible-on-windows-bsd-and-z-os-unix">
+<span id="os-guide-index"></span><h1>Using Ansible on Windows, BSD, and z/OS UNIX<a class="headerlink" href="#using-ansible-on-windows-bsd-and-z-os-unix" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>Making Open Source More Inclusive</strong></p>
@@ -345,6 +343,18 @@ Find out everything you need to know about using Ansible on Windows and with BSD
 <li class="toctree-l2"><a class="reference internal" href="intro_windows.html#common-windows-problems">Common Windows problems</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="intro_zos.html">Managing z/OS UNIX hosts with Ansible</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#ansible-and-z-os-unix-system-services">Ansible and z/OS UNIX System Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#the-z-os-landscape">The z/OS landscape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#using-ansible-builtin-modules-with-z-os-unix">Using <code class="docutils literal notranslate"><span class="pre">ansible.builtin</span></code> modules with z/OS UNIX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#configure-the-remote-environment">Configure the remote environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#configure-the-remote-python-interpreter">Configure the remote Python interpreter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#configure-the-remote-shell">Configure the remote shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#enable-ansible-pipelining">Enable Ansible pipelining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#unreadable-characters">Unreadable characters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html#using-z-os-as-a-control-node">Using z/OS as a control node</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -363,7 +373,7 @@ Find out everything you need to know about using Ansible on Windows and with BSD
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 13, 2025.
+      <span class="lastupdated">Last updated on Mar 21, 2025.
       </span></p>
   </div>
 

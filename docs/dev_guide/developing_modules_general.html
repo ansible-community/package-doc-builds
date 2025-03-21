@@ -138,7 +138,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -243,17 +243,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -311,18 +308,19 @@
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#preparing-an-environment-for-developing-ansible-modules" id="id1">Preparing an environment for developing Ansible modules</a></p></li>
-<li><p><a class="reference internal" href="#creating-a-module" id="id2">Creating a module</a></p></li>
-<li><p><a class="reference internal" href="#creating-an-info-or-a-facts-module" id="id3">Creating an info or a facts module</a></p></li>
-<li><p><a class="reference internal" href="#verifying-your-module-code" id="id4">Verifying your module code</a></p>
+<li><p><a class="reference internal" href="#creating-a-standalone-module" id="id2">Creating a standalone module</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-module-in-a-collection" id="id3">Creating a module in a collection</a></p></li>
+<li><p><a class="reference internal" href="#creating-an-info-or-a-facts-module" id="id4">Creating an info or a facts module</a></p></li>
+<li><p><a class="reference internal" href="#verifying-your-module-code" id="id5">Verifying your module code</a></p>
 <ul>
-<li><p><a class="reference internal" href="#verifying-your-module-code-locally" id="id5">Verifying your module code locally</a></p></li>
-<li><p><a class="reference internal" href="#verifying-your-module-code-in-a-playbook" id="id6">Verifying your module code in a playbook</a></p></li>
+<li><p><a class="reference internal" href="#verifying-your-module-code-locally" id="id6">Verifying your module code locally</a></p></li>
+<li><p><a class="reference internal" href="#verifying-your-module-code-in-a-playbook" id="id7">Verifying your module code in a playbook</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#testing-your-newly-created-module" id="id7">Testing your newly-created module</a></p></li>
-<li><p><a class="reference internal" href="#contributing-back-to-ansible" id="id8">Contributing back to Ansible</a></p></li>
-<li><p><a class="reference internal" href="#communication-and-development-support" id="id9">Communication and development support</a></p></li>
-<li><p><a class="reference internal" href="#credit" id="id10">Credit</a></p></li>
+<li><p><a class="reference internal" href="#testing-your-newly-created-module" id="id8">Testing your newly-created module</a></p></li>
+<li><p><a class="reference internal" href="#contributing-back-to-ansible" id="id9">Contributing back to Ansible</a></p></li>
+<li><p><a class="reference internal" href="#communication-and-development-support" id="id10">Communication and development support</a></p></li>
+<li><p><a class="reference internal" href="#credit" id="id11">Credit</a></p></li>
 </ul>
 </nav>
 <section id="preparing-an-environment-for-developing-ansible-modules">
@@ -333,13 +331,22 @@ Modules for inclusion in Ansible itself must be Python or Powershell.</p>
 <p>One advantage of using Python or Powershell for your custom modules is being able to use the <code class="docutils literal notranslate"><span class="pre">module_utils</span></code> common code that does a lot of the
 heavy lifting for argument processing, logging and response writing, among other things.</p>
 </section>
-<section id="creating-a-module">
-<h2><a class="toc-backref" href="#id2" role="doc-backlink">Creating a module</a><a class="headerlink" href="#creating-a-module" title="Link to this heading"></a></h2>
+<section id="creating-a-standalone-module">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Creating a standalone module</a><a class="headerlink" href="#creating-a-standalone-module" title="Link to this heading"></a></h2>
 <p>It is highly recommended that you use a <code class="docutils literal notranslate"><span class="pre">venv</span></code> or <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> for Python development.</p>
-<p>To create a module:</p>
+<p>To create a standalone module:</p>
 <ol class="arabic simple">
 <li><p>Create a <code class="docutils literal notranslate"><span class="pre">library</span></code> directory in your workspace. Your test play should live in the same directory.</p></li>
 <li><p>Create your new module file: <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">touch</span> <span class="pre">library/my_test.py</span></code>. Or just open/create it with your editor of choice.</p></li>
+<li><p>Paste the content below into your new module file. It includes the <a class="reference internal" href="developing_modules_documenting.html#developing-modules-documenting"><span class="std std-ref">required Ansible format and documentation</span></a>, a simple <a class="reference internal" href="developing_program_flow_modules.html#argument-spec"><span class="std std-ref">argument spec for declaring the module options</span></a>, and some example code.</p></li>
+<li><p>Modify and extend the code to do what you want your new module to do. See the <a class="reference internal" href="developing_modules_best_practices.html#developing-modules-best-practices"><span class="std std-ref">programming tips</span></a> and <a class="reference internal" href="developing_python_3.html#developing-python-3"><span class="std std-ref">Python 3 compatibility</span></a> pages for pointers on writing clean and concise module code.</p></li>
+</ol>
+</section>
+<section id="creating-a-module-in-a-collection">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Creating a module in a collection</a><a class="headerlink" href="#creating-a-module-in-a-collection" title="Link to this heading"></a></h2>
+<p>To create a new module in an existing collection called <code class="docutils literal notranslate"><span class="pre">my_namespace.my_collection</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Create your new module file: <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">touch</span> <span class="pre">&lt;PATH_TO_COLLECTION&gt;/ansible_collections/my_namespace/my_collection/plugins/modules/my_test.py</span></code>. Or just create it with your editor of choice.</p></li>
 <li><p>Paste the content below into your new module file. It includes the <a class="reference internal" href="developing_modules_documenting.html#developing-modules-documenting"><span class="std std-ref">required Ansible format and documentation</span></a>, a simple <a class="reference internal" href="developing_program_flow_modules.html#argument-spec"><span class="std std-ref">argument spec for declaring the module options</span></a>, and some example code.</p></li>
 <li><p>Modify and extend the code to do what you want your new module to do. See the <a class="reference internal" href="developing_modules_best_practices.html#developing-modules-best-practices"><span class="std std-ref">programming tips</span></a> and <a class="reference internal" href="developing_python_3.html#developing-python-3"><span class="std std-ref">Python 3 compatibility</span></a> pages for pointers on writing clean and concise module code.</p></li>
 </ol>
@@ -481,7 +488,7 @@ heavy lifting for argument processing, logging and response writing, among other
 </div>
 </section>
 <section id="creating-an-info-or-a-facts-module">
-<h2><a class="toc-backref" href="#id3" role="doc-backlink">Creating an info or a facts module</a><a class="headerlink" href="#creating-an-info-or-a-facts-module" title="Link to this heading"></a></h2>
+<span id="creating-info-facts"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Creating an info or a facts module</a><a class="headerlink" href="#creating-an-info-or-a-facts-module" title="Link to this heading"></a></h2>
 <p>Ansible gathers information about the target machines using facts modules, and gathers information on other objects or files using info modules.
 If you find yourself trying to add <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">info</span></code> or <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">list</span></code> to an existing module, that is often a sign that a new dedicated <code class="docutils literal notranslate"><span class="pre">_facts</span></code> or <code class="docutils literal notranslate"><span class="pre">_info</span></code> module is needed.</p>
 <p>In Ansible 2.8 and onwards, we have two type of information modules, they are <code class="docutils literal notranslate"><span class="pre">*_info</span></code> and <code class="docutils literal notranslate"><span class="pre">*_facts</span></code>.</p>
@@ -505,11 +512,11 @@ General information is non-host specific information, for example information on
 <p>The rest is just like creating a normal module.</p>
 </section>
 <section id="verifying-your-module-code">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink">Verifying your module code</a><a class="headerlink" href="#verifying-your-module-code" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Verifying your module code</a><a class="headerlink" href="#verifying-your-module-code" title="Link to this heading"></a></h2>
 <p>After you modify the sample code above to do what you want, you can try out your module.
 Our <a class="reference internal" href="debugging.html#debugging-modules"><span class="std std-ref">debugging tips</span></a> will help if you run into bugs as you verify your module code.</p>
 <section id="verifying-your-module-code-locally">
-<h3><a class="toc-backref" href="#id5" role="doc-backlink">Verifying your module code locally</a><a class="headerlink" href="#verifying-your-module-code-locally" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Verifying your module code locally</a><a class="headerlink" href="#verifying-your-module-code-locally" title="Link to this heading"></a></h3>
 <p>The simplest way is to use <code class="docutils literal notranslate"><span class="pre">ansible</span></code> adhoc command:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">ANSIBLE_LIBRARY</span><span class="o">=</span>./library<span class="w"> </span>ansible<span class="w"> </span>-m<span class="w"> </span>my_test<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;name=hello new=true&#39;</span><span class="w"> </span>remotehost
 </pre></div>
@@ -518,9 +525,14 @@ Our <a class="reference internal" href="debugging.html#debugging-modules"><span 
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">ANSIBLE_LIBRARY</span><span class="o">=</span>./library<span class="w"> </span>ansible<span class="w"> </span>-m<span class="w"> </span>my_test<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;name=hello new=true&#39;</span><span class="w"> </span>localhost
 </pre></div>
 </div>
+<p>For a module developed in an existing collection called <code class="docutils literal notranslate"><span class="pre">my_namespace.my_collection</span></code> (as mentioned above):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>localhost<span class="w"> </span>-m<span class="w"> </span>my_namespace.my_collection.my_test<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;name=hello new=true&#39;</span><span class="w"> </span>--playbook-dir<span class="o">=</span><span class="nv">$PWD</span>
+</pre></div>
+</div>
 <ul class="simple">
-<li><p>If for any reason (pdb, using print(), faster iteration, etc) you want to avoid going through Ansible,
-another way is to create an arguments file, a basic JSON config file that passes parameters to your module so that you can run it.
+<li><p>If you use <code class="docutils literal notranslate"><span class="pre">pdb</span></code>, <code class="docutils literal notranslate"><span class="pre">print()</span></code>, or some other method of local debugging for faster iteration,
+you can avoid going through Ansible by creating an arguments file, which is
+a basic JSON config file that passes parameters to your module so that you can run it.
 Name the arguments file <code class="docutils literal notranslate"><span class="pre">/tmp/args.json</span></code> and add the following content:</p></li>
 </ul>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -537,13 +549,19 @@ Name the arguments file <code class="docutils literal notranslate"><span class="
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>library/my_test.py<span class="w"> </span>/tmp/args.json
 </pre></div>
 </div>
+<p>You might also need to add your collection’s path to the Python path. This tells Python to look for additional module_utils code in the given path.
+You can run the module code, as in the following example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span>PATH_TO_COLLECTIONS:<span class="nv">$PYTHONPATH</span>
+$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>ansible_collections.my_namespace.my_collection.plugins.modules.my_test<span class="w"> </span>/tmp/args.json
+</pre></div>
+</div>
 <p>It should return output like this:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;changed&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;state&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;original_message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;new_message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;goodbye&quot;</span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;invocation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;module_args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;new&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}}}</span>
 </pre></div>
 </div>
 </section>
 <section id="verifying-your-module-code-in-a-playbook">
-<h3><a class="toc-backref" href="#id6" role="doc-backlink">Verifying your module code in a playbook</a><a class="headerlink" href="#verifying-your-module-code-in-a-playbook" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Verifying your module code in a playbook</a><a class="headerlink" href="#verifying-your-module-code-in-a-playbook" title="Link to this heading"></a></h3>
 <p>You can easily run a full test by including it in a playbook, as long as the <code class="docutils literal notranslate"><span class="pre">library</span></code> directory is in the same directory as the play:</p>
 <ul class="simple">
 <li><p>Create a playbook in any directory: <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">touch</span> <span class="pre">testmod.yml</span></code></p></li>
@@ -568,7 +586,7 @@ Name the arguments file <code class="docutils literal notranslate"><span class="
 </section>
 </section>
 <section id="testing-your-newly-created-module">
-<h2><a class="toc-backref" href="#id7" role="doc-backlink">Testing your newly-created module</a><a class="headerlink" href="#testing-your-newly-created-module" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Testing your newly-created module</a><a class="headerlink" href="#testing-your-newly-created-module" title="Link to this heading"></a></h2>
 <p>Review our <a class="reference internal" href="testing.html#developing-testing"><span class="std std-ref">testing</span></a> section for more detailed
 information, including instructions for <a class="reference internal" href="testing_documentation.html#testing-module-documentation"><span class="std std-ref">testing module documentation</span></a>, adding <a class="reference internal" href="testing_integration.html#testing-integration"><span class="std std-ref">integration tests</span></a>, and more.</p>
 <div class="admonition note">
@@ -578,17 +596,17 @@ In this case, the tests should be marked with the <code class="docutils literal 
 </div>
 </section>
 <section id="contributing-back-to-ansible">
-<h2><a class="toc-backref" href="#id8" role="doc-backlink">Contributing back to Ansible</a><a class="headerlink" href="#contributing-back-to-ansible" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Contributing back to Ansible</a><a class="headerlink" href="#contributing-back-to-ansible" title="Link to this heading"></a></h2>
 <p>If you would like to contribute to <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> by adding a new feature or fixing a bug, <a class="reference external" href="https://help.github.com/articles/fork-a-repo/">create a fork</a> of the ansible/ansible repository and develop against a new feature branch using the <code class="docutils literal notranslate"><span class="pre">devel</span></code> branch as a starting point. When you have a good working code change, you can submit a pull request to the Ansible repository by selecting your feature branch as a source and the Ansible devel branch as a target.</p>
 <p>If you want to contribute a module to an <a class="reference internal" href="../community/contributing_maintained_collections.html#contributing-maintained-collections"><span class="std std-ref">Ansible collection</span></a>, review our <a class="reference internal" href="developing_modules_checklist.html#developing-modules-checklist"><span class="std std-ref">submission checklist</span></a>, <a class="reference internal" href="developing_modules_best_practices.html#developing-modules-best-practices"><span class="std std-ref">programming tips</span></a>, and <a class="reference internal" href="developing_python_3.html#developing-python-3"><span class="std std-ref">strategy for maintaining Python 2 and Python 3 compatibility</span></a>, as well as information about <a class="reference internal" href="testing.html#developing-testing"><span class="std std-ref">testing</span></a> before you open a pull request.</p>
 <p>The <a class="reference internal" href="../community/index.html#ansible-community-guide"><span class="std std-ref">Community Guide</span></a> covers how to open a pull request and what happens next.</p>
 </section>
 <section id="communication-and-development-support">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink">Communication and development support</a><a class="headerlink" href="#communication-and-development-support" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Communication and development support</a><a class="headerlink" href="#communication-and-development-support" title="Link to this heading"></a></h2>
 <p>Visit the <a class="reference internal" href="../community/communication.html#communication"><span class="std std-ref">Ansible communication guide</span></a> for information on how to join the conversation.</p>
 </section>
 <section id="credit">
-<h2><a class="toc-backref" href="#id10" role="doc-backlink">Credit</a><a class="headerlink" href="#credit" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Credit</a><a class="headerlink" href="#credit" title="Link to this heading"></a></h2>
 <p>Thank you to Thomas Stringer (<a class="reference external" href="https://github.com/trstringer">&#64;trstringer</a>) for contributing source
 material for this topic.</p>
 </section>
@@ -608,7 +626,7 @@ material for this topic.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 13, 2025.
+      <span class="lastupdated">Last updated on Mar 21, 2025.
       </span></p>
   </div>
 

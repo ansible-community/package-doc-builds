@@ -183,7 +183,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -289,17 +289,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -484,7 +481,7 @@ to convert boolean indicators to actual booleans.</p>
 <p>To compare a version number, such as checking if the <code class="docutils literal notranslate"><span class="pre">ansible_facts['distribution_version']</span></code>
 version is greater than or equal to ‘12.04’, you can use the <code class="docutils literal notranslate"><span class="pre">version</span></code> test.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">version</span></code> test can also be used to evaluate the <code class="docutils literal notranslate"><span class="pre">ansible_facts['distribution_version']</span></code></p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">ansible_facts</span><span class="o">[</span><span class="s1">&#39;distribution_version&#39;</span><span class="o">]</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;12.04&#39;</span><span class="o">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">ansible_facts</span><span class="o">[</span><span class="s1">&#39;distribution_version&#39;</span><span class="o">]</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;12.04&#39;</span><span class="o">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 </pre></div>
 </div>
 <p>If <code class="docutils literal notranslate"><span class="pre">ansible_facts['distribution_version']</span></code> is greater than or equal to 12.04, this test returns True, otherwise False.</p>
@@ -511,11 +508,11 @@ version is greater than or equal to ‘12.04’, you can use the <code class="do
 </dd>
 </dl>
 <p>Using <code class="docutils literal notranslate"><span class="pre">version_type</span></code> to compare a semantic version would be achieved like the following</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">sample_semver_var</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;2.0.0-rc.1+build.123&#39;</span><span class="o">,</span> <span class="s1">&#39;lt&#39;</span><span class="o">,</span> <span class="nv">version_type</span><span class="o">=</span><span class="s1">&#39;semver&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">sample_semver_var</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;2.0.0-rc.1+build.123&#39;</span><span class="o">,</span> <span class="s1">&#39;lt&#39;</span><span class="o">,</span> <span class="nv">version_type</span><span class="o">=</span><span class="s1">&#39;semver&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 </pre></div>
 </div>
 <p>In Ansible 2.14, the <code class="docutils literal notranslate"><span class="pre">pep440</span></code> option for <code class="docutils literal notranslate"><span class="pre">version_type</span></code> was added, and the rules of this type are defined in <a class="reference external" href="https://peps.python.org/pep-0440/">PEP-440</a>. The following example showcases how this type can differentiate pre-releases as being less than a general release.</p>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;2.14.0rc1&#39;</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;2.14.0&#39;</span><span class="o">,</span> <span class="s1">&#39;lt&#39;</span><span class="o">,</span> <span class="nv">version_type</span><span class="o">=</span><span class="s1">&#39;pep440&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;</span><span class="cp">{{</span> <span class="s1">&#39;2.14.0rc1&#39;</span> <span class="k">is</span> <span class="nf">version</span><span class="o">(</span><span class="s1">&#39;2.14.0&#39;</span><span class="o">,</span> <span class="s1">&#39;lt&#39;</span><span class="o">,</span> <span class="nv">version_type</span><span class="o">=</span><span class="s1">&#39;pep440&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 </pre></div>
 </div>
 <p>When using <code class="docutils literal notranslate"><span class="pre">version</span></code> in a playbook or role, don’t use <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">}}</span></code> as described in the <a class="reference external" href="https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#when-should-i-use-also-how-to-interpolate-variables-or-dynamic-variable-names">FAQ</a></p>
@@ -851,7 +848,7 @@ you provide Byte format to computers and human-readable format to people.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 13, 2025.
+      <span class="lastupdated">Last updated on Mar 21, 2025.
       </span></p>
   </div>
 

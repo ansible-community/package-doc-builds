@@ -180,7 +180,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -286,17 +286,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -492,9 +489,27 @@ the handler from running, such as a host becoming unreachable.)</p>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result.rc == 2</span>
 </pre></div>
 </div>
+<p>You can reference simple variables in conditionals to avoid repeating certain terms, as in the following example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example playbook</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myHosts</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">log_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/ansible/logfolder/</span>
+<span class="w">    </span><span class="nt">log_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">log.log</span>
+
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create empty log file</span>
+<span class="w">      </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mkdir {{ log_path }} || touch {{log_path }}{{ log_file }}</span>
+<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tmp</span>
+<span class="w">      </span><span class="nt">changed_when</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tmp.rc == 0</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;tmp.stderr</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">&quot;mkdir:</span><span class="nv"> </span><span class="s">cannot</span><span class="nv"> </span><span class="s">create</span><span class="nv"> </span><span class="s">directory</span><span class="nv"> </span><span class="s">‘&quot;</span><span class="nv"> </span><span class="s">~</span><span class="nv"> </span><span class="s">log_path</span><span class="nv"> </span><span class="s">~</span><span class="nv"> </span><span class="s">&quot;’:</span><span class="nv"> </span><span class="s">File</span><span class="nv"> </span><span class="s">exists&quot;&#39;</span>
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Just like <code class="docutils literal notranslate"><span class="pre">when</span></code> these two conditionals do not require templating delimiters (<code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">}}</span></code>) as they are implied.</p>
+<p>Notice the missing double curly braces <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">}}</span></code> around the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> variable in the <code class="docutils literal notranslate"><span class="pre">changed_when</span></code> statement.</p>
+<p>Just like <code class="docutils literal notranslate"><span class="pre">when</span></code> these two conditionals do not require templating delimiters (<code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">}}</span></code>) because they are raw Jinja2 expressions.</p>
+<p>If you still use them, ansible will raise a warning  that conditional statements should not include jinja2 templating delimiters.</p>
 </div>
 <p>See <a class="reference internal" href="#controlling-what-defines-failure"><span class="std std-ref">Defining failure</span></a> for more conditional syntax examples.</p>
 </section>
@@ -603,7 +618,7 @@ the handler from running, such as a host becoming unreachable.)</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 13, 2025.
+      <span class="lastupdated">Last updated on Mar 21, 2025.
       </span></p>
   </div>
 

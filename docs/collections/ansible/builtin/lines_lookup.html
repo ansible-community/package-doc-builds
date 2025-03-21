@@ -139,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -310,17 +310,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -421,6 +418,7 @@ the same lookup plugin name.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
+<li><p>The given commands are passed to a shell for execution, therefore all variables that are part of the commands and come from a remote/untrusted source MUST be sanitized using the <a class="reference internal" href="quote_filter.html#ansible-collections-ansible-builtin-quote-filter"><span class="std std-ref">ansible.builtin.quote</span></a> filter to avoid shell injection vulnerabilities. See the example section.</p></li>
 <li><p>Like all lookups, this runs on the Ansible controller and is unaffected by other keywords such as ‘become’. If you need to use different permissions, you must change the command or run Ansible as another user.</p></li>
 <li><p>Alternatively, you can use a shell/command task that runs against localhost and registers the result.</p></li>
 <li><p>The directory of the play is used as the current working directory.</p></li>
@@ -432,6 +430,10 @@ the same lookup plugin name.</p>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">We could read the file directly, but this shows output from command</span>
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msg=&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain"> is an output line from running cat on /etc/motd&quot;</span>
 <span class="w">  </span><span class="nt">with_lines</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cat /etc/motd</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always use quote filter to make sure your variables are safe to use with shell</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msg=&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain"> is an output line from running given command&quot;</span>
+<span class="w">  </span><span class="nt">with_lines</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cat</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">file_name</span> <span class="o">|</span> <span class="nf">quote</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">More useful example of looping over a command result</span>
 <span class="w">  </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/usr/bin/frobnicate</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -494,7 +496,7 @@ the same lookup plugin name.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 13, 2025.
+      <span class="lastupdated">Last updated on Mar 21, 2025.
       </span></p>
   </div>
 
