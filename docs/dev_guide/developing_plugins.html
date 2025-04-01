@@ -1,0 +1,673 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+
+  <!-- Google Tag Manager Data Layer -->
+  <script>
+   dataLayer = [];
+  </script>
+  <!-- End Google Tag Manager Data Layer -->
+
+
+
+
+  
+  <title>Developing Plugins &mdash; Ansible Documentation</title>
+  
+
+  
+  
+
+  <link rel="canonical" href="https://docs.ansible.com/ansible/latest/dev_guide/developing_plugins.html"/>
+
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:'../',
+        VERSION:'2.2',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/language_data.js"></script>
+
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.min.css" type="text/css" />
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Ansible Documentation" href="../index.html"/>
+        <link rel="up" title="Developer Information" href="index.html"/>
+        <link rel="next" title="Developing Dynamic Inventory Sources" href="developing_inventory.html"/>
+        <link rel="prev" title="Appendix: Module Utilities" href="developing_module_utilities.html"/> 
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+  <style>
+    .search-reset-start {
+        color: #463E3F;
+        float: right;
+        position: relative;
+        top: -25px;
+        left: -10px;
+        z-index: 10;
+     }
+     .search-reset-start:hover {
+        cursor: pointer;
+        color: #2980B9;
+     }
+     #search-box-id {
+        padding-right: 25px;
+     }
+  </style>
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300'
+    rel='stylesheet' type='text/css'>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+  <!-- End Google Tag Manager -->
+
+    <div class="DocSite-globalNav ansibleNav">
+        <ul>
+            <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+            <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+            <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+            <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+            <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+        </ul>
+    </div>
+
+  <a class="DocSite-nav" href="http://docs.ansible.com/">
+    <img class="DocSiteNav-logo"
+      src="../_static/images/logo_invert.png"
+      alt="Ansible Logo">
+    <div class="DocSiteNav-title">
+      Documentation
+    </div>
+  </a>
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+
+      <div style="background-color:#5bbdbf;height=80px;margin:'auto auto auto auto'">
+        <a class="DocSiteProduct-header DocSiteProduct-header--core" href="http://docs.ansible.com">
+            <div class="DocSiteProduct-productName">
+                <div class="DocSiteProduct-logoText">
+                    Ansible Core
+                    <div class="DocSiteProduct-CurrentVersion" align="right">
+                      v2.3
+                  </div>
+                </div>
+            </div>
+        </a>
+
+
+          <div class="DocSiteProduct-CheckVersionPara">For previous versions, see the  <a class="DocSiteProduct-versionheader" href="http://docs.ansible.com/">documentation archive.</a></div>
+      </div>
+
+      <div id="menu-id" class="wy-menu wy-menu-vertical" data-spy="affix">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intro_installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_inventory.html">Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_dynamic_inventory.html">Dynamic Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_patterns.html">Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_adhoc.html">Introduction To Ad-Hoc Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_configuration.html">Configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_bsd.html">BSD Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_windows.html">Windows Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_networking.html">Networking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart Video</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbooks.html">Playbooks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_intro.html">Intro to Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_roles.html">Playbook Roles and Include Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_variables.html">Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_templating.html">Templating (Jinja2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_loops.html">Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_strategies.html">Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_best_practices.html">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../playbooks_special_topics.html">Playbooks: Special Topics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../become.html">Become (Privilege Escalation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_acceleration.html">Accelerated Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_async.html">Asynchronous Actions and Polling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_checkmode.html">Check Mode (“Dry Run”)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_debugger.html">Playbook Debugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_delegation.html">Delegation, Rolling Updates, and Local Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_environment.html">Setting the Environment (and Working With Proxies)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_environment.html#working-with-language-specific-version-managers">Working With Language-Specific Version Managers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_error_handling.html">Error Handling In Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_lookups.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_prompts.html">Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_tags.html">Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_startnstep.html">Start and Step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_directives.html">Directives Glossary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">About Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules_intro.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common_return_values.html">Return Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules_support.html">Module Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules_by_category.html">Module Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_all_modules.html">All Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_cloud_modules.html">Cloud Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_clustering_modules.html">Clustering Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_commands_modules.html">Commands Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_crypto_modules.html">Crypto Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_database_modules.html">Database Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_files_modules.html">Files Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_identity_modules.html">Identity Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_inventory_modules.html">Inventory Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_messaging_modules.html">Messaging Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_monitoring_modules.html">Monitoring Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_network_modules.html">Network Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_notification_modules.html">Notification Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_packaging_modules.html">Packaging Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_remote_management_modules.html">Remote Management Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_source_control_modules.html">Source Control Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_storage_modules.html">Storage Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_system_modules.html">System Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_utilities_modules.html">Utilities Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_web_infrastructure_modules.html">Web Infrastructure Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_windows_modules.html">Windows Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides.html">Detailed Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide_aws.html">Amazon Web Services Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_azure.html">Getting Started with Azure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_rax.html">Rackspace Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_gce.html">Google Cloud Platform Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_cloudstack.html">CloudStack Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_vagrant.html">Using Vagrant and Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_rolling_upgrade.html">Continuous Delivery and Rolling Upgrades</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_docker.html">Getting Started with Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_packet.html">Using Ansible with the Packet host</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Information</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#ansible-developer-guide">Ansible Developer Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Community Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../community/index.html#ansible-community-guide">Ansible Community Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tower.html">Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy.html">Ansible Galaxy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../galaxy.html#the-website">The Website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../galaxy.html#the-command-line-tool">The command line tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../test_strategies.html">Testing Strategies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#integrating-testing-with-ansible-playbooks">Integrating Testing With Ansible Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#the-right-level-of-testing">The Right Level of Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#check-mode-as-a-drift-test">Check Mode As A Drift Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#modules-that-are-useful-for-testing">Modules That Are Useful for Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#testing-lifecycle">Testing Lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#integrating-testing-with-rolling-updates">Integrating Testing With Rolling Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#achieving-continuous-deployment">Achieving Continuous Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-can-i-set-the-path-or-any-other-environment-variable-for-a-task-or-entire-playbook">How can I set the PATH or any other environment variable for a task or entire playbook?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-handle-different-machines-needing-different-user-accounts-or-ports-to-log-in-with">How do I handle different machines needing different user accounts or ports to log in with?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-get-ansible-to-reuse-connections-enable-kerberized-ssh-or-have-ansible-pay-attention-to-my-local-ssh-config-file">How do I get ansible to reuse connections, enable Kerberized SSH, or have Ansible pay attention to my local SSH config file?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-configure-a-jump-host-to-access-servers-that-i-have-no-direct-access-to">How do I configure a jump host to access servers that I have no direct access to?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-speed-up-management-inside-ec2">How do I speed up management inside EC2?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-handle-python-pathing-not-having-a-python-2-x-in-usr-bin-python-on-a-remote-machine">How do I handle python pathing not having a Python 2.X in /usr/bin/python on a remote machine?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#what-is-the-best-way-to-make-content-reusable-redistributable">What is the best way to make content reusable/redistributable?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#where-does-the-configuration-file-live-and-what-can-i-configure-in-it">Where does the configuration file live and what can I configure in it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-disable-cowsay">How do I disable cowsay?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-see-a-list-of-all-of-the-ansible-variables">How do I see a list of all of the ansible_ variables?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-see-all-the-inventory-vars-defined-for-my-host">How do I see all the inventory vars defined for my host?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-loop-over-a-list-of-hosts-in-a-group-inside-of-a-template">How do I loop over a list of hosts in a group, inside of a template?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-access-a-variable-name-programmatically">How do I access a variable name programmatically?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-access-a-variable-of-the-first-host-in-a-group">How do I access a variable of the first host in a group?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-copy-files-recursively-onto-a-target-host">How do I copy files recursively onto a target host?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-access-shell-environment-variables">How do I access shell environment variables?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-generate-crypted-passwords-for-the-user-module">How do I generate crypted passwords for the user module?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#can-i-get-training-on-ansible">Can I get training on Ansible?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#is-there-a-web-interface-rest-api-etc">Is there a web interface / REST API / etc?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-submit-a-change-to-the-documentation">How do I submit a change to the documentation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-keep-secret-data-in-my-playbook">How do I keep secret data in my playbook?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#when-should-i-use-also-how-to-interpolate-variables-or-dynamic-variable-names">When should I use {{ }}? Also, how to interpolate variables or dynamic variable names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#why-don-t-you-ship-in-x-format">Why don’t you ship in X format?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#i-don-t-see-my-question-here">I don’t see my question here</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../YAMLSyntax.html">YAML Syntax</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../YAMLSyntax.html#yaml-basics">YAML Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../YAMLSyntax.html#gotchas">Gotchas</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides.html">Ansible Porting Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_3_support.html">Python 3 Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python_3_support.html#testing-python-3-with-commands-and-playbooks">Testing Python 3 with commands and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_3_support.html#testing-python-3-module-support">Testing Python 3 module support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release_and_maintenance.html">Release and maintenance</a></li>
+</ul>
+
+        
+
+
+    <div class="DocSite-sideNav ansibleNav">
+       <ul class="">
+       <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+       <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+       <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+       <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+       <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+       </ul>
+     </div>
+
+    <!-- changeable widget -->
+    <div id="sideBanner">
+    <br/>
+    <a href="https://www.ansible.com/docs-left?utm_source=docs">
+      <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+    </a>
+    </div>
+
+
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="/">Ansible Documentation</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+
+          <!-- Banner ads
+          <div class="DocSiteBanner">
+            <a class="DocSiteBanner-imgWrapper"
+                href="https://www.ansible.com/docs-top?utm_source=docs">
+                <img src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-top-left.png">
+            </a>
+            <a class="DocSiteBanner-imgWrapper"
+                href="https://www.ansible.com/docs-top?utm_source=docs">
+                <img src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-top-right.png">
+            </a>
+        </div> -->
+
+          <ul class="wy-breadcrumbs">
+  <li><a href="../index.html">Docs</a> &raquo;</li>
+  <li><a href="">Developing Plugins</a></li>
+</ul>
+<hr/>
+          
+<div id='banner' class='Admonition caution'>
+  <p>You are reading an unmaintained version of the Ansible documentation. Unmaintained Ansible versions can contain unfixed security vulnerabilities (CVE). Please upgrade to a maintained version. See <a href="https://docs.ansible.com/ansible/latest/index.html">the latest Ansible documentation</a>.</p>
+</div>
+          <div id="page-content">
+          
+  <div class="section" id="developing-plugins">
+<h1><a class="toc-backref" href="#id3">Developing Plugins</a><a class="headerlink" href="#developing-plugins" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#developing-plugins" id="id3">Developing Plugins</a><ul>
+<li><a class="reference internal" href="#callback-plugins" id="id4">Callback Plugins</a><ul>
+<li><a class="reference internal" href="#example-callback-plugins" id="id5">Example Callback Plugins</a></li>
+<li><a class="reference internal" href="#configuring-callback-plugins" id="id6">Configuring Callback Plugins</a><ul>
+<li><a class="reference internal" href="#managing-stdout" id="id7">Managing stdout</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developing-callback-plugins" id="id8">Developing Callback Plugins</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connection-plugins" id="id9">Connection Plugins</a></li>
+<li><a class="reference internal" href="#lookup-plugins" id="id10">Lookup Plugins</a></li>
+<li><a class="reference internal" href="#vars-plugins" id="id11">Vars Plugins</a></li>
+<li><a class="reference internal" href="#filter-plugins" id="id12">Filter Plugins</a></li>
+<li><a class="reference internal" href="#test-plugins" id="id13">Test Plugins</a></li>
+<li><a class="reference internal" href="#distributing-plugins" id="id14">Distributing Plugins</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Plugins are pieces of code that augment Ansible’s core functionality. Ansible ships with a number of handy plugins, and you can easily write your own.</p>
+<p>The following types of plugins are available:</p>
+<ul class="simple">
+<li><em>Action</em> plugins are front ends to modules and can execute actions on the controller before calling the modules themselves.</li>
+<li><em>Cache</em> plugins are used to keep a cache of ‘facts’ to avoid costly fact-gathering operations.</li>
+<li><em>Callback</em> plugins enable you to hook into Ansible events for display or logging purposes.</li>
+<li><em>Connection</em> plugins define how to communicate with inventory hosts.</li>
+<li><em>Filters</em> plugins allow you to manipulate data inside Ansible plays and/or templates. This is a Jinja2 feature; Ansible ships extra filter plugins.</li>
+<li><em>Lookup</em> plugins are used to pull data from an external source. These are implemented using a custom Jinja2 function.</li>
+<li><em>Strategy</em> plugins control the flow of a play and execution logic.</li>
+<li><em>Shell</em> plugins deal with low-level commands and formatting for the different shells Ansible can encounter on remote hosts.</li>
+<li><em>Test</em> plugins allow you to validate data inside Ansible plays and/or templates. This is a Jinja2 feature; Ansible ships extra test plugins.</li>
+<li><em>Vars</em> plugins inject additional variable data into Ansible runs that did not come from an inventory, playbook, or the command line.</li>
+</ul>
+<p>This section describes the various types of plugins and how to implement them.</p>
+<div class="section" id="callback-plugins">
+<span id="developing-callbacks"></span><h2><a class="toc-backref" href="#id4">Callback Plugins</a><a class="headerlink" href="#callback-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Callback plugins enable adding new behaviors to Ansible when responding to events. By default, callback plugins control most of the output you see when running the command line programs.</p>
+<div class="section" id="example-callback-plugins">
+<span id="callback-examples"></span><h3><a class="toc-backref" href="#id5">Example Callback Plugins</a><a class="headerlink" href="#example-callback-plugins" title="Permalink to this headline">¶</a></h3>
+<p>Ansible comes with a number of callback plugins that you can look at for examples. These can be found in <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/callback">lib/ansible/plugins/callback</a>.</p>
+<p>The <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/callback/log_plays.py">log_plays</a>
+callback is an example of how to intercept playbook events to a log
+file, and the <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/callback/mail.py">mail</a>
+callback sends email when playbooks complete.</p>
+<p>The <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/callback/osx_say.py">osx_say</a>
+callback provided is particularly entertaining – it will respond with
+computer synthesized speech on OS X in relation to playbook events,
+and is guaranteed to entertain and/or annoy coworkers.</p>
+</div>
+<div class="section" id="configuring-callback-plugins">
+<span id="configuring-callbacks"></span><h3><a class="toc-backref" href="#id6">Configuring Callback Plugins</a><a class="headerlink" href="#configuring-callback-plugins" title="Permalink to this headline">¶</a></h3>
+<p>You can activate a custom callback by either dropping it into a callback_plugins directory adjacent to your play or inside a role or by putting it in one of the callback directory sources configured in <cite>ansible.cfg</cite>.</p>
+<p>Plugins are loaded in alphanumeric order; for example, a plugin implemented in a file named <cite>1_first.py</cite> would run before a plugin file named <cite>2_second.py</cite>.</p>
+<p>Most callbacks shipped with Ansible are disabled by default and need to be whitelisted in your <cite>ansible.cfg</cite> file in order to function. For example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="c1">#callback_whitelist = timer, mail, mycallbackplugin</span>
+</pre></div>
+</div>
+<div class="section" id="managing-stdout">
+<h4><a class="toc-backref" href="#id7">Managing stdout</a><a class="headerlink" href="#managing-stdout" title="Permalink to this headline">¶</a></h4>
+<p>You can only have one plugin be the main manager of your console output. If you want to replace the default, you should define CALLBACK_TYPE = stdout in the subclass and then configure the stdout plugin in <cite>ansible.cfg</cite>. For example:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="c1">#stdout_callback = mycallbackplugin</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="developing-callback-plugins">
+<span id="callback-development"></span><h3><a class="toc-backref" href="#id8">Developing Callback Plugins</a><a class="headerlink" href="#developing-callback-plugins" title="Permalink to this headline">¶</a></h3>
+<p>Callback plugins are created by creating a new class with the Base(Callbacks) class as the parent:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.plugins.callback</span> <span class="kn">import</span> <span class="n">CallbackBase</span>
+<span class="kn">from</span> <span class="nn">ansible</span> <span class="kn">import</span> <span class="n">constants</span> <span class="k">as</span> <span class="n">C</span>
+
+<span class="k">class</span> <span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>From there, override the specific methods from the CallbackBase that you want to provide a callback for. For plugins intended for use with Ansible version 2.0 and later, you should only override methods that start with <cite>v2</cite>. For a complete list of methods that you can override, please see <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> in the <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/callback">lib/ansible/plugins/callback</a> directory.</p>
+<p>The following example shows how Ansible’s timer plugin is implemented:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make coding more python3-ish</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
+<span class="n">__metaclass__</span> <span class="o">=</span> <span class="nb">type</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">ansible.plugins.callback</span> <span class="kn">import</span> <span class="n">CallbackBase</span>
+
+
+<span class="k">class</span> <span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This callback module tells you how long your plays ran for.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">CALLBACK_VERSION</span> <span class="o">=</span> <span class="mf">2.0</span>
+    <span class="n">CALLBACK_TYPE</span> <span class="o">=</span> <span class="s1">&#39;aggregate&#39;</span>
+    <span class="n">CALLBACK_NAME</span> <span class="o">=</span> <span class="s1">&#39;timer&#39;</span>
+    <span class="n">CALLBACK_NEEDS_WHITELIST</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">CallbackModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">days_hours_minutes_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runtime</span><span class="p">):</span>
+        <span class="n">minutes</span> <span class="o">=</span> <span class="p">(</span><span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">//</span> <span class="mi">60</span><span class="p">)</span> <span class="o">%</span> <span class="mi">60</span>
+        <span class="n">r_seconds</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">-</span> <span class="p">(</span><span class="n">minutes</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">runtime</span><span class="o">.</span><span class="n">days</span><span class="p">,</span> <span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">//</span> <span class="mi">3600</span><span class="p">,</span> <span class="n">minutes</span><span class="p">,</span> <span class="n">r_seconds</span>
+
+    <span class="k">def</span> <span class="nf">playbook_on_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stats</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v2_playbook_on_stats</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">v2_playbook_on_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stats</span><span class="p">):</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">runtime</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="s2">&quot;Playbook run took </span><span class="si">%s</span><span class="s2"> days, </span><span class="si">%s</span><span class="s2"> hours, </span><span class="si">%s</span><span class="s2"> minutes, </span><span class="si">%s</span><span class="s2"> seconds&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">days_hours_minutes_seconds</span><span class="p">(</span><span class="n">runtime</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Note that the CALLBACK_VERSION and CALLBACK_NAME definitions are required for properly functioning plugins for Ansible &gt;=2.0.</p>
+</div>
+</div>
+<div class="section" id="connection-plugins">
+<span id="developing-connection-plugins"></span><h2><a class="toc-backref" href="#id9">Connection Plugins</a><a class="headerlink" href="#connection-plugins" title="Permalink to this headline">¶</a></h2>
+<p>By default, Ansible ships with a ‘paramiko’ SSH, native ssh (just called ‘ssh’), ‘local’ connection type, and there are also some minor players like ‘chroot’ and ‘jail’.  All of these can be used in playbooks and with /usr/bin/ansible to decide how you want to talk to remote machines.  The basics of these connection types
+are covered in the <a class="reference internal" href="../intro_getting_started.html"><span class="doc">Getting Started</span></a> section.  Should you want to extend Ansible to support other transports (SNMP, Message bus, etc) it’s as simple as copying the format of one of the existing modules and dropping it into the connection plugins
+directory.   The value of ‘smart’ for a connection allows selection of paramiko or openssh based on system capabilities, and chooses
+‘ssh’ if OpenSSH supports ControlPersist, in Ansible 1.2.1 and later.  Previous versions did not support ‘smart’.</p>
+<p>More documentation on writing connection plugins is pending, though you can jump into <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/connection">lib/ansible/plugins/connection</a> and figure things out pretty easily.</p>
+</div>
+<div class="section" id="lookup-plugins">
+<span id="developing-lookup-plugins"></span><h2><a class="toc-backref" href="#id10">Lookup Plugins</a><a class="headerlink" href="#lookup-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Lookup plugins are used to pull in data from external data stores. Lookup plugins can be used within playbooks for both looping - playbook language constructs like “with_fileglob” and “with_items” are implemented via lookup plugins - and to return values into a variable or parameter.</p>
+<p>Here’s a simple lookup plugin implementation - this lookup returns the contents of a text file as a variable:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.errors</span> <span class="kn">import</span> <span class="n">AnsibleError</span><span class="p">,</span> <span class="n">AnsibleParserError</span>
+<span class="kn">from</span> <span class="nn">ansible.plugins.lookup</span> <span class="kn">import</span> <span class="n">LookupBase</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">__main__</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ansible.utils.display</span> <span class="kn">import</span> <span class="n">Display</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">Display</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">LookupModule</span><span class="p">(</span><span class="n">LookupBase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terms</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span>
+            <span class="n">display</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File lookup term: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">term</span><span class="p">)</span>
+
+            <span class="c1"># Find the file in the expected search path</span>
+            <span class="n">lookupfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_file_in_search_path</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="n">term</span><span class="p">)</span>
+            <span class="n">display</span><span class="o">.</span><span class="n">vvvv</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;File lookup using </span><span class="si">%s</span><span class="s2"> as file&quot;</span> <span class="o">%</span> <span class="n">lookupfile</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">lookupfile</span><span class="p">:</span>
+                    <span class="n">contents</span><span class="p">,</span> <span class="n">show_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loader</span><span class="o">.</span><span class="n">_get_file_contents</span><span class="p">(</span><span class="n">lookupfile</span><span class="p">)</span>
+                    <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">contents</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">AnsibleParserError</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">AnsibleParserError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">AnsibleError</span><span class="p">(</span><span class="s2">&quot;could not locate file in lookup: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">term</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ret</span>
+</pre></div>
+</div>
+<p>An example of how this lookup is called:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">all</span>
+  <span class="nt">vars</span><span class="p">:</span>
+     <span class="nt">contents</span><span class="p">:</span> <span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;file&#39;</span><span class="o">,</span> <span class="s1">&#39;/etc/foo.txt&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+  <span class="nt">tasks</span><span class="p">:</span>
+
+     <span class="p p-Indicator">-</span> <span class="nt">debug</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">msg=&quot;the value of foo.txt is </span><span class="cp">{{</span> <span class="nv">contents</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain"> as seen today </span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;pipe&#39;</span><span class="o">,</span> <span class="s1">&#39;date +&quot;%Y-%m-%d&quot;&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">&quot;</span>
+</pre></div>
+</div>
+<p>Errors encountered during execution should be returned by raising AnsibleError() with a message describing the error. Any strings returned by your lookup plugin implementation that could ever contain non-ASCII characters must be converted into Python’s unicode type because the strings will be run through jinja2.  To do this, you can use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ansible.module_utils._text</span> <span class="kn">import</span> <span class="n">to_text</span>
+<span class="n">result_string</span> <span class="o">=</span> <span class="n">to_text</span><span class="p">(</span><span class="n">result_string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more example lookup plugins, check out the source code for the lookup plugins that are included with Ansible here: <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/lookup">lib/ansible/plugins/lookup</a>.</p>
+<p>For usage examples of lookup plugins, see <a class="reference external" href="http://docs.ansible.com/ansible/playbooks_lookups.html">Using Lookups</a>.</p>
+</div>
+<div class="section" id="vars-plugins">
+<span id="developing-vars-plugins"></span><h2><a class="toc-backref" href="#id11">Vars Plugins</a><a class="headerlink" href="#vars-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Playbook constructs like ‘host_vars’ and ‘group_vars’ work via ‘vars’ plugins.  They inject additional variable
+data into ansible runs that did not come from an inventory, playbook, or command line.  Note that variables
+can also be returned from inventory, so in most cases, you won’t need to write or understand vars_plugins.</p>
+<p>More documentation on writing vars plugins is pending, though you can jump into <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/inventory/vars_plugins">lib/ansible/inventory/vars_plugins</a> and figure
+things out pretty easily.</p>
+<p>If you find yourself wanting to write a vars_plugin, it’s more likely you should write an inventory script instead.</p>
+</div>
+<div class="section" id="filter-plugins">
+<span id="developing-filter-plugins"></span><h2><a class="toc-backref" href="#id12">Filter Plugins</a><a class="headerlink" href="#filter-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Filter plugins are used for manipulating data. They are a feature of Jinja2 and are also available in Jinja2 templates used by the <cite>template</cite> module. As with all plugins, they can be easily extended, but instead of having a file for each one you can have several per file. Most of the filter plugins shipped with Ansible reside in a <cite>core.py</cite>.</p>
+<p>See <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/filter">lib/ansible/plugins/filter</a> for details.</p>
+</div>
+<div class="section" id="test-plugins">
+<span id="developing-test-plugins"></span><h2><a class="toc-backref" href="#id13">Test Plugins</a><a class="headerlink" href="#test-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Test plugins are for verifying data. They are a feature of Jinja2 and are also available in Jinja2 templates used by the <cite>template</cite> module. As with all plugins, they can be easily extended, but instead of having a file for each one you can have several per file. Most of the test plugins shipped with Ansible reside in a <cite>core.py</cite>. These are specially useful in conjunction with some filter plugins like <cite>map</cite> and <cite>select</cite>; they are also available for conditional directives like <cite>when:</cite>.</p>
+<p>See <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/test">lib/ansible/plugins/test</a> for details.</p>
+</div>
+<div class="section" id="distributing-plugins">
+<span id="id2"></span><h2><a class="toc-backref" href="#id14">Distributing Plugins</a><a class="headerlink" href="#distributing-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Plugins are loaded from the library installed path and the configured plugins directory (check your <cite>ansible.cfg</cite>).
+The location can vary depending on how you installed Ansible (pip, rpm, deb, etc) or by the OS/Distribution/Packager.
+Plugins are automatically loaded when you have one of the following subfolders adjacent to your playbook or inside a role:</p>
+<blockquote>
+<div><ul class="simple">
+<li>action_plugins</li>
+<li>lookup_plugins</li>
+<li>callback_plugins</li>
+<li>connection_plugins</li>
+<li>filter_plugins</li>
+<li>strategy_plugins</li>
+<li>cache_plugins</li>
+<li>test_plugins</li>
+<li>shell_plugins</li>
+</ul>
+</div></blockquote>
+<p>When shipped as part of a role, the plugin will be available as soon as the role is called in the play.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="../modules.html"><span class="doc">About Modules</span></a></dt>
+<dd>List of built-in modules</dd>
+<dt><a class="reference internal" href="developing_api.html"><span class="doc">Python API</span></a></dt>
+<dd>Learn about the Python API for task execution</dd>
+<dt><a class="reference internal" href="developing_inventory.html"><span class="doc">Developing Dynamic Inventory Sources</span></a></dt>
+<dd>Learn about how to develop dynamic inventory sources</dd>
+<dt><a class="reference internal" href="developing_modules.html"><span class="doc">Developing Modules</span></a></dt>
+<dd>Learn about how to write Ansible modules</dd>
+<dt><a class="reference external" href="http://groups.google.com/group/ansible-devel">Mailing List</a></dt>
+<dd>The development mailing list</dd>
+<dt><a class="reference external" href="http://irc.freenode.net">irc.freenode.net</a></dt>
+<dd>#ansible IRC chat channel</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <div id="search-results"><gcse:searchresults-only></div>
+          <footer>
+  
+    <div class="rst-footer-buttons">
+      
+        <a href="developing_inventory.html" class="btn btn-neutral float-right" title="Developing Dynamic Inventory Sources"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="developing_module_utilities.html" class="btn btn-neutral" title="Appendix: Module Utilities"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <p>
+  Copyright © 2017 Red Hat, Inc.
+  <br>
+    Last updated on Jun 29, 2022.
+  </p>
+<p>
+Ansible docs are generated from <a href="https://github.com/ansible/ansible">GitHub sources</a> using <a href="http://sphinx-doc.org/">Sphinx</a> using a theme provided by <a href="http://readthedocs.org">Read the Docs</a>. 
+</p>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+        (function(d,s,i,r) {
+        if (d.getElementById(i)){return;}
+        var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+        n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+        e.parentNode.insertBefore(n, e);
+        })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+_satellite.pageBottom();
+}
+</script>
+</body>
+</html>
