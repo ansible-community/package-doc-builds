@@ -1,0 +1,722 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+
+  <!-- Google Tag Manager Data Layer -->
+  <script>
+   dataLayer = [];
+  </script>
+  <!-- End Google Tag Manager Data Layer -->
+
+
+
+
+  
+  <title>Windows Ansible Module Development Walkthrough &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  <link rel="canonical" href="https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general_windows.html"/>
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:'../',
+        VERSION:'2.4',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.min.css" type="text/css" />
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Ansible Documentation" href="../index.html"/>
+        <link rel="up" title="Developer Information" href="index.html"/>
+        <link rel="next" title="Documenting Your Module" href="developing_modules_documenting.html"/>
+        <link rel="prev" title="Ansible Module Development Walkthrough" href="developing_modules_general.html"/> 
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+  <style>
+    .search-reset-start {
+        color: #463E3F;
+        float: right;
+        position: relative;
+        top: -25px;
+        left: -10px;
+        z-index: 10;
+     }
+     .search-reset-start:hover {
+        cursor: pointer;
+        color: #2980B9;
+     }
+     #search-box-id {
+        padding-right: 25px;
+     }
+  </style>
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300'
+    rel='stylesheet' type='text/css'>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+  <!-- End Google Tag Manager -->
+
+    <div class="DocSite-globalNav ansibleNav">
+        <ul>
+            <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+            <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+            <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+            <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+            <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+        </ul>
+    </div>
+
+  <a class="DocSite-nav" href="/">
+    <img class="DocSiteNav-logo"
+      src="../_static/images/logo_invert.png"
+      alt="Ansible Logo">
+    <div class="DocSiteNav-title">
+      Documentation
+    </div>
+  </a>
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+
+      <div style="background-color:#5bbdbf;height=80px;margin:'auto auto auto auto'">
+        <a class="DocSiteProduct-header DocSiteProduct-header--core" href="/">
+            <div class="DocSiteProduct-productName">
+                <div class="DocSiteProduct-logoText">
+                    Ansible
+                    <div class="DocSiteProduct-CurrentVersion" align="right">
+                      v2.4
+                  </div>
+                </div>
+            </div>
+        </a>
+
+
+          <div class="DocSiteProduct-CheckVersionPara">For previous versions, see the  <a class="DocSiteProduct-versionheader" href="/#coreversionselect">documentation archive.</a></div>
+      </div>
+
+      <div id="menu-id" class="wy-menu wy-menu-vertical" data-spy="affix">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../intro_installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_getting_started.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_inventory.html">Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_dynamic_inventory.html">Dynamic Inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_patterns.html">Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_adhoc.html">Introduction To Ad-Hoc Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_configuration.html">Configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_bsd.html">BSD Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_windows.html">Windows Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro_networking.html">Networking Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart Video</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbooks.html">Playbooks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_intro.html">Intro to Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_reuse.html">Creating Reusable Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_variables.html">Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_templating.html">Templating (Jinja2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_loops.html">Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_strategies.html">Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_best_practices.html">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../playbooks_special_topics.html">Playbooks: Special Topics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../become.html">Become (Privilege Escalation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_acceleration.html">Accelerated Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_async.html">Asynchronous Actions and Polling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_checkmode.html">Check Mode (“Dry Run”)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_debugger.html">Playbook Debugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_delegation.html">Delegation, Rolling Updates, and Local Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_environment.html">Setting the Environment (and Working With Proxies)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_environment.html#working-with-language-specific-version-managers">Working With Language-Specific Version Managers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_error_handling.html">Error Handling In Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_advanced_syntax.html">Advanced Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_lookups.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_prompts.html">Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_tags.html">Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_vault.html">Using Vault in playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_startnstep.html">Start and Step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../playbooks_keywords.html">Playbook Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">About Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules_intro.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common_return_values.html">Return Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules_support.html">Module Maintenance &amp; Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules_by_category.html">Module Index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_all_modules.html">All Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_cloud_modules.html">Cloud Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_clustering_modules.html">Clustering Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_commands_modules.html">Commands Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_crypto_modules.html">Crypto Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_database_modules.html">Database Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_files_modules.html">Files Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_identity_modules.html">Identity Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_inventory_modules.html">Inventory Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_messaging_modules.html">Messaging Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_monitoring_modules.html">Monitoring Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_net_tools_modules.html">Net Tools Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_network_modules.html">Network Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_notification_modules.html">Notification Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_packaging_modules.html">Packaging Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_remote_management_modules.html">Remote Management Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_source_control_modules.html">Source Control Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_storage_modules.html">Storage Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_system_modules.html">System Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_utilities_modules.html">Utilities Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_web_infrastructure_modules.html">Web Infrastructure Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../list_of_windows_modules.html">Windows Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../vault.html">Ansible Vault</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#what-can-be-encrypted-with-vault">What Can Be Encrypted With Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#creating-encrypted-files">Creating Encrypted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#editing-encrypted-files">Editing Encrypted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#rekeying-encrypted-files">Rekeying Encrypted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#encrypting-unencrypted-files">Encrypting Unencrypted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#decrypting-encrypted-files">Decrypting Encrypted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#viewing-encrypted-files">Viewing Encrypted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#use-encrypt-string-to-create-encrypted-variables-to-embed-in-yaml">Use encrypt_string to create encrypted variables to embed in yaml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#vault-ids-and-multiple-vault-passwords">Vault Ids and Multiple Vault Passwords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#providing-vault-passwords">Providing Vault Passwords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#speeding-up-vault-operations">Speeding Up Vault Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#vault-format">Vault Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vault.html#vault-payload-format-1-1">Vault Payload Format 1.1</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../command_line_tools.html">Command Line Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ansible.html">ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ansible-playbook.html">ansible-playbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ansible-vault.html">ansible-vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ansible-galaxy.html">ansible-galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ansible-console.html">ansible-console</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ansible-config.html">ansible-config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ansible-doc.html">ansible-doc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ansible-inventory.html">ansible-inventory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ansible-pull.html">ansible-pull</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides.html">Detailed Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide_aws.html">Amazon Web Services Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_azure.html">Getting Started with Azure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_rax.html">Rackspace Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_gce.html">Google Cloud Platform Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_cloudstack.html">CloudStack Cloud Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_vagrant.html">Using Vagrant and Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_rolling_upgrade.html">Continuous Delivery and Rolling Upgrades</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_docker.html">Getting Started with Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guide_packet.html">Using Ansible with the Packet host</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Information</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#ansible-developer-guide">Ansible Developer Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tower.html">Ansible Tower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community.html">Community Information &amp; Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../community.html#ansible-users">Ansible Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../community.html#for-current-and-prospective-developers">For Current and Prospective Developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../community.html#other-topics">Other Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../community.html#community-code-of-conduct">Community Code of Conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../community.html#contributors-license-agreement">Contributors License Agreement</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy.html">Ansible Galaxy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../galaxy.html#the-website">The Website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../galaxy.html#the-command-line-tool">The command line tool</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../test_strategies.html">Testing Strategies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#integrating-testing-with-ansible-playbooks">Integrating Testing With Ansible Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#the-right-level-of-testing">The Right Level of Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#check-mode-as-a-drift-test">Check Mode As A Drift Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#modules-that-are-useful-for-testing">Modules That Are Useful for Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#testing-lifecycle">Testing Lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#integrating-testing-with-rolling-updates">Integrating Testing With Rolling Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#achieving-continuous-deployment">Achieving Continuous Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_strategies.html#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-can-i-set-the-path-or-any-other-environment-variable-for-a-task-or-entire-playbook">How can I set the PATH or any other environment variable for a task or entire playbook?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-handle-different-machines-needing-different-user-accounts-or-ports-to-log-in-with">How do I handle different machines needing different user accounts or ports to log in with?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-get-ansible-to-reuse-connections-enable-kerberized-ssh-or-have-ansible-pay-attention-to-my-local-ssh-config-file">How do I get ansible to reuse connections, enable Kerberized SSH, or have Ansible pay attention to my local SSH config file?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-configure-a-jump-host-to-access-servers-that-i-have-no-direct-access-to">How do I configure a jump host to access servers that I have no direct access to?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-speed-up-management-inside-ec2">How do I speed up management inside EC2?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-handle-python-pathing-not-having-a-python-2-x-in-usr-bin-python-on-a-remote-machine">How do I handle python pathing not having a Python 2.X in /usr/bin/python on a remote machine?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#what-is-the-best-way-to-make-content-reusable-redistributable">What is the best way to make content reusable/redistributable?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#where-does-the-configuration-file-live-and-what-can-i-configure-in-it">Where does the configuration file live and what can I configure in it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-disable-cowsay">How do I disable cowsay?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-see-a-list-of-all-of-the-ansible-variables">How do I see a list of all of the ansible_ variables?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-see-all-the-inventory-vars-defined-for-my-host">How do I see all the inventory vars defined for my host?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-loop-over-a-list-of-hosts-in-a-group-inside-of-a-template">How do I loop over a list of hosts in a group, inside of a template?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-access-a-variable-name-programmatically">How do I access a variable name programmatically?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-access-a-variable-of-the-first-host-in-a-group">How do I access a variable of the first host in a group?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-copy-files-recursively-onto-a-target-host">How do I copy files recursively onto a target host?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-access-shell-environment-variables">How do I access shell environment variables?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-generate-crypted-passwords-for-the-user-module">How do I generate crypted passwords for the user module?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#can-i-get-training-on-ansible">Can I get training on Ansible?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#is-there-a-web-interface-rest-api-etc">Is there a web interface / REST API / etc?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-submit-a-change-to-the-documentation">How do I submit a change to the documentation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-do-i-keep-secret-data-in-my-playbook">How do I keep secret data in my playbook?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#when-should-i-use-also-how-to-interpolate-variables-or-dynamic-variable-names">When should I use {{ }}? Also, how to interpolate variables or dynamic variable names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#why-don-t-you-ship-in-x-format">Why don’t you ship in X format?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#i-don-t-see-my-question-here">I don’t see my question here</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../config.html#the-configuration-file">The configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html#common-options">Common Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../YAMLSyntax.html">YAML Syntax</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../YAMLSyntax.html#yaml-basics">YAML Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../YAMLSyntax.html#gotchas">Gotchas</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides.html">Ansible Porting Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_3_support.html">Python 3 Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../python_3_support.html#testing-python-3-with-commands-and-playbooks">Testing Python 3 with commands and playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_3_support.html#testing-python-3-module-support">Testing Python 3 module support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python_3_support.html#what-to-do-if-an-incompatibility-is-found">What to do if an incompatibility is found</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release_and_maintenance.html">Release and maintenance</a></li>
+</ul>
+
+        
+
+
+    <div class="DocSite-sideNav ansibleNav">
+       <ul class="">
+       <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+       <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+       <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+       <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+       <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+       </ul>
+     </div>
+
+    <!-- changeable widget -->
+    <div id="sideBanner">
+    <br/>
+    <a href="https://www.ansible.com/docs-left?utm_source=docs">
+      <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+    </a>
+    </div>
+
+
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="/">Ansible Documentation</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+
+          <!-- Banner ads
+          <div class="DocSiteBanner">
+            <a class="DocSiteBanner-imgWrapper"
+                href="https://www.ansible.com/docs-top?utm_source=docs">
+                <img src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-top-left.png">
+            </a>
+            <a class="DocSiteBanner-imgWrapper"
+                href="https://www.ansible.com/docs-top?utm_source=docs">
+                <img src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-top-right.png">
+            </a>
+        </div> -->
+
+          <ul class="wy-breadcrumbs">
+  <li><a href="../index.html">Docs</a> &raquo;</li>
+  <li><a href="">Windows Ansible Module Development Walkthrough</a></li>
+</ul>
+<hr/>
+          
+<div id='banner' class='Admonition caution'>
+  <p>You are reading an unmaintained version of the Ansible documentation. Unmaintained Ansible versions can contain unfixed security vulnerabilities (CVE). Please upgrade to a maintained version. See <a href="https://docs.ansible.com/ansible/latest/index.html">the latest Ansible documentation</a>.</p>
+</div>
+          <div id="page-content">
+          
+  <div class="section" id="windows-ansible-module-development-walkthrough">
+<h1><a class="toc-backref" href="#id1">Windows Ansible Module Development Walkthrough</a><a class="headerlink" href="#windows-ansible-module-development-walkthrough" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will walk through developing, testing, and debugging an
+Ansible Windows module.</p>
+<p>Because Windows modules are written in Powershell and need to be run on a
+Windows host, this guide differs from the usual development walkthrough guide.</p>
+<p>What’s covered in this section:</p>
+<div class="contents topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#windows-ansible-module-development-walkthrough" id="id1">Windows Ansible Module Development Walkthrough</a></li>
+<li><a class="reference internal" href="#windows-environment-setup" id="id2">Windows environment setup</a></li>
+<li><a class="reference internal" href="#windows-new-module-development" id="id3">Windows new module development</a></li>
+<li><a class="reference internal" href="#windows-playbook-module-testing" id="id4">Windows playbook module testing</a></li>
+<li><a class="reference internal" href="#windows-debugging" id="id5">Windows debugging</a></li>
+<li><a class="reference internal" href="#windows-unit-testing" id="id6">Windows unit testing</a></li>
+<li><a class="reference internal" href="#windows-integration-testing" id="id7">Windows integration testing</a></li>
+<li><a class="reference internal" href="#windows-communication-and-development-support" id="id8">Windows communication and development support</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="windows-environment-setup">
+<h1><a class="toc-backref" href="#id2">Windows environment setup</a><a class="headerlink" href="#windows-environment-setup" title="Permalink to this headline">¶</a></h1>
+<p>TODO: Add in more information on how to use Vagrant to setup a Windows host.</p>
+</div>
+<div class="section" id="windows-new-module-development">
+<h1><a class="toc-backref" href="#id3">Windows new module development</a><a class="headerlink" href="#windows-new-module-development" title="Permalink to this headline">¶</a></h1>
+<p>When creating a new module there are a few things to keep in mind:</p>
+<ul class="simple">
+<li>Module code is in Powershell (.ps1) files while the documentation is contained in Python (.py) files of the same name</li>
+<li>Avoid using <code class="docutils literal notranslate"><span class="pre">Write-Host/Debug/Verbose/Error</span></code> in the module and add what needs to be returned to the <code class="docutils literal notranslate"><span class="pre">$result</span></code> variable</li>
+<li>When trying an exception use <code class="docutils literal notranslate"><span class="pre">Fail-Json</span> <span class="pre">-obj</span> <span class="pre">$result</span> <span class="pre">-message</span> <span class="pre">&quot;exception</span> <span class="pre">message</span> <span class="pre">here&quot;</span></code> instead</li>
+<li>Most new modules require check mode and integration tests before they are merged into the main Ansible codebase</li>
+<li>Avoid using try/catch statements over a large code block, rather use them for individual calls so the error message can be more descriptive</li>
+<li>Try and catch specific exceptions when using try/catch statements</li>
+<li>Avoid using PSCustomObjects unless necessary</li>
+<li>Look for common functions in <code class="docutils literal notranslate"><span class="pre">./lib/ansible/module_utils/powershell/</span></code> and use the code there instead of duplicating work. These can be imported by adding the line <code class="docutils literal notranslate"><span class="pre">#Requires</span> <span class="pre">-Module</span> <span class="pre">*</span></code> where * is the filename to import, and will be automatically included with the module code sent to the Windows target when run via Ansible</li>
+<li>Ensure the code runs under Powershell v3 and higher on Windows Server 2008 and higher; if higher minimum Powershell or OS versions are required, ensure the documentation reflects this clearly</li>
+<li>Ansible runs modules under strictmode version 2.0. Be sure to test with that enabled by putting <code class="docutils literal notranslate"><span class="pre">Set-StrictMode</span> <span class="pre">-Version</span> <span class="pre">2.0</span></code> at the top of your dev script</li>
+<li>Favour native Powershell cmdlets over executable calls if possible</li>
+<li>If adding an object to <code class="docutils literal notranslate"><span class="pre">$result</span></code>, ensure any trailing slashes are removed or escaped, as <code class="docutils literal notranslate"><span class="pre">ConvertTo-Json</span></code> will fail to convert it</li>
+<li>Use the full cmdlet name instead of aliases, e.g. <code class="docutils literal notranslate"><span class="pre">Remove-Item</span></code> over <code class="docutils literal notranslate"><span class="pre">rm</span></code></li>
+<li>Use named parameters with cmdlets, e.g. <code class="docutils literal notranslate"><span class="pre">Remove-Item</span> <span class="pre">-Path</span> <span class="pre">C:\temp</span></code> over <code class="docutils literal notranslate"><span class="pre">Remove-Item</span> <span class="pre">C:\temp</span></code></li>
+</ul>
+<p>A very basic powershell module template can be found found below:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c">#!powershell</span>
+<span class="c"># This file is part of Ansible</span>
+
+<span class="c"># GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)</span>
+
+<span class="c">#Requires -Module Ansible.ModuleUtils.Legacy.psm1</span>
+
+<span class="nv">$ErrorActionPreference</span> <span class="p">=</span> <span class="s1">&#39;Stop&#39;</span>
+
+<span class="nv">$params</span> <span class="p">=</span> <span class="n">Parse-Args</span> <span class="n">-arguments</span> <span class="nv">$args</span> <span class="n">-supports_check_mode</span> <span class="nv">$true</span>
+<span class="nv">$check_mode</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;_ansible_check_mode&quot;</span> <span class="n">-type</span> <span class="s2">&quot;bool&quot;</span> <span class="n">-default</span> <span class="nv">$false</span>
+<span class="nv">$diff_mode</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;_ansible_diff&quot;</span> <span class="n">-type</span> <span class="s2">&quot;bool&quot;</span> <span class="n">-default</span> <span class="nv">$false</span>
+
+<span class="c"># these are your module parameters, there are various types which can be</span>
+<span class="c"># used to format your parameters. You can also set mandatory parameters</span>
+<span class="c"># with -failifempty, set defaults with -default and set choices with</span>
+<span class="c"># -validateset.</span>
+<span class="nv">$string</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;string&quot;</span> <span class="n">-type</span> <span class="s2">&quot;str&quot;</span> <span class="n">-failifempty</span> <span class="nv">$true</span>
+<span class="nv">$bool</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;bool&quot;</span> <span class="n">-type</span> <span class="s2">&quot;bool&quot;</span> <span class="n">-default</span> <span class="nv">$false</span>
+<span class="nv">$int</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;int&quot;</span> <span class="n">-type</span> <span class="s2">&quot;int&quot;</span>
+<span class="nv">$path</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;path&quot;</span> <span class="n">-type</span> <span class="s2">&quot;path&quot;</span>
+<span class="nv">$list</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;list&quot;</span> <span class="n">-type</span> <span class="s2">&quot;list&quot;</span>
+<span class="nv">$choices</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;choices&quot;</span> <span class="n">-type</span> <span class="s2">&quot;str&quot;</span> <span class="n">-default</span> <span class="s2">&quot;present&quot;</span> <span class="n">-validateset</span> <span class="s2">&quot;absent&quot;</span><span class="p">,</span><span class="s2">&quot;present&quot;</span>
+
+<span class="nv">$result</span> <span class="p">=</span> <span class="p">@{</span>
+    <span class="n">changed</span> <span class="p">=</span> <span class="nv">$false</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$diff_mode</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$result</span><span class="p">.</span><span class="nb">diff </span><span class="p">=</span> <span class="p">@{}</span>
+<span class="p">}</span>
+
+<span class="c"># code goes here</span>
+
+<span class="c"># you can add/set new result objects with</span>
+<span class="nv">$result</span><span class="p">.</span><span class="n">changed</span> <span class="p">=</span> <span class="nv">$true</span>
+<span class="nv">$result</span><span class="p">.</span><span class="n">new_result</span> <span class="p">=</span> <span class="s2">&quot;Hi&quot;</span>
+
+<span class="nb">Exit-Json</span> <span class="n">-obj</span> <span class="nv">$result</span>
+</pre></div>
+</div>
+<p>When in doubt, look at some of the core modules and see how things have been
+implemented there.</p>
+<p>Sometimes there are multiple ways that Windows offers to complete a task; this
+is the order to favour when writing modules:</p>
+<ul class="simple">
+<li>Native Powershell cmdlets like <code class="docutils literal notranslate"><span class="pre">Remove-Item</span> <span class="pre">-Path</span> <span class="pre">C:\temp</span> <span class="pre">-Recurse</span></code></li>
+<li>.NET classes like <code class="docutils literal notranslate"><span class="pre">[System.IO.Path]::GetRandomFileName()</span></code></li>
+<li>WMI objects through the <code class="docutils literal notranslate"><span class="pre">New-CimInstance</span></code> cmdlet</li>
+<li>COM objects through <code class="docutils literal notranslate"><span class="pre">New-Object</span> <span class="pre">-ComObject</span></code> cmdlet</li>
+<li>Calls to native executables like <code class="docutils literal notranslate"><span class="pre">Secedit.exe</span></code></li>
+</ul>
+</div>
+<div class="section" id="windows-playbook-module-testing">
+<h1><a class="toc-backref" href="#id4">Windows playbook module testing</a><a class="headerlink" href="#windows-playbook-module-testing" title="Permalink to this headline">¶</a></h1>
+<p>To test a module you can do so with an Ansible playbook.</p>
+<ul>
+<li><p class="first">Create a playbook in any directory <code class="docutils literal notranslate"><span class="pre">touch</span> <span class="pre">testmodule.yml</span></code></p>
+</li>
+<li><p class="first">Create an inventory file in the same directory <code class="docutils literal notranslate"><span class="pre">touch</span> <span class="pre">hosts</span></code></p>
+</li>
+<li><p class="first">Populate the inventory file with the variables required to connect to a Windows host(s).</p>
+</li>
+<li><p class="first">Add the following to the new playbook file:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test out windows module</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">windows</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test out module</span>
+    <span class="nt">win_module</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test name</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run the playbook <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span> <span class="pre">-i</span> <span class="pre">hosts</span> <span class="pre">testmodule.yml</span></code></p>
+</li>
+</ul>
+<p>This can be pretty high level and is useful for seeing how Ansible runs with
+the new module end to end: but there are better ways to test out the module as
+shown below.</p>
+</div>
+<div class="section" id="windows-debugging">
+<h1><a class="toc-backref" href="#id5">Windows debugging</a><a class="headerlink" href="#windows-debugging" title="Permalink to this headline">¶</a></h1>
+<p>Debugging a module currently can only be done on a Windows host. This is
+extremely useful when developing a new module or looking at bug fixes. These
+are some steps that need to be followed to set this up.</p>
+<ul>
+<li><p class="first">Copy the module script to the Windows server</p>
+</li>
+<li><p class="first">Copy <code class="docutils literal notranslate"><span class="pre">./lib/ansible/module_utils/powershell/Ansible.ModuleUtils.Legacy.psm1</span></code> to the same directory as the script above</p>
+</li>
+<li><p class="first">To stop the script from exiting the editor on a successful run, in <code class="docutils literal notranslate"><span class="pre">Ansible.ModuleUtils.Legacy.psm1</span></code> under the function <code class="docutils literal notranslate"><span class="pre">Exit-Json</span></code>, replace the last two lines of the function with:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ConvertTo-Json -InputObject $obj -Depth 99</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">To stop the script from exiting the editor on a failed run, in <code class="docutils literal notranslate"><span class="pre">Ansible.ModuleUtils.Legacy.psm1</span></code> under the function <code class="docutils literal notranslate"><span class="pre">Fail-Json</span></code>, replace the last two lines of the function with:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Write-Error -Message (ConvertTo-Json -InputObject $obj -Depth 99)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add the following to the start of the module script that was copied to the server:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="c1">### start setup code</span>
+<span class="l l-Scalar l-Scalar-Plain">$complex_args = @{</span>
+    <span class="l l-Scalar l-Scalar-Plain">&quot;_ansible_check_mode&quot; = $false</span>
+    <span class="l l-Scalar l-Scalar-Plain">&quot;_ansible_diff&quot; = $false</span>
+    <span class="l l-Scalar l-Scalar-Plain">&quot;path&quot; = &quot;C:\temp&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">&quot;state&quot; = &quot;present&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">}</span>
+
+<span class="l l-Scalar l-Scalar-Plain">Import-Module -Name .\Ansible.ModuleUtils.Legacy.psm1</span>
+<span class="l l-Scalar l-Scalar-Plain">### end setup code</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>You can add more args to <code class="docutils literal notranslate"><span class="pre">$complex_args</span></code> as required by the module. The
+module can now be run on the Windows host either directly through Powershell
+or through an IDE.</p>
+<p>There are multiple IDEs that can be used to debug a Powershell script, two of
+the most popular are</p>
+<ul class="simple">
+<li><a class="reference external" href="https://msdn.microsoft.com/en-us/powershell/scripting/core-powershell/ise/how-to-debug-scripts-in-windows-powershell-ise">Powershell ISE</a></li>
+<li><a class="reference external" href="https://blogs.technet.microsoft.com/heyscriptingguy/2017/02/06/debugging-powershell-script-in-visual-studio-code-part-1/">Visual Studio Code</a></li>
+</ul>
+<p>To be able to view the arguments as passed by Ansible to the module follow
+these steps.</p>
+<ul class="simple">
+<li>Prefix the Ansible command with <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_KEEP_REMOTE_FILES=1</span></code> to get Ansible to keep the exec files on the server</li>
+<li>Log onto the Windows server using the same user Ansible executed the module as</li>
+<li>Navigate to <code class="docutils literal notranslate"><span class="pre">%TEMP%\..</span></code>, there should be a folder starting with <code class="docutils literal notranslate"><span class="pre">ansible-tmp-</span></code></li>
+<li>Inside this folder open up the powershell script for the module</li>
+<li>In this script there is a raw JSON script under <code class="docutils literal notranslate"><span class="pre">$json_raw</span></code> which contains the module arguments under <code class="docutils literal notranslate"><span class="pre">module_args</span></code></li>
+<li>These args can be assigned manually to the <code class="docutils literal notranslate"><span class="pre">$complex_args</span></code> variable that is defined on your debug script</li>
+</ul>
+</div>
+<div class="section" id="windows-unit-testing">
+<h1><a class="toc-backref" href="#id6">Windows unit testing</a><a class="headerlink" href="#windows-unit-testing" title="Permalink to this headline">¶</a></h1>
+<p>Currently there is no mechanism to run unit tests for Powershell modules under Ansible CI.
+There is work in the pipeline to introduce this in the future, stay tuned.</p>
+</div>
+<div class="section" id="windows-integration-testing">
+<h1><a class="toc-backref" href="#id7">Windows integration testing</a><a class="headerlink" href="#windows-integration-testing" title="Permalink to this headline">¶</a></h1>
+<p>Integration tests for Ansible modules are typically written as Ansible roles. The test
+roles are located in <code class="docutils literal notranslate"><span class="pre">./test/integration/targets</span></code>. You must first set up your testing
+environment, and configure a test inventory for Ansible to connect to. In this example we
+will set up a test inventory to connect to two hosts and run the integration
+tests for win_stat.</p>
+<ul class="simple">
+<li>Create a copy of <code class="docutils literal notranslate"><span class="pre">./test/integration/inventory.winrm.template</span></code> and just call it <code class="docutils literal notranslate"><span class="pre">inventory.winrm</span></code></li>
+<li>Fill in entries under <code class="docutils literal notranslate"><span class="pre">[windows]</span></code> and set the required vars that are needed to connect to the host</li>
+<li>To execute the integration tests, run <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">windows-integration</span> <span class="pre">win_stat</span></code>- you can replace <code class="docutils literal notranslate"><span class="pre">win_stat</span></code> with the role you wish to test</li>
+</ul>
+<p>This will execute all the tests currently defined for that role. You can set
+the verbosity level using the <code class="docutils literal notranslate"><span class="pre">-v</span></code> argument just as you would with
+ansible-playbook.</p>
+<p>When developing tests for a new module, it is recommended to test a scenario in
+check mode and 2 times not in check mode. This ensures that check mode
+does not make any changes but reports a change, as well as that the 2nd run is
+idempotent and does not report changes. Following is an example of one way that this can be done:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove a file (check mode)</span>
+  <span class="nt">win_file</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\temp</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_check</span>
+  <span class="nt">check_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get result of remove a file (check mode)</span>
+  <span class="nt">win_command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">powershell.exe &quot;if (Test-Path -Path &#39;C:\temp&#39;) { &#39;true&#39; } else { &#39;false&#39; }&quot;</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_actual_check</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">assert remove a file (check mode)</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_check|changed</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_actual_check.stdout == &#39;true\r\n&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove a file</span>
+  <span class="nt">win_file</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\temp</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get result of remove a file</span>
+  <span class="nt">win_command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">powershell.exe &quot;if (Test-Path -Path &#39;C:\temp&#39;) { &#39;true&#39; } else { &#39;false&#39; }&quot;</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_actual</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">assert remove a file</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">remove_file|changed</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_actual.stdout == &#39;false\r\n&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove a file (idempotent)</span>
+  <span class="nt">win_file</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\temp</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_again</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">assert remove a file (idempotent)</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">not remove_file_again|changed</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows-communication-and-development-support">
+<h1><a class="toc-backref" href="#id8">Windows communication and development support</a><a class="headerlink" href="#windows-communication-and-development-support" title="Permalink to this headline">¶</a></h1>
+<p>Join the IRC channel <code class="docutils literal notranslate"><span class="pre">#ansible-devel</span></code> or <code class="docutils literal notranslate"><span class="pre">#ansible-windows</span></code> on freenode for
+discussions surrounding Ansible development for Windows.</p>
+<p>For questions and discussions pertaining to using the Ansible product,
+use the <code class="docutils literal notranslate"><span class="pre">#ansible</span></code> channel.</p>
+</div>
+
+
+          </div>
+          <div id="search-results"><gcse:searchresults-only></div>
+          <footer>
+  
+    <div class="rst-footer-buttons">
+      
+        <a href="developing_modules_documenting.html" class="btn btn-neutral float-right" title="Documenting Your Module"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="developing_modules_general.html" class="btn btn-neutral" title="Ansible Module Development Walkthrough"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <p>
+  Copyright © 2017 Red Hat, Inc.
+  <br>
+    Last updated on Dec 01, 2020.
+  </p>
+<p>
+Ansible docs are generated from <a href="https://github.com/ansible/ansible">GitHub sources</a> using <a href="http://sphinx-doc.org/">Sphinx</a> using a theme provided by <a href="http://readthedocs.org">Read the Docs</a>. 
+</p>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+        (function(d,s,i,r) {
+        if (d.getElementById(i)){return;}
+        var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+        n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+        e.parentNode.insertBefore(n, e);
+        })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+_satellite.pageBottom();
+}
+</script>
+</body>
+</html>
