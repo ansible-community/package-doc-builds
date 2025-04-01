@@ -1,0 +1,855 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+  <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" />
+  <meta class="swiftype" name="version" data-type="string" content="3.2.2">
+
+  <!-- Google Tag Manager Data Layer -->
+  <script>
+   dataLayer = [];
+  </script>
+  <!-- End Google Tag Manager Data Layer -->
+
+  
+  <title>Windows Ansible Module Development Walkthrough &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general_windows.html"/>
+  
+
+  
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:'../',
+        VERSION:'2.6',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+    
+      <link rel="search" type="application/opensearchdescription+xml"
+            title="Search within Ansible Documentation"
+            href="../_static/opensearch.xml"/>
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+  <!-- End Google Tag Manager -->
+
+    <div class="DocSite-globalNav ansibleNav">
+        <ul>
+            <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+            <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+            <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+            <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+            <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+        </ul>
+    </div>
+
+  <a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+    <img class="DocSiteNav-logo"
+      src="../_static/images/logo_invert.png"
+      alt="Ansible Logo">
+    <div class="DocSiteNav-title">
+      Documentation
+    </div>
+  </a>
+
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          <div style="background-color:#5bbdbf;height=80px;margin:'auto auto auto auto'">
+            <a class="DocSiteProduct-header DocSiteProduct-header--core" href="/">
+              <div class="DocSiteProduct-productName">
+                <div class="DocSiteProduct-logoText">
+                  Ansible
+                  <div class="DocSiteProduct-CurrentVersion" align="right">2.6</div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="wy-side-nav-search" style="background-color#5bbdbf;height=80px;margin:'auto auto auto auto'">
+            
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+          </div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/intro_installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/intro_configuration.html">Configuring Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Scenario Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_aci.html">Cisco ACI Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_aws.html">Amazon Web Services Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_azure.html">Microsoft Azure Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_cloudstack.html">CloudStack Cloud Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_docker.html">Getting Started with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_gce.html">Google Cloud Platform Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_packet.html">Using Ansible with the Packet host</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_rax.html">Rackspace Cloud Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_rolling_upgrade.html">Continuous Delivery and Rolling Upgrades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_vagrant.html">Using Vagrant and Ansible</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for VMWare</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../vmware/index.html">Ansible for VMware</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/index.html">Ansible for Network Automation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/modules_by_category.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/galaxy.html">Ansible Galaxy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Ansible Tower</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        <!-- changeable widget -->
+
+        <div id="sideBanner">
+          <br/>
+          <a href="https://www.ansible.com/docs-left?utm_source=docs">
+            <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+          </a>
+          <br/><br/><br/>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible Documentation</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+
+          <!-- Banner ads
+          <div class="DocSiteBanner">
+            <a class="DocSiteBanner-imgWrapper"
+                href="https://www.ansible.com/docs-top?utm_source=docs">
+                <img src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-top-left.png">
+            </a>
+            <a class="DocSiteBanner-imgWrapper"
+                href="https://www.ansible.com/docs-top?utm_source=docs">
+                <img src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-top-right.png">
+            </a>
+        </div> -->
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Windows Ansible Module Development Walkthrough</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+
+          
+<div id='banner' class='Admonition caution'>
+  <p>You are reading an unmaintained version of the Ansible documentation. Unmaintained Ansible versions can contain unfixed security vulnerabilities (CVE). Please upgrade to a maintained version. See <a href="https://docs.ansible.com/ansible/latest/index.html">the latest Ansible documentation</a>.</p>
+</div>
+          <div id="page-content">
+          
+  <div class="section" id="windows-ansible-module-development-walkthrough">
+<span id="developing-modules-general-windows"></span><h1><a class="toc-backref" href="#id1">Windows Ansible Module Development Walkthrough</a><a class="headerlink" href="#windows-ansible-module-development-walkthrough" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will walk through developing, testing, and debugging an
+Ansible Windows module.</p>
+<p>Because Windows modules are written in Powershell and need to be run on a
+Windows host, this guide differs from the usual development walkthrough guide.</p>
+<p>What’s covered in this section:</p>
+<div class="contents topic" id="topics">
+<p class="topic-title">Topics</p>
+<ul class="simple">
+<li><a class="reference internal" href="#windows-ansible-module-development-walkthrough" id="id1">Windows Ansible Module Development Walkthrough</a></li>
+<li><a class="reference internal" href="#windows-environment-setup" id="id2">Windows environment setup</a></li>
+<li><a class="reference internal" href="#create-a-windows-server-in-a-vm" id="id3">Create a Windows Server in a VM</a></li>
+<li><a class="reference internal" href="#create-an-ansible-inventory" id="id4">Create an Ansible Inventory</a></li>
+<li><a class="reference internal" href="#provisioning-the-environment" id="id5">Provisioning the Environment</a></li>
+<li><a class="reference internal" href="#windows-new-module-development" id="id6">Windows new module development</a></li>
+<li><a class="reference internal" href="#windows-module-utilities" id="id7">Windows module utilities</a></li>
+<li><a class="reference internal" href="#windows-playbook-module-testing" id="id8">Windows playbook module testing</a></li>
+<li><a class="reference internal" href="#windows-debugging" id="id9">Windows debugging</a></li>
+<li><a class="reference internal" href="#windows-unit-testing" id="id10">Windows unit testing</a></li>
+<li><a class="reference internal" href="#windows-integration-testing" id="id11">Windows integration testing</a></li>
+<li><a class="reference internal" href="#windows-communication-and-development-support" id="id12">Windows communication and development support</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="windows-environment-setup">
+<h1><a class="toc-backref" href="#id2">Windows environment setup</a><a class="headerlink" href="#windows-environment-setup" title="Permalink to this headline">¶</a></h1>
+<p>Unlike Python module development which can be run on the host that runs
+Ansible, Windows modules need to be written and tested for Windows hosts.
+While evaluation editions of Windows can be downloaded from
+Microsoft, these images are usually not ready to be used by Ansible without
+further modification. The easiest way to set up a Windows host so that it is
+ready to by used by Ansible is to set up a virtual machine using Vagrant.
+Vagrant can be used to download existing OS images called <em>boxes</em> that are then
+deployed to a hypervisor like VirtualBox. These boxes can either be created and
+stored offline or they can be downloaded from a central repository called
+Vagrant Cloud.</p>
+<p>This guide will use the Vagrant boxes created by the <a class="reference external" href="https://github.com/jborean93/packer-windoze">packer-windoze</a>
+repository which have also been uploaded to <a class="reference external" href="https://app.vagrantup.com/boxes/search?utf8=%E2%9C%93&amp;sort=downloads&amp;provider=&amp;q=jborean93">Vagrant Cloud</a>.
+To find out more info on how these images are created, please go to the Github
+repo and look at the <code class="docutils literal notranslate"><span class="pre">README</span></code> file.</p>
+<p>Before you can get started, the following programs must be installed (please consult the Vagrant and
+VirtualBox documentation for installation instructions):</p>
+<ul class="simple">
+<li>Vagrant</li>
+<li>VirtualBox</li>
+</ul>
+</div>
+<div class="section" id="create-a-windows-server-in-a-vm">
+<h1><a class="toc-backref" href="#id3">Create a Windows Server in a VM</a><a class="headerlink" href="#create-a-windows-server-in-a-vm" title="Permalink to this headline">¶</a></h1>
+<p>To create a single Windows Server 2016 instance, run the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vagrant init jborean93/WindowsServer2016
+vagrant up
+</pre></div>
+</div>
+<p>This will download the Vagrant box from Vagrant Cloud and add it to the local
+boxes on your host and then start up that instance in VirtualBox. When starting
+for the first time, the Windows VM will run through the sysprep process and
+then create a HTTP and HTTPS WinRM listener automatically. Vagrant will finish
+its process once the listeners are onlinem, after which the VM can be used by Ansible.</p>
+</div>
+<div class="section" id="create-an-ansible-inventory">
+<h1><a class="toc-backref" href="#id4">Create an Ansible Inventory</a><a class="headerlink" href="#create-an-ansible-inventory" title="Permalink to this headline">¶</a></h1>
+<p>The following Ansible inventory file can be used to connect to the newly
+created Windows VM:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[windows]</span>
+<span class="na">WindowsServer  ansible_host</span><span class="o">=</span><span class="s">127.0.0.1</span>
+
+<span class="k">[windows:vars]</span>
+<span class="na">ansible_user</span><span class="o">=</span><span class="s">vagrant</span>
+<span class="na">ansible_password</span><span class="o">=</span><span class="s">vagrant</span>
+<span class="na">ansible_port</span><span class="o">=</span><span class="s">55986</span>
+<span class="na">ansible_connection</span><span class="o">=</span><span class="s">winrm</span>
+<span class="na">ansible_winrm_transport</span><span class="o">=</span><span class="s">ntlm</span>
+<span class="na">ansible_winrm_server_cert_validation</span><span class="o">=</span><span class="s">ignore</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The port <code class="docutils literal notranslate"><span class="pre">55986</span></code> is automatically forwarded by Vagrant to the
+Windows host that was created, if this conflicts with an existing local
+port then Vagrant will automatically use another one at random and display
+show that in the output.</p>
+</div>
+<p>The OS that is created is based on the image set. The following
+images can be used:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://app.vagrantup.com/jborean93/boxes/WindowsServer2008-x86">jborean93/WindowsServer2008-x86</a></li>
+<li><a class="reference external" href="https://app.vagrantup.com/jborean93/boxes/WindowsServer2008-x64">jborean93/WindowsServer2008-x64</a></li>
+<li><a class="reference external" href="https://app.vagrantup.com/jborean93/boxes/WindowsServer2008R2">jborean93/WindowsServer2008R2</a></li>
+<li><a class="reference external" href="https://app.vagrantup.com/jborean93/boxes/WindowsServer2012">jborean93/WindowsServer2012</a></li>
+<li><a class="reference external" href="https://app.vagrantup.com/jborean93/boxes/WindowsServer2012R2">jborean93/WindowsServer2012R2</a></li>
+<li><a class="reference external" href="https://app.vagrantup.com/jborean93/boxes/WindowsServer2016">jborean93/WindowsServer2016</a></li>
+</ul>
+<p>When the host is online, it can accessible by RDP on <code class="docutils literal notranslate"><span class="pre">127.0.0.1:3389</span></code> but the
+port may differ depending if there was a conflict. To get rid of the host, run
+<code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">destroy</span> <span class="pre">--force</span></code> and Vagrant will automatically remove the VM and
+any other files associated with that VM.</p>
+<p>While this is useful when testing modules on a single Windows instance, these
+host won’t work without modification with domain based modules. The Vagrantfile
+at <a class="reference external" href="https://github.com/jborean93/ansible-windows/tree/master/vagrant">ansible-windows</a>
+can be used to create a test domain environment to be used in Ansible. This
+repo contains three files which are used by both Ansible and Vagrant to create
+multiple Windows hosts in a domain environment. These files are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>: The Vagrant file that reads the inventory setup of <code class="docutils literal notranslate"><span class="pre">inventory.yml</span></code> and provisions the hosts that are required</li>
+<li><code class="docutils literal notranslate"><span class="pre">inventory.yml</span></code>: Contains the hosts that are required and other connection information such as IP addresses and forwarded ports</li>
+<li><code class="docutils literal notranslate"><span class="pre">main.yml</span></code>: Ansible playbook called by Vagrant to provision the domain controller and join the child hosts to the domain</li>
+</ul>
+<p>By default, these files will create the following environment:</p>
+<ul class="simple">
+<li>A single domain controller running on Windows Server 2016</li>
+<li>Five child hosts for each major Windows Server version joined to that domain</li>
+<li>A domain with the DNS name <code class="docutils literal notranslate"><span class="pre">domain.local</span></code></li>
+<li>A local administrator account on each host with the username <code class="docutils literal notranslate"><span class="pre">vagrant</span></code> and password <code class="docutils literal notranslate"><span class="pre">vagrant</span></code></li>
+<li>A domain admin account <code class="docutils literal notranslate"><span class="pre">vagrant-domain&#64;domain.local</span></code> with the password <code class="docutils literal notranslate"><span class="pre">VagrantPass1</span></code></li>
+</ul>
+<p>The domain name and accounts can be modified by changing the variables
+<code class="docutils literal notranslate"><span class="pre">domain_*</span></code> in the <code class="docutils literal notranslate"><span class="pre">inventory.yml</span></code> file if it is required. The inventory
+file can also be modified to provision more or less servers by changing the
+hosts that are defined under the <code class="docutils literal notranslate"><span class="pre">domain_children</span></code> key. The host variable
+<code class="docutils literal notranslate"><span class="pre">ansible_host</span></code> is the private IP that will be assigned to the VirtualBox host
+only network adapter while <code class="docutils literal notranslate"><span class="pre">vagrant_box</span></code> is the box that will be used to
+create the VM.</p>
+</div>
+<div class="section" id="provisioning-the-environment">
+<h1><a class="toc-backref" href="#id5">Provisioning the Environment</a><a class="headerlink" href="#provisioning-the-environment" title="Permalink to this headline">¶</a></h1>
+<p>To provision the environment as is, run the following:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/jborean93/ansible-windows.git
+<span class="nb">cd</span> vagrant
+vagrant up
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Vagrant provisions each host sequentially so this can take some time
+to complete. If any errors occur during the Ansible phase of setting up the
+domain, run <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">provision</span></code> to rerun just that step.</p>
+</div>
+<p>Unlike setting up a single Windows instance with Vagrant, these hosts can also
+be accessed using the IP address directly as well as through the forwarded
+ports. It is easier to access it over the host only network adapter as the
+normal protocol ports are used, e.g. RDP is still over <code class="docutils literal notranslate"><span class="pre">3389</span></code>. In cases where
+the host cannot be resolved using the host only network IP, the following
+protocols can be access over <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> using these forwarded ports:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">RDP</span></code>: 295xx</li>
+<li><code class="docutils literal notranslate"><span class="pre">SSH</span></code>: 296xx</li>
+<li><code class="docutils literal notranslate"><span class="pre">WinRM</span> <span class="pre">HTTP</span></code>: 297xx</li>
+<li><code class="docutils literal notranslate"><span class="pre">WinRM</span> <span class="pre">HTTPS</span></code>: 298xx</li>
+<li><code class="docutils literal notranslate"><span class="pre">SMB</span></code>: 299xx</li>
+</ul>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">xx</span></code> with the entry number in the inventory file where the domain
+controller started with <code class="docutils literal notranslate"><span class="pre">00</span></code> and is incremented from there. For example, in
+the default <code class="docutils literal notranslate"><span class="pre">inventory.yml</span></code> file, WinRM over HTTPS for <code class="docutils literal notranslate"><span class="pre">SERVER2012R2</span></code> is
+forwarded over port <code class="docutils literal notranslate"><span class="pre">29804</span></code> as it’s the fourth entry in <code class="docutils literal notranslate"><span class="pre">domain_children</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">While an SSH server is available on all Windows hosts but Server
+2008 (non R2), it is not a support connection for Ansible managing Windows
+hosts and should not be used with Ansible.</p>
+</div>
+</div>
+<div class="section" id="windows-new-module-development">
+<h1><a class="toc-backref" href="#id6">Windows new module development</a><a class="headerlink" href="#windows-new-module-development" title="Permalink to this headline">¶</a></h1>
+<p>When creating a new module there are a few things to keep in mind:</p>
+<ul class="simple">
+<li>Module code is in Powershell (.ps1) files while the documentation is contained in Python (.py) files of the same name</li>
+<li>Avoid using <code class="docutils literal notranslate"><span class="pre">Write-Host/Debug/Verbose/Error</span></code> in the module and add what needs to be returned to the <code class="docutils literal notranslate"><span class="pre">$result</span></code> variable</li>
+<li>When trying an exception use <code class="docutils literal notranslate"><span class="pre">Fail-Json</span> <span class="pre">-obj</span> <span class="pre">$result</span> <span class="pre">-message</span> <span class="pre">&quot;exception</span> <span class="pre">message</span> <span class="pre">here&quot;</span></code> instead</li>
+<li>Most new modules require check mode and integration tests before they are merged into the main Ansible codebase</li>
+<li>Avoid using try/catch statements over a large code block, rather use them for individual calls so the error message can be more descriptive</li>
+<li>Try and catch specific exceptions when using try/catch statements</li>
+<li>Avoid using PSCustomObjects unless necessary</li>
+<li>Look for common functions in <code class="docutils literal notranslate"><span class="pre">./lib/ansible/module_utils/powershell/</span></code> and use the code there instead of duplicating work. These can be imported by adding the line <code class="docutils literal notranslate"><span class="pre">#Requires</span> <span class="pre">-Module</span> <span class="pre">*</span></code> where * is the filename to import, and will be automatically included with the module code sent to the Windows target when run via Ansible</li>
+<li>Ensure the code runs under Powershell v3 and higher on Windows Server 2008 and higher; if higher minimum Powershell or OS versions are required, ensure the documentation reflects this clearly</li>
+<li>Ansible runs modules under strictmode version 2.0. Be sure to test with that enabled by putting <code class="docutils literal notranslate"><span class="pre">Set-StrictMode</span> <span class="pre">-Version</span> <span class="pre">2.0</span></code> at the top of your dev script</li>
+<li>Favour native Powershell cmdlets over executable calls if possible</li>
+<li>If adding an object to <code class="docutils literal notranslate"><span class="pre">$result</span></code>, ensure any trailing slashes are removed or escaped, as <code class="docutils literal notranslate"><span class="pre">ConvertTo-Json</span></code> will fail to convert it</li>
+<li>Use the full cmdlet name instead of aliases, e.g. <code class="docutils literal notranslate"><span class="pre">Remove-Item</span></code> over <code class="docutils literal notranslate"><span class="pre">rm</span></code></li>
+<li>Use named parameters with cmdlets, e.g. <code class="docutils literal notranslate"><span class="pre">Remove-Item</span> <span class="pre">-Path</span> <span class="pre">C:\temp</span></code> over <code class="docutils literal notranslate"><span class="pre">Remove-Item</span> <span class="pre">C:\temp</span></code></li>
+</ul>
+<p>A very basic powershell module <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/lib/ansible/modules/windows/win_environment.ps1">win_environment</a> is included below. It demonstrates how to implement check-mode and diff-support, and also shows a warning to the user when a specific condition is met.</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c">#!powershell</span>
+
+<span class="c"># Copyright: (c) 2015, Jon Hawkesworth (@jhawkesworth) &lt;figs@unity.demon.co.uk&gt;</span>
+<span class="c"># GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)</span>
+
+<span class="c">#Requires -Module Ansible.ModuleUtils.Legacy</span>
+
+<span class="nv">$ErrorActionPreference</span> <span class="p">=</span> <span class="s2">&quot;Stop&quot;</span>
+
+<span class="nv">$params</span> <span class="p">=</span> <span class="n">Parse-Args</span> <span class="n">-arguments</span> <span class="nv">$args</span> <span class="n">-supports_check_mode</span> <span class="nv">$true</span>
+<span class="nv">$check_mode</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;_ansible_check_mode&quot;</span> <span class="n">-type</span> <span class="s2">&quot;bool&quot;</span> <span class="n">-default</span> <span class="nv">$false</span>
+<span class="nv">$diff_mode</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;_ansible_diff&quot;</span> <span class="n">-type</span> <span class="s2">&quot;bool&quot;</span> <span class="n">-default</span> <span class="nv">$false</span>
+
+<span class="nv">$name</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;name&quot;</span> <span class="n">-type</span> <span class="s2">&quot;str&quot;</span> <span class="n">-failifempty</span> <span class="nv">$true</span>
+<span class="nv">$state</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;state&quot;</span> <span class="n">-type</span> <span class="s2">&quot;str&quot;</span> <span class="n">-default</span> <span class="s2">&quot;present&quot;</span> <span class="n">-validateset</span> <span class="s2">&quot;absent&quot;</span><span class="p">,</span><span class="s2">&quot;present&quot;</span>
+<span class="nv">$value</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;value&quot;</span> <span class="n">-type</span> <span class="s2">&quot;str&quot;</span>
+<span class="nv">$level</span> <span class="p">=</span> <span class="nb">Get-AnsibleParam</span> <span class="n">-obj</span> <span class="nv">$params</span> <span class="n">-name</span> <span class="s2">&quot;level&quot;</span> <span class="n">-type</span> <span class="s2">&quot;str&quot;</span> <span class="n">-validateSet</span> <span class="s2">&quot;machine&quot;</span><span class="p">,</span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="s2">&quot;process&quot;</span> <span class="n">-failifempty</span> <span class="nv">$true</span>
+
+<span class="nv">$before_value</span> <span class="p">=</span> <span class="no">[Environment]</span><span class="p">::</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$level</span><span class="p">)</span>
+
+<span class="nv">$result</span> <span class="p">=</span> <span class="p">@{</span>
+    <span class="n">before_value</span> <span class="p">=</span> <span class="nv">$before_value</span>
+    <span class="n">changed</span> <span class="p">=</span> <span class="nv">$false</span>
+    <span class="n">value</span> <span class="p">=</span> <span class="nv">$value</span>
+<span class="p">}</span>
+
+<span class="c"># When removing environment, set value to $null if set</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">-eq</span> <span class="s2">&quot;absent&quot;</span> <span class="o">-and</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">Add-Warning</span> <span class="n">-obj</span> <span class="nv">$result</span> <span class="n">-message</span> <span class="s2">&quot;When removing environment variable &#39;$name&#39; it should not have a value &#39;$value&#39; set&quot;</span>
+    <span class="nv">$value</span> <span class="p">=</span> <span class="nv">$null</span>
+<span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">-eq</span> <span class="s2">&quot;present&quot;</span> <span class="o">-and</span> <span class="p">(</span><span class="o">-not</span> <span class="nv">$value</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">Fail-Json</span> <span class="n">-obj</span> <span class="nv">$result</span> <span class="n">-message</span> <span class="s2">&quot;When state=present, value must be defined and not an empty string, if you wish to remove the envvar, set state=absent&quot;</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">-eq</span> <span class="s2">&quot;present&quot;</span> <span class="o">-and</span> <span class="nv">$before_value</span> <span class="o">-ne</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="nv">$check_mode</span><span class="p">)</span> <span class="p">{</span>
+        <span class="no">[Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$value</span><span class="p">,</span> <span class="nv">$level</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nv">$result</span><span class="p">.</span><span class="n">changed</span> <span class="p">=</span> <span class="nv">$true</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$diff_mode</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$before_value</span> <span class="o">-eq</span> <span class="nv">$null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$result</span><span class="p">.</span><span class="nb">diff </span><span class="p">=</span> <span class="p">@{</span>
+                <span class="n">prepared</span> <span class="p">=</span> <span class="s2">&quot; [$level]</span><span class="se">`n</span><span class="s2">+$name = $value</span><span class="se">`n</span><span class="s2">&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nv">$result</span><span class="p">.</span><span class="nb">diff </span><span class="p">=</span> <span class="p">@{</span>
+                <span class="n">prepared</span> <span class="p">=</span> <span class="s2">&quot; [$level]</span><span class="se">`n</span><span class="s2">-$name = $before_value</span><span class="se">`n</span><span class="s2">+$name = $value</span><span class="se">`n</span><span class="s2">&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$state</span> <span class="o">-eq</span> <span class="s2">&quot;absent&quot;</span> <span class="o">-and</span> <span class="nv">$before_value</span> <span class="o">-ne</span> <span class="nv">$null</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="nv">$check_mode</span><span class="p">)</span> <span class="p">{</span>
+        <span class="no">[Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$null</span><span class="p">,</span> <span class="nv">$level</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nv">$result</span><span class="p">.</span><span class="n">changed</span> <span class="p">=</span> <span class="nv">$true</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$diff_mode</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$result</span><span class="p">.</span><span class="nb">diff </span><span class="p">=</span> <span class="p">@{</span>
+            <span class="n">prepared</span> <span class="p">=</span> <span class="s2">&quot; [$level]</span><span class="se">`n</span><span class="s2">-$name = $before_value</span><span class="se">`n</span><span class="s2">&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="nb">Exit-Json</span> <span class="n">-obj</span> <span class="nv">$result</span>
+</pre></div>
+</div>
+<p>A slightly more advanced module is <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/lib/ansible/modules/windows/win_uri.ps1">win_uri</a> which additionally shows how to use different parameter types (bool, str, int, list, dict, path) and a selection of choices for parameters, how to fail a module and how to handle exceptions.</p>
+<p>When in doubt, look at some of the other core modules and see how things have been
+implemented there.</p>
+<p>Sometimes there are multiple ways that Windows offers to complete a task; this
+is the order to favour when writing modules:</p>
+<ul class="simple">
+<li>Native Powershell cmdlets like <code class="docutils literal notranslate"><span class="pre">Remove-Item</span> <span class="pre">-Path</span> <span class="pre">C:\temp</span> <span class="pre">-Recurse</span></code></li>
+<li>.NET classes like <code class="docutils literal notranslate"><span class="pre">[System.IO.Path]::GetRandomFileName()</span></code></li>
+<li>WMI objects through the <code class="docutils literal notranslate"><span class="pre">New-CimInstance</span></code> cmdlet</li>
+<li>COM objects through <code class="docutils literal notranslate"><span class="pre">New-Object</span> <span class="pre">-ComObject</span></code> cmdlet</li>
+<li>Calls to native executables like <code class="docutils literal notranslate"><span class="pre">Secedit.exe</span></code></li>
+</ul>
+<p>PowerShell modules support a small subset of the <code class="docutils literal notranslate"><span class="pre">#Requires</span></code> options built
+into PowerShell as well as some Ansible-specific requirements specified by
+<code class="docutils literal notranslate"><span class="pre">#AnsibleRequires</span></code>. These statements can be placed at any point in the script,
+but are most commonly near the top. They are used to make it easier to state the
+requirements of the module without writing any of the checks. Each <code class="docutils literal notranslate"><span class="pre">requires</span></code>
+statement must be on its own line, but there can be multiple requires statements
+in one script.</p>
+<p>These are the checks that can be used within Ansible modules:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">#Requires</span> <span class="pre">-Module</span> <span class="pre">Ansible.ModuleUtils.&lt;module_util&gt;</span></code>: Added in Ansible 2.4, specifies a module_util to load in for the module execution.</li>
+<li><code class="docutils literal notranslate"><span class="pre">#Requires</span> <span class="pre">-Version</span> <span class="pre">x.y</span></code>: Added in Ansible 2.5, specifies the version of PowerShell that is required by the module. The module will fail if this requirement is not met.</li>
+<li><code class="docutils literal notranslate"><span class="pre">#AnsibleRequires</span> <span class="pre">-OSVersion</span> <span class="pre">x.y</span></code>: Added in Ansible 2.5, specifies the OS build version that is required by the module and will fail if this requirement is not met. The actual OS version is derived from <code class="docutils literal notranslate"><span class="pre">[Environment]::OSVersion.Version</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">#AnsibleRequires</span> <span class="pre">-Become</span></code>: Added in Ansible 2.5, forces the exec runner to run the module with <code class="docutils literal notranslate"><span class="pre">become</span></code>, which is primarily used to bypass WinRM restrictions. If <code class="docutils literal notranslate"><span class="pre">ansible_become_user</span></code> is not specified then the <code class="docutils literal notranslate"><span class="pre">SYSTEM</span></code> account is used instead.</li>
+</ul>
+</div>
+<div class="section" id="windows-module-utilities">
+<h1><a class="toc-backref" href="#id7">Windows module utilities</a><a class="headerlink" href="#windows-module-utilities" title="Permalink to this headline">¶</a></h1>
+<p>Like Python modules, PowerShell modules also provide a number of module
+utilities that provide helper functions within PowerShell. These module_utils
+can be imported by adding the following line to a PowerShell module:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c">#Requires -Module Ansible.ModuleUtils.Legacy</span>
+</pre></div>
+</div>
+<p>This will import the module_util at <code class="docutils literal notranslate"><span class="pre">./lib/ansible/module_utils/powershell/Ansible.ModuleUtils.Legacy.psm1</span></code>
+and enable calling all of its functions.</p>
+<p>The following is a list of module_utils that are packaged with Ansible and a general description of what
+they do:</p>
+<ul class="simple">
+<li>ArgvParser: Utiliy used to convert a list of arguments to an escaped string compliant with the Windows argument parsing rules.</li>
+<li>CamelConversion: Utility used to convert camelCase strings/lists/dicts to snake_case.</li>
+<li>CommandUtil: Utility used to execute a Windows process and return the stdout/stderr and rc as separate objects.</li>
+<li>FileUtil: Utility that expands on the <code class="docutils literal notranslate"><span class="pre">Get-ChildItem</span></code> and <code class="docutils literal notranslate"><span class="pre">Test-Path</span></code> to work with special files like <code class="docutils literal notranslate"><span class="pre">C:\pagefile.sys</span></code>.</li>
+<li>Legacy: General definitions and helper utilities for Ansible module.</li>
+<li>LinkUtil: Utility to create, remove, and get information about symbolic links, junction points and hard inks.</li>
+<li>SID: Utilities used to convert a user or group to a Windows SID and vice versa.</li>
+</ul>
+<p>For more details on any specific module utility and their requirements, please see the <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/module_utils/powershell">Ansible
+module utilities source code</a>.</p>
+<p>PowerShell module utilities can be stored outside of the standard Ansible
+distribution for use with custom modules. Custom module_utils are placed in a
+folder called <code class="docutils literal notranslate"><span class="pre">module_utils</span></code> located in the root folder of the playbook or role
+directory.</p>
+<p>The below example is a role structure that contains two custom module_utils
+called <code class="docutils literal notranslate"><span class="pre">Ansible.ModuleUtils.ModuleUtil1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Ansible.ModuleUtils.ModuleUtil2</span></code>:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">meta/</span>
+  <span class="l l-Scalar l-Scalar-Plain">main.yml</span>
+<span class="l l-Scalar l-Scalar-Plain">defaults/</span>
+  <span class="l l-Scalar l-Scalar-Plain">main.yml</span>
+<span class="l l-Scalar l-Scalar-Plain">module_utils/</span>
+  <span class="l l-Scalar l-Scalar-Plain">Ansible.ModuleUtils.ModuleUtil1.psm1</span>
+  <span class="l l-Scalar l-Scalar-Plain">Ansible.ModuleUtils.ModuleUtil2.psm1</span>
+<span class="l l-Scalar l-Scalar-Plain">tasks/</span>
+  <span class="l l-Scalar l-Scalar-Plain">main.yml</span>
+</pre></div>
+</div>
+<p>Each module_util must contain at least one function, and a list of functions, aliases and cmdlets to export for use
+in a module. This can be a blanket export by using <code class="docutils literal notranslate"><span class="pre">*</span></code>. For example:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nb">Export-ModuleMember</span> <span class="n">-Alias</span> <span class="p">*</span> <span class="n">-Function</span> <span class="p">*</span> <span class="n">-Cmdlet</span> <span class="p">*</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows-playbook-module-testing">
+<h1><a class="toc-backref" href="#id8">Windows playbook module testing</a><a class="headerlink" href="#windows-playbook-module-testing" title="Permalink to this headline">¶</a></h1>
+<p>You can test a module with an Ansible playbook. For example:</p>
+<ul>
+<li><p class="first">Create a playbook in any directory <code class="docutils literal notranslate"><span class="pre">touch</span> <span class="pre">testmodule.yml</span></code>.</p>
+</li>
+<li><p class="first">Create an inventory file in the same directory <code class="docutils literal notranslate"><span class="pre">touch</span> <span class="pre">hosts</span></code>.</p>
+</li>
+<li><p class="first">Populate the inventory file with the variables required to connect to a Windows host(s).</p>
+</li>
+<li><p class="first">Add the following to the new playbook file:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test out windows module</span>
+  <span class="nt">hosts</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">windows</span>
+  <span class="nt">tasks</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test out module</span>
+    <span class="nt">win_module</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test name</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run the playbook <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span> <span class="pre">-i</span> <span class="pre">hosts</span> <span class="pre">testmodule.yml</span></code></p>
+</li>
+</ul>
+<p>This can be useful for seeing how Ansible runs with
+the new module end to end. Other possible ways to test the module are
+shown below.</p>
+</div>
+<div class="section" id="windows-debugging">
+<h1><a class="toc-backref" href="#id9">Windows debugging</a><a class="headerlink" href="#windows-debugging" title="Permalink to this headline">¶</a></h1>
+<p>Debugging a module currently can only be done on a Windows host. This can be
+useful when developing a new module or implementing bug fixes. These
+are some steps that need to be followed to set this up:</p>
+<ul>
+<li><p class="first">Copy the module script to the Windows server</p>
+</li>
+<li><p class="first">Copy <code class="docutils literal notranslate"><span class="pre">./lib/ansible/module_utils/powershell/Ansible.ModuleUtils.Legacy.psm1</span></code> to the same directory as the script above</p>
+</li>
+<li><p class="first">To stop the script from exiting the editor on a successful run, in <code class="docutils literal notranslate"><span class="pre">Ansible.ModuleUtils.Legacy.psm1</span></code> under the function <code class="docutils literal notranslate"><span class="pre">Exit-Json</span></code>, replace the last two lines of the function with:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ConvertTo-Json -InputObject $obj -Depth 99</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">To stop the script from exiting the editor on a failed run, in <code class="docutils literal notranslate"><span class="pre">Ansible.ModuleUtils.Legacy.psm1</span></code> under the function <code class="docutils literal notranslate"><span class="pre">Fail-Json</span></code>, replace the last two lines of the function with:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Write-Error -Message (ConvertTo-Json -InputObject $obj -Depth 99)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add the following to the start of the module script that was copied to the server:</p>
+<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="c1">### start setup code</span>
+<span class="l l-Scalar l-Scalar-Plain">$complex_args = @{</span>
+    <span class="l l-Scalar l-Scalar-Plain">&quot;_ansible_check_mode&quot; = $false</span>
+    <span class="l l-Scalar l-Scalar-Plain">&quot;_ansible_diff&quot; = $false</span>
+    <span class="l l-Scalar l-Scalar-Plain">&quot;path&quot; = &quot;C:\temp&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">&quot;state&quot; = &quot;present&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">}</span>
+
+<span class="l l-Scalar l-Scalar-Plain">Import-Module -Name .\Ansible.ModuleUtils.Legacy.psm1</span>
+<span class="l l-Scalar l-Scalar-Plain">### end setup code</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>You can add more args to <code class="docutils literal notranslate"><span class="pre">$complex_args</span></code> as required by the module. The
+module can now be run on the Windows host either directly through Powershell
+or through an IDE.</p>
+<p>There are multiple IDEs that can be used to debug a Powershell script, two of
+the most popular are</p>
+<ul class="simple">
+<li><a class="reference external" href="https://msdn.microsoft.com/en-us/powershell/scripting/core-powershell/ise/how-to-debug-scripts-in-windows-powershell-ise">Powershell ISE</a></li>
+<li><a class="reference external" href="https://blogs.technet.microsoft.com/heyscriptingguy/2017/02/06/debugging-powershell-script-in-visual-studio-code-part-1/">Visual Studio Code</a></li>
+</ul>
+<p>To be able to view the arguments as passed by Ansible to the module follow
+these steps.</p>
+<ul class="simple">
+<li>Prefix the Ansible command with <span class="target" id="index-0"></span><a class="reference internal" href="../reference_appendices/config.html#envvar-ANSIBLE_KEEP_REMOTE_FILES"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_KEEP_REMOTE_FILES=1</span></code></a> to specify that Ansible should keep the exec files on the server.</li>
+<li>Log onto the Windows server using the same user account that Ansible used to execute the module.</li>
+<li>Navigate to <code class="docutils literal notranslate"><span class="pre">%TEMP%\..</span></code>. It should contain a folder starting with <code class="docutils literal notranslate"><span class="pre">ansible-tmp-</span></code>.</li>
+<li>Inside this folder, open the PowerShell script for the module.</li>
+<li>In this script is a raw JSON script under <code class="docutils literal notranslate"><span class="pre">$json_raw</span></code> which contains the module arguments under <code class="docutils literal notranslate"><span class="pre">module_args</span></code>. These args can be assigned manually to the <code class="docutils literal notranslate"><span class="pre">$complex_args</span></code> variable that is defined on your debug script.</li>
+</ul>
+</div>
+<div class="section" id="windows-unit-testing">
+<h1><a class="toc-backref" href="#id10">Windows unit testing</a><a class="headerlink" href="#windows-unit-testing" title="Permalink to this headline">¶</a></h1>
+<p>Currently there is no mechanism to run unit tests for Powershell modules under Ansible CI.</p>
+</div>
+<div class="section" id="windows-integration-testing">
+<h1><a class="toc-backref" href="#id11">Windows integration testing</a><a class="headerlink" href="#windows-integration-testing" title="Permalink to this headline">¶</a></h1>
+<p>Integration tests for Ansible modules are typically written as Ansible roles. These test
+roles are located in <code class="docutils literal notranslate"><span class="pre">./test/integration/targets</span></code>. You must first set up your testing
+environment, and configure a test inventory for Ansible to connect to.</p>
+<p>In this example we will set up a test inventory to connect to two hosts and run the integration
+tests for win_stat:</p>
+<ul class="simple">
+<li>Create a copy of <code class="docutils literal notranslate"><span class="pre">./test/integration/inventory.winrm.template</span></code> and name it <code class="docutils literal notranslate"><span class="pre">inventory.winrm</span></code>.</li>
+<li>Fill in entries under <code class="docutils literal notranslate"><span class="pre">[windows]</span></code> and set the required variables that are needed to connect to the host.</li>
+<li>To execute the integration tests, run <code class="docutils literal notranslate"><span class="pre">ansible-test</span> <span class="pre">windows-integration</span> <span class="pre">win_stat</span></code>; you can replace <code class="docutils literal notranslate"><span class="pre">win_stat</span></code> with the role you wish to test.</li>
+</ul>
+<p>This will execute all the tests currently defined for that role. You can set
+the verbosity level using the <code class="docutils literal notranslate"><span class="pre">-v</span></code> argument just as you would with
+ansible-playbook.</p>
+<p>When developing tests for a new module, it is recommended to test a scenario once in
+check mode and twice not in check mode. This ensures that check mode
+does not make any changes but reports a change, as well as that the second run is
+idempotent and does not report changes. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove a file (check mode)</span>
+  <span class="nt">win_file</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\temp</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_check</span>
+  <span class="nt">check_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get result of remove a file (check mode)</span>
+  <span class="nt">win_command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">powershell.exe &quot;if (Test-Path -Path &#39;C:\temp&#39;) { &#39;true&#39; } else { &#39;false&#39; }&quot;</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_actual_check</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">assert remove a file (check mode)</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_check is changed</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_actual_check.stdout == &#39;true\r\n&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove a file</span>
+  <span class="nt">win_file</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\temp</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get result of remove a file</span>
+  <span class="nt">win_command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">powershell.exe &quot;if (Test-Path -Path &#39;C:\temp&#39;) { &#39;true&#39; } else { &#39;false&#39; }&quot;</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_actual</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">assert remove a file</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">remove_file is changed</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_actual.stdout == &#39;false\r\n&#39;</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove a file (idempotent)</span>
+  <span class="nt">win_file</span><span class="p">:</span>
+    <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\temp</span>
+    <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+  <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">remove_file_again</span>
+
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">assert remove a file (idempotent)</span>
+  <span class="nt">assert</span><span class="p">:</span>
+    <span class="nt">that</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">not remove_file_again is changed</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows-communication-and-development-support">
+<h1><a class="toc-backref" href="#id12">Windows communication and development support</a><a class="headerlink" href="#windows-communication-and-development-support" title="Permalink to this headline">¶</a></h1>
+<p>Join the IRC channel <code class="docutils literal notranslate"><span class="pre">#ansible-devel</span></code> or <code class="docutils literal notranslate"><span class="pre">#ansible-windows</span></code> on freenode for
+discussions about Ansible development for Windows.</p>
+<p>For questions and discussions pertaining to using the Ansible product,
+use the <code class="docutils literal notranslate"><span class="pre">#ansible</span></code> channel.</p>
+</div>
+
+
+          </div>
+          <div id="search-results"><gcse:searchresults-only></div>
+          <footer>
+  
+
+  <hr/>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <p>Last updated on Dec 01, 2020.<br/>
+  Copyright © 2018 Red Hat, Inc. <br/>
+  </p>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.6',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  false,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+        (function(d,s,i,r) {
+        if (d.getElementById(i)){return;}
+        var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+        n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+        e.parentNode.insertBefore(n, e);
+        })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+_satellite.pageBottom();
+}
+</script>
+</body>
+</html>

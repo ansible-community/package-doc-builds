@@ -1,0 +1,737 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script type="text/javascript" src="//www.redhat.com/dtm.js"></script>
+  <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" />
+  <meta class="swiftype" name="version" data-type="string" content="3.2.2">
+
+  <!-- Google Tag Manager Data Layer -->
+  <script>
+   dataLayer = [];
+  </script>
+  <!-- End Google Tag Manager Data Layer -->
+
+  
+  <title>ec2_vpc - configure AWS virtual private clouds &mdash; Ansible Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/modules/ec2_vpc_module.html"/>
+  
+
+  
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+
+  
+  
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:'../',
+        VERSION:'2.6',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+    
+      <link rel="search" type="application/opensearchdescription+xml"
+            title="Search within Ansible Documentation"
+            href="../_static/opensearch.xml"/>
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+  <!-- End Google Tag Manager -->
+
+    <div class="DocSite-globalNav ansibleNav">
+        <ul>
+            <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+            <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+            <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+            <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+            <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+        </ul>
+    </div>
+
+  <a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+    <img class="DocSiteNav-logo"
+      src="../_static/images/logo_invert.png"
+      alt="Ansible Logo">
+    <div class="DocSiteNav-title">
+      Documentation
+    </div>
+  </a>
+
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          <div style="background-color:#5bbdbf;height=80px;margin:'auto auto auto auto'">
+            <a class="DocSiteProduct-header DocSiteProduct-header--core" href="/">
+              <div class="DocSiteProduct-productName">
+                <div class="DocSiteProduct-logoText">
+                  Ansible
+                  <div class="DocSiteProduct-CurrentVersion" align="right">2.6</div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="wy-side-nav-search" style="background-color#5bbdbf;height=80px;margin:'auto auto auto auto'">
+            
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+          </div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/intro_installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/intro_configuration.html">Configuring Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Scenario Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_aci.html">Cisco ACI Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_aws.html">Amazon Web Services Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_azure.html">Microsoft Azure Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_cloudstack.html">CloudStack Cloud Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_docker.html">Getting Started with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_gce.html">Google Cloud Platform Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_packet.html">Using Ansible with the Packet host</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_rax.html">Rackspace Cloud Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_rolling_upgrade.html">Continuous Delivery and Rolling Upgrades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/guide_vagrant.html">Using Vagrant and Ansible</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for VMWare</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../vmware/index.html">Ansible for VMware</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Ansible for Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/index.html">Ansible for Network Automation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules_by_category.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/galaxy.html">Ansible Galaxy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Release and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Ansible Tower</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/index.html">Ansible Roadmap</a></li>
+</ul>
+
+            
+          
+        </div>
+        <!-- changeable widget -->
+
+        <div id="sideBanner">
+          <br/>
+          <a href="https://www.ansible.com/docs-left?utm_source=docs">
+            <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+          </a>
+          <br/><br/><br/>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible Documentation</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+
+          <!-- Banner ads
+          <div class="DocSiteBanner">
+            <a class="DocSiteBanner-imgWrapper"
+                href="https://www.ansible.com/docs-top?utm_source=docs">
+                <img src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-top-left.png">
+            </a>
+            <a class="DocSiteBanner-imgWrapper"
+                href="https://www.ansible.com/docs-top?utm_source=docs">
+                <img src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-top-right.png">
+            </a>
+        </div> -->
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>ec2_vpc - configure AWS virtual private clouds</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+
+          
+<div id='banner' class='Admonition caution'>
+  <p>You are reading an unmaintained version of the Ansible documentation. Unmaintained Ansible versions can contain unfixed security vulnerabilities (CVE). Please upgrade to a maintained version. See <a href="https://docs.ansible.com/ansible/latest/index.html">the latest Ansible documentation</a>.</p>
+</div>
+          <div id="page-content">
+          
+  <div class="section" id="ec2-vpc-configure-aws-virtual-private-clouds">
+<span id="ec2-vpc-module"></span><h1>ec2_vpc - configure AWS virtual private clouds<a class="headerlink" href="#ec2-vpc-configure-aws-virtual-private-clouds" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 1.4.</span></p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#deprecated" id="id1">DEPRECATED</a></li>
+<li><a class="reference internal" href="#synopsis" id="id2">Synopsis</a><ul>
+<li><a class="reference internal" href="#requirements" id="id3">Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parameters" id="id4">Parameters</a></li>
+<li><a class="reference internal" href="#notes" id="id5">Notes</a></li>
+<li><a class="reference internal" href="#examples" id="id6">Examples</a></li>
+<li><a class="reference internal" href="#status" id="id7">Status</a><ul>
+<li><a class="reference internal" href="#author" id="id8">Author</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="deprecated">
+<h2><a class="toc-backref" href="#id1">DEPRECATED</a><a class="headerlink" href="#deprecated" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Removed in Ansible:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">version: 2.5</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Why:</th><td class="field-body">Replaced by dedicated modules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Alternative:</th><td class="field-body">Use <a class="reference internal" href="ec2_vpc_net_module.html#ec2-vpc-net-module"><span class="std std-ref">ec2_vpc_net</span></a> along with supporting modules including <a class="reference internal" href="ec2_vpc_igw_module.html#ec2-vpc-igw-module"><span class="std std-ref">ec2_vpc_igw</span></a>, <a class="reference internal" href="ec2_vpc_route_table_module.html#ec2-vpc-route-table-module"><span class="std std-ref">ec2_vpc_route_table</span></a>, <a class="reference internal" href="ec2_vpc_subnet_module.html#ec2-vpc-subnet-module"><span class="std std-ref">ec2_vpc_subnet</span></a>, <a class="reference internal" href="ec2_vpc_dhcp_option_module.html#ec2-vpc-dhcp-option-module"><span class="std std-ref">ec2_vpc_dhcp_option</span></a>, <a class="reference internal" href="ec2_vpc_nat_gateway_module.html#ec2-vpc-nat-gateway-module"><span class="std std-ref">ec2_vpc_nat_gateway</span></a>, <a class="reference internal" href="ec2_vpc_nacl_module.html#ec2-vpc-nacl-module"><span class="std std-ref">ec2_vpc_nacl</span></a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id2">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Create or terminates AWS virtual private clouds.  This module has a dependency on python-boto.</li>
+</ul>
+<div class="section" id="requirements">
+<h3><a class="toc-backref" href="#id3">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li>python &gt;= 2.6</li>
+<li>boto</li>
+</ul>
+</div>
+</div>
+<div class="section" id="parameters">
+<h2><a class="toc-backref" href="#id4">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<table  border=0 cellpadding=0 class="documentation-table">
+    <tr>
+        <th colspan="1">Parameter</th>
+        <th>Choices/<font color="blue">Defaults</font></th>
+                    <th width="100%">Comments</th>
+    </tr>
+                <tr>
+                                                            <td colspan="1">
+                <b>aws_access_key</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>AWS access key. If not set then the value of the AWS_ACCESS_KEY_ID, AWS_ACCESS_KEY or EC2_ACCESS_KEY environment variable is used.</div>
+                                                                                    <div style="font-size: small; color: darkgreen"><br/>aliases: ec2_access_key, access_key</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>aws_secret_key</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>AWS secret key. If not set then the value of the AWS_SECRET_ACCESS_KEY, AWS_SECRET_KEY, or EC2_SECRET_KEY environment variable is used.</div>
+                                                                                    <div style="font-size: small; color: darkgreen"><br/>aliases: ec2_secret_key, secret_key</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>cidr_block</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>The cidr block representing the VPC, e.g. <code>10.0.0.0/16</code>, required when <em>state=present</em>.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>dns_hostnames</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Toggles the &quot;Enable DNS hostname support for instances&quot; flag.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>dns_support</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Toggles the &quot;Enable DNS resolution&quot; flag.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>ec2_url</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Url to use to connect to EC2 or your Eucalyptus cloud (by default the module will use EC2 endpoints). Ignored for modules where region is required. Must be specified for all other modules if region is not used. If not set then the value of the EC2_URL environment variable, if any, is used.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>instance_tenancy</b>
+                                                                        </td>
+                            <td>
+                                                                                                                        <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>default</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>dedicated</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>The supported tenancy options for instances launched into the VPC.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>internet_gateway</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Toggle whether there should be an Internet gateway attached to the VPC.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>profile</b>
+                                                        <br/><div style="font-size: small; color: darkgreen">(added in 1.6)</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>Uses a boto profile. Only works with boto &gt;= 2.24.0.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>region</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>The AWS region to use. If not specified then the value of the AWS_REGION or EC2_REGION environment variable, if any, is used. See <a href='http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region'>http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region</a></div>
+                                                                                    <div style="font-size: small; color: darkgreen"><br/>aliases: aws_region, ec2_region</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>resource_tags</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                    <br/><div style="font-size: small; color: darkgreen">(added in 1.6)</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>A dictionary array of resource tags of the form <code>{ tag1: value1, tag2: value2 }</code>. - Tags in this list are used in conjunction with CIDR block to uniquely identify a VPC in lieu of vpc_id. Therefore, if CIDR/Tag combination does not exist, a new VPC will be created.  VPC tags not on this list will be ignored. Prior to 1.7, specifying a resource tag was optional.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>route_tables</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>A dictionary array of route tables to add of the form: <code>{ subnets: [172.22.2.0/24, 172.22.3.0/24,], routes: [{ dest: 0.0.0.0/0, gw: igw},], resource_tags: ... }</code>. Where the subnets list is those subnets the route table should be associated with, and the routes list is a list of routes to be in the table.  The special keyword for the gw of igw specifies that you should the route should go through the internet gateway attached to the VPC. gw also accepts instance-ids, interface-ids, and vpc-peering-connection-ids in addition igw. resource_tags is optional and uses dictionary form: <code>{ &quot;Name&quot;: &quot;public&quot;, ... }</code>. This module is currently unable to affect the &quot;main&quot; route table due to some limitations in boto, so you must explicitly define the associated subnets or they will be attached to the main table implicitly. As of 1.8, if the route_tables parameter is not specified, no existing routes will be modified.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>security_token</b>
+                                                        <br/><div style="font-size: small; color: darkgreen">(added in 1.6)</div>                </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>AWS STS security token. If not set then the value of the AWS_SECURITY_TOKEN or EC2_SECURITY_TOKEN environment variable is used.</div>
+                                                                                    <div style="font-size: small; color: darkgreen"><br/>aliases: access_token</div>
+                                </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>state</b>
+                                    <br/><div style="font-size: small; color: red">required</div>                                    </td>
+                            <td>
+                                                                                                                        <ul><b>Choices:</b>
+                                                                                                                                                            <li>present</li>
+                                                                                                                                                                                            <li>absent</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Create or terminate the VPC.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>subnets</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>A dictionary array of subnets to add of the form <code>{ cidr: ..., az: ... , resource_tags: ... }</code>.</div>
+                                                <div>Where <code>az</code> is the desired availability zone of the subnet, optional.</div>
+                                                <div>Tags <code>resource_tags</code> use dictionary form <code>{ &quot;Environment&quot;:&quot;Dev&quot;, &quot;Tier&quot;:&quot;Web&quot;, ...}</code>, optional.</div>
+                                                <div><code>resource_tags</code> see resource_tags for VPC below. The main difference is subnet tags not specified here will be deleted.</div>
+                                                <div>All VPC subnets not in this list will be removed as well.</div>
+                                                <div>As of 1.8, if the subnets parameter is not specified, no existing subnets will be modified.&#x27;</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>validate_certs</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                        <br/><div style="font-size: small; color: darkgreen">(added in 1.5)</div>                </td>
+                            <td>
+                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                            <li>no</li>
+                                                                                                                                                                                            <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>When set to &quot;no&quot;, SSL certificates will not be validated for boto versions &gt;= 2.6.0.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>vpc_id</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                        </td>
+                                                            <td>
+                                                                    <div>A VPC id to terminate when <em>state=absent</em>.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>wait</b>
+                <br/><div style="font-size: small; color: red">bool</div>                                                        </td>
+                            <td>
+                                                                                                                                                                    <ul><b>Choices:</b>
+                                                                                                                                                            <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                            <li>yes</li>
+                                                                                </ul>
+                                                                        </td>
+                                                            <td>
+                                                                    <div>Wait for the VPC to be in state &#x27;available&#x27; before returning.</div>
+                                                                            </td>
+        </tr>
+                            <tr>
+                                                            <td colspan="1">
+                <b>wait_timeout</b>
+                                                                        </td>
+                            <td>
+                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">300</div>
+                                </td>
+                                                            <td>
+                                                                    <div>How long before wait gives up, in seconds.</div>
+                                                                            </td>
+        </tr>
+                    </table>
+<br/></div>
+<div class="section" id="notes">
+<h2><a class="toc-backref" href="#id5">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>If parameters are not set within the module, the following environment variables can be used in decreasing order of precedence <code class="docutils literal notranslate"><span class="pre">AWS_URL</span></code> or <code class="docutils literal notranslate"><span class="pre">EC2_URL</span></code>, <code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code> or <code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY</span></code> or <code class="docutils literal notranslate"><span class="pre">EC2_ACCESS_KEY</span></code>, <code class="docutils literal notranslate"><span class="pre">AWS_SECRET_ACCESS_KEY</span></code> or <code class="docutils literal notranslate"><span class="pre">AWS_SECRET_KEY</span></code> or <code class="docutils literal notranslate"><span class="pre">EC2_SECRET_KEY</span></code>, <code class="docutils literal notranslate"><span class="pre">AWS_SECURITY_TOKEN</span></code> or <code class="docutils literal notranslate"><span class="pre">EC2_SECURITY_TOKEN</span></code>, <code class="docutils literal notranslate"><span class="pre">AWS_REGION</span></code> or <code class="docutils literal notranslate"><span class="pre">EC2_REGION</span></code></li>
+<li>Ansible uses the boto configuration file (typically ~/.boto) if no credentials are provided. See <a class="reference external" href="http://boto.readthedocs.org/en/latest/boto_config_tut.html">http://boto.readthedocs.org/en/latest/boto_config_tut.html</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">AWS_REGION</span></code> or <code class="docutils literal notranslate"><span class="pre">EC2_REGION</span></code> can be typically be used to specify the AWS region, when required, but this can also be configured in the boto config file</li>
+</ul>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id6">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: None of these examples set aws_access_key, aws_secret_key, or region.</span>
+<span class="c1"># It is assumed that their matching environment variables are set.</span>
+
+<span class="c1"># Basic creation example:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">ec2_vpc</span><span class="p">:</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+        <span class="nt">cidr_block</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.23.0.0/16</span>
+        <span class="nt">resource_tags</span><span class="p">:</span> <span class="p p-Indicator">{</span> <span class="s">&quot;Environment&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;Development&quot;</span> <span class="p p-Indicator">}</span>
+        <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="c1"># Full creation example with subnets and optional availability zones.</span>
+<span class="c1"># The absence or presence of subnets deletes or creates them respectively.</span>
+    <span class="p p-Indicator">-</span> <span class="nt">ec2_vpc</span><span class="p">:</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">present</span>
+        <span class="nt">cidr_block</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.22.0.0/16</span>
+        <span class="nt">resource_tags</span><span class="p">:</span> <span class="p p-Indicator">{</span> <span class="s">&quot;Environment&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;Development&quot;</span> <span class="p p-Indicator">}</span>
+        <span class="nt">subnets</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="nt">cidr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.22.1.0/24</span>
+            <span class="nt">az</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">us-west-2c</span>
+            <span class="nt">resource_tags</span><span class="p">:</span> <span class="p p-Indicator">{</span> <span class="s">&quot;Environment&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;Dev&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Tier&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="s">&quot;Web&quot;</span> <span class="p p-Indicator">}</span>
+          <span class="p p-Indicator">-</span> <span class="nt">cidr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.22.2.0/24</span>
+            <span class="nt">az</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">us-west-2b</span>
+            <span class="nt">resource_tags</span><span class="p">:</span> <span class="p p-Indicator">{</span> <span class="s">&quot;Environment&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;Dev&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Tier&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="s">&quot;App&quot;</span> <span class="p p-Indicator">}</span>
+          <span class="p p-Indicator">-</span> <span class="nt">cidr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.22.3.0/24</span>
+            <span class="nt">az</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">us-west-2a</span>
+            <span class="nt">resource_tags</span><span class="p">:</span> <span class="p p-Indicator">{</span> <span class="s">&quot;Environment&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;Dev&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Tier&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="s">&quot;DB&quot;</span> <span class="p p-Indicator">}</span>
+        <span class="nt">internet_gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+        <span class="nt">route_tables</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="nt">subnets</span><span class="p">:</span>
+              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">172.22.2.0/24</span>
+              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">172.22.3.0/24</span>
+            <span class="nt">routes</span><span class="p">:</span>
+              <span class="p p-Indicator">-</span> <span class="nt">dest</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.0.0.0/0</span>
+                <span class="nt">gw</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">igw</span>
+          <span class="p p-Indicator">-</span> <span class="nt">subnets</span><span class="p">:</span>
+              <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">172.22.1.0/24</span>
+            <span class="nt">routes</span><span class="p">:</span>
+              <span class="p p-Indicator">-</span> <span class="nt">dest</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.0.0.0/0</span>
+                <span class="nt">gw</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">igw</span>
+        <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+      <span class="nt">register</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">vpc</span>
+
+<span class="c1"># Removal of a VPC by id</span>
+    <span class="p p-Indicator">-</span> <span class="nt">ec2_vpc</span><span class="p">:</span>
+        <span class="nt">state</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absent</span>
+        <span class="nt">vpc_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">vpc-aaaaaaa</span>
+        <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="c1"># If you have added elements not managed by this module, e.g. instances, NATs, etc then</span>
+<span class="c1"># the delete will fail until those dependencies are removed.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="status">
+<h2><a class="toc-backref" href="#id7">Status</a><a class="headerlink" href="#status" title="Permalink to this headline">¶</a></h2>
+<p>This module is flagged as <strong>deprecated</strong> and will be removed in version 2.5. For more information see <a class="reference internal" href="#deprecated">DEPRECATED</a>.</p>
+<div class="section" id="author">
+<h3><a class="toc-backref" href="#id8">Author</a><a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Carson Gee (&#64;carsongee)</li>
+</ul>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">If you notice any issues in this documentation you can <a class="reference external" href="https://github.com/ansible/ansible/edit/devel/lib/ansible/modules/cloud/amazon/_ec2_vpc.py?description=%3C!---%20Your%20description%20here%20--%3E%0A%0A%2Blabel:%20docsite_pr">edit this document</a> to improve it.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <div id="search-results"><gcse:searchresults-only></div>
+          <footer>
+  
+
+  <hr/>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','yABGvz2N8PwcwBxyfzUc','2.0.0');
+</script>
+
+  <p>Last updated on Dec 01, 2020.<br/>
+  Copyright © 2018 Red Hat, Inc. <br/>
+  </p>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2.6',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  false,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+<!-- begin analytics -->
+<script type="text/javascript">
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+        (function(d,s,i,r) {
+        if (d.getElementById(i)){return;}
+        var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+        n.id=i;n.src = '//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+        e.parentNode.insertBefore(n, e);
+        })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script type="text/javascript">
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+_satellite.pageBottom();
+}
+</script>
+</body>
+</html>
