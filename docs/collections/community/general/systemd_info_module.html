@@ -228,6 +228,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
@@ -394,7 +395,7 @@
 <h1>community.general.systemd_info module – Gather <code class="docutils literal notranslate"><span class="pre">systemd</span></code> unit info<a class="headerlink" href="#community-general-systemd-info-module-gather-systemd-unit-info" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 10.4.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 10.5.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -414,10 +415,13 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>This module gathers info about systemd units (services, targets, sockets, mount).</p></li>
+<li><p>This module gathers info about systemd units (services, targets, sockets, mounts, timers).</p></li>
+<li><p>Timer units are supported since community.general 10.5.0.</p></li>
 <li><p>It runs <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">list-units</span></code> (or processes selected units) and collects properties for each unit using <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">show</span></code>.</p></li>
+<li><p>In case a unit has multiple properties with the same name, only the value of the first one will be collected.</p></li>
 <li><p>Even if a unit has a <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-return-units-loadstate"><span class="std std-ref"><span class="pre">units.loadstate</span></span></a></code> of <code class="ansible-value docutils literal notranslate"><span class="pre">not-found</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">masked</span></code>, it is returned, but only with the minimal properties (<code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-return-units-name"><span class="std std-ref"><span class="pre">units.name</span></span></a></code>, <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-return-units-loadstate"><span class="std std-ref"><span class="pre">units.loadstate</span></span></a></code>, <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-return-units-activestate"><span class="std std-ref"><span class="pre">units.activestate</span></span></a></code>, <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-return-units-substate"><span class="std std-ref"><span class="pre">units.substate</span></span></a></code>).</p></li>
 <li><p>When <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-parameter-unitname"><span class="std std-ref"><span class="pre">unitname</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-parameter-extra-properties"><span class="std std-ref"><span class="pre">extra_properties</span></span></a></strong></code> are used, the module first checks if the unit exists, then check if properties exist. If not, the module fails.</p></li>
+<li><p>When <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-parameter-unitname"><span class="std std-ref"><span class="pre">unitname</span></span></a></strong></code> is used with wildcard expressions, the module checks for units that match the indicated expressions, if units are not present for all the indicated expressions, the module fails.</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -443,8 +447,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-unitname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>List of unit names to process.</p>
-<p>It supports <code class="docutils literal notranslate"><span class="pre">.service</span></code>, <code class="docutils literal notranslate"><span class="pre">.target</span></code>, <code class="docutils literal notranslate"><span class="pre">.socket</span></code>, and <code class="docutils literal notranslate"><span class="pre">.mount</span></code> units type.</p>
-<p>Each name must correspond to the full name of the <code class="docutils literal notranslate"><span class="pre">systemd</span></code> unit.</p>
+<p>It supports <code class="docutils literal notranslate"><span class="pre">.service</span></code>, <code class="docutils literal notranslate"><span class="pre">.target</span></code>, <code class="docutils literal notranslate"><span class="pre">.socket</span></code>, <code class="docutils literal notranslate"><span class="pre">.mount</span></code> and <code class="docutils literal notranslate"><span class="pre">.timer</span></code> units type.</p>
+<p><code class="docutils literal notranslate"><span class="pre">.timer</span></code> units are supported since community.general 10.5.0.</p>
+<p>Each name must correspond to the full name of the <code class="docutils literal notranslate"><span class="pre">systemd</span></code> unit or to a wildcard expression like <code class="ansible-value docutils literal notranslate"><span class="pre">'ssh*'</span></code> and <code class="ansible-value docutils literal notranslate"><span class="pre">'*.service'</span></code>.</p>
+<p>Wildcard expressions in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-systemd-info-module-parameter-unitname"><span class="std std-ref"><span class="pre">unitname</span></span></a></strong></code> are supported since community.general 10.5.0.</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
@@ -485,7 +491,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <section id="examples">
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
-<span class="c1"># Gather info for all systemd services, targets, sockets and mount</span>
+<span class="c1"># Gather info for all systemd services, targets, sockets, mount and timer</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gather all systemd unit info</span>
 <span class="w">  </span><span class="nt">community.general.systemd_info</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">results</span>
@@ -501,6 +507,22 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">extra_properties</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Description</span>
 <span class="w">    </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">results</span>
+
+<span class="c1"># Gather info using wildcards/expression</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gather info of units that start with &#39;systemd-&#39;</span>
+<span class="w">  </span><span class="nt">community.general.systemd_info</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">unitname</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;systemd-*&#39;</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">results</span>
+
+<span class="c1"># Gather info for systemd-tmpfiles-clean.timer with extra properties</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gather info of systemd-tmpfiles-clean.timer and extra AccuracyUSec</span>
+<span class="w">  </span><span class="nt">community.general.systemd_info</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">unitname</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">systemd-tmpfiles-clean.timer</span>
+<span class="w">    </span><span class="nt">extra_properties</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AccuracyUSec</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">results</span>
 </pre></div>
 </div>
 </section>
@@ -682,7 +704,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 21, 2025.
+      <span class="lastupdated">Last updated on Apr 17, 2025.
       </span></p>
   </div>
 
