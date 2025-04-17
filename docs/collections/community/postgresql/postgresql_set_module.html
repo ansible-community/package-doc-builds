@@ -224,6 +224,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
@@ -390,7 +391,7 @@
 <h1>community.postgresql.postgresql_set module – Change a PostgreSQL server configuration parameter<a class="headerlink" href="#community-postgresql-postgresql-set-module-change-a-postgresql-server-configuration-parameter" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/postgresql/">community.postgresql collection</a> (version 3.12.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/postgresql/">community.postgresql collection</a> (version 3.14.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -414,6 +415,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
+<li><p>IMPORTANT: If your PostgreSQL server version is 14 or later, use the <a class="reference internal" href="postgresql_alter_system_module.html#ansible-collections-community-postgresql-postgresql-alter-system-module"><span class="std std-ref">community.postgresql.postgresql_alter_system</span></a> module instead as it will replace this module in future.</p></li>
 <li><p>Allows to change a PostgreSQL server configuration parameter.</p></li>
 <li><p>The module uses ALTER SYSTEM command and applies changes by reload server configuration.</p></li>
 <li><p>ALTER SYSTEM is used for changing server configuration parameters across the entire database cluster.</p></li>
@@ -460,12 +462,13 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-db"></div>
-<div class="ansibleOptionAnchor" id="parameter-login_db"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-set-module-parameter-login-db"><span id="ansible-collections-community-postgresql-postgresql-set-module-parameter-db"></span><strong>db</strong></p>
-<a class="ansibleOptionLink" href="#parameter-db" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: login_db</span></p>
+<div class="ansibleOptionAnchor" id="parameter-login_db"></div>
+<div class="ansibleOptionAnchor" id="parameter-db"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-set-module-parameter-login-db"><span id="ansible-collections-community-postgresql-postgresql-set-module-parameter-db"></span><strong>login_db</strong></p>
+<a class="ansibleOptionLink" href="#parameter-login_db" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: db</span></p>
 <p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of database to connect.</p>
+<p>The <code class="ansible-value docutils literal notranslate"><span class="pre">db</span></code> alias is deprecated and will be removed in version 5.0.0.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -629,7 +632,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>Supported version of PostgreSQL is 9.4 and later.</p></li>
+<li><p>Supported version of PostgreSQL is 9.4 and later. For PostgreSQL version 14 or later, the <a class="reference internal" href="postgresql_alter_system_module.html#ansible-collections-community-postgresql-postgresql-alter-system-module"><span class="std std-ref">community.postgresql.postgresql_alter_system</span></a> module is recommended.</p></li>
 <li><p>Pay attention, change setting with ‘postmaster’ context can return changed is true when actually nothing changes because the same value may be presented in several different form, for example, 1024MB, 1GB, etc. However in pg_settings system view it can be defined like 131072 number of 8kB pages. The final check of the parameter value cannot compare it because the server was not restarted and the value in pg_settings is not updated yet.</p></li>
 <li><p>For some parameters restart of PostgreSQL server is required. See official documentation <a class="reference external" href="https://www.postgresql.org/docs/current/view-pg-settings.html">https://www.postgresql.org/docs/current/view-pg-settings.html</a>.</p></li>
 <li><p>The default authentication assumes that you are either logging in as or sudo’ing to the <code class="docutils literal notranslate"><span class="pre">postgres</span></code> account on the host.</p></li>
@@ -645,6 +648,8 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
+<dt><a class="reference internal" href="postgresql_alter_system_module.html#ansible-collections-community-postgresql-postgresql-alter-system-module"><span class="std std-ref">community.postgresql.postgresql_alter_system</span></a></dt><dd><p>Change a PostgreSQL server configuration parameter.</p>
+</dd>
 <dt><a class="reference internal" href="postgresql_info_module.html#ansible-collections-community-postgresql-postgresql-info-module"><span class="std std-ref">community.postgresql.postgresql_info</span></a></dt><dd><p>Gather information about PostgreSQL servers.</p>
 </dd>
 <dt><a class="reference external" href="https://www.postgresql.org/docs/current/runtime-config.html">PostgreSQL server configuration</a></dt><dd><p>General information about PostgreSQL server configuration.</p>
@@ -807,7 +812,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 21, 2025.
+      <span class="lastupdated">Last updated on Apr 17, 2025.
       </span></p>
   </div>
 
