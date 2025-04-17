@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Module defaults" href="playbooks_module_defaults.html" />
-    <link rel="prev" title="Re-using Ansible artifacts" href="playbooks_reuse.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="Reusing Ansible artifacts" href="playbooks_reuse.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -152,7 +152,7 @@
 <li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Re-using Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Reusing Ansible artifacts</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Roles</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#role-directory-structure">Role directory structure</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#storing-and-finding-roles">Storing and finding roles</a></li>
@@ -179,7 +179,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -285,17 +285,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -389,30 +386,30 @@ webservers.yml
 fooservers.yml
 </pre></div>
 </div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">roles/</span>
-<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">common/</span><span class="w">               </span><span class="c1"># this hierarchy represents a &quot;role&quot;</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">tasks/</span><span class="w">            </span><span class="c1">#</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">main.yml</span><span class="w">      </span><span class="c1">#  &lt;-- tasks file can include smaller files if warranted</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">handlers/</span><span class="w">         </span><span class="c1">#</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">main.yml</span><span class="w">      </span><span class="c1">#  &lt;-- handlers file</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">templates/</span><span class="w">        </span><span class="c1">#  &lt;-- files for use with the template resource</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">ntp.conf.j2</span><span class="w">   </span><span class="c1">#  &lt;------- templates end in .j2</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">files/</span><span class="w">            </span><span class="c1">#</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">bar.txt</span><span class="w">       </span><span class="c1">#  &lt;-- files for use with the copy resource</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">foo.sh</span><span class="w">        </span><span class="c1">#  &lt;-- script files for use with the script resource</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">vars/</span><span class="w">             </span><span class="c1">#</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">main.yml</span><span class="w">      </span><span class="c1">#  &lt;-- variables associated with this role</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">defaults/</span><span class="w">         </span><span class="c1">#</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">main.yml</span><span class="w">      </span><span class="c1">#  &lt;-- default lower priority variables for this role</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">meta/</span><span class="w">             </span><span class="c1">#</span>
-<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">main.yml</span><span class="w">      </span><span class="c1">#  &lt;-- role dependencies</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">library/</span><span class="w">          </span><span class="c1"># roles can also include custom modules</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">module_utils/</span><span class="w">     </span><span class="c1"># roles can also include custom module_utils</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">lookup_plugins/</span><span class="w">   </span><span class="c1"># or other types of plugins, like lookup in this case</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>roles/
+    common/               # this hierarchy represents a &quot;role&quot;
+        tasks/            #
+            main.yml      #  &lt;-- tasks file can include smaller files if warranted
+        handlers/         #
+            main.yml      #  &lt;-- handlers file
+        templates/        #  &lt;-- files for use with the template resource
+            ntp.conf.j2   #  &lt;------- templates end in .j2
+        files/            #
+            bar.txt       #  &lt;-- files for use with the copy resource
+            foo.sh        #  &lt;-- script files for use with the script resource
+        vars/             #
+            main.yml      #  &lt;-- variables associated with this role
+        defaults/         #
+            main.yml      #  &lt;-- default lower priority variables for this role
+        meta/             #
+            main.yml      #  &lt;-- role dependencies
+        library/          # roles can also include custom modules
+        module_utils/     # roles can also include custom module_utils
+        lookup_plugins/   # or other types of plugins, like lookup in this case
 
-<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">webtier/</span><span class="w">              </span><span class="c1"># same kind of structure as &quot;common&quot; was above, done for the webtier role</span>
-<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">monitoring/</span><span class="w">           </span><span class="c1"># &quot;&quot;</span>
-<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">fooapp/</span><span class="w">               </span><span class="c1"># &quot;&quot;</span>
+    webtier/              # same kind of structure as &quot;common&quot; was above, done for the webtier role
+    monitoring/           # &quot;&quot;
+    fooapp/               # &quot;&quot;
 </pre></div>
 </div>
 <p>By default, Ansible will look in most role directories for a <code class="docutils literal notranslate"><span class="pre">main.yml</span></code> file for relevant content (also <code class="docutils literal notranslate"><span class="pre">main.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">main</span></code>):</p>
@@ -601,7 +598,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/opt/a&#39;</span>
 <span class="w">        </span><span class="nt">app_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
 <span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">typeA</span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="c1"># ...</span>
 </pre></div>
 </div>
 <p>When you add a <a class="reference internal" href="playbooks_tags.html#tags"><span class="std std-ref">tag</span></a> to an <code class="docutils literal notranslate"><span class="pre">include_role</span></code> task, Ansible applies the tag <strong>only</strong> to the include itself. This means you can pass <code class="docutils literal notranslate"><span class="pre">--tags</span></code> to run only selected tasks from the role, if those tasks themselves have the same tag as the include statement. See <a class="reference internal" href="playbooks_tags.html#selective-reuse"><span class="std std-ref">Selectively running tagged tasks in reusable files</span></a> for details.</p>
@@ -645,7 +642,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/opt/a&#39;</span>
 <span class="w">        </span><span class="nt">app_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="c1"># ...</span>
 </pre></div>
 </div>
 <p>When you add a tag to an <code class="docutils literal notranslate"><span class="pre">import_role</span></code> statement, Ansible applies the tag to <strong>all</strong> tasks within the role. See <a class="reference internal" href="playbooks_tags.html#tag-inheritance"><span class="std std-ref">Tag inheritance: adding tags to multiple tasks</span></a> for details.</p>
@@ -1110,7 +1107,7 @@ Alongside the ‘tasks’ and ‘handlers’ structure of a role, add a director
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="playbooks_reuse.html" class="btn btn-neutral float-left" title="Re-using Ansible artifacts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbooks_reuse.html" class="btn btn-neutral float-left" title="Reusing Ansible artifacts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="playbooks_module_defaults.html" class="btn btn-neutral float-right" title="Module defaults" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -1118,7 +1115,7 @@ Alongside the ‘tasks’ and ‘handlers’ structure of a role, add a director
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 13, 2025.
+      <span class="lastupdated">Last updated on Apr 17, 2025.
       </span></p>
   </div>
 

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Re-using Ansible artifacts &mdash; Ansible Community Documentation</title>
+  <title>Reusing Ansible artifacts &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
@@ -152,12 +152,12 @@
 <li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Re-using Ansible artifacts</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Reusing Ansible artifacts</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#creating-reusable-files-and-roles">Creating reusable files and roles</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#re-using-playbooks">Re-using playbooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reusing-playbooks">Reusing playbooks</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#when-to-turn-a-playbook-into-a-role">When to turn a playbook into a role</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#re-using-files-and-roles">Re-using files and roles</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#re-using-tasks-as-handlers">Re-using tasks as handlers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reusing-files-and-roles">Reusing files and roles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reusing-tasks-as-handlers">Reusing tasks as handlers</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
@@ -176,7 +176,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -259,7 +259,7 @@
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Using Ansible playbooks</a></li>
           <li class="breadcrumb-item"><a href="playbooks.html">Working with playbooks</a></li>
-      <li class="breadcrumb-item active">Re-using Ansible artifacts</li>
+      <li class="breadcrumb-item active">Reusing Ansible artifacts</li>
   <li class="wy-breadcrumbs-aside">
             <!-- Remove main index page as it is no longer editable -->
             
@@ -282,17 +282,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -342,22 +339,22 @@
   
            <div itemprop="articleBody">
              
-  <section id="re-using-ansible-artifacts">
-<span id="playbooks-reuse"></span><h1>Re-using Ansible artifacts<a class="headerlink" href="#re-using-ansible-artifacts" title="Link to this heading"></a></h1>
+  <section id="reusing-ansible-artifacts">
+<span id="playbooks-reuse"></span><h1>Reusing Ansible artifacts<a class="headerlink" href="#reusing-ansible-artifacts" title="Link to this heading"></a></h1>
 <p>You can write a simple playbook in one very large file, and most users learn the one-file approach first. However, breaking your automation work up into smaller files is an excellent way to organize complex sets of tasks and reuse them. Smaller, more distributed artifacts let you reuse the same variables, tasks, and plays in multiple playbooks to address different use cases. You can use distributed artifacts across multiple parent playbooks or even multiple times within one playbook. For example, you might want to update your customer database as part of several different playbooks. If you put all the tasks related to updating your database in a tasks file or a role, you can reuse them in many playbooks while only maintaining them in one place.</p>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#creating-reusable-files-and-roles" id="id1">Creating reusable files and roles</a></p></li>
-<li><p><a class="reference internal" href="#re-using-playbooks" id="id2">Re-using playbooks</a></p></li>
+<li><p><a class="reference internal" href="#reusing-playbooks" id="id2">Reusing playbooks</a></p></li>
 <li><p><a class="reference internal" href="#when-to-turn-a-playbook-into-a-role" id="id3">When to turn a playbook into a role</a></p></li>
-<li><p><a class="reference internal" href="#re-using-files-and-roles" id="id4">Re-using files and roles</a></p>
+<li><p><a class="reference internal" href="#reusing-files-and-roles" id="id4">Reusing files and roles</a></p>
 <ul>
 <li><p><a class="reference internal" href="#includes-dynamic-reuse" id="id5">Includes: dynamic reuse</a></p></li>
 <li><p><a class="reference internal" href="#imports-static-reuse" id="id6">Imports: static reuse</a></p></li>
 <li><p><a class="reference internal" href="#comparing-includes-and-imports-dynamic-and-static-reuse" id="id7">Comparing includes and imports: dynamic and static reuse</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#re-using-tasks-as-handlers" id="id8">Re-using tasks as handlers</a></p>
+<li><p><a class="reference internal" href="#reusing-tasks-as-handlers" id="id8">Reusing tasks as handlers</a></p>
 <ul>
 <li><p><a class="reference internal" href="#triggering-included-dynamic-handlers" id="id9">Triggering included (dynamic) handlers</a></p></li>
 <li><p><a class="reference internal" href="#triggering-imported-static-handlers" id="id10">Triggering imported (static) handlers</a></p></li>
@@ -380,8 +377,8 @@
 <p><span class="versionmodified added">New in version 2.4.</span></p>
 </div>
 </section>
-<section id="re-using-playbooks">
-<h2><a class="toc-backref" href="#id2" role="doc-backlink">Re-using playbooks</a><a class="headerlink" href="#re-using-playbooks" title="Link to this heading"></a></h2>
+<section id="reusing-playbooks">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Reusing playbooks</a><a class="headerlink" href="#reusing-playbooks" title="Link to this heading"></a></h2>
 <p>You can incorporate multiple playbooks into a main playbook. However, you can only use imports to reuse playbooks. For example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">import_playbook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">import_playbook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">databases.yml</span>
@@ -401,8 +398,8 @@
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">When to turn a playbook into a role</a><a class="headerlink" href="#when-to-turn-a-playbook-into-a-role" title="Link to this heading"></a></h2>
 <p>For some use cases, simple playbooks work well. However, starting at a certain level of complexity, roles work better than playbooks. A role lets you store your defaults, handlers, variables, and tasks in separate directories, instead of in a single long document. Roles are easy to share on Ansible Galaxy. For complex use cases, most users find roles easier to read, understand, and maintain than all-in-one playbooks.</p>
 </section>
-<section id="re-using-files-and-roles">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink">Re-using files and roles</a><a class="headerlink" href="#re-using-files-and-roles" title="Link to this heading"></a></h2>
+<section id="reusing-files-and-roles">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Reusing files and roles</a><a class="headerlink" href="#reusing-files-and-roles" title="Link to this heading"></a></h2>
 <p>Ansible offers two ways to reuse files and roles in a playbook: dynamic and static.</p>
 <blockquote>
 <div><ul class="simple">
@@ -453,7 +450,7 @@
 </section>
 <section id="comparing-includes-and-imports-dynamic-and-static-reuse">
 <span id="dynamic-vs-static"></span><h3><a class="toc-backref" href="#id7" role="doc-backlink">Comparing includes and imports: dynamic and static reuse</a><a class="headerlink" href="#comparing-includes-and-imports-dynamic-and-static-reuse" title="Link to this heading"></a></h3>
-<p>Each approach to re-using distributed Ansible artifacts has advantages and limitations. You may choose dynamic reuse for some playbooks and static reuse for others. Although you can use both dynamic and static reuse in a single playbook, it is best to select one approach per playbook. Mixing static and dynamic reuse can introduce difficult-to-diagnose bugs into your playbooks. This table summarizes the main differences so you can choose the best approach for each playbook you create.</p>
+<p>Each approach to reusing distributed Ansible artifacts has advantages and limitations. You may choose dynamic reuse for some playbooks and static reuse for others. Although you can use both dynamic and static reuse in a single playbook, it is best to select one approach per playbook. Mixing static and dynamic reuse can introduce difficult-to-diagnose bugs into your playbooks. This table summarizes the main differences so you can choose the best approach for each playbook you create.</p>
 <table class="documentation-table docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"></th>
@@ -521,8 +518,8 @@ and accounting.</p></li>
 </div>
 </section>
 </section>
-<section id="re-using-tasks-as-handlers">
-<h2><a class="toc-backref" href="#id8" role="doc-backlink">Re-using tasks as handlers</a><a class="headerlink" href="#re-using-tasks-as-handlers" title="Link to this heading"></a></h2>
+<section id="reusing-tasks-as-handlers">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Reusing tasks as handlers</a><a class="headerlink" href="#reusing-tasks-as-handlers" title="Link to this heading"></a></h2>
 <p>You can also use includes and imports in the <a class="reference internal" href="playbooks_handlers.html#handlers"><span class="std std-ref">Handlers: running operations on change</span></a> section of a playbook. For example, if you want to define how to restart Apache, you only have to do that once for all of your playbooks. You might make a <code class="docutils literal notranslate"><span class="pre">restarts.yml</span></code> file that looks like:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># restarts.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart apache</span>
@@ -605,7 +602,7 @@ and accounting.</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 13, 2025.
+      <span class="lastupdated">Last updated on Apr 17, 2025.
       </span></p>
   </div>
 
