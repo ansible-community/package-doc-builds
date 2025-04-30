@@ -298,37 +298,40 @@
            <div itemprop="articleBody">
              
   <section id="ansible-12-porting-guide">
-<span id="porting-12-guide"></span><h1><a class="toc-backref" href="#id4" role="doc-backlink">Ansible 12 Porting Guide</a><a class="headerlink" href="#ansible-12-porting-guide" title="Link to this heading"></a></h1>
+<span id="porting-12-guide"></span><h1><a class="toc-backref" href="#id7" role="doc-backlink">Ansible 12 Porting Guide</a><a class="headerlink" href="#ansible-12-porting-guide" title="Link to this heading"></a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#ansible-12-porting-guide" id="id4">Ansible 12 Porting Guide</a></p>
+<li><p><a class="reference internal" href="#ansible-12-porting-guide" id="id7">Ansible 12 Porting Guide</a></p>
 <ul>
-<li><p><a class="reference internal" href="#playbook" id="id5">Playbook</a></p></li>
-<li><p><a class="reference internal" href="#engine" id="id6">Engine</a></p></li>
-<li><p><a class="reference internal" href="#plugin-api" id="id7">Plugin API</a></p></li>
-<li><p><a class="reference internal" href="#command-line" id="id8">Command Line</a></p></li>
-<li><p><a class="reference internal" href="#deprecated" id="id9">Deprecated</a></p></li>
-<li><p><a class="reference internal" href="#modules" id="id10">Modules</a></p></li>
-<li><p><a class="reference internal" href="#plugins" id="id11">Plugins</a></p></li>
-<li><p><a class="reference internal" href="#porting-custom-scripts" id="id12">Porting custom scripts</a></p></li>
-<li><p><a class="reference internal" href="#networking" id="id13">Networking</a></p></li>
-<li><p><a class="reference internal" href="#porting-guide-for-v12-0-0a1" id="id14">Porting Guide for v12.0.0a1</a></p></li>
+<li><p><a class="reference internal" href="#introduction" id="id8">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#playbook" id="id9">Playbook</a></p></li>
+<li><p><a class="reference internal" href="#engine" id="id10">Engine</a></p></li>
+<li><p><a class="reference internal" href="#plugin-api" id="id11">Plugin API</a></p></li>
+<li><p><a class="reference internal" href="#command-line" id="id12">Command Line</a></p></li>
+<li><p><a class="reference internal" href="#deprecated" id="id13">Deprecated</a></p></li>
+<li><p><a class="reference internal" href="#modules" id="id14">Modules</a></p></li>
+<li><p><a class="reference internal" href="#plugins" id="id15">Plugins</a></p></li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id16">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#networking" id="id17">Networking</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v12-0-0a2" id="id18">Porting Guide for v12.0.0a2</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v12-0-0a1" id="id19">Porting Guide for v12.0.0a1</a></p></li>
 </ul>
 </li>
 </ul>
 </nav>
 <p>Ansible 12 is based on Ansible-core 2.19.</p>
-<p>We suggest you read this page along with the <a class="reference external" href="https://github.com/ansible-community/ansible-build-data/blob/main/12/CHANGELOG-v12.md">Ansible 12 Changelog</a> to understand what updates you may need to make.
-Introduction
-============</p>
+<p>We suggest you read this page along with the <a class="reference external" href="https://github.com/ansible-community/ansible-build-data/blob/main/12/CHANGELOG-v12.md">Ansible 12 Changelog</a> to understand what updates you may need to make.</p>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>This release includes an overhaul of the templating system and a new feature dubbed Data Tagging.
 These changes enable reporting of numerous problematic behaviors that went undetected in previous releases,
 with wide-ranging positive effects on security, performance, and user experience.</p>
 <p>Backward compatibility has been preserved where practical, but some breaking changes were necessary.
 This guide describes some common problem scenarios with example content, error messsages, and suggested solutions.</p>
+</section>
 <section id="playbook">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
 <section id="broken-conditionals">
 <h3>Broken Conditionals<a class="headerlink" href="#broken-conditionals" title="Link to this heading"></a></h3>
 <p>Broken conditionals occur when the input expression or template is not a string, or the result is not a boolean.
@@ -488,6 +491,31 @@ The environment variable <code class="docutils literal notranslate"><span class=
 <p>This optional warning and failure behavior is experimental and subject to change in future versions.</p>
 </div>
 </section>
+<section id="loops-no-longer-leak-omit-placeholders">
+<h3>Loops no longer leak omit placeholders<a class="headerlink" href="#loops-no-longer-leak-omit-placeholders" title="Link to this heading"></a></h3>
+<p>Omit placeholders no longer leak between loop item templating and task templating.</p>
+<p>Previously, <code class="docutils literal notranslate"><span class="pre">omit</span></code> placeholders could remain embedded in loop items after templating and be used as an <code class="docutils literal notranslate"><span class="pre">omit</span></code> for task templating.
+Now, values resolving to <code class="docutils literal notranslate"><span class="pre">omit</span></code> are dropped immediately when loop items are templated.</p>
+<p>To turn missing values into an <code class="docutils literal notranslate"><span class="pre">omit</span></code> for task templating, use <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">default(omit)</span></code>.
+This solution is backward compatible with previous versions of <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.</p>
+<section id="example-missing-default-omit">
+<h4>Example - missing default(omit)<a class="headerlink" href="#example-missing-default-omit" title="Link to this heading"></a></h4>
+<p>The following task tries to pass <code class="docutils literal notranslate"><span class="pre">omit</span></code> from a loop to the task, but the value is undefined since it was omitted:</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.msg</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="w">  </span><span class="c1"># &#39;msg&#39; is undefined</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">omit</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="w">  </span><span class="c1"># &#39;msg&#39; will be omitted from the loop item</span>
+</pre></div>
+</div>
+<p>This updated task uses <code class="docutils literal notranslate"><span class="pre">default(omit)</span></code> on the missing value to ensure it is omitted for the task:</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.msg</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="w">  </span><span class="c1"># &#39;msg&#39; is undefined, use &#39;default(omit)&#39; to turn it into an omit</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">omit</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="w">  </span><span class="c1"># passed through in earlier versions, this value is now omitted from the loop item</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="privilege-escalation-timeouts">
 <h3>Privilege escalation timeouts<a class="headerlink" href="#privilege-escalation-timeouts" title="Link to this heading"></a></h3>
 <p>Timeout waiting on privilege escalation (<code class="docutils literal notranslate"><span class="pre">become</span></code>) is now an unreachable error instead of a task error.
@@ -496,7 +524,7 @@ timeout on <code class="docutils literal notranslate"><span class="pre">become</
 </section>
 </section>
 <section id="engine">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Engine</a><a class="headerlink" href="#engine" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Engine</a><a class="headerlink" href="#engine" title="Link to this heading"></a></h2>
 <section id="templating">
 <h3>Templating<a class="headerlink" href="#templating" title="Link to this heading"></a></h3>
 <section id="template-trust-model-inversion">
@@ -683,7 +711,7 @@ warnings, or deprecations (even in module code) using the <code class="docutils 
 </section>
 </section>
 <section id="plugin-api">
-<span id="id1"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
+<span id="id1"></span><h2><a class="toc-backref" href="#id11" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
 <section id="deprecating-values">
 <h3>Deprecating values<a class="headerlink" href="#deprecating-values" title="Link to this heading"></a></h3>
 <p>Plugins and Python modules can tag returned values as deprecated with the new <code class="docutils literal notranslate"><span class="pre">deprecate_value</span></code> function from
@@ -743,17 +771,62 @@ templates.</p>
 <p>This section and the associated public API are currently incomplete.</p>
 </div>
 </section>
+<section id="raising-exceptions">
+<h3>Raising exceptions<a class="headerlink" href="#raising-exceptions" title="Link to this heading"></a></h3>
+<p>When raising exceptions in an exception handler, be sure to use <code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">...</span> <span class="pre">from</span></code> as appropriate.
+This supersedes the use of the <code class="docutils literal notranslate"><span class="pre">AnsibleError</span></code> arg <code class="docutils literal notranslate"><span class="pre">orig_exc</span></code> to represent the cause.
+Specifying <code class="docutils literal notranslate"><span class="pre">orig_exc</span></code> as the cause is still permitted for backward compatibility.</p>
+<p>Failure to use <code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">...</span> <span class="pre">from</span></code> when <code class="docutils literal notranslate"><span class="pre">orig_exc</span></code> is set will result in a warning.
+Additionally, if the two cause exceptions do not match, a warning will be issued.</p>
+</section>
+<section id="overly-broad-exception-handling-in-jinja-plugins">
+<h3>Overly-broad exception handling in Jinja plugins<a class="headerlink" href="#overly-broad-exception-handling-in-jinja-plugins" title="Link to this heading"></a></h3>
+<p>Jinja plugins with overly broad exception handling, such as <code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">Exception</span></code>,
+may behave incorrectly when accessing the contents of variables which are containers (<code class="docutils literal notranslate"><span class="pre">dict</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>).
+This can occur when a templated value from a variable is undefined,
+is an undecryptable vaulted value, or another value which triggers lazily reported fault conditions.</p>
+<p>Jinja plugins should catch more specific exception types where possible,
+and do so around the smallest reasonable portion of code.
+Be especially careful to avoid broad exception handling around code which accesses the contents of container variables.</p>
+</section>
+<section id="ansible-custom-data-types">
+<h3>Ansible custom data types<a class="headerlink" href="#ansible-custom-data-types" title="Link to this heading"></a></h3>
+<p>Many variable objects in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> are represented by custom types.
+In previous versions these could be seen as types such as:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleUnicode</span></code> (a subclass of <code class="docutils literal notranslate"><span class="pre">str</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleSequence</span></code> (a subclass of <code class="docutils literal notranslate"><span class="pre">list</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleMapping</span></code> (a subclass of <code class="docutils literal notranslate"><span class="pre">dict</span></code>)</p></li>
+</ul>
+<p>These types, and more, now have new subclasses derived from their native Python types.
+In most cases these types behave indistinguishably from the types they extend, and existing code should function normally.
+However, some Python libraries do not handle builtin object subclasses properly.
+Custom plugins that interact with such libraries may require changes to convert and pass the native types.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This section and the associated public API are currently incomplete.</p>
+</div>
+</section>
+<section id="ansiblevaultencryptedunicode-replaced-by-encryptedstring">
+<h3>AnsibleVaultEncryptedUnicode replaced by EncryptedString<a class="headerlink" href="#ansiblevaultencryptedunicode-replaced-by-encryptedstring" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">AnsibleVaultEncryptedUnicode</span></code> type has been replaced by <code class="docutils literal notranslate"><span class="pre">EncryptedString</span></code>.</p>
+<p>Plugins which create <code class="docutils literal notranslate"><span class="pre">AnsibleVaultEncryptedUnicode</span></code> will now receive <code class="docutils literal notranslate"><span class="pre">EncryptedString</span></code> instances instead.
+This feature ensures backward compatibility with previous versions of <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.</p>
+<p>Plugins which perform <code class="docutils literal notranslate"><span class="pre">isinstance</span></code> checks, looking for <code class="docutils literal notranslate"><span class="pre">AnsibleVaultEncryptedUnicode</span></code>, will no longer encounter these types.
+Values formerly represented by that type will now appear as a tagged <code class="docutils literal notranslate"><span class="pre">str</span></code> instead.
+Special handling in plugins is no longer required to access the contents of these values.</p>
+</section>
 </section>
 <section id="command-line">
-<h2><a class="toc-backref" href="#id8" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="deprecated">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="modules">
-<h2><a class="toc-backref" href="#id10" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 <section id="modules-removed">
 <h3>Modules removed<a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
@@ -772,7 +845,9 @@ templates.</p>
 </section>
 </section>
 <section id="plugins">
-<h2><a class="toc-backref" href="#id11" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
+<section id="noteworthy-plugin-changes">
+<h3>Noteworthy plugin changes<a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
 <ul>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">ssh</span></code> connection plugin now supports using <code class="docutils literal notranslate"><span class="pre">SSH_ASKPASS</span></code> to supply passwords
 for authentication as an alternative to the <code class="docutils literal notranslate"><span class="pre">sshpass</span></code> program. The default is to use
@@ -793,18 +868,66 @@ make one of the following changes:</p>
 </pre></div>
 </div>
 </li>
+<li><p>Coercing unrecognized input values in the <code class="docutils literal notranslate"><span class="pre">bool</span></code> filter is deprecated.
+The <code class="docutils literal notranslate"><span class="pre">bool</span></code> filter now returns only <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>, depending on the input:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code> - Returned for <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code> and case-insensitive matches on the strings: “yes”, “on”, “true”, “1”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">False</span></code> - Returned for <code class="docutils literal notranslate"><span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">0</span></code> and case-insensitive matches on the strings: “no”, “off”, “false”, “0”</p></li>
+</ul>
+<p>Any other input will result in a deprecation warning. This warning will become an error in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.23.</p>
+<p>When a deprecation warning is issued, the return value is <code class="docutils literal notranslate"><span class="pre">False</span></code> unless the input equals <code class="docutils literal notranslate"><span class="pre">1</span></code>,
+which can occur when the input is the <code class="docutils literal notranslate"><span class="pre">float</span></code> value of <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
+<p>This filter now returns <code class="docutils literal notranslate"><span class="pre">False</span></code> instead of <code class="docutils literal notranslate"><span class="pre">None</span></code> when the input is <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+The aforementioned deprecation warning is also issued in this case.</p>
+</li>
 </ul>
 </section>
+</section>
 <section id="porting-custom-scripts">
-<h2><a class="toc-backref" href="#id12" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="networking">
-<h2><a class="toc-backref" href="#id13" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id17" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
+<section id="porting-guide-for-v12-0-0a2">
+<h2><a class="toc-backref" href="#id18" role="doc-backlink">Porting Guide for v12.0.0a2</a><a class="headerlink" href="#porting-guide-for-v12-0-0a2" title="Link to this heading"></a></h2>
+<section id="known-issues">
+<h3>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>reveal_ansible_type filter plugin and ansible_type test plugin - note that ansible-core’s Data Tagging feature implements new aliases, such as <code class="docutils literal notranslate"><span class="pre">_AnsibleTaggedStr</span></code> for <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">_AnsibleTaggedInt</span></code> for <code class="docutils literal notranslate"><span class="pre">int</span></code>, and <code class="docutils literal notranslate"><span class="pre">_AnsibleTaggedFloat</span></code> for <code class="docutils literal notranslate"><span class="pre">float</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/9833">https://github.com/ansible-collections/community.general/pull/9833</a>).</p></li>
+</ul>
+</section>
+<section id="major-changes">
+<h3>Major Changes<a class="headerlink" href="#major-changes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add tempo role by &#64;CSTDev in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/323">https://github.com/grafana/grafana-ansible-collection/pull/323</a></p></li>
+<li><p>Do not log grafana.ini contents when setting facts by &#64;root-expert in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/325">https://github.com/grafana/grafana-ansible-collection/pull/325</a></p></li>
+<li><p>Fix loki_operational_config section not getting rendered in config.yml by &#64;olegkaspersky in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/330">https://github.com/grafana/grafana-ansible-collection/pull/330</a></p></li>
+<li><p>Fix sectionless items edge case by &#64;santilococo in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/303">https://github.com/grafana/grafana-ansible-collection/pull/303</a></p></li>
+<li><p>Fix tags Inherit default vars by &#64;MJurayev in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/341">https://github.com/grafana/grafana-ansible-collection/pull/341</a></p></li>
+<li><p>Fix the markdown code fences for install command by &#64;benmatselby in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/306">https://github.com/grafana/grafana-ansible-collection/pull/306</a></p></li>
+<li><p>Grafana fix facts in main.yml by &#64;voidquark in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/315">https://github.com/grafana/grafana-ansible-collection/pull/315</a></p></li>
+<li><p>Make dashboard imports more flexible by &#64;torfbolt in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/308">https://github.com/grafana/grafana-ansible-collection/pull/308</a></p></li>
+<li><p>force temporary directory even in check mode for  dashboards.yml by &#64;cmehat in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/339">https://github.com/grafana/grafana-ansible-collection/pull/339</a></p></li>
+<li><p>integrate sles legacy init-script support by &#64;floerica in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/184">https://github.com/grafana/grafana-ansible-collection/pull/184</a></p></li>
+<li><p>management of the config.river with the conversion of the config.yaml by &#64;lbrule in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/149">https://github.com/grafana/grafana-ansible-collection/pull/149</a></p></li>
+</ul>
+</section>
+<section id="deprecated-features">
+<h3>Deprecated Features<a class="headerlink" href="#deprecated-features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>manifold lookup plugin - plugin is deprecated and will be removed in community.general 11.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/10028">https://github.com/ansible-collections/community.general/pull/10028</a>).</p></li>
+<li><p>stackpath_compute inventory plugin - plugin is deprecated and will be removed in community.general 11.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/10026">https://github.com/ansible-collections/community.general/pull/10026</a>).</p></li>
+</ul>
+<ul class="simple">
+<li><p>vmware_dvs_portgroup - <code class="docutils literal notranslate"><span class="pre">mac_learning</span></code> is deprecated in favour of <code class="docutils literal notranslate"><span class="pre">network_policy.mac_learning</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2360">https://github.com/ansible-collections/community.vmware/pull/2360</a>).</p></li>
+</ul>
+</section>
+</section>
 <section id="porting-guide-for-v12-0-0a1">
-<h2><a class="toc-backref" href="#id14" role="doc-backlink">Porting Guide for v12.0.0a1</a><a class="headerlink" href="#porting-guide-for-v12-0-0a1" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">Porting Guide for v12.0.0a1</a><a class="headerlink" href="#porting-guide-for-v12-0-0a1" title="Link to this heading"></a></h2>
 <section id="added-collections">
 <h3>Added Collections<a class="headerlink" href="#added-collections" title="Link to this heading"></a></h3>
 <ul class="simple">
@@ -812,8 +935,8 @@ make one of the following changes:</p>
 <li><p>microsoft.iis (version 1.0.2)</p></li>
 </ul>
 </section>
-<section id="known-issues">
-<h3>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading"></a></h3>
+<section id="id2">
+<h3>Known Issues<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>templating - Any string value starting with <code class="docutils literal notranslate"><span class="pre">#jinja2:</span></code> which is templated will always be interpreted as Jinja2 configuration overrides. To include this literal value at the start of a string, a space or other character must precede it.</p></li>
 <li><p>variables - Tagged values cannot be used for dictionary keys in many circumstances.</p></li>
@@ -881,8 +1004,8 @@ make one of the following changes:</p>
 <li><p>Drop support for Python 2.7 and 3.5.</p></li>
 </ul>
 </section>
-<section id="major-changes">
-<h3>Major Changes<a class="headerlink" href="#major-changes" title="Link to this heading"></a></h3>
+<section id="id3">
+<h3>Major Changes<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Jinja plugins - Jinja builtin filter and test plugins are now accessible via their fully-qualified names <code class="docutils literal notranslate"><span class="pre">ansible.builtin.{name}</span></code>.</p></li>
 <li><p>Task Execution / Forks - Forks no longer inherit stdio from the parent <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> process. <code class="docutils literal notranslate"><span class="pre">stdout</span></code>, <code class="docutils literal notranslate"><span class="pre">stderr</span></code>, and <code class="docutils literal notranslate"><span class="pre">stdin</span></code> within a worker are detached from the terminal, and non-functional. All needs to access stdio from a fork for controller side plugins requires use of <code class="docutils literal notranslate"><span class="pre">Display</span></code>.</p></li>
@@ -923,7 +1046,7 @@ make one of the following changes:</p>
 <li><p>Updated the examples with correct values that have minimum or maximum values.</p></li>
 </ul>
 <ul class="simple">
-<li><p>Ability to set custom directory path for <a href="#id2"><span class="problematic" id="id3">*</span></a>.alloy config files by &#64;voidquark in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/294">https://github.com/grafana/grafana-ansible-collection/pull/294</a></p></li>
+<li><p>Ability to set custom directory path for <a href="#id4"><span class="problematic" id="id5">*</span></a>.alloy config files by &#64;voidquark in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/294">https://github.com/grafana/grafana-ansible-collection/pull/294</a></p></li>
 <li><p>Fix ‘dict object’ has no attribute ‘path’ when running with –check by &#64;JMLX42 in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/283">https://github.com/grafana/grafana-ansible-collection/pull/283</a></p></li>
 <li><p>Update grafana template by &#64;santilococo in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/300">https://github.com/grafana/grafana-ansible-collection/pull/300</a></p></li>
 <li><p>add loki bloom support by &#64;voidquark in <a class="reference external" href="https://github.com/grafana/grafana-ansible-collection/pull/298">https://github.com/grafana/grafana-ansible-collection/pull/298</a></p></li>
@@ -989,14 +1112,16 @@ Users can still install this collection with <code class="docutils literal notra
 <li><p>junos_scp</p></li>
 </ul>
 </section>
-<section id="deprecated-features">
-<h3>Deprecated Features<a class="headerlink" href="#deprecated-features" title="Link to this heading"></a></h3>
+<section id="id6">
+<h3>Deprecated Features<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>CLI - The <code class="docutils literal notranslate"><span class="pre">--inventory-file</span></code> option alias is deprecated. Use the <code class="docutils literal notranslate"><span class="pre">-i</span></code> or <code class="docutils literal notranslate"><span class="pre">--inventory</span></code> option instead.</p></li>
 <li><p>Stategy Plugins - Use of strategy plugins not provided in <code class="docutils literal notranslate"><span class="pre">ansible.builtin</span></code> are deprecated and do not carry any backwards compatibility guarantees going forward. A future release will remove the ability to use external strategy plugins. No alternative for third party strategy plugins is currently planned.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ansible.module_utils.compat.datetime</span></code> - The datetime compatibility shims are now deprecated. They are scheduled to be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> v2.21. This includes <code class="docutils literal notranslate"><span class="pre">UTC</span></code>, <code class="docutils literal notranslate"><span class="pre">utcfromtimestamp()</span></code> and <code class="docutils literal notranslate"><span class="pre">utcnow</span></code> importable from said module (<a class="reference external" href="https://github.com/ansible/ansible/pull/81874">https://github.com/ansible/ansible/pull/81874</a>).</p></li>
 <li><p>bool filter - Support for coercing unrecognized input values (including None) has been deprecated. Consult the filter documentation for acceptable values, or consider use of the <code class="docutils literal notranslate"><span class="pre">truthy</span></code> and <code class="docutils literal notranslate"><span class="pre">falsy</span></code> tests.</p></li>
 <li><p>cache plugins - The <cite>ansible.plugins.cache.base</cite> Python module is deprecated. Use <cite>ansible.plugins.cache</cite> instead.</p></li>
+<li><p>callback plugins - The <cite>v2_on_any</cite> callback method is deprecated. Use specific callback methods instead.</p></li>
+<li><p>callback plugins - The v1 callback API (callback methods not prefixed with <cite>v2_</cite>) is deprecated. Use <cite>v2_</cite> prefixed methods instead.</p></li>
 <li><p>conditionals - Conditionals using Jinja templating delimiters (e.g., <code class="docutils literal notranslate"><span class="pre">{{</span></code>, <code class="docutils literal notranslate"><span class="pre">{%</span></code>) should be rewritten as expressions without delimiters, unless the entire conditional value is a single template that resolves to a trusted string expression. This is useful for dynamic indirection of conditional expressions, but is limited to trusted literal string expressions.</p></li>
 <li><p>config - The <code class="docutils literal notranslate"><span class="pre">ACTION_WARNINGS</span></code> config has no effect. It previously disabled command warnings, which have since been removed.</p></li>
 <li><p>config - The <code class="docutils literal notranslate"><span class="pre">DEFAULT_JINJA2_NATIVE</span></code> option has no effect. Jinja2 native mode is now the default and only option.</p></li>
@@ -1130,7 +1255,7 @@ Users can still install this collection with <code class="docutils literal notra
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Apr 30, 2025.
       </span></p>
   </div>
 
