@@ -138,7 +138,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -324,17 +324,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -439,8 +436,16 @@ to work around limitations, corner cases and ensure selinux context is saved if 
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">fail_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NoReturn" title="(in Python v3.13)"><span class="pre">NoReturn</span></a></span></span></dt>
-<dd><p>return from the module, with an error message</p>
+<span class="sig-name descname"><span class="pre">fail_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception:</span> <span class="pre">BaseException</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">&lt;object</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NoReturn" title="(in Python v3.13)"><span class="pre">NoReturn</span></a></span></span></dt>
+<dd><p>Return from the module with an error message and optional exception/traceback detail.
+A traceback will only be included in the result if error traceback capturing has been enabled.</p>
+<p>When <cite>exception</cite> is an exception object, its message chain will be automatically combined with <cite>msg</cite> to create the final error message.
+The message chain includes the exception’s message as well as messages from any __cause__ exceptions.
+The traceback from <cite>exception</cite> will be used for the formatted traceback.</p>
+<p>When <cite>exception</cite> is a string, it will be used as the formatted traceback.</p>
+<p>When <cite>exception</cite> is set to <cite>None</cite>, the current call stack will be used for the formatted traceback.</p>
+<p>When <cite>exception</cite> is not specified, a formatted traceback will be retrieved from the current exception.
+If no exception is pending, the current call stack will be used instead.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1137,9 +1142,8 @@ to an integer and return it</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ansible.module_utils.common.validation.check_type_jsonarg">
 <span class="sig-prename descclassname"><span class="pre">ansible.module_utils.common.validation.</span></span><span class="sig-name descname"><span class="pre">check_type_jsonarg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansible.module_utils.common.validation.check_type_jsonarg" title="Link to this definition"></a></dt>
-<dd><p>Return a jsonified string. Sometimes the controller turns a json string
-into a dict/list so transform it back into json here</p>
-<p>Raises <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></a> if unable to convert the value</p>
+<dd><p>JSON serialize dict/list/tuple, strip str and bytes.
+Previously required for cases where Ansible/Jinja classic-mode literal eval pass could inadvertently deserialize objects.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1385,7 +1389,7 @@ in the provided dictionary.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 03, 2025.
+      <span class="lastupdated">Last updated on May 06, 2025.
       </span></p>
   </div>
 

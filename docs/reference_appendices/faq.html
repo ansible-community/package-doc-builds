@@ -138,7 +138,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -292,17 +292,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -597,39 +594,65 @@ this in inventory like so:</p>
 </section>
 <section id="running-on-z-os">
 <h3>Running on z/OS<a class="headerlink" href="#running-on-z-os" title="Link to this heading"></a></h3>
-<p>There are a few common errors that one might run into when trying to execute Ansible on z/OS as a target.</p>
 <ul>
-<li><p>Version 2.7.6 of python for z/OS will not work with Ansible because it represents strings internally as EBCDIC.</p>
-<p>To get around this limitation, download and install a later version of <a class="reference external" href="https://www.rocketsoftware.com/zos-open-source">python for z/OS</a> (2.7.13 or 3.6.1) that represents strings internally as ASCII. Version 2.7.13 is verified to work.</p>
-</li>
-<li><p>When <code class="docutils literal notranslate"><span class="pre">pipelining</span> <span class="pre">=</span> <span class="pre">False</span></code> in <cite>/etc/ansible/ansible.cfg</cite> then Ansible modules are transferred in binary mode through sftp however execution of python fails with</p>
+<li><p>Generally speaking, z/OS cannot be used as an Ansible control node. For more details, see <a class="reference internal" href="../os_guide/intro_zos.html#zos-as-control-node"><span class="std std-ref">Using z/OS as a control node</span></a>.</p></li>
+<li><p>When the path to the Python interpreter is not found in the default location on the target host, the following error may result:</p>
 <div class="admonition error">
 <p class="admonition-title">Error</p>
-<p>SyntaxError: Non-UTF-8 code starting with '\x83' in file /a/user1/.ansible/tmp/ansible-tmp-1548232945.35-274513842609025/AnsiballZ_stat.py on line 1, but no encoding declared; see <a class="reference external" href="https://python.org/dev/peps/pep-0263/">https://python.org/dev/peps/pep-0263/</a> for details</p>
+<p>/usr/bin/python: FSUM7351 not found</p>
 </div>
-<p>To fix it set <code class="docutils literal notranslate"><span class="pre">pipelining</span> <span class="pre">=</span> <span class="pre">True</span></code> in <cite>/etc/ansible/ansible.cfg</cite>.</p>
+<p>Ansible requires a Python interpreter to execute modules on the remote host, and checks for it at the ‘default’ path <code class="docutils literal notranslate"><span class="pre">/usr/bin/python</span></code>.</p>
+<p>On z/OS, the Python 3 interpreter (from <a class="reference external" href="https://www.ibm.com/products/open-enterprise-python-zos">IBM Open Enterprise SDK for Python</a>)
+is often installed to a different path, typically something like:
+<code class="docutils literal notranslate"><span class="pre">/usr/lpp/cyp/v3r12/pyz</span></code>.</p>
+<p>The path to the python interpreter can be configured with the Ansible inventory variable <code class="docutils literal notranslate"><span class="pre">ansible_python_interpreter</span></code>.
+For example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">zos1 ansible_python_interpreter</span><span class="o">:</span><span class="s">/usr/lpp/cyp/v3r12/pyz</span>
+</pre></div>
+</div>
+<p>For more details, see: <a class="reference internal" href="#python-interpreters"><span class="std std-ref">How do I handle not having a Python interpreter at /usr/bin/python on a remote machine?</span></a>.</p>
 </li>
-<li><p>Python interpret cannot be found in default location <code class="docutils literal notranslate"><span class="pre">/usr/bin/python</span></code> on target host.</p>
+<li><p>When <a class="reference internal" href="config.html#ansible-pipelining"><span class="std std-ref">ANSIBLE_PIPELINING</span></a> is not enabled or when Ansible pipelining is enabled but the <code class="docutils literal notranslate"><span class="pre">PYTHONSTDINENCODING</span></code>
+property is not correctly set, the following error may result.</p>
 <div class="admonition error">
 <p class="admonition-title">Error</p>
-<p>/usr/bin/python: EDC5129I No such file or directory</p>
+<p>SyntaxError: Non-UTF-8 code starting with ‘\x81’ in file &lt;stdin&gt; on line 1, but no encoding declared; see <a class="reference external" href="https://peps.python.org/pep-0263/">https://peps.python.org/pep-0263/</a> for details</p>
 </div>
-<p>To fix this set the path to the python installation in your inventory like so:</p>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">zos1 ansible_python_interpreter</span><span class="o">=</span><span class="s">/usr/lpp/python/python-2017-04-12-py27/python27/bin/python</span>
+<p>Note, the hex <code class="docutils literal notranslate"><span class="pre">'\x81'</span></code> below may vary depending source causing the error:</p>
+<p>When Ansible pipelining is enabled, Ansible passes all module code to the remote target through Python’s stdin pipe
+and runs it all in a single call.
+For more details on pipelining, see: <a class="reference internal" href="../dev_guide/developing_program_flow_modules.html#flow-pipelining"><span class="std std-ref">Pipelining</span></a>.</p>
+<p>Include the following in the environment for any tasks performed on z/OS managed nodes.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">PYTHONSTDINENCODING</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cp1047&quot;</span>
 </pre></div>
 </div>
 </li>
-<li><p>Start of python fails with <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">module</span> <span class="pre">libpython2.7.so</span> <span class="pre">was</span> <span class="pre">not</span> <span class="pre">found.</span></code></p>
-<div class="admonition error">
-<p class="admonition-title">Error</p>
-<p>EE3501S The module libpython2.7.so was not found.</p>
-</div>
-<p>On z/OS, you must execute python from gnu bash. If gnu bash is installed at <code class="docutils literal notranslate"><span class="pre">/usr/lpp/bash</span></code>, you can fix this in your inventory by specifying an <code class="docutils literal notranslate"><span class="pre">ansible_shell_executable</span></code>:</p>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">zos1 ansible_shell_executable</span><span class="o">=</span><span class="s">/usr/lpp/bash/bin/bash</span>
+<li><p>Certain language environment (LE) configurations enable automatic conversion and automatic file tagging functionality
+required by Python on z/OS systems (<a class="reference external" href="https://www.ibm.com/products/open-enterprise-python-zos">IBM Open Enterprise SDK for Python</a> ).</p>
+<p>Include the following configurations when setting the remote environment for any z/OS managed nodes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">_BPXK_AUTOCVT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ON&quot;</span>
+<span class="nt">_CEE_RUNOPTS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FILETAG(AUTOCVT,AUTOTAG)</span><span class="nv"> </span><span class="s">POSIX(ON)&quot;</span>
+
+<span class="nt">_TAG_REDIR_ERR</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;txt&quot;</span>
+<span class="nt">_TAG_REDIR_IN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;txt&quot;</span>
+<span class="nt">_TAG_REDIR_OUT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;txt&quot;</span>
 </pre></div>
 </div>
+<p>Ansible can be configured with remote environment variables in these options:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>inventory - inventory.yml, group_vars/all.yml, or host_vars/all.yml</p></li>
+<li><p>playbook - <code class="docutils literal notranslate"><span class="pre">environment</span></code> variable at top of playbook.</p></li>
+<li><p>block or task - <code class="docutils literal notranslate"><span class="pre">environment</span></code> key word.</p></li>
+</ul>
+</div></blockquote>
+<p>For more details, see <a class="reference internal" href="../playbook_guide/playbooks_environment.html#playbooks-environment"><span class="std std-ref">Setting the remote environment</span></a>.</p>
 </li>
 </ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../os_guide/intro_zos.html#working-with-zos"><span class="std std-ref">Managing z/OS UNIX hosts with Ansible</span></a></p>
+</div>
 </section>
 <section id="running-under-fakeroot">
 <h3>Running under fakeroot<a class="headerlink" href="#running-under-fakeroot" title="Link to this heading"></a></h3>
@@ -1082,7 +1105,7 @@ So this:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 03, 2025.
+      <span class="lastupdated">Last updated on May 06, 2025.
       </span></p>
   </div>
 

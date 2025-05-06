@@ -139,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -228,6 +228,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
@@ -333,17 +334,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -397,7 +395,7 @@
 <h1>community.general.ansible_type test – Validate input type<a class="headerlink" href="#community-general-ansible-type-test-validate-input-type" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This test plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 10.4.0).</p>
+<p>This test plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 10.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -471,30 +469,36 @@ examples: <code class="docutils literal notranslate"><span class="pre">input</sp
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Substitution converts str to AnsibleUnicode</span>
-<span class="c1"># -------------------------------------------</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Substitution converts str to AnsibleUnicode or _AnsibleTaggedStr</span>
+<span class="c1"># ----------------------------------------------------------------</span>
 
-<span class="c1"># String. AnsibleUnicode.</span>
-<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AnsibleUnicode</span>
+<span class="c1"># String. AnsibleUnicode or _AnsibleTaggedStr.</span>
+<span class="nt">dtype</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AnsibleUnicode</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_AnsibleTaggedStr</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;abc&quot;</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
-<span class="c1"># String. AnsibleUnicode alias str.</span>
-<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;AnsibleUnicode&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span><span class="p p-Indicator">}</span>
+<span class="c1"># String. AnsibleUnicode/_AnsibleTaggedStr alias str.</span>
+<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;AnsibleUnicode&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;_AnsibleTaggedStr&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span><span class="p p-Indicator">}</span>
 <span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;abc&quot;</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">,</span> <span class="nv">alias</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
-<span class="c1"># List. All items are AnsibleUnicode.</span>
-<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">list[AnsibleUnicode]</span>
+<span class="c1"># List. All items are AnsibleUnicode/_AnsibleTaggedStr.</span>
+<span class="nt">dtype</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">list[AnsibleUnicode]</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">list[_AnsibleTaggedStr]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;a&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p p-Indicator">]</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
-<span class="c1"># Dictionary. All keys are AnsibleUnicode. All values are AnsibleUnicode.</span>
-<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dict[AnsibleUnicode, AnsibleUnicode]</span>
+<span class="c1"># Dictionary. All keys and values are AnsibleUnicode/_AnsibleTaggedStr.</span>
+<span class="nt">dtype</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dict[AnsibleUnicode, AnsibleUnicode]</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dict[_AnsibleTaggedStr, _AnsibleTaggedStr]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;a&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;bar&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;baz&quot;</span><span class="p p-Indicator">}</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
@@ -542,32 +546,46 @@ examples: <code class="docutils literal notranslate"><span class="pre">input</sp
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="o">{</span><span class="s2">&quot;a&quot;</span><span class="o">:</span> <span class="m">1</span><span class="o">,</span> <span class="s2">&quot;b&quot;</span><span class="o">:</span> <span class="m">2</span><span class="o">}</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
-<span class="c1"># Type of strings is AnsibleUnicode or str</span>
-<span class="c1"># ----------------------------------------</span>
+<span class="c1"># Type of strings is AnsibleUnicode, _AnsibleTaggedStr, or str</span>
+<span class="c1"># ------------------------------------------------------------</span>
 
 <span class="c1"># Dictionary. The keys are integers or strings. All values are strings.</span>
-<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;AnsibleUnicode&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span><span class="p p-Indicator">}</span>
+<span class="nt">alias</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">AnsibleUnicode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedStr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedInt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
 <span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dict[int|str, str]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">1</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;a&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p p-Indicator">}</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">,</span> <span class="nv">alias</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
 <span class="c1"># Dictionary. All keys are integers. All values are keys.</span>
-<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;AnsibleUnicode&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span><span class="p p-Indicator">}</span>
+<span class="nt">alias</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">AnsibleUnicode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedStr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedInt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
 <span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dict[int, str]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">1</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;a&#39;</span><span class="p p-Indicator">,</span><span class="nt"> 2</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p p-Indicator">}</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">,</span> <span class="nv">alias</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
 <span class="c1"># Dictionary. All keys are strings. Multiple types values.</span>
-<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;AnsibleUnicode&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span><span class="p p-Indicator">}</span>
+<span class="nt">alias</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">AnsibleUnicode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedStr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedInt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedFloat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float</span>
 <span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dict[str, bool|dict|float|int|list|str]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;a&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;b&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;c&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&#39;abc&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;d&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">True</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;e&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;x&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;z&#39;</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="s">&#39;f&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;x&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">}}</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">,</span> <span class="nv">alias</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
 <span class="c1"># List. Multiple types items.</span>
-<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;AnsibleUnicode&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span><span class="p p-Indicator">}</span>
+<span class="nt">alias</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">AnsibleUnicode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedStr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedInt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">  </span><span class="nt">_AnsibleTaggedFloat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float</span>
 <span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">list[bool|dict|float|int|list|str]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;abc&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">True</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;x&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;z&#39;</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;x&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;y&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">}]</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">,</span> <span class="nv">alias</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -576,20 +594,20 @@ examples: <code class="docutils literal notranslate"><span class="pre">input</sp
 <span class="c1"># Option dtype is list</span>
 <span class="c1"># --------------------</span>
 
-<span class="c1"># AnsibleUnicode or str</span>
-<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;AnsibleUnicode&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;str&#39;</span><span class="p p-Indicator">]</span>
+<span class="c1"># AnsibleUnicode, _AnsibleTaggedStr, or str</span>
+<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;AnsibleUnicode&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;_AnsibleTaggedStr&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;str&#39;</span><span class="p p-Indicator">]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">abc</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
 <span class="c1"># float or int</span>
-<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;float&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;int&#39;</span><span class="p p-Indicator">]</span>
+<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;float&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;int&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;_AnsibleTaggedInt&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;_AnsibleTaggedFloat&quot;</span><span class="p p-Indicator">]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
 <span class="c1"># float or int</span>
-<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;float&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;int&#39;</span><span class="p p-Indicator">]</span>
+<span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;float&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;int&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;_AnsibleTaggedInt&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;_AnsibleTaggedFloat&quot;</span><span class="p p-Indicator">]</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123.45</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
@@ -598,14 +616,22 @@ examples: <code class="docutils literal notranslate"><span class="pre">input</sp
 <span class="c1"># --------------</span>
 
 <span class="c1"># int alias number</span>
-<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;int&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;number&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;float&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;number&quot;</span><span class="p p-Indicator">}</span>
+<span class="nt">alias</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">int</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
+<span class="w">    </span><span class="nt">float</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
+<span class="w">    </span><span class="nt">_AnsibleTaggedInt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
+<span class="w">    </span><span class="nt">_AnsibleTaggedFloat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float</span>
 <span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">,</span> <span class="nv">alias</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="c1"># result =&gt; true</span>
 
 <span class="c1"># float alias number</span>
-<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;int&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;number&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;float&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;number&quot;</span><span class="p p-Indicator">}</span>
+<span class="nt">alias</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">int</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
+<span class="w">    </span><span class="nt">float</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
+<span class="w">    </span><span class="nt">_AnsibleTaggedInt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
+<span class="w">    </span><span class="nt">_AnsibleTaggedFloat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float</span>
 <span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
 <span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123.45</span>
 <span class="nt">result</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">data</span> <span class="k">is</span> <span class="nf">community</span><span class="nv">.general.ansible_type</span><span class="o">(</span><span class="nv">dtype</span><span class="o">,</span> <span class="nv">alias</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
@@ -670,7 +696,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">input</sp
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 03, 2025.
+      <span class="lastupdated">Last updated on May 06, 2025.
       </span></p>
   </div>
 

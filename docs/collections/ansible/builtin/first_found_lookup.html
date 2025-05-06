@@ -139,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -174,6 +174,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Ansible Namespace</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../_protomatter/index.html">Ansible._Protomatter</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Ansible.Builtin</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
@@ -205,6 +206,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
@@ -310,17 +312,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -455,8 +454,8 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('a
 <td><div class="ansible-option-cell"><p>When <code class="ansible-value docutils literal notranslate"><span class="pre">True</span></code>, return an empty list when no files are matched.</p>
 <p>This is useful when used with <code class="docutils literal notranslate"><span class="pre">with_first_found</span></code>, as an empty list return to <code class="docutils literal notranslate"><span class="pre">with_</span></code> calls causes the calling task to be skipped.</p>
 <p>When used as a template via <code class="docutils literal notranslate"><span class="pre">lookup</span></code> or <code class="docutils literal notranslate"><span class="pre">query</span></code>, setting <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-ansible-builtin-first-found-lookup-parameter-skip"><span class="std std-ref"><span class="pre">skip=True</span></span></a></code> will *not* cause the task to skip. Tasks must handle the empty list return from the template.</p>
-<p>When <code class="ansible-value docutils literal notranslate"><span class="pre">False</span></code> and <code class="docutils literal notranslate"><span class="pre">lookup</span></code> or <code class="docutils literal notranslate"><span class="pre">query</span></code> specifies <code class="ansible-option-value docutils literal notranslate"><span><span class="pre">errors='ignore'</span></span></code> all errors (including no file found, but potentially others) return an empty string or an empty list respectively.</p>
-<p>When <code class="ansible-value docutils literal notranslate"><span class="pre">True</span></code> and <code class="docutils literal notranslate"><span class="pre">lookup</span></code> or <code class="docutils literal notranslate"><span class="pre">query</span></code> specifies <code class="ansible-option-value docutils literal notranslate"><span><span class="pre">errors='ignore'</span></span></code>, no file found will return an empty list and other potential errors return an empty string or empty list depending on the template call (in other words return values of <code class="docutils literal notranslate"><span class="pre">lookup</span></code> vs <code class="docutils literal notranslate"><span class="pre">query</span></code>).</p>
+<p>When <code class="ansible-value docutils literal notranslate"><span class="pre">False</span></code> and <code class="docutils literal notranslate"><span class="pre">lookup</span></code> or <code class="docutils literal notranslate"><span class="pre">query</span></code> specifies <code class="ansible-option-value docutils literal notranslate"><span><span class="pre">errors='ignore'</span></span></code> all errors (including no file found, but potentially others) return <code class="ansible-value docutils literal notranslate"><span class="pre">None</span></code> or an empty list respectively.</p>
+<p>When <code class="ansible-value docutils literal notranslate"><span class="pre">True</span></code> and <code class="docutils literal notranslate"><span class="pre">lookup</span></code> or <code class="docutils literal notranslate"><span class="pre">query</span></code> specifies <code class="ansible-option-value docutils literal notranslate"><span><span class="pre">errors='ignore'</span></span></code>, no file found will return an empty list and other potential errors return <code class="ansible-value docutils literal notranslate"><span class="pre">None</span></code> or empty list depending on the template call (in other words return values of <code class="docutils literal notranslate"><span class="pre">lookup</span></code> vs <code class="docutils literal notranslate"><span class="pre">query</span></code>).</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -625,7 +624,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('a
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 03, 2025.
+      <span class="lastupdated">Last updated on May 06, 2025.
       </span></p>
   </div>
 

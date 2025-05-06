@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="vmware.vmware.vms inventory – Create an inventory containing VMware VMs" href="vms_inventory.html" />
-    <link rel="prev" title="vmware.vmware.vm_portgroup_info module – Returns information about the portgroups of virtual machines" href="vm_portgroup_info_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="vmware.vmware.vm_resource_info module – Gather information about the resources of one or more VMs." href="vm_resource_info_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -139,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -193,6 +193,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
@@ -307,17 +308,14 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    /*
+    
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;text-align: center;">' +
-        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
+        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
+        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
         '</p>' +
-        '<p style="padding-bottom: 1.2rem;text-align: center">' +
-          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
-          '</p>' +
       '</div>';
-    */
+    
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -371,7 +369,7 @@
 <h1>vmware.vmware.esxi_hosts inventory – Create an inventory containing VMware ESXi hosts<a class="headerlink" href="#vmware-vmware-esxi-hosts-inventory-create-an-inventory-containing-vmware-esxi-hosts" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware/">vmware.vmware collection</a> (version 1.10.1).</p>
+<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware/">vmware.vmware collection</a> (version 1.11.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -534,6 +532,18 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-filter_expressions"></div>
+<div class="ansibleOptionAnchor" id="parameter-filters"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-filters"><span id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-filter-expressions"></span><strong>filter_expressions</strong></p>
+<a class="ansibleOptionLink" href="#parameter-filter_expressions" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: filters</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=list</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>A list of jinja expressions to filter out hosts from the final inventory.</p>
+<p>If any of the expressions evaluate to True, the host will not be included in the inventory.</p>
+<p>This filtering is done after the host information has been collected from vSphere. It does not affect the speed of the inventory plugin. For faster collection time, refer to the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-search-paths"><span class="std std-ref"><span class="pre">search_paths</span></span></a></strong></code> option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-flatten_nested_properties"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-flatten-nested-properties"><strong>flatten_nested_properties</strong></p>
 <a class="ansibleOptionLink" href="#parameter-flatten_nested_properties" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -546,7 +556,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-gather_tags"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-gather-tags"><strong>gather_tags</strong></p>
 <a class="ansibleOptionLink" href="#parameter-gather_tags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -559,7 +569,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-group_by_paths"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-group-by-paths"><strong>group_by_paths</strong></p>
 <a class="ansibleOptionLink" href="#parameter-group_by_paths" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -574,7 +584,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-group_by_paths_prefix"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-group-by-paths-prefix"><strong>group_by_paths_prefix</strong></p>
 <a class="ansibleOptionLink" href="#parameter-group_by_paths_prefix" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -583,7 +593,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-groups"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-groups"><strong>groups</strong></p>
 <a class="ansibleOptionLink" href="#parameter-groups" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -591,7 +601,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-hostname"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-hostname"><strong>hostname</strong></p>
 <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -603,7 +613,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-hostnames"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-hostnames"><strong>hostnames</strong></p>
 <a class="ansibleOptionLink" href="#parameter-hostnames" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -614,7 +624,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;name&quot;]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-keyed_groups"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-keyed-groups"><strong>keyed_groups</strong></p>
 <a class="ansibleOptionLink" href="#parameter-keyed_groups" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -622,7 +632,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[{&quot;key&quot;:</span> <span class="pre">&quot;summary.runtime.powerState&quot;,</span> <span class="pre">&quot;separator&quot;:</span> <span class="pre">&quot;&quot;}]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-keyed_groups/default_value"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-keyed-groups-default-value"><strong>default_value</strong></p>
 <a class="ansibleOptionLink" href="#parameter-keyed_groups/default_value" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in ansible-core 2.12</em></p>
@@ -631,21 +641,21 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p>This option is mutually exclusive with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-keyed-groups-trailing-separator"><span class="std std-ref"><span class="pre">keyed_groups[].trailing_separator</span></span></a></strong></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-keyed_groups/key"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-keyed-groups-key"><strong>key</strong></p>
 <a class="ansibleOptionLink" href="#parameter-keyed_groups/key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The key from input dictionary used to generate groups.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-keyed_groups/parent_group"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-keyed-groups-parent-group"><strong>parent_group</strong></p>
 <a class="ansibleOptionLink" href="#parameter-keyed_groups/parent_group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>parent group for keyed group.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-keyed_groups/prefix"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-keyed-groups-prefix"><strong>prefix</strong></p>
 <a class="ansibleOptionLink" href="#parameter-keyed_groups/prefix" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -653,7 +663,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-keyed_groups/separator"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-keyed-groups-separator"><strong>separator</strong></p>
 <a class="ansibleOptionLink" href="#parameter-keyed_groups/separator" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -661,7 +671,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;_&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-keyed_groups/trailing_separator"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-keyed-groups-trailing-separator"><strong>trailing_separator</strong></p>
 <a class="ansibleOptionLink" href="#parameter-keyed_groups/trailing_separator" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in ansible-core 2.12</em></p>
@@ -675,7 +685,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-leading_separator"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-leading-separator"><strong>leading_separator</strong></p>
 <a class="ansibleOptionLink" href="#parameter-leading_separator" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in ansible-core 2.11</em></p>
@@ -693,7 +703,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div>
 <div class="ansibleOptionAnchor" id="parameter-pass"></div>
 <div class="ansibleOptionAnchor" id="parameter-pwd"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-pwd"><span id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-password"></span><span id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-pass"></span><strong>password</strong></p>
@@ -708,7 +718,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-port"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-port"><strong>port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -721,7 +731,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-properties"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-properties"><strong>properties</strong></p>
 <a class="ansibleOptionLink" href="#parameter-properties" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -733,7 +743,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;name&quot;,</span> <span class="pre">&quot;customValue&quot;,</span> <span class="pre">&quot;summary.runtime.powerState&quot;]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-proxy-host"><strong>proxy_host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -746,7 +756,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-proxy-port"><strong>proxy_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -758,7 +768,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_protocol"></div>
 <div class="ansibleOptionAnchor" id="parameter-protocol"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-proxy-protocol"><span id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-protocol"></span><strong>proxy_protocol</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: protocol</span></p>
@@ -773,7 +783,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-sanitize_property_names"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-sanitize-property-names"><strong>sanitize_property_names</strong></p>
 <a class="ansibleOptionLink" href="#parameter-sanitize_property_names" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -786,7 +796,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-search_paths"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-search-paths"><strong>search_paths</strong></p>
 <a class="ansibleOptionLink" href="#parameter-search_paths" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -797,7 +807,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-strict"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-strict"><strong>strict</strong></p>
 <a class="ansibleOptionLink" href="#parameter-strict" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -810,7 +820,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_extra_vars"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-use-extra-vars"><strong>use_extra_vars</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_extra_vars" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in ansible-core 2.11</em></p>
@@ -833,7 +843,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div>
 <div class="ansibleOptionAnchor" id="parameter-admin"></div>
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-username"><span id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-user"></span><span id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-admin"></span><strong>username</strong></p>
@@ -848,7 +858,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-esxi-hosts-inventory-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -889,14 +899,16 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 
 
 <span class="c1"># Simple configuration with in-file authentication parameters</span>
+<span class="nn">---</span>
 <span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vmware.vmware.esxi_hosts</span>
 <span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.65.223.31</span>
 <span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">administrator@vsphere.local</span>
 <span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Esxi@123$%</span>
 <span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-
+<span class="nn">...</span>
 
 <span class="c1"># More complex configuration. Authentication parameters are assumed to be set as environment variables.</span>
+<span class="nn">---</span>
 <span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vmware.vmware.esxi_hosts</span>
 
 <span class="c1"># Create groups based on host paths</span>
@@ -906,6 +918,10 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <span class="nt">properties</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;name&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;capability&quot;</span><span class="p p-Indicator">]</span>
 <span class="nt">groups</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">vmotion_supported</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">capability.vmotionSupported</span>
+
+<span class="c1"># Filter out hosts using jinja patterns. For example, filter out powered off hosts</span>
+<span class="nt">filter_expressions</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;summary.runtime.powerState</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&quot;poweredOff&quot;&#39;</span>
 
 <span class="c1"># Only gather hosts found in certain paths</span>
 <span class="nt">search_paths</span><span class="p">:</span>
@@ -925,6 +941,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 <span class="w">  </span><span class="c1"># assuming path is something like /MyDC/host/MyCluster</span>
 <span class="w">  </span><span class="nt">datacenter</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;(path</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">split(&#39;/&#39;))[1]&quot;</span>
 <span class="w">  </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;(path</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">split(&#39;/&#39;))[3]&quot;</span>
+<span class="nn">...</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -955,7 +972,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="vm_portgroup_info_module.html" class="btn btn-neutral float-left" title="vmware.vmware.vm_portgroup_info module – Returns information about the portgroups of virtual machines" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vm_resource_info_module.html" class="btn btn-neutral float-left" title="vmware.vmware.vm_resource_info module – Gather information about the resources of one or more VMs." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="vms_inventory.html" class="btn btn-neutral float-right" title="vmware.vmware.vms inventory – Create an inventory containing VMware VMs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -963,7 +980,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-esxi-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 03, 2025.
+      <span class="lastupdated">Last updated on May 06, 2025.
       </span></p>
   </div>
 
