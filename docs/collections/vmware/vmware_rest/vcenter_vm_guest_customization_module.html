@@ -193,6 +193,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
@@ -371,7 +372,7 @@
 <h1>vmware.vmware_rest.vcenter_vm_guest_customization module – Applies a customization specification on the virtual machine<a class="headerlink" href="#vmware-vmware-rest-vcenter-vm-guest-customization-module-applies-a-customization-specification-on-the-virtual-machine" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware_rest/">vmware.vmware_rest collection</a> (version 4.6.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware_rest/">vmware.vmware_rest collection</a> (version 4.7.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -634,7 +635,9 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 <span class="c1">#</span>
 <span class="c1">##########</span>
 
+<span class="c1">#</span>
 <span class="c1"># Here is the basic workflow for creating a new VM and then customizing it</span>
+<span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy a new VM based on a template</span>
 <span class="w">  </span><span class="nt">vmware.vmware_rest.vcenter_vmtemplate_libraryitems</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm-from-template</span>
@@ -645,25 +648,27 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_new_vm</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Power on the VM to register VMware tools</span>
-<span class="w">  </span><span class="nt">vmware.vmware_rest.vcenter_vm_power</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start</span>
-<span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Wait until my VMware tools are recognized</span>
-<span class="w">  </span><span class="nt">vmware.vmware_rest.vcenter_vm_tools_info</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm_tools_info</span>
-<span class="w">  </span><span class="nt">until</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm_tools_info is not failed</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm_tools_info.value.run_state == &quot;RUNNING&quot;</span>
-<span class="w">  </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
-<span class="w">  </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Power Off VM</span>
-<span class="w">  </span><span class="nt">vmware.vmware_rest.vcenter_vm_power</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stop</span>
-<span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="c1"># If your template already has vmtools installed and vCenter recognizes the installation (you should be able to see the tools version when the template</span>
+<span class="c1"># is cloned), then you can skip this block in your workflow.</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Register VMware Tools with vCenter</span>
+<span class="w">  </span><span class="nt">block</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Power on the VM</span>
+<span class="w">      </span><span class="nt">vmware.vmware_rest.vcenter_vm_power</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start</span>
+<span class="w">        </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Wait until my VMware tools are recognized</span>
+<span class="w">      </span><span class="nt">vmware.vmware_rest.vcenter_vm_tools_info</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm_tools_info</span>
+<span class="w">      </span><span class="nt">until</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm_tools_info is not failed</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm_tools_info.value.run_state == &quot;RUNNING&quot;</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<span class="w">      </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Power Off VM</span>
+<span class="w">      </span><span class="nt">vmware.vmware_rest.vcenter_vm_power</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stop</span>
+<span class="w">        </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Customize the VM</span>
 <span class="w">  </span><span class="nt">vmware.vmware_rest.vcenter_vm_guest_customization</span><span class="p">:</span>
@@ -685,9 +690,16 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 <span class="w">          </span><span class="nt">fixed_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myhost</span>
 <span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FIXED</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Power on the VM</span>
+<span class="w">  </span><span class="nt">vmware.vmware_rest.vcenter_vm_power</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start</span>
+<span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="c1">#</span>
 <span class="c1"># Here is an example using the Linux script text. The script shebang can be anything (bash, perl, python), so long as the script will actually run</span>
 <span class="c1"># There is also size and length limitation on the script text, as described in the module documentation.</span>
 <span class="c1"># Finally, note the script is run twice. Once before all of the other customization and once after.</span>
+<span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Customize the VM</span>
 <span class="w">  </span><span class="nt">vmware.vmware_rest.vcenter_vm_guest_customization</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -719,6 +731,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 <span class="w">            </span><span class="no"># add any other post-customization tasks here</span>
 <span class="w">          </span><span class="no">fi</span>
 
+<span class="c1">#</span>
 <span class="c1"># Here is a simple example using cloud-init</span>
 <span class="c1"># See also:</span>
 <span class="c1">#   https://developer.broadcom.com/xapis/vsphere-automation-api/latest/vcenter/data-structures/Guest_CloudinitConfiguration/</span>
@@ -728,6 +741,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 <span class="c1">#</span>
 <span class="c1">#   cloud-init required: metadata as plain-text JSON/YAML, maximum 512KB file size</span>
 <span class="c1">#   cloud-init optional: userdata as plain-text in raw cloud-init format with no compression / no base64 encoding, maximum 512KB file size</span>
+<span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Customize the VM</span>
 <span class="w">  </span><span class="nt">vmware.vmware_rest.vcenter_vm_guest_customization</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">my_new_vm.id</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -756,7 +770,9 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 <span class="w">                  </span><span class="no">This is a test</span>
 <span class="w">                </span><span class="no">path: /root/cloud-init-example</span>
 
+<span class="c1">#</span>
 <span class="c1"># Here is a more complex cloud-init example</span>
+<span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set cloud-init variables for customization specification</span>
 <span class="w">  </span><span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">metadata_yaml</span><span class="p">:</span>
@@ -865,7 +881,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on May 07, 2025.
       </span></p>
   </div>
 
