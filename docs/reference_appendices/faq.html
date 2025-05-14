@@ -227,7 +227,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-fix-protocol-error-file-name-does-not-match-request-when-fetching-a-file">How do I fix ‘protocol error: file name does not match request’ when fetching a file?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#does-ansible-support-multiple-factor-authentication-2fa-mfa-biometrics-finterprint-usbkey-otp">Does Ansible support multiple factor authentication 2FA/MFA/biometrics/finterprint/usbkey/OTP/…</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-validate-option-is-not-enough-for-my-needs-what-do-i-do">The ‘validate’ option is not enough for my needs, what do I do?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#why-does-the-regex-search-filter-return-none-instead-of-an-empty-string">Why does the <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> filter return <cite>None</cite> instead of an empty string?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-submit-a-change-to-the-documentation">How do I submit a change to the documentation?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-is-the-difference-between-ansible-legacy-and-ansible-builtin-collections">What is the difference between <code class="docutils literal notranslate"><span class="pre">ansible.legacy</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible.builtin</span></code> collections?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-don-t-see-my-question-here">I don’t see my question here</a></li>
@@ -1031,23 +1030,6 @@ and backups, which most file based modules also support:</p>
 </pre></div>
 </div>
 </section>
-<section id="why-does-the-regex-search-filter-return-none-instead-of-an-empty-string">
-<span id="jinja2-faqs"></span><h2>Why does the <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> filter return <cite>None</cite> instead of an empty string?<a class="headerlink" href="#why-does-the-regex-search-filter-return-none-instead-of-an-empty-string" title="Link to this heading"></a></h2>
-<p>Until the jinja2 2.10 release, Jinja was only able to return strings, but Ansible needed Python objects in some cases. Ansible uses <code class="docutils literal notranslate"><span class="pre">safe_eval</span></code> and  only sends strings that look like certain types of Python objects through this function. With <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> that does not find a match, the result (<code class="docutils literal notranslate"><span class="pre">None</span></code>) is converted to the string “None” which is not useful in non-native jinja2.</p>
-<p>The following example of a single templating action shows this behavior:</p>
-<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-</pre></div>
-</div>
-<p>This example does not result in a Python <code class="docutils literal notranslate"><span class="pre">None</span></code>, so Ansible historically converted it to “” (empty string).</p>
-<p>The native jinja2 functionality actually allows us to return full Python objects, that are always represented as Python objects everywhere, and as such the result of a single templating action with <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> can result in the Python <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Native jinja2 functionality is not needed when <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> is used as an intermediate result that is then compared to the jinja2 <code class="docutils literal notranslate"><span class="pre">none</span></code> test.</p>
-<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="k">is</span> <span class="nf">none</span> <span class="cp">}}</span>
-</pre></div>
-</div>
-</div>
-</section>
 <section id="how-do-i-submit-a-change-to-the-documentation">
 <span id="docs-contributions"></span><h2>How do I submit a change to the documentation?<a class="headerlink" href="#how-do-i-submit-a-change-to-the-documentation" title="Link to this heading"></a></h2>
 <p>Documentation for Ansible is kept in the <a class="reference external" href="https://github.com/ansible/ansible-documentation">ansible/ansible-documentation</a>
@@ -1105,7 +1087,7 @@ So this:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 12, 2025.
+      <span class="lastupdated">Last updated on May 14, 2025.
       </span></p>
   </div>
 
