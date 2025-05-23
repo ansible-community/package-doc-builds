@@ -371,7 +371,7 @@
 <h1>vmware.vmware.vms inventory – Create an inventory containing VMware VMs<a class="headerlink" href="#vmware-vmware-vms-inventory-create-an-inventory-containing-vmware-vms" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware/">vmware.vmware collection</a> (version 2.0.0).</p>
+<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware/">vmware.vmware collection</a> (version 2.0.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -948,12 +948,35 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-vms-i
 <span class="nn">...</span>
 
 <span class="c1"># Use Tags and Tag Categories to create groups</span>
+<span class="c1"># Given the example tags below:</span>
+<span class="c1">#</span>
+<span class="c1">#   tags:</span>
+<span class="c1">#     urn:vmomi:InventoryServiceTag:70f87e82-6ac6-42bc-878c-817d7b2a4520:GLOBAL: db</span>
+<span class="c1">#     urn:vmomi:InventoryServiceTag:bb10e90b-263f-4248-be06-086df1100d6b:GLOBAL: tofu-managed</span>
+<span class="c1">#     urn:vmomi:InventoryServiceTag:70f87e82-6ac6-42bc-878c-111111111111:GLOBAL: web</span>
+<span class="c1">#   tags_by_category:</span>
+<span class="c1">#     app_type:</span>
+<span class="c1">#       - urn:vmomi:InventoryServiceTag:70f87e82-6ac6-42bc-878c-817d7b2a4520:GLOBAL: db</span>
+<span class="c1">#       - urn:vmomi:InventoryServiceTag:70f87e82-6ac6-42bc-878c-111111111111:GLOBAL: web</span>
+<span class="c1">#     tofu:</span>
+<span class="c1">#       - urn:vmomi:InventoryServiceTag:bb10e90b-263f-4248-be06-086df1100d6b:GLOBAL: tofu-managed</span>
 <span class="nn">---</span>
 <span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vmware.vmware.vms</span>
 <span class="nt">gather_tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="nt">keyed_groups</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tags_by_category.OS</span>
-<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vmware_tag_os_category_&quot;</span>
+<span class="w">  </span><span class="c1"># create groups based on tag names/values, like db, web, and tofu-managed</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tags.values()</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">separator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+
+<span class="w">  </span><span class="c1"># create groups based on app types, like db and web</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tags_by_category.app_type | map(&#39;dict2items&#39;) | flatten | map(attribute=&#39;value&#39;)</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vmware_tag_app_type_category_&quot;</span>
+<span class="w">    </span><span class="nt">separator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+
+<span class="w">  </span><span class="c1"># create groups based on categories, like app_type or tofu</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tags_by_category.keys()</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vmware_tag_category_name_&quot;</span>
 <span class="w">    </span><span class="nt">separator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 <span class="nn">...</span>
 
@@ -1036,7 +1059,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-vms-i
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 22, 2025.
+      <span class="lastupdated">Last updated on May 23, 2025.
       </span></p>
   </div>
 
