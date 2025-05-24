@@ -395,7 +395,7 @@
 <h1>community.mysql.mysql_info module – Gather information about MySQL or MariaDB servers<a class="headerlink" href="#community-mysql-mysql-info-module-gather-information-about-mysql-or-mariadb-servers" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/mysql/">community.mysql collection</a> (version 3.13.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/mysql/">community.mysql collection</a> (version 3.14.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -609,6 +609,7 @@ see <a class="reference internal" href="#ansible-collections-community-mysql-mys
 <ul class="simple">
 <li><p>Compatible with MariaDB or MySQL.</p></li>
 <li><p>Calculating the size of a database might be slow, depending on the number and size of tables in it. To avoid this, use <em>exclude_fields=db_size</em>.</p></li>
+<li><p>filters <code class="docutils literal notranslate"><span class="pre">users_info</span></code> doesn’t support MariaDB roles.</p></li>
 <li><p>Requires the PyMySQL (Python 2.7 and Python 3.X) package installed on the remote host. The Python package may be installed with apt-get install python-pymysql (Ubuntu; see <a class="reference internal" href="../../ansible/builtin/apt_module.html#ansible-collections-ansible-builtin-apt-module"><span class="std std-ref">ansible.builtin.apt</span></a>) or yum install python2-PyMySQL (RHEL/CentOS/Fedora; see <a class="reference internal" href="../../ansible/builtin/yum_module.html#ansible-collections-ansible-builtin-yum-module"><span class="std std-ref">ansible.builtin.yum</span></a>). You can also use dnf install python2-PyMySQL for newer versions of Fedora; see <a class="reference internal" href="../../ansible/builtin/dnf_module.html#ansible-collections-ansible-builtin-dnf-module"><span class="std std-ref">ansible.builtin.dnf</span></a>.</p></li>
 <li><p>Be sure you have PyMySQL library installed on the target machine for the Python interpreter Ansible discovers. For example if ansible discovers and uses Python 3, you need to install the Python 3 version of PyMySQL. If ansible discovers and uses Python 2, you need to install the Python 2 version of PyMySQL.</p></li>
 <li><p>If you have trouble, it may help to force Ansible to use the Python interpreter you need by specifying <code class="docutils literal notranslate"><span class="pre">ansible_python_interpreter</span></code>. For more information, see <a class="reference external" href="https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html">https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html</a>.</p></li>
@@ -718,6 +719,7 @@ see <a class="reference internal" href="#ansible-collections-community-mysql-mys
 <span class="w">      </span><span class="nt">tls_requires</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.tls_requires</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">      </span><span class="nt">priv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.priv</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">      </span><span class="nt">resource_limits</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.resource_limits</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">locked</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.locked</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">      </span><span class="nt">column_case_sensitive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">result.users_info</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -727,6 +729,7 @@ see <a class="reference internal" href="#ansible-collections-community-mysql-mys
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != &#39;root&#39;</span><span class="w">  </span><span class="c1"># In case you don&#39;t want to import admin accounts</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != &#39;mariadb.sys&#39;</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != &#39;mysql&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != &#39;PUBLIC&#39;</span><span class="w">  </span><span class="c1"># MariaDB roles are not supported</span>
 </pre></div>
 </div>
 </section>
@@ -871,8 +874,9 @@ see <a class="reference internal" href="#ansible-collections-community-mysql-mys
 <p>Useful when migrating accounts to another server or to create an inventory.</p>
 <p>Does not support proxy privileges. If an account has proxy privileges, they won’t appear in the output.</p>
 <p>Causes issues with authentications plugins <code class="docutils literal notranslate"><span class="pre">sha256_password</span></code> and <code class="docutils literal notranslate"><span class="pre">caching_sha2_password</span></code>. If the output is fed to <a class="reference internal" href="mysql_user_module.html#ansible-collections-community-mysql-mysql-user-module"><span class="std std-ref">community.mysql.mysql_user</span></a>, the ``plugin_auth_string`` will most likely be unreadable due to non-binary characters.</p>
+<p>The “locked” field was aded in ``community.mysql`` 3.13.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> if not excluded by filter</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[{&quot;host&quot;:</span> <span class="pre">&quot;host.com&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;user1&quot;,</span> <span class="pre">&quot;plugin&quot;:</span> <span class="pre">&quot;mysql_native_password&quot;,</span> <span class="pre">&quot;plugin_auth_string&quot;:</span> <span class="pre">&quot;*1234567&quot;,</span> <span class="pre">&quot;priv&quot;:</span> <span class="pre">&quot;db1.*:SELECT/db2.*:SELECT&quot;,</span> <span class="pre">&quot;resource_limits&quot;:</span> <span class="pre">{&quot;MAX_USER_CONNECTIONS&quot;:</span> <span class="pre">100},</span> <span class="pre">&quot;tls_requires&quot;:</span> <span class="pre">{&quot;SSL&quot;:</span> <span class="pre">null}}]</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[{&quot;host&quot;:</span> <span class="pre">&quot;host.com&quot;,</span> <span class="pre">&quot;locked&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;user1&quot;,</span> <span class="pre">&quot;plugin&quot;:</span> <span class="pre">&quot;mysql_native_password&quot;,</span> <span class="pre">&quot;plugin_auth_string&quot;:</span> <span class="pre">&quot;*1234567&quot;,</span> <span class="pre">&quot;priv&quot;:</span> <span class="pre">&quot;db1.*:SELECT/db2.*:SELECT&quot;,</span> <span class="pre">&quot;resource_limits&quot;:</span> <span class="pre">{&quot;MAX_USER_CONNECTIONS&quot;:</span> <span class="pre">100},</span> <span class="pre">&quot;tls_requires&quot;:</span> <span class="pre">{&quot;SSL&quot;:</span> <span class="pre">null}}]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -963,7 +967,7 @@ see <a class="reference internal" href="#ansible-collections-community-mysql-mys
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 23, 2025.
+      <span class="lastupdated">Last updated on May 24, 2025.
       </span></p>
   </div>
 
