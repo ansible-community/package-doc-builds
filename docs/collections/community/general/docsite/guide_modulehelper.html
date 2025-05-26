@@ -452,13 +452,18 @@ section above, but there are more elements that will take part in it.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils.module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleHelper</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyTest</span><span class="p">(</span><span class="n">ModuleHelper</span><span class="p">):</span>
+    <span class="c1"># behavior for module paramaters ONLY, see below for further information</span>
     <span class="n">output_params</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">change_params</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">diff_params</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">facts_name</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">facts_params</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="n">facts_name</span> <span class="o">=</span> <span class="kc">None</span>   <span class="c1"># used if generating facts, from parameters or otherwise</span>
+
+    <span class="c1"># transitional variables for the new VarDict implementation, see information below</span>
     <span class="n">use_old_vardict</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">mute_vardict_deprecation</span> <span class="o">=</span> <span class="kc">False</span>
+
     <span class="n">module</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">argument_spec</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
         <span class="c1"># ...</span>
@@ -570,9 +575,10 @@ There are two ways to prevent that from happening:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>Set <code class="docutils literal notranslate"><span class="pre">mute_vardict_deprecation</span> <span class="pre">=</span> <span class="pre">True</span></code> and the deprecation will be silenced. If the module still uses the old <code class="docutils literal notranslate"><span class="pre">VarDict</span></code>,
-it will not be able to update to community.general 11.0.0 (Spring 2026) upon its release.</p></li>
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">use_old_vardict</span> <span class="pre">=</span> <span class="pre">False</span></code> to make the MH module use the new <code class="docutils literal notranslate"><span class="pre">VarDict</span></code> immediatelly.
-The new <code class="docutils literal notranslate"><span class="pre">VarDict</span></code> and its use is documented and this is the recommended way to handle this.</p></li>
+it will not be able to update to community.general 11.0.0 (Spring 2025) upon its release.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">use_old_vardict</span> <span class="pre">=</span> <span class="pre">False</span></code> to make the MH module use the new <code class="docutils literal notranslate"><span class="pre">VarDict</span></code> immediately.
+We strongly recommend you use the new <code class="docutils literal notranslate"><span class="pre">VarDict</span></code>, for that you make sure to consult its documentation at
+<a class="reference internal" href="guide_vardict.html#ansible-collections-community-general-docsite-guide-vardict"><span class="std std-ref">VarDict Guide</span></a>.</p></li>
 </ol>
 </div></blockquote>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyTest</span><span class="p">(</span><span class="n">ModuleHelper</span><span class="p">):</span>
@@ -590,6 +596,11 @@ If you want to include some module parameters in the output, list them in the <c
     <span class="o">...</span>
 </pre></div>
 </div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The variable names listed in <code class="docutils literal notranslate"><span class="pre">output_params</span></code> <strong>must be module parameters</strong>, as in parameters listed in the module’s <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code>.
+Names not found in <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> are silently ignored.</p>
+</div>
 <p>Another neat feature provided by MH by using <code class="docutils literal notranslate"><span class="pre">VarDict</span></code> is the automatic tracking of changes when setting the metadata <code class="docutils literal notranslate"><span class="pre">change=True</span></code>.
 Again, to enable this feature for module parameters, you must list them in the <code class="docutils literal notranslate"><span class="pre">change_params</span></code> class variable.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyTest</span><span class="p">(</span><span class="n">ModuleHelper</span><span class="p">):</span>
@@ -597,6 +608,11 @@ Again, to enable this feature for module parameters, you must list them in the <
     <span class="n">change_params</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="p">)</span>
     <span class="o">...</span>
 </pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The variable names listed in <code class="docutils literal notranslate"><span class="pre">change_params</span></code> <strong>must be module parameters</strong>, as in parameters listed in the module’s <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code>.
+Names not found in <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> are silently ignored.</p>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -612,6 +628,11 @@ With that, MH will automatically generate the diff output for variables that hav
     <span class="c1"># example from community.general.gio_mime</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="o">.</span><span class="n">set_meta</span><span class="p">(</span><span class="s2">&quot;handler&quot;</span><span class="p">,</span> <span class="n">initial_value</span><span class="o">=</span><span class="n">gio_mime_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="o">.</span><span class="n">mime_type</span><span class="p">),</span> <span class="n">diff</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">change</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The variable names listed in <code class="docutils literal notranslate"><span class="pre">diff_params</span></code> <strong>must be module parameters</strong>, as in parameters listed in the module’s <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code>.
+Names not found in <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> are silently ignored.</p>
 </div>
 <p>Moreover, if a module is set to return <em>facts</em> instead of return values, then again use the metadata <code class="docutils literal notranslate"><span class="pre">fact=True</span></code> and <code class="docutils literal notranslate"><span class="pre">fact_params</span></code> for module parameters.
 Additionally, you must specify <code class="docutils literal notranslate"><span class="pre">facts_name</span></code>, as in:</p>
@@ -631,6 +652,11 @@ Additionally, you must specify <code class="docutils literal notranslate"><span 
 <span class="w">  </span><span class="nt">debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Volume fact is</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">ansible_facts.volume_facts.volume</span> <span class="cp">}}</span>
 </pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The variable names listed in <code class="docutils literal notranslate"><span class="pre">fact_params</span></code> <strong>must be module parameters</strong>, as in parameters listed in the module’s <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code>.
+Names not found in <code class="docutils literal notranslate"><span class="pre">argument_spec</span></code> are silently ignored.</p>
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -879,7 +905,7 @@ where <code class="docutils literal notranslate"><span class="pre">self</span></
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 19, 2025.
+      <span class="lastupdated">Last updated on May 26, 2025.
       </span></p>
   </div>
 
