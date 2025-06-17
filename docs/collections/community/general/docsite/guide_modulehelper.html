@@ -421,7 +421,6 @@ But bear in mind that it does not showcase all of MH’s features:</p>
         <span class="p">),</span>
         <span class="n">supports_check_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">use_old_vardict</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__run__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="o">.</span><span class="n">original_message</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
@@ -463,10 +462,6 @@ section above, but there are more elements that will take part in it.</p>
     <span class="n">facts_params</span> <span class="o">=</span> <span class="p">()</span>
 
     <span class="n">facts_name</span> <span class="o">=</span> <span class="kc">None</span>   <span class="c1"># used if generating facts, from parameters or otherwise</span>
-
-    <span class="c1"># transitional variables for the new VarDict implementation, see information below</span>
-    <span class="n">use_old_vardict</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">mute_vardict_deprecation</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="n">module</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">argument_spec</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
@@ -569,29 +564,13 @@ If no exception is raised, then the module succeeds.</p>
 By using <code class="docutils literal notranslate"><span class="pre">self.vars</span></code>, you get a central mechanism to access the parameters but also to expose variables as return values of the module.
 As described in <a class="reference internal" href="guide_vardict.html#ansible-collections-community-general-docsite-guide-vardict"><span class="std std-ref">VarDict Guide</span></a>, variables in <code class="docutils literal notranslate"><span class="pre">VarDict</span></code> have metadata associated to them.
 One of the attributes in that metadata marks the variable for output, and MH makes use of that to generate the module’s return values.</p>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">VarDict</span></code> feature described was introduced in community.general 7.1.0, but there was a first
-implementation of it embedded within <code class="docutils literal notranslate"><span class="pre">ModuleHelper</span></code>.
-That older implementation is now deprecated and will be removed in community.general 11.0.0.
-After community.general 7.1.0, MH modules generate a deprecation message about <em>using the old VarDict</em>.
-There are two ways to prevent that from happening:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">mute_vardict_deprecation</span> <span class="pre">=</span> <span class="pre">True</span></code> and the deprecation will be silenced. If the module still uses the old <code class="docutils literal notranslate"><span class="pre">VarDict</span></code>,
-it will not be able to update to community.general 11.0.0 (Spring 2025) upon its release.</p></li>
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">use_old_vardict</span> <span class="pre">=</span> <span class="pre">False</span></code> to make the MH module use the new <code class="docutils literal notranslate"><span class="pre">VarDict</span></code> immediately.
-We strongly recommend you use the new <code class="docutils literal notranslate"><span class="pre">VarDict</span></code>, for that you make sure to consult its documentation at
-<a class="reference internal" href="guide_vardict.html#ansible-collections-community-general-docsite-guide-vardict"><span class="std std-ref">VarDict Guide</span></a>.</p></li>
-</ol>
-</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyTest</span><span class="p">(</span><span class="n">ModuleHelper</span><span class="p">):</span>
-    <span class="n">use_old_vardict</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">mute_vardict_deprecation</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="o">...</span>
-</pre></div>
-</div>
-<p>These two settings are mutually exclusive, but that is not enforced and the behavior when setting both is not specified.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">VarDict</span></code> class was introduced in community.general 7.1.0, as part of <code class="docutils literal notranslate"><span class="pre">ModuleHelper</span></code> itself.
+However, it has been factored out to become an utility on its own, described in <a class="reference internal" href="guide_vardict.html#ansible-collections-community-general-docsite-guide-vardict"><span class="std std-ref">VarDict Guide</span></a>,
+and the older implementation was removed in community.general 11.0.0.</p>
+<p>Some code might still refer to the class variables <code class="docutils literal notranslate"><span class="pre">use_old_vardict</span></code> and <code class="docutils literal notranslate"><span class="pre">mute_vardict_deprecation</span></code>, used for the transtition to the new
+implementation but from community.general 11.0.0 onwards they are no longer used and can be safely removed from the code.</p>
 </div>
 <p>Contrary to new variables created in <code class="docutils literal notranslate"><span class="pre">VarDict</span></code>, module parameters are not set for output by default.
 If you want to include some module parameters in the output, list them in the <code class="docutils literal notranslate"><span class="pre">output_params</span></code> class variable.</p>
@@ -744,7 +723,6 @@ By using <code class="docutils literal notranslate"><span class="pre">StateModul
     <span class="n">module</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="o">...</span>
     <span class="p">)</span>
-    <span class="n">use_old_vardict</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__init_module__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">gconftool2_runner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="n">check_rc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -909,7 +887,7 @@ where <code class="docutils literal notranslate"><span class="pre">self</span></
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 16, 2025.
+      <span class="lastupdated">Last updated on Jun 17, 2025.
       </span></p>
   </div>
 
