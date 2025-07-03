@@ -382,7 +382,7 @@
 <h1>cisco.ios.ios_acls module – Resource module to configure ACLs.<a class="headerlink" href="#cisco-ios-ios-acls-module-resource-module-to-configure-acls" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/ios/">cisco.ios collection</a> (version 10.1.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/ios/">cisco.ios collection</a> (version 10.1.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -2237,6 +2237,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <li><p>Tested against Cisco IOSXE Version 17.3 on CML.</p></li>
 <li><p>Module behavior is not idempotent when sequence for aces are not mentioned</p></li>
 <li><p>This module works with connection <code class="docutils literal notranslate"><span class="pre">network_cli</span></code>. See <a class="reference external" href="https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html">https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html</a></p></li>
+<li><p>Default ACLs don’t get updated, replaced or overridden. Added Defaults - implicit_deny_v6, implicit_permit_v6, preauth_v6, IP-Adm-V4-Int-ACL-global, implicit_deny, implicit_permit, preauth_v4, sl_def_acl</p></li>
 </ul>
 </div>
 </section>
@@ -3318,6 +3319,26 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">                </span><span class="nt">ttl</span><span class="p">:</span>
 <span class="w">                  </span><span class="nt">eq</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">150</span>
+<span class="w">            </span><span class="nt">aces</span><span class="p">:</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">grant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deny</span>
+<span class="w">                </span><span class="nt">sequence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">                </span><span class="nt">protocol_options</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">tcp</span><span class="p">:</span>
+<span class="w">                    </span><span class="nt">syn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">                </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">198.51.100.0</span>
+<span class="w">                  </span><span class="nt">wildcard_bits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.255</span>
+<span class="w">                  </span><span class="nt">port_protocol</span><span class="p">:</span>
+<span class="w">                    </span><span class="nt">eq</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telnet</span>
+<span class="w">                </span><span class="nt">destination</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">198.51.110.0</span>
+<span class="w">                  </span><span class="nt">wildcard_bits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.255</span>
+<span class="w">                  </span><span class="nt">port_protocol</span><span class="p">:</span>
+<span class="w">                    </span><span class="nt">eq</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telnet</span>
+<span class="w">                </span><span class="nt">dscp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ef</span>
+<span class="w">                </span><span class="nt">ttl</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">eq</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implicit_deny</span>
 <span class="w">            </span><span class="nt">aces</span><span class="p">:</span>
 <span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">grant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deny</span>
 <span class="w">                </span><span class="nt">sequence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
@@ -4757,7 +4778,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 02, 2025.
+      <span class="lastupdated">Last updated on Jul 03, 2025.
       </span></p>
   </div>
 
