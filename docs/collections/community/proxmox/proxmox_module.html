@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="community.proxmox.proxmox_backup module – Start a VM backup in Proxmox VE cluster" href="proxmox_backup_module.html" />
+    <link rel="next" title="community.proxmox.proxmox_access_acl module – Management of ACLs for objects in Proxmox VE Cluster" href="proxmox_access_acl_module.html" />
     <link rel="prev" title="Community.Proxmox" href="index.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -396,7 +396,7 @@
 <h1>community.proxmox.proxmox module – Management of instances in Proxmox VE cluster<a class="headerlink" href="#community-proxmox-proxmox-module-management-of-instances-in-proxmox-ve-cluster" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxmox/">community.proxmox collection</a> (version 1.0.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxmox/">community.proxmox collection</a> (version 1.1.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -614,8 +614,9 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <a class="ansibleOptionLink" href="#parameter-force" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Forcing operations.</p>
-<p>Can be used only with states <code class="ansible-value docutils literal notranslate"><span class="pre">present</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">stopped</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">restarted</span></code>.</p>
+<p>Can be used only with states <code class="ansible-value docutils literal notranslate"><span class="pre">absent</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">present</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">stopped</span></code>, and <code class="ansible-value docutils literal notranslate"><span class="pre">restarted</span></code>.</p>
 <p>With <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-module-parameter-state"><span class="std std-ref"><span class="pre">state=present</span></span></a></code> force option allow to overwrite existing container.</p>
+<p>With <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-module-parameter-state"><span class="std std-ref"><span class="pre">state=absent</span></span></a></code> force option will force stop the container before deletion.</p>
 <p>With states <code class="ansible-value docutils literal notranslate"><span class="pre">stopped</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">restarted</span></code> allow to force stop instance.</p>
 <p>When specifying <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-module-parameter-force"><span class="std std-ref"><span class="pre">force</span></span></a></strong></code>, <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-module-parameter-update"><span class="std std-ref"><span class="pre">update</span></span></a></strong></code> must not be specified.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
@@ -1294,6 +1295,33 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <span class="w">    </span><span class="nt">api_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1q2w3e</span>
 <span class="w">    </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">    </span><span class="no">Create a new container automatically selecting the next available vmid</span>
+<span class="w">    </span><span class="no">using a non-root API token</span>
+<span class="w">  </span><span class="nt">community.proxmox.proxmox</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;uk-mc02&#39;</span>
+<span class="w">    </span><span class="nt">api_token_id</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;svc-tkn&#39;</span>
+<span class="w">    </span><span class="nt">api_token_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;81c09a2a-0359-4ba1-8153-8cb3cd02509b&#39;</span>
+<span class="w">    </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;remoteapiuser@pam&#39;</span>
+<span class="w">    </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;node1&#39;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;123456&#39;</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;example.org&#39;</span>
+<span class="w">    </span><span class="nt">ostemplate</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;local:vztmpl/ubuntu-14.04-x86_64.tar.gz&#39;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">    </span><span class="no">Create a new container automatically selecting the next available vmid</span>
+<span class="w">    </span><span class="no">and providing a public key for the root account the Ansible host can use</span>
+<span class="w">    </span><span class="no">to connect to the new container</span>
+<span class="w">  </span><span class="nt">community.proxmox.proxmox</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;uk-mc02&#39;</span>
+<span class="w">    </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;root@pam&#39;</span>
+<span class="w">    </span><span class="nt">api_password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1q2w3e&#39;</span>
+<span class="w">    </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;node1&#39;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;123456&#39;</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;example.org&#39;</span>
+<span class="w">    </span><span class="nt">ostemplate</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;local:vztmpl/ubuntu-14.04-x86_64.tar.gz&#39;</span>
+<span class="w">    </span><span class="nt">pubkey</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;ssh-ed25519</span><span class="nv"> </span><span class="s">AAAAC3NzaC1...hBWA</span><span class="nv"> </span><span class="s">ansibleuser@ansiblehost&#39;</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -1321,14 +1349,14 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Community.Proxmox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="proxmox_backup_module.html" class="btn btn-neutral float-right" title="community.proxmox.proxmox_backup module – Start a VM backup in Proxmox VE cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="proxmox_access_acl_module.html" class="btn btn-neutral float-right" title="community.proxmox.proxmox_access_acl module – Management of ACLs for objects in Proxmox VE Cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 04, 2025.
+      <span class="lastupdated">Last updated on Jul 05, 2025.
       </span></p>
   </div>
 
