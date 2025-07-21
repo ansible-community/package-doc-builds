@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.general.lmdb_kv lookup – fetch data from LMDB &mdash; Ansible Community Documentation</title>
@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="community.general.manifold lookup – get credentials from Manifold.co" href="manifold_lookup.html" />
+    <link rel="next" title="community.general.merge_variables lookup – merge variables whose names match a given pattern" href="merge_variables_lookup.html" />
     <link rel="prev" title="community.general.lastpass lookup – fetch data from LastPass" href="lastpass_lookup.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -208,6 +208,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Community.Mysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../okd/index.html">Community.Okd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../postgresql/index.html">Community.Postgresql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxmox/index.html">Community.Proxmox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../proxysql/index.html">Community.Proxysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../rabbitmq/index.html">Community.Rabbitmq</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../routeros/index.html">Community.Routeros</a></li>
@@ -225,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
@@ -337,8 +337,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -356,6 +356,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -395,7 +397,7 @@
 <h1>community.general.lmdb_kv lookup – fetch data from LMDB<a class="headerlink" href="#community-general-lmdb-kv-lookup-fetch-data-from-lmdb" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This lookup plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 10.5.0).</p>
+<p>This lookup plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 11.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -496,7 +498,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lmdb_kv_db</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jp.mdb</span>
 <span class="w">  </span><span class="nt">with_community.general.lmdb_kv</span><span class="p">:</span>
-<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;n*&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;n*&quot;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get an item by key</span>
 <span class="w">  </span><span class="nt">ansible.builtin.assert</span><span class="p">:</span>
@@ -522,7 +524,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <div class="ansibleOptionAnchor" id="return-_raw"></div><p class="ansible-option-title" id="ansible-collections-community-general-lmdb-kv-lookup-return-raw"><strong>Return value</strong></p>
 <a class="ansibleOptionLink" href="#return-_raw" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=any</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>value(s) stored in LMDB</p>
+<td><div class="ansible-option-cell"><p>Value(s) stored in LMDB.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 </div></td>
 </tr>
@@ -533,10 +535,6 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <ul class="simple">
 <li><p>Jan-Piet Mens (&#64;jpmens)</p></li>
 </ul>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
-<p>Configuration entries for each entry type have a low to high priority order. For example, a variable that is lower in the list will override a variable that is higher up.</p>
-</div>
 </section>
 <section id="collection-links">
 <h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
@@ -559,14 +557,14 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="lastpass_lookup.html" class="btn btn-neutral float-left" title="community.general.lastpass lookup – fetch data from LastPass" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="manifold_lookup.html" class="btn btn-neutral float-right" title="community.general.manifold lookup – get credentials from Manifold.co" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="merge_variables_lookup.html" class="btn btn-neutral float-right" title="community.general.merge_variables lookup – merge variables whose names match a given pattern" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

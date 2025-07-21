@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>vyos.vyos.vyos_lldp_interfaces module – LLDP interfaces resource module &mdash; Ansible Community Documentation</title>
@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="vyos.vyos.vyos_logging module – Manage logging on network devices" href="vyos_logging_module.html" />
+    <link rel="next" title="vyos.vyos.vyos_logging_global module – Logging resource module" href="vyos_logging_global_module.html" />
     <link rel="prev" title="vyos.vyos.vyos_lldp_global module – LLDP global resource module" href="vyos_lldp_global_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -190,7 +190,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
@@ -226,6 +225,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Vyos Namespace</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Vyos.Vyos</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#platform-vyos">Platform VyOS</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
 </ul>
 </li>
@@ -287,11 +288,8 @@
           <li class="breadcrumb-item"><a href="index.html">Vyos.Vyos</a></li>
       <li class="breadcrumb-item active">vyos.vyos.vyos_lldp_interfaces module – LLDP interfaces resource module</li>
   <li class="wy-breadcrumbs-aside">
-            <!-- Remove main index page as it is no longer editable -->
-            
-              <br>
-
-            
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/vyos/vyos.vyos/edit/main/plugins/modules/vyos_lldp_interfaces.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
   </li>
   </ul>
   <hr/>
@@ -312,8 +310,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -331,6 +329,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -370,7 +370,7 @@
 <h1>vyos.vyos.vyos_lldp_interfaces module – LLDP interfaces resource module<a class="headerlink" href="#vyos-vyos-vyos-lldp-interfaces-module-lldp-interfaces-resource-module" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vyos/vyos/">vyos.vyos collection</a> (version 5.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vyos/vyos/">vyos.vyos collection</a> (version 6.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -406,14 +406,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-config"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config"><strong>config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>A list of lldp interfaces configurations.</p>
+<td><div class="ansible-option-cell"><p>A list of LLDP interfaces configurations.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/enable"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-enable"><strong>enable</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/enable" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>to disable lldp on the interface.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Disable LLDP on the interfaces.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -429,55 +429,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-config/location/civic_based"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-civic-based"><strong>civic_based</strong></p>
-<a class="ansibleOptionLink" href="#parameter-config/location/civic_based" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Civic-based location data.</p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-config/location/civic_based/ca_info"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-civic-based-ca-info"><strong>ca_info</strong></p>
-<a class="ansibleOptionLink" href="#parameter-config/location/civic_based/ca_info" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LLDP-MED address info</p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-config/location/civic_based/ca_info/ca_type"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-civic-based-ca-info-ca-type"><strong>ca_type</strong></p>
-<a class="ansibleOptionLink" href="#parameter-config/location/civic_based/ca_info/ca_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LLDP-MED Civic Address type.</p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-config/location/civic_based/ca_info/ca_value"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-civic-based-ca-info-ca-value"><strong>ca_value</strong></p>
-<a class="ansibleOptionLink" href="#parameter-config/location/civic_based/ca_info/ca_value" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LLDP-MED Civic Address value.</p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-config/location/civic_based/country_code"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-civic-based-country-code"><strong>country_code</strong></p>
-<a class="ansibleOptionLink" href="#parameter-config/location/civic_based/country_code" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Country Code</p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/location/coordinate_based"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-coordinate-based"><strong>coordinate_based</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/location/coordinate_based" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Coordinate-based location.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/location/coordinate_based/altitude"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-coordinate-based-altitude"><strong>altitude</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/location/coordinate_based/altitude" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Altitude in meters.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/location/coordinate_based/datum"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-coordinate-based-datum"><strong>datum</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/location/coordinate_based/datum" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -490,35 +455,35 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/location/coordinate_based/latitude"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-coordinate-based-latitude"><strong>latitude</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/location/coordinate_based/latitude" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Latitude.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/location/coordinate_based/longitude"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-coordinate-based-longitude"><strong>longitude</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/location/coordinate_based/longitude" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Longitude.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/location/elin"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-location-elin"><strong>elin</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/location/elin" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Emergency Call Service ELIN number (between 10-25 numbers).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/name"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-config-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the lldp interface.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the LLDP interface.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-running_config"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-running-config"><strong>running_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-running_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -527,7 +492,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>The state <em>parsed</em> reads the configuration from <code class="docutils literal notranslate"><span class="pre">running_config</span></code> option and transforms it into Ansible structured data as per the resource module’s argspec and the value is then returned in the <em>parsed</em> key within the result.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-lldp-interfaces-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -552,7 +517,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>Tested against VyOS 1.1.8 (helium).</p></li>
+<li><p>Tested against VyOS 1.3.8, 1.4.2, the upcoming 1.5, and the rolling release of spring 2025</p></li>
 <li><p>This module works with connection <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code>. See <a class="reference external" href="../network/user_guide/platform_vyos.html">the VyOS OS Platform Options</a>.</p></li>
 </ul>
 </div>
@@ -571,11 +536,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth1</span>
 <span class="w">        </span><span class="nt">location</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">civic_based</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">country_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">US</span>
-<span class="w">            </span><span class="nt">ca_info</span><span class="p">:</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ca_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">                </span><span class="nt">ca_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENGLISH</span>
+<span class="w">          </span><span class="nt">elin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000000911</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth2</span>
 <span class="w">        </span><span class="nt">location</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">coordinate_based</span><span class="p">:</span>
@@ -584,18 +545,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">            </span><span class="nt">longitude</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">222.267255W</span>
 <span class="w">            </span><span class="nt">latitude</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">33.524449N</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">merged</span>
-
 <span class="c1">#</span>
 <span class="c1">#</span>
 <span class="c1"># -------------------------</span>
 <span class="c1"># Module Execution Result</span>
 <span class="c1"># -------------------------</span>
 <span class="c1">#</span>
-<span class="c1"># before&quot;: []</span>
+<span class="c1"># before&quot;: {}</span>
 <span class="c1">#</span>
 <span class="c1">#    &quot;commands&quot;: [</span>
-<span class="c1">#        &quot;set service lldp interface eth1 location civic-based country-code &#39;US&#39;&quot;,</span>
-<span class="c1">#        &quot;set service lldp interface eth1 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;&quot;,</span>
+<span class="c1">#        &quot;set service lldp interface eth1 location elin &#39;0000000911&#39;&quot;,</span>
 <span class="c1">#        &quot;set service lldp interface eth1&quot;,</span>
 <span class="c1">#        &quot;set service lldp interface eth2 location coordinate-based latitude &#39;33.524449N&#39;&quot;,</span>
 <span class="c1">#        &quot;set service lldp interface eth2 location coordinate-based altitude &#39;2200&#39;&quot;,</span>
@@ -606,41 +565,32 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#        &quot;set service lldp interface eth2 location coordinate-based datum &#39;WGS84&#39;&quot;,</span>
 <span class="c1">#        &quot;set service lldp interface eth2 location coordinate-based longitude &#39;222.267255W&#39;&quot;,</span>
 <span class="c1">#        &quot;set service lldp interface eth2&quot;</span>
+<span class="c1">#    ]</span>
 <span class="c1">#</span>
-<span class="c1"># &quot;after&quot;: [</span>
-<span class="c1">#        {</span>
-<span class="c1">#            &quot;location&quot;: {</span>
-<span class="c1">#                &quot;coordinate_based&quot;: {</span>
-<span class="c1">#                    &quot;altitude&quot;: 2200,</span>
-<span class="c1">#                    &quot;datum&quot;: &quot;WGS84&quot;,</span>
-<span class="c1">#                    &quot;latitude&quot;: &quot;33.524449N&quot;,</span>
-<span class="c1">#                    &quot;longitude&quot;: &quot;222.267255W&quot;</span>
-<span class="c1">#                }</span>
-<span class="c1">#            },</span>
-<span class="c1">#            &quot;name&quot;: &quot;eth2&quot;</span>
-<span class="c1">#        },</span>
-<span class="c1">#        {</span>
-<span class="c1">#            &quot;location&quot;: {</span>
-<span class="c1">#                &quot;civic_based&quot;: {</span>
-<span class="c1">#                    &quot;ca_info&quot;: [</span>
-<span class="c1">#                        {</span>
-<span class="c1">#                            &quot;ca_type&quot;: 0,</span>
-<span class="c1">#                            &quot;ca_value&quot;: &quot;ENGLISH&quot;</span>
-<span class="c1">#                        }</span>
-<span class="c1">#                    ],</span>
-<span class="c1">#                    &quot;country_code&quot;: &quot;US&quot;</span>
-<span class="c1">#                }</span>
-<span class="c1">#            },</span>
-<span class="c1">#            &quot;name&quot;: &quot;eth1&quot;</span>
-<span class="c1">#        }</span>
-<span class="c1">#    ],</span>
+<span class="c1"># &quot;after&quot;: {</span>
+<span class="c1">#      &quot;location&quot;: {</span>
+<span class="c1">#          &quot;coordinate_based&quot;: {</span>
+<span class="c1">#              &quot;altitude&quot;: 2200,</span>
+<span class="c1">#              &quot;datum&quot;: &quot;WGS84&quot;,</span>
+<span class="c1">#              &quot;latitude&quot;: &quot;33.524449N&quot;,</span>
+<span class="c1">#              &quot;longitude&quot;: &quot;222.267255W&quot;</span>
+<span class="c1">#          }</span>
+<span class="c1">#      },</span>
+<span class="c1">#      &quot;name&quot;: &quot;eth2&quot;</span>
+<span class="c1">#  },</span>
+<span class="c1">#  {</span>
+<span class="c1">#      &quot;location&quot;: {</span>
+<span class="c1">#          &quot;elin&quot;: &quot;0000000911&quot;</span>
+<span class="c1">#          }</span>
+<span class="c1">#      },</span>
+<span class="c1">#      &quot;name&quot;: &quot;eth1&quot;</span>
+<span class="c1">#  }</span>
 <span class="c1">#</span>
 <span class="c1"># After state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@vyos:~$ show configuration commands | grep lldp</span>
-<span class="c1"># set service lldp interface eth1 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;</span>
-<span class="c1"># set service lldp interface eth1 location civic-based country-code &#39;US&#39;</span>
+<span class="c1"># set service lldp interface eth1 location elin &#39;0000000911&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based altitude &#39;2200&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based datum &#39;WGS84&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based latitude &#39;33.524449N&#39;</span>
@@ -653,8 +603,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@vyos:~$ show configuration commands | grep lldp</span>
-<span class="c1"># set service lldp interface eth1 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;</span>
-<span class="c1"># set service lldp interface eth1 location civic-based country-code &#39;US&#39;</span>
+<span class="c1"># set service lldp interface eth1 location elin &#39;0000000911&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based altitude &#39;2200&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based datum &#39;WGS84&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based latitude &#39;33.524449N&#39;</span>
@@ -667,11 +616,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth2</span>
 <span class="w">        </span><span class="nt">location</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">civic_based</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">country_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">US</span>
-<span class="w">            </span><span class="nt">ca_info</span><span class="p">:</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ca_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">                </span><span class="nt">ca_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENGLISH</span>
+<span class="w">          </span><span class="nt">elin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000000911</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth1</span>
 <span class="w">        </span><span class="nt">location</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">coordinate_based</span><span class="p">:</span>
@@ -700,15 +645,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#        },</span>
 <span class="c1">#        {</span>
 <span class="c1">#            &quot;location&quot;: {</span>
-<span class="c1">#                &quot;civic_based&quot;: {</span>
-<span class="c1">#                    &quot;ca_info&quot;: [</span>
-<span class="c1">#                        {</span>
-<span class="c1">#                            &quot;ca_type&quot;: 0,</span>
-<span class="c1">#                            &quot;ca_value&quot;: &quot;ENGLISH&quot;</span>
-<span class="c1">#                        }</span>
-<span class="c1">#                    ],</span>
-<span class="c1">#                    &quot;country_code&quot;: &quot;US&quot;</span>
-<span class="c1">#                }</span>
+<span class="c1">#                &quot;elin&quot;: &quot;0000000911&quot;</span>
 <span class="c1">#            },</span>
 <span class="c1">#            &quot;name&quot;: &quot;eth1&quot;</span>
 <span class="c1">#        }</span>
@@ -717,8 +654,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#    &quot;commands&quot;: [</span>
 <span class="c1">#        &quot;delete service lldp interface eth2 location&quot;,</span>
 <span class="c1">#        &quot;set service lldp interface eth2 &#39;disable&#39;&quot;,</span>
-<span class="c1">#        &quot;set service lldp interface eth2 location civic-based country-code &#39;US&#39;&quot;,</span>
-<span class="c1">#        &quot;set service lldp interface eth2 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;&quot;,</span>
+<span class="c1">#        &quot;set service lldp interface eth2 location elin &#39;0000000911&#39;&quot;,</span>
 <span class="c1">#        &quot;delete service lldp interface eth1 location&quot;,</span>
 <span class="c1">#        &quot;set service lldp interface eth1 &#39;disable&#39;&quot;,</span>
 <span class="c1">#        &quot;set service lldp interface eth1 location coordinate-based latitude &#39;33.524449N&#39;&quot;,</span>
@@ -727,33 +663,23 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#        &quot;set service lldp interface eth1 location coordinate-based longitude &#39;222.267255W&#39;&quot;</span>
 <span class="c1">#    ]</span>
 <span class="c1">#</span>
-<span class="c1">#    &quot;after&quot;: [</span>
-<span class="c1">#        {</span>
-<span class="c1">#            &quot;location&quot;: {</span>
-<span class="c1">#                &quot;civic_based&quot;: {</span>
-<span class="c1">#                    &quot;ca_info&quot;: [</span>
-<span class="c1">#                        {</span>
-<span class="c1">#                            &quot;ca_type&quot;: 0,</span>
-<span class="c1">#                            &quot;ca_value&quot;: &quot;ENGLISH&quot;</span>
-<span class="c1">#                        }</span>
-<span class="c1">#                    ],</span>
-<span class="c1">#                    &quot;country_code&quot;: &quot;US&quot;</span>
-<span class="c1">#                }</span>
-<span class="c1">#            },</span>
-<span class="c1">#            &quot;name&quot;: &quot;eth2&quot;</span>
+<span class="c1">#    &quot;after&quot;: {</span>
+<span class="c1">#        &quot;location&quot;: {</span>
+<span class="c1">#            &quot;elin&quot;: &quot;0000000911&quot;</span>
 <span class="c1">#        },</span>
-<span class="c1">#        {</span>
-<span class="c1">#            &quot;location&quot;: {</span>
-<span class="c1">#                &quot;coordinate_based&quot;: {</span>
-<span class="c1">#                    &quot;altitude&quot;: 2200,</span>
-<span class="c1">#                    &quot;datum&quot;: &quot;WGS84&quot;,</span>
-<span class="c1">#                    &quot;latitude&quot;: &quot;33.524449N&quot;,</span>
-<span class="c1">#                    &quot;longitude&quot;: &quot;222.267255W&quot;</span>
-<span class="c1">#                }</span>
-<span class="c1">#            },</span>
-<span class="c1">#            &quot;name&quot;: &quot;eth1&quot;</span>
-<span class="c1">#        }</span>
-<span class="c1">#    ]</span>
+<span class="c1">#        &quot;name&quot;: &quot;eth2&quot;</span>
+<span class="c1">#    },</span>
+<span class="c1">#    {</span>
+<span class="c1">#        &quot;location&quot;: {</span>
+<span class="c1">#            &quot;coordinate_based&quot;: {</span>
+<span class="c1">#                &quot;altitude&quot;: 2200,</span>
+<span class="c1">#                &quot;datum&quot;: &quot;WGS84&quot;,</span>
+<span class="c1">#                &quot;latitude&quot;: &quot;33.524449N&quot;,</span>
+<span class="c1">#                &quot;longitude&quot;: &quot;222.267255W&quot;</span>
+<span class="c1">#            }</span>
+<span class="c1">#        },</span>
+<span class="c1">#        &quot;name&quot;: &quot;eth1&quot;</span>
+<span class="c1">#    }</span>
 <span class="c1">#</span>
 <span class="c1"># After state:</span>
 <span class="c1"># -------------</span>
@@ -765,8 +691,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># set service lldp interface eth1 location coordinate-based latitude &#39;33.524449N&#39;</span>
 <span class="c1"># set service lldp interface eth1 location coordinate-based longitude &#39;222.267255W&#39;</span>
 <span class="c1"># set service lldp interface eth2 &#39;disable&#39;</span>
-<span class="c1"># set service lldp interface eth2 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;</span>
-<span class="c1"># set service lldp interface eth2 location civic-based country-code &#39;US&#39;</span>
+<span class="c1"># set service lldp interface eth2 location elin &#39;0000000911&#39;</span>
 
 
 <span class="c1"># Using overridden</span>
@@ -781,8 +706,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># set service lldp interface eth1 location coordinate-based latitude &#39;33.524449N&#39;</span>
 <span class="c1"># set service lldp interface eth1 location coordinate-based longitude &#39;222.267255W&#39;</span>
 <span class="c1"># set service lldp interface eth2 &#39;disable&#39;</span>
-<span class="c1"># set service lldp interface eth2 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;</span>
-<span class="c1"># set service lldp interface eth2 location civic-based country-code &#39;US&#39;</span>
+<span class="c1"># set service lldp interface eth2 location elin &#39;0000000911&#39;</span>
 <span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Overrides all device configuration with provided configuration</span>
 <span class="w">  </span><span class="nt">vyos.vyos.vyos_lldp_interfaces</span><span class="p">:</span>
@@ -799,49 +723,39 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------------------</span>
 <span class="c1">#</span>
 <span class="c1"># &quot;before&quot;: [</span>
-<span class="c1">#        {</span>
-<span class="c1">#            &quot;enable&quot;: false,</span>
-<span class="c1">#            &quot;location&quot;: {</span>
-<span class="c1">#                &quot;civic_based&quot;: {</span>
-<span class="c1">#                    &quot;ca_info&quot;: [</span>
-<span class="c1">#                        {</span>
-<span class="c1">#                            &quot;ca_type&quot;: 0,</span>
-<span class="c1">#                            &quot;ca_value&quot;: &quot;ENGLISH&quot;</span>
-<span class="c1">#                        }</span>
-<span class="c1">#                    ],</span>
-<span class="c1">#                    &quot;country_code&quot;: &quot;US&quot;</span>
-<span class="c1">#                }</span>
-<span class="c1">#            },</span>
-<span class="c1">#            &quot;name&quot;: &quot;eth2&quot;</span>
-<span class="c1">#        },</span>
-<span class="c1">#        {</span>
-<span class="c1">#            &quot;enable&quot;: false,</span>
-<span class="c1">#            &quot;location&quot;: {</span>
-<span class="c1">#                &quot;coordinate_based&quot;: {</span>
-<span class="c1">#                    &quot;altitude&quot;: 2200,</span>
-<span class="c1">#                    &quot;datum&quot;: &quot;WGS84&quot;,</span>
-<span class="c1">#                    &quot;latitude&quot;: &quot;33.524449N&quot;,</span>
-<span class="c1">#                    &quot;longitude&quot;: &quot;222.267255W&quot;</span>
-<span class="c1">#                }</span>
-<span class="c1">#            },</span>
-<span class="c1">#            &quot;name&quot;: &quot;eth1&quot;</span>
+<span class="c1">#    {</span>
+<span class="c1">#      &quot;enable&quot;: false,</span>
+<span class="c1">#      &quot;elin&quot;: &quot;0000000911&quot;,</span>
+<span class="c1">#      &quot;name&quot;: &quot;eth2&quot;</span>
+<span class="c1">#    },</span>
+<span class="c1">#    {</span>
+<span class="c1">#      &quot;enable&quot;: false,</span>
+<span class="c1">#      &quot;location&quot;: {</span>
+<span class="c1">#        &quot;coordinate_based&quot;: {</span>
+<span class="c1">#          &quot;altitude&quot;: 2200,</span>
+<span class="c1">#          &quot;datum&quot;: &quot;WGS84&quot;,</span>
+<span class="c1">#          &quot;latitude&quot;: &quot;33.524449N&quot;,</span>
+<span class="c1">#          &quot;longitude&quot;: &quot;222.267255W&quot;</span>
 <span class="c1">#        }</span>
-<span class="c1">#    ]</span>
+<span class="c1">#      },</span>
+<span class="c1">#      &quot;name&quot;: &quot;eth1&quot;</span>
+<span class="c1">#    }</span>
+<span class="c1">#  ]</span>
 <span class="c1">#</span>
-<span class="c1">#    &quot;commands&quot;: [</span>
-<span class="c1">#        &quot;delete service lldp interface eth2 location&quot;,</span>
-<span class="c1">#        &quot;delete service lldp interface eth2 disable&quot;,</span>
-<span class="c1">#        &quot;set service lldp interface eth2 location elin 0000000911&quot;</span>
+<span class="c1"># &quot;commands&quot;: [</span>
+<span class="c1">#    &quot;delete service lldp interface eth2 location&quot;,</span>
+<span class="c1">#    &quot;delete service lldp interface eth2 disable&quot;,</span>
+<span class="c1">#    &quot;set service lldp interface eth2 location elin 0000000911&quot;</span>
+<span class="c1">#  ]</span>
 <span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#    &quot;after&quot;: [</span>
-<span class="c1">#        {</span>
-<span class="c1">#            &quot;location&quot;: {</span>
-<span class="c1">#                &quot;elin&quot;: 0000000911</span>
-<span class="c1">#            },</span>
-<span class="c1">#            &quot;name&quot;: &quot;eth2&quot;</span>
-<span class="c1">#        }</span>
-<span class="c1">#    ]</span>
+<span class="c1"># &quot;after&quot;: [</span>
+<span class="c1">#    {</span>
+<span class="c1">#      &quot;location&quot;: {</span>
+<span class="c1">#        &quot;elin&quot;: 0000000911</span>
+<span class="c1">#      },</span>
+<span class="c1">#      &quot;name&quot;: &quot;eth2&quot;</span>
+<span class="c1">#    }</span>
+<span class="c1">#  ]</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
 <span class="c1"># After state</span>
@@ -859,7 +773,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># vyos@vyos# run show configuration commands | grep lldp</span>
 <span class="c1"># set service lldp interface eth2 location elin &#39;0000000911&#39;</span>
 <span class="c1">#</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete lldp  interface attributes of given interfaces.</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete LLDP interface attributes of given interfaces.</span>
 <span class="w">  </span><span class="nt">vyos.vyos.vyos_lldp_interfaces</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth2</span>
@@ -870,11 +784,17 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># Module Execution Results</span>
 <span class="c1"># ------------------------</span>
 <span class="c1">#</span>
-<span class="w">    </span><span class="nt">before</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">elin</span><span class="p">:</span><span class="w"> </span><span class="nv">0000000911</span><span class="p p-Indicator">},</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">eth2</span><span class="p p-Indicator">}]</span>
-<span class="c1"># &quot;commands&quot;: [</span>
-<span class="c1">#    &quot;commands&quot;: [</span>
-<span class="c1">#        &quot;delete service lldp interface eth2&quot;</span>
-<span class="c1">#    ]</span>
+<span class="c1">#  &quot;before&quot;: [</span>
+<span class="c1">#       {</span>
+<span class="c1">#          &quot;location&quot;: {</span>
+<span class="c1">#              &quot;elin&quot;: 0000000911</span>
+<span class="c1">#          },</span>
+<span class="c1">#          &quot;name&quot;: &quot;eth2&quot;</span>
+<span class="c1">#      }</span>
+<span class="c1">#  ]</span>
+<span class="c1">#  &quot;commands&quot;: [</span>
+<span class="c1">#      &quot;delete service lldp interface eth2&quot;</span>
+<span class="c1">#  ]</span>
 <span class="c1">#</span>
 <span class="c1"># &quot;after&quot;: []</span>
 <span class="c1"># After state</span>
@@ -889,8 +809,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@192# run show configuration commands | grep lldp</span>
-<span class="c1"># set service lldp interface eth1 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;</span>
-<span class="c1"># set service lldp interface eth1 location civic-based country-code &#39;US&#39;</span>
+<span class="c1"># set service lldp interface eth1 location elin &#39;0000000911&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based altitude &#39;2200&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based datum &#39;WGS84&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based latitude &#39;33.524449N&#39;</span>
@@ -920,15 +839,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#         },</span>
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;location&quot;: {</span>
-<span class="c1">#                 &quot;civic_based&quot;: {</span>
-<span class="c1">#                     &quot;ca_info&quot;: [</span>
-<span class="c1">#                         {</span>
-<span class="c1">#                             &quot;ca_type&quot;: 0,</span>
-<span class="c1">#                             &quot;ca_value&quot;: &quot;ENGLISH&quot;</span>
-<span class="c1">#                         }</span>
-<span class="c1">#                     ],</span>
-<span class="c1">#                     &quot;country_code&quot;: &quot;US&quot;</span>
-<span class="c1">#                 }</span>
+<span class="c1">#                 &quot;elin&quot;: &quot;0000000911&quot;</span>
 <span class="c1">#             },</span>
 <span class="c1">#             &quot;name&quot;: &quot;eth1&quot;</span>
 <span class="c1">#         }</span>
@@ -939,8 +850,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@192# run show configuration commands | grep lldp</span>
-<span class="c1"># set service lldp interface eth1 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;</span>
-<span class="c1"># set service lldp interface eth1 location civic-based country-code &#39;US&#39;</span>
+<span class="c1"># set service lldp interface eth1 location elin &#39;0000000911&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based altitude &#39;2200&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based datum &#39;WGS84&#39;</span>
 <span class="c1"># set service lldp interface eth2 location coordinate-based latitude &#39;33.524449N&#39;</span>
@@ -955,11 +865,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth1</span>
 <span class="w">        </span><span class="nt">location</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">civic_based</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">country_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">US</span>
-<span class="w">            </span><span class="nt">ca_info</span><span class="p">:</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ca_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">                </span><span class="nt">ca_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENGLISH</span>
+<span class="w">          </span><span class="nt">elin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000000911</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth2</span>
 <span class="w">        </span><span class="nt">location</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">coordinate_based</span><span class="p">:</span>
@@ -977,8 +883,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#</span>
 <span class="c1">#</span>
 <span class="c1"># &quot;rendered&quot;: [</span>
-<span class="c1">#         &quot;set service lldp interface eth1 location civic-based country-code &#39;US&#39;&quot;,</span>
-<span class="c1">#         &quot;set service lldp interface eth1 location civic-based ca-type 0 ca-value &#39;ENGLISH&#39;&quot;,</span>
+<span class="c1">#         &quot;set service lldp interface eth1 location elin &#39;0000000911&#39;&quot;,</span>
 <span class="c1">#         &quot;set service lldp interface eth1&quot;,</span>
 <span class="c1">#         &quot;set service lldp interface eth2 location coordinate-based latitude &#39;33.524449N&#39;&quot;,</span>
 <span class="c1">#         &quot;set service lldp interface eth2 location coordinate-based altitude &#39;2200&#39;&quot;,</span>
@@ -994,8 +899,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Parsed the commands to provide structured configuration.</span>
 <span class="w">  </span><span class="nt">vyos.vyos.vyos_lldp_interfaces</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">running_config</span><span class="p">:</span>
-<span class="w">      </span><span class="s">&quot;set</span><span class="nv"> </span><span class="s">service</span><span class="nv"> </span><span class="s">lldp</span><span class="nv"> </span><span class="s">interface</span><span class="nv"> </span><span class="s">eth1</span><span class="nv"> </span><span class="s">location</span><span class="nv"> </span><span class="s">civic-based</span><span class="nv"> </span><span class="s">ca-type</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">ca-value</span><span class="nv"> </span><span class="s">&#39;ENGLISH&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">service</span><span class="nv"> </span><span class="s">lldp</span><span class="nv"> </span><span class="s">interface</span><span class="nv"> </span><span class="s">eth1</span><span class="nv"> </span><span class="s">location</span><span class="nv"> </span><span class="s">civic-based</span><span class="nv"> </span><span class="s">country-code</span><span class="nv"> </span><span class="s">&#39;US&#39;</span>
+<span class="w">      </span><span class="s">&quot;set</span><span class="nv"> </span><span class="s">service</span><span class="nv"> </span><span class="s">lldp</span><span class="nv"> </span><span class="s">interface</span><span class="nv"> </span><span class="s">eth1</span><span class="nv"> </span><span class="s">location</span><span class="nv"> </span><span class="s">elin</span><span class="nv"> </span><span class="s">&#39;0000000911&#39;</span>
 <span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">service</span><span class="nv"> </span><span class="s">lldp</span><span class="nv"> </span><span class="s">interface</span><span class="nv"> </span><span class="s">eth2</span><span class="nv"> </span><span class="s">location</span><span class="nv"> </span><span class="s">coordinate-based</span><span class="nv"> </span><span class="s">altitude</span><span class="nv"> </span><span class="s">&#39;2200&#39;</span>
 <span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">service</span><span class="nv"> </span><span class="s">lldp</span><span class="nv"> </span><span class="s">interface</span><span class="nv"> </span><span class="s">eth2</span><span class="nv"> </span><span class="s">location</span><span class="nv"> </span><span class="s">coordinate-based</span><span class="nv"> </span><span class="s">datum</span><span class="nv"> </span><span class="s">&#39;WGS84&#39;</span>
 <span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">service</span><span class="nv"> </span><span class="s">lldp</span><span class="nv"> </span><span class="s">interface</span><span class="nv"> </span><span class="s">eth2</span><span class="nv"> </span><span class="s">location</span><span class="nv"> </span><span class="s">coordinate-based</span><span class="nv"> </span><span class="s">latitude</span><span class="nv"> </span><span class="s">&#39;33.524449N&#39;</span>
@@ -1022,15 +926,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#         },</span>
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;location&quot;: {</span>
-<span class="c1">#                 &quot;civic_based&quot;: {</span>
-<span class="c1">#                     &quot;ca_info&quot;: [</span>
-<span class="c1">#                         {</span>
-<span class="c1">#                             &quot;ca_type&quot;: 0,</span>
-<span class="c1">#                             &quot;ca_value&quot;: &quot;ENGLISH&quot;</span>
-<span class="c1">#                         }</span>
-<span class="c1">#                     ],</span>
-<span class="c1">#                     &quot;country_code&quot;: &quot;US&quot;</span>
-<span class="c1">#                 }</span>
+<span class="c1">#                 &quot;elin&quot;: &quot;0000000911&quot;</span>
 <span class="c1">#             },</span>
 <span class="c1">#             &quot;name&quot;: &quot;eth1&quot;</span>
 <span class="c1">#         }</span>
@@ -1054,7 +950,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>The configuration as structured data after module completion.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when changed</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format\n</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -1063,7 +959,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>The configuration as structured data prior to module invocation.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format\n</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -1086,8 +982,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <section id="collection-links">
 <h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
 <ul class="ansible-links">
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vyos.vyos/issues" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vyos.vyos" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://vyos.dev" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/vyos/vyos.vyos" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://vyos.dev/maniphest/task/edit/form/3/?projectPHIDs=PHID-PROJ-aryfih5l65cgcdmx4sqp" rel="noopener external" target="_blank">Report an issue</a></span></li>
+<li><span><a class="reference internal" href="index.html#communication-for-vyos-vyos"><span class="std std-ref">Communication</span></a></span></li>
 </ul>
 </section>
 </section>
@@ -1100,14 +998,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="vyos_lldp_global_module.html" class="btn btn-neutral float-left" title="vyos.vyos.vyos_lldp_global module – LLDP global resource module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="vyos_logging_module.html" class="btn btn-neutral float-right" title="vyos.vyos.vyos_logging module – Manage logging on network devices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="vyos_logging_global_module.html" class="btn btn-neutral float-right" title="vyos.vyos.vyos_logging_global module – Logging resource module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ansible.windows.win_package module – Installs/uninstalls an installable package &mdash; Ansible Community Documentation</title>
@@ -174,7 +174,6 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Ansible Namespace</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../_protomatter/index.html">Ansible._Protomatter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../builtin/index.html">Ansible.Builtin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../netcommon/index.html">Ansible.Netcommon</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../posix/index.html">Ansible.Posix</a></li>
@@ -202,7 +201,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
@@ -314,8 +312,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -333,6 +331,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -372,7 +372,7 @@
 <h1>ansible.windows.win_package module – Installs/uninstalls an installable package<a class="headerlink" href="#ansible-windows-win-package-module-installs-uninstalls-an-installable-package" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/windows/">ansible.windows collection</a> (version 2.8.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/windows/">ansible.windows collection</a> (version 3.1.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -577,7 +577,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>This package can either be on the local file system, network share or a url.</p>
 <p>When <code class="docutils literal notranslate"><span class="pre">state=present</span></code>, <code class="docutils literal notranslate"><span class="pre">product_id</span></code> is not set and the path is a URL, this file will always be downloaded to a temporary directory for idempotency checks, otherwise the file will only be downloaded if the package has not been installed based on the <code class="docutils literal notranslate"><span class="pre">product_id</span></code> checks.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">state=present</span></code> then this value MUST be set.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">state=absent</span></code> then this value does not need to be set if <code class="docutils literal notranslate"><span class="pre">product_id</span></code> is.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">state=absent</span></code> and <code class="docutils literal notranslate"><span class="pre">product_id</span></code> is set then this value is not required.</p>
+<p>Module can not derive product id if <code class="docutils literal notranslate"><span class="pre">state=absent</span></code> and path is a URL.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -590,7 +591,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>For msp packages, this is the <code class="docutils literal notranslate"><span class="pre">PatchCode</span></code> (GUID) of the package which can found under the <code class="docutils literal notranslate"><span class="pre">Details</span> <span class="pre">-&gt;</span> <span class="pre">Revision</span> <span class="pre">number</span></code> of the file’s properties.</p>
 <p>For msix packages, this is the <code class="docutils literal notranslate"><span class="pre">Name</span></code> or <code class="docutils literal notranslate"><span class="pre">PackageFullName</span></code> of the package found under the <code class="docutils literal notranslate"><span class="pre">Get-AppxPackage</span></code> cmdlet.</p>
 <p>For registry (exe) packages, this is the registry key name under the registry paths specified in <em>provider</em>.</p>
-<p>This value is ignored if <code class="docutils literal notranslate"><span class="pre">path</span></code> is set to a local accesible file path and the package is not an <code class="docutils literal notranslate"><span class="pre">exe</span></code>.</p>
+<p>This value is ignored if <code class="docutils literal notranslate"><span class="pre">path</span></code> is set to a local accessible file path and the package is not an <code class="docutils literal notranslate"><span class="pre">exe</span></code>.</p>
 <p>This SHOULD be set when the package is an <code class="docutils literal notranslate"><span class="pre">exe</span></code>, or the path is a url or a network share and credential delegation is not being used. The <code class="docutils literal notranslate"><span class="pre">creates_*</span></code> options can be used instead but is not recommended.</p>
 </div></td>
 </tr>
@@ -657,7 +658,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>Whether to install or uninstall the package.</p>
 <p>The module uses <em>product_id</em> to determine whether the package is installed or not.</p>
-<p>For all providers but <code class="docutils literal notranslate"><span class="pre">auto</span></code>, the <em>path</em> can be used for idempotency checks if it is locally accesible filesystem path.</p>
+<p>For all providers but <code class="docutils literal notranslate"><span class="pre">auto</span></code>, the <em>path</em> can be used for idempotency checks if it is locally accessible filesystem path.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
@@ -773,11 +774,11 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <dl class="simple">
 <dt><a class="reference internal" href="../../chocolatey/chocolatey/win_chocolatey_module.html#ansible-collections-chocolatey-chocolatey-win-chocolatey-module"><span class="std std-ref">chocolatey.chocolatey.win_chocolatey</span></a></dt><dd><p>Manage packages using chocolatey.</p>
 </dd>
-<dt><a class="reference internal" href="../../community/windows/win_hotfix_module.html#ansible-collections-community-windows-win-hotfix-module"><span class="std std-ref">community.windows.win_hotfix</span></a></dt><dd><p>Install and uninstalls Windows hotfixes.</p>
+<dt><a class="reference internal" href="../../community/windows/win_hotfix_module.html#ansible-collections-community-windows-win-hotfix-module"><span class="std std-ref">community.windows.win_hotfix</span></a></dt><dd><p>The official documentation on the <strong>community.windows.win_hotfix</strong> module.</p>
 </dd>
 <dt><a class="reference internal" href="win_updates_module.html#ansible-collections-ansible-windows-win-updates-module"><span class="std std-ref">ansible.windows.win_updates</span></a></dt><dd><p>Download and install Windows updates.</p>
 </dd>
-<dt><a class="reference internal" href="../../community/windows/win_inet_proxy_module.html#ansible-collections-community-windows-win-inet-proxy-module"><span class="std std-ref">community.windows.win_inet_proxy</span></a></dt><dd><p>Manages proxy settings for WinINet and Internet Explorer.</p>
+<dt><a class="reference internal" href="../../community/windows/win_inet_proxy_module.html#ansible-collections-community-windows-win-inet-proxy-module"><span class="std std-ref">community.windows.win_inet_proxy</span></a></dt><dd><p>The official documentation on the <strong>community.windows.win_inet_proxy</strong> module.</p>
 </dd>
 </dl>
 </div>
@@ -1027,7 +1028,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

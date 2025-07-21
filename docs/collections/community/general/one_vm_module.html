@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.general.one_vm module – Creates or terminates OpenNebula instances &mdash; Ansible Community Documentation</title>
@@ -208,6 +208,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Community.Mysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../okd/index.html">Community.Okd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../postgresql/index.html">Community.Postgresql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxmox/index.html">Community.Proxmox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../proxysql/index.html">Community.Proxysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../rabbitmq/index.html">Community.Rabbitmq</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../routeros/index.html">Community.Routeros</a></li>
@@ -225,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
@@ -337,8 +337,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -356,6 +356,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -395,7 +397,7 @@
 <h1>community.general.one_vm module – Creates or terminates OpenNebula instances<a class="headerlink" href="#community-general-one-vm-module-creates-or-terminates-opennebula-instances" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 10.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 11.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -664,6 +666,16 @@ see <a class="reference internal" href="#ansible-collections-community-general-o
 <td><div class="ansible-option-cell"><p>When <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-one-vm-module-parameter-instance-ids"><span class="std std-ref"><span class="pre">instance_ids</span></span></a></strong></code> is provided, updates running VMs with the <code class="docutils literal notranslate"><span class="pre">updateconf</span></code> API call.</p>
 <p>When new VMs are being created, emulates the <code class="docutils literal notranslate"><span class="pre">updateconf</span></code> API call using direct template merge.</p>
 <p>Allows for complete modifications of the <code class="docutils literal notranslate"><span class="pre">CONTEXT</span></code> attribute.</p>
+<p>Supported attributes include:</p>
+<p><strong>BACKUP_CONFIG:</strong> <code class="ansible-value docutils literal notranslate"><span class="pre">BACKUP_VOLATILE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">FS_FREEZE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">INCREMENT_MODE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">KEEP_LAST</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">MODE</span></code>;</p>
+<p><strong>CONTEXT:</strong> (Any value, except <code class="ansible-value docutils literal notranslate"><span class="pre">ETH*</span></code>. Variable substitution will be made);</p>
+<p><strong>CPU_MODEL:</strong> <code class="ansible-value docutils literal notranslate"><span class="pre">FEATURES</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">MODEL</span></code>;</p>
+<p><strong>FEATURES:</strong> <code class="ansible-value docutils literal notranslate"><span class="pre">ACPI</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">APIC</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">GUEST_AGENT</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">HYPERV</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">IOTHREADS</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">LOCALTIME</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">PAE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">VIRTIO_BLK_QUEUES</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">VIRTIO_SCSI_QUEUES</span></code>;</p>
+<p><strong>GRAPHICS:</strong> <code class="ansible-value docutils literal notranslate"><span class="pre">COMMAND</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">KEYMAP</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">LISTEN</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">PASSWD</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">PORT</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">TYPE</span></code>;</p>
+<p><strong>INPUT:</strong> <code class="ansible-value docutils literal notranslate"><span class="pre">BUS</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">TYPE</span></code>;</p>
+<p><strong>OS:</strong> <code class="ansible-value docutils literal notranslate"><span class="pre">ARCH</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">BOOT</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">BOOTLOADER</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">FIRMWARE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">INITRD</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">KERNEL</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">KERNEL_CMD</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">MACHINE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">ROOT</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">SD_DISK_BUS</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">UUID</span></code>;</p>
+<p><strong>RAW:</strong> <code class="ansible-value docutils literal notranslate"><span class="pre">DATA</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">DATA_VMX</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">TYPE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">VALIDATE</span></code>;</p>
+<p><strong>VIDEO:</strong> <code class="ansible-value docutils literal notranslate"><span class="pre">ATS</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">IOMMU</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">RESOLUTION</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">TYPE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">VRAM</span></code>.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -1383,7 +1395,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-o
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

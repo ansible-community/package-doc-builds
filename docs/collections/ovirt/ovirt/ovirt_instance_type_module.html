@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ovirt.ovirt.ovirt_instance_type module – Module to manage Instance Types in oVirt/RHV &mdash; Ansible Community Documentation</title>
@@ -190,7 +190,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
@@ -312,8 +311,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -331,6 +330,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -370,7 +371,7 @@
 <h1>ovirt.ovirt.ovirt_instance_type module – Module to manage Instance Types in oVirt/RHV<a class="headerlink" href="#ovirt-ovirt-ovirt-instance-type-module-module-to-manage-instance-types-in-ovirt-rhv" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ovirt/ovirt/">ovirt.ovirt collection</a> (version 3.2.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ovirt/ovirt/">ovirt.ovirt collection</a> (version 3.2.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -495,6 +496,7 @@ see <a class="reference internal" href="#ansible-collections-ovirt-ovirt-ovirt-i
 <a class="ansibleOptionLink" href="#parameter-auth/timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Number of seconds to wait for response.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -717,6 +719,7 @@ see <a class="reference internal" href="#ansible-collections-ovirt-ovirt-ovirt-i
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies list of the attributes which should be fetched from the API.</p>
 <p>This parameter apply only when <code class="docutils literal notranslate"><span class="pre">fetch_nested</span></code> is <em>true</em>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -725,6 +728,7 @@ see <a class="reference internal" href="#ansible-collections-ovirt-ovirt-ovirt-i
 </div></td>
 <td><div class="ansible-option-cell"><p>List of NICs, which should be attached to Virtual Machine. NIC is described by following dictionary.</p>
 <p>NOTE - This parameter is used only when <code class="docutils literal notranslate"><span class="pre">state</span></code> is <em>running</em> or <em>present</em> and is able to only create NICs. To manage NICs of the instance type in more depth please use <a class="reference internal" href="ovirt_nic_module.html#ansible-collections-ovirt-ovirt-ovirt-nic-module"><span class="std std-ref">ovirt.ovirt.ovirt_nic</span></a> module instead.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -965,8 +969,8 @@ see <a class="reference internal" href="#ansible-collections-ovirt-ovirt-ovirt-i
 <span class="c1"># Enable usb support and serial console</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ovirt.ovirt.ovirt_instance_type</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myit</span>
-<span class="w">    </span><span class="nt">usb_support</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">    </span><span class="nt">serial_console</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">    </span><span class="nt">usb_support</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">serial_console</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="c1"># Use graphical console with spice and vnc</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a instance type that has the console configured for both Spice and VNC</span>
@@ -1011,8 +1015,7 @@ see <a class="reference internal" href="#ansible-collections-ovirt-ovirt-ovirt-i
 <section id="authors">
 <h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>Martin Necas (&#64;mnecas)</p></li>
-<li><p>Ondra Machacek (&#64;machacekondra)</p></li>
+<li><p>oVirt Developers (&#64;oVirt)</p></li>
 </ul>
 </section>
 <section id="collection-links">
@@ -1040,7 +1043,7 @@ see <a class="reference internal" href="#ansible-collections-ovirt-ovirt-ovirt-i
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>vmware.vmware_rest.vm_moid lookup – Look up MoID for vSphere vm objects using vCenter REST API &mdash; Ansible Community Documentation</title>
@@ -190,7 +190,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
@@ -314,8 +313,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -333,6 +332,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -372,7 +373,7 @@
 <h1>vmware.vmware_rest.vm_moid lookup – Look up MoID for vSphere vm objects using vCenter REST API<a class="headerlink" href="#vmware-vmware-rest-vm-moid-lookup-look-up-moid-for-vsphere-vm-objects-using-vcenter-rest-api" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This lookup plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware_rest/">vmware.vmware_rest collection</a> (version 4.7.0).</p>
+<p>This lookup plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware_rest/">vmware.vmware_rest collection</a> (version 4.8.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -384,23 +385,39 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 <p class="ansible-version-added">New in vmware.vmware_rest 2.1.0</p>
 <nav class="contents local" id="contents">
 <ul class="simple">
-<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
-<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
-<li><p><a class="reference internal" href="#terms" id="id3">Terms</a></p></li>
-<li><p><a class="reference internal" href="#keyword-parameters" id="id4">Keyword parameters</a></p></li>
-<li><p><a class="reference internal" href="#notes" id="id5">Notes</a></p></li>
-<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
-<li><p><a class="reference internal" href="#return-value" id="id7">Return Value</a></p></li>
+<li><p><a class="reference internal" href="#deprecated" id="id1">DEPRECATED</a></p></li>
+<li><p><a class="reference internal" href="#synopsis" id="id2">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id3">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#terms" id="id4">Terms</a></p></li>
+<li><p><a class="reference internal" href="#keyword-parameters" id="id5">Keyword parameters</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id6">Notes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id7">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-value" id="id8">Return Value</a></p></li>
+<li><p><a class="reference internal" href="#status" id="id9">Status</a></p></li>
 </ul>
 </nav>
+<section id="deprecated">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">DEPRECATED</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Removed in<span class="colon">:</span></dt>
+<dd class="field-odd"><p>version 5.0.0</p>
+</dd>
+<dt class="field-even">Why<span class="colon">:</span></dt>
+<dd class="field-even"><p>This plugin will not work with ansible-core 2.19 and above. Refer to <a class="reference external" href="https://github.com/ansible-collections/vmware.vmware/tree/main/docs/lookup_plugin_migration.md">the migration documentation</a> for migration examples.</p>
+</dd>
+<dt class="field-odd">Alternative<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Use <span class="xref std std-ref">vmware.vmware.moid_from_path</span> instead.</p>
+</dd>
+</dl>
+</section>
 <section id="synopsis">
-<h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Returns Managed Object Reference (MoID) of the vSphere vm object contained in the specified path.</p></li>
 </ul>
 </section>
 <section id="requirements">
-<span id="ansible-collections-vmware-vmware-rest-vm-moid-lookup-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<span id="ansible-collections-vmware-vmware-rest-vm-moid-lookup-requirements"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>The below requirements are needed on the local controller node that executes this lookup.</p>
 <ul class="simple">
 <li><p>vSphere 7.0.3 or greater</p></li>
@@ -409,7 +426,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 </ul>
 </section>
 <section id="terms">
-<h2><a class="toc-backref" href="#id3" role="doc-backlink">Terms</a><a class="headerlink" href="#terms" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Terms</a><a class="headerlink" href="#terms" title="Link to this heading"></a></h2>
 <table class="longtable ansible-option-table docutils align-default" style="width: 100%">
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
@@ -431,7 +448,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-rest-
 </table>
 </section>
 <section id="keyword-parameters">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink">Keyword parameters</a><a class="headerlink" href="#keyword-parameters" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Keyword parameters</a><a class="headerlink" href="#keyword-parameters" title="Link to this heading"></a></h2>
 <p>This describes keyword parameters of the lookup. These are the values <code class="docutils literal notranslate"><span class="pre">key1=value1</span></code>, <code class="docutils literal notranslate"><span class="pre">key2=value2</span></code> and so on in the following
 examples: <code class="docutils literal notranslate"><span class="pre">lookup('vmware.vmware_rest.vm_moid',</span> <span class="pre">key1=value1,</span> <span class="pre">key2=value2,</span> <span class="pre">...)</span></code> and <code class="docutils literal notranslate"><span class="pre">query('vmware.vmware_rest.vm_moid',</span> <span class="pre">key1=value1,</span> <span class="pre">key2=value2,</span> <span class="pre">...)</span></code></p>
 <table class="longtable ansible-option-table docutils align-default" style="width: 100%">
@@ -516,7 +533,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('v
 </table>
 </section>
 <section id="notes">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -528,7 +545,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('v
 </div>
 </section>
 <section id="examples">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
 <span class="c1">#</span>
 <span class="c1"># The examples below assume you have a datacenter named &#39;my_dc&#39; and a vm named &#39;my_vm&#39;.</span>
@@ -612,7 +629,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('v
 </div>
 </section>
 <section id="return-value">
-<h2><a class="toc-backref" href="#id7" role="doc-backlink">Return Value</a><a class="headerlink" href="#return-value" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Return Value</a><a class="headerlink" href="#return-value" title="Link to this heading"></a></h2>
 <table class="longtable ansible-option-table docutils align-default" style="width: 100%">
 <thead>
 <tr class="row-odd"><th class="head"><p>Key</p></th>
@@ -631,22 +648,25 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('v
 </tr>
 </tbody>
 </table>
+</section>
+<section id="status">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Status</a><a class="headerlink" href="#status" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This lookup will be removed in version 5.0.0.
+<em>[deprecated]</em></p></li>
+<li><p>For more information see <a class="reference internal" href="#deprecated">DEPRECATED</a>.</p></li>
+</ul>
 <section id="authors">
 <h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Alina Buzachis (&#64;alinabuzachis)</p></li>
 </ul>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
-<p>Configuration entries for each entry type have a low to high priority order. For example, a variable that is lower in the list will override a variable that is higher up.</p>
-</div>
 </section>
 <section id="collection-links">
 <h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
 <ul class="ansible-links">
 <li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vmware.vmware_rest" rel="noopener external" target="_blank">Homepage</a></span></li>
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vmware.vmware_rest.git" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vmware.vmware_rest" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
 </ul>
 </section>
 </section>
@@ -666,7 +686,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('v
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

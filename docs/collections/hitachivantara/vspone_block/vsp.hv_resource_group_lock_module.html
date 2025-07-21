@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>hitachivantara.vspone_block.vsp.hv_resource_group_lock module – Allows the locking and unlocking of resource groups on Hitachi VSP storage systems. &mdash; Ansible Community Documentation</title>
@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="hitachivantara.vspone_block.vsp.hv_shadow_image_pair module – Manages shadow image pairs on Hitachi VSP storage systems." href="vsp.hv_shadow_image_pair_module.html" />
+    <link rel="next" title="hitachivantara.vspone_block.vsp.hv_shadow_image_group module – Manages Remote Copy Group on Hitachi VSP storage systems." href="vsp.hv_shadow_image_group_module.html" />
     <link rel="prev" title="hitachivantara.vspone_block.vsp.hv_resource_group_facts module – Retrieves resource group information from Hitachi VSP storage systems." href="vsp.hv_resource_group_facts_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -190,7 +190,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Hitachivantara Namespace</a><ul class="current">
@@ -312,8 +311,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -331,6 +330,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -370,7 +371,7 @@
 <h1>hitachivantara.vspone_block.vsp.hv_resource_group_lock module – Allows the locking and unlocking of resource groups on Hitachi VSP storage systems.<a class="headerlink" href="#hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-allows-the-locking-and-unlocking-of-resource-groups-on-hitachi-vsp-storage-systems" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hitachivantara/vspone_block/">hitachivantara.vspone_block collection</a> (version 3.3.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hitachivantara/vspone_block/">hitachivantara.vspone_block collection</a> (version 3.5.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -386,24 +387,23 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
 <li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#attributes" id="id4">Attributes</a></p></li>
-<li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
-<li><p><a class="reference internal" href="#return-values" id="id6">Return Values</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id5">Notes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id7">Return Values</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>This module allows the locking and unlocking of resource groups on Hitachi VSP storage systems.</p></li>
-<li><p>This module is supported for both <code class="docutils literal notranslate"><span class="pre">direct</span></code> and <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection types.</p></li>
-<li><p>For <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection type examples, go to URL <a class="reference external" href="https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/resource_management_with_lock/vsp_direct">https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/resource_management_with_lock/vsp_direct</a></p></li>
-<li><p>For <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection type examples, go to URL <a class="reference external" href="https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/resource_management_with_lock/vsp_uai_gateway">https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/resource_management_with_lock/vsp_uai_gateway</a></p></li>
+<li><p>For examples, go to URL <a class="reference external" href="https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/resource_management_with_lock/vsp_direct">https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/resource_management_with_lock/vsp_direct</a></p></li>
 </ul>
 </section>
 <section id="requirements">
 <span id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
-<li><p>python &gt;= 3.8</p></li>
+<li><p>python &gt;= 3.9</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -426,24 +426,23 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="parameter-connection_info/address"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-connection-info-address"><strong>address</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/address" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>IP address or hostname of either the UAI gateway (if connection_type is <code class="docutils literal notranslate"><span class="pre">gateway</span></code>) or the storage system (if connection_type is <code class="docutils literal notranslate"><span class="pre">direct</span></code>).</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>IP address or hostname of the storage system.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-connection_info/api_token"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-connection-info-api-token"><strong>api_token</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/api_token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Provide api_token for <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection type. For <code class="docutils literal notranslate"><span class="pre">direct</span></code>ion connection type, this token is required while working on locked resources. Provide the lock_token value returned by lock resource group task.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>This token is required while working on locked resources. Provide the lock_token value returned by lock resource group task for primary storage system.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-connection_info/connection_type"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-connection-info-connection-type"><strong>connection_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/connection_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Type of connection to the storage system. Two types of connections are supported, <code class="docutils literal notranslate"><span class="pre">direct</span></code> and <code class="docutils literal notranslate"><span class="pre">gateway</span></code>.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Type of connection to the storage system.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;gateway&quot;</span></code></p></li>
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;direct&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
@@ -452,21 +451,21 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="parameter-connection_info/password"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-connection-info-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for authentication. Required if connection_type is <code class="docutils literal notranslate"><span class="pre">direct</span></code> and api_token is not provided.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for authentication. This is a required field if api_token is not provided.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-connection_info/username"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-connection-info-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for authentication. Required if connection_type is <code class="docutils literal notranslate"><span class="pre">direct</span></code> and api_token is not provided.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for authentication. This is a required field if api_token is not provided.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secondary_connection_info"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-secondary-connection-info"><strong>secondary_connection_info</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secondary_connection_info" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Information required to establish a connection to the remote storage system. This is required for <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection only.</p>
+<td><div class="ansible-option-cell"><p>Information required to establish a connection to the remote storage system.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -480,21 +479,21 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="parameter-secondary_connection_info/api_token"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-secondary-connection-info-api-token"><strong>api_token</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secondary_connection_info/api_token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>This token is required while working on locked resources. Provide the lock_token value returned by lock resource group task.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>This token is required while working on locked resources. Provide the lock_token value returned by lock resource group task for secondary storage system.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secondary_connection_info/password"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-secondary-connection-info-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secondary_connection_info/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for authentication. Required if connection_type is <code class="docutils literal notranslate"><span class="pre">direct</span></code> and api_token is not provided.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for authentication for secondary storage. This is a required field if api_token is not provided.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secondary_connection_info/username"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-secondary-connection-info-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secondary_connection_info/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for authentication. Required if connection_type is <code class="docutils literal notranslate"><span class="pre">direct</span></code> and api_token is not provided.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for authentication for secondary storage. This is a required field if api_token is not provided.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -505,24 +504,10 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-spec/id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-spec-id"><strong>id</strong></p>
-<a class="ansibleOptionLink" href="#parameter-spec/id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The id of the specific resource group to lock. Valid for <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection only.</p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/lock_timeout_sec"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-spec-lock-timeout-sec"><strong>lock_timeout_sec</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/lock_timeout_sec" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The time that elapses before a lock timeout (in seconds). Specify a value from 0 to 7200. Default is 0. Valid for <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection only.</p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-spec/name"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-spec-name"><strong>name</strong></p>
-<a class="ansibleOptionLink" href="#parameter-spec/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the specific resource group to lock. Valid for <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection only.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The time that elapses before a lock timeout (in seconds). Specify a value from 0 to 7200. Default is 0.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -542,7 +527,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="parameter-storage_system_info"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-parameter-storage-system-info"><strong>storage_system_info</strong></p>
 <a class="ansibleOptionLink" href="#parameter-storage_system_info" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Information about the storage system. This field is required for gateway connection type only.</p>
+<td><div class="ansible-option-cell"><p>Information about the storage system. This field is an optional field.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -568,7 +553,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-attribute-check-mode"><strong>check_mode</strong></p>
 <a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
-<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-none">none</strong></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Determines if the module should run in check mode.</p>
 </div></td>
@@ -576,16 +561,27 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </tbody>
 </table>
 </section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The input parameters <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> were removed in version 3.4.0. They were deprecated due to internal API simplification and are no longer supported.</p></li>
+<li><p>The output parameters <code class="docutils literal notranslate"><span class="pre">entitlement_status</span></code>, <code class="docutils literal notranslate"><span class="pre">subscriber_id</span></code>, and <code class="docutils literal notranslate"><span class="pre">partner_id</span></code> were removed in version 3.4.0. They were also deprecated due to internal API simplification and are no longer supported.</p></li>
+<li><p>Connection type <code class="docutils literal notranslate"><span class="pre">gateway</span></code> was removed starting from version 3.4.0. Please use an earlier version if you require this connection type.</p></li>
+</ul>
+</div>
+</section>
 <section id="examples">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Resource management with Resource Group Lock for direct connection type where single storage system is involved</span>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Resource management with Resource Group Lock where single storage system is involved</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lock resource groups</span>
 <span class="w">      </span><span class="nt">hitachivantara.vspone_block.vsp.hv_resource_group_lock</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">connection_info</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage1.company.com</span>
-<span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin&quot;</span>
-<span class="w">        </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret&quot;</span>
+<span class="w">          </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage1.company.com</span>
+<span class="w">          </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;admin&quot;</span>
+<span class="w">          </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret&quot;</span>
 <span class="w">        </span><span class="nt">spec</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">lock_timeout_sec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span>
 <span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">response</span>
@@ -598,11 +594,11 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">hitachivantara.vspone_block.vsp.hv_ldevs</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">connection_info</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage1.company.com</span>
-<span class="w">          </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api_token_value</span>
+<span class="w">          </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lock_token_value</span>
 <span class="w">        </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">pool_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">        </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2GB</span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RD_LOCK_TEST_120424</span>
+<span class="w">          </span><span class="nt">pool_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">          </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2GB</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RD_LOCK_TEST_120424</span>
 <span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_ldev_result</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Debug lock resource group result</span>
@@ -613,52 +609,18 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">hitachivantara.vspone_block.vsp.hv_resource_group_lock</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">connection_info</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage1.company.com</span>
-<span class="w">          </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api_token_value</span>
+<span class="w">          </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lock_token_value</span>
 <span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 <span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Debug lock resource group result</span>
 <span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result</span>
-
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lock Resource Group by name for gateway connection type</span>
-<span class="w">      </span><span class="nt">hitachivantara.vspone_block.vsp.hv_resource_group_lock</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">connection_info</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">connection_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gateway</span>
-<span class="w">          </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uai_gateway1.company.co</span>
-<span class="w">          </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api_token_value</span>
-<span class="w">        </span><span class="nt">storage_system_info</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">serial</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">810050</span>
-<span class="w">          </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">        </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_VSM_13</span>
-<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lock_resource_group_result</span>
-
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Debug lock resource group result</span>
-<span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lock_resource_group_result</span>
-
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Unlock Resource Group by name for gateway connection type</span>
-<span class="w">      </span><span class="nt">hitachivantara.vspone_block.vsp.hv_resource_group_lock</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">connection_info</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">connection_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gateway</span>
-<span class="w">          </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uai_gateway1.company.co</span>
-<span class="w">          </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api_token_value</span>
-<span class="w">        </span><span class="nt">storage_system_info</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">serial</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">810050</span>
-<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
-<span class="w">        </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_VSM_13</span>
-<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unlock_resource_group_result</span>
-
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Debug unlock resource group result</span>
-<span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unlock_resource_group_result</span>
 </pre></div>
 </div>
 </section>
 <section id="return-values">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
 <p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
 <table class="longtable ansible-option-table docutils align-default" style="width: 100%">
 <thead>
@@ -671,9 +633,9 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="return-response"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-resource-group-lock-module-return-response"><strong>response</strong></p>
 <a class="ansibleOptionLink" href="#return-response" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>First lock resource groups output, then ldev creation output and finally unlock resource group output. This is an example where the connection type is direct. Ansible sorts the output, so the outputs were jumbled with three tasks. Ignore the underscores (_) in the beginning of the variables, they are added to keep the output in order with the tasks. For first task three (___), for the second task two (__), and for the third task one (_) underscores are added in the beginning.</p>
+<td><div class="ansible-option-cell"><p>First lock resource groups output, then ldev creation output and finally unlock resource group output. Ansible sorts the output, so the outputs were jumbled with three tasks. Ignore the underscores (_) in the beginning of the variables, they are added to keep the output in order with the tasks. For first task three (___), for the second task two (__), and for the third task one (_) underscores are added in the beginning.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;___lock_session_id&quot;:</span> <span class="pre">26945,</span> <span class="pre">&quot;___lock_token&quot;:</span> <span class="pre">&quot;62316257-5362-458a-8a9a-8922beaf7460&quot;,</span> <span class="pre">&quot;___locked_resource_groups&quot;:</span> <span class="pre">[{&quot;id&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;meta_resource&quot;},</span> <span class="pre">{&quot;id&quot;:</span> <span class="pre">1,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;test-rg-1&quot;},</span> <span class="pre">{&quot;id&quot;:</span> <span class="pre">2,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;test-rg-2&quot;},</span> <span class="pre">{&quot;id&quot;:</span> <span class="pre">3,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;test-rg-3&quot;}],</span> <span class="pre">&quot;__canonical_name&quot;:</span> <span class="pre">&quot;naa.60060e80089c4e0000509c4e00000024&quot;,</span> <span class="pre">&quot;__dedup_compression_progress&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;__dedup_compression_status&quot;:</span> <span class="pre">&quot;DISABLED&quot;,</span> <span class="pre">&quot;__deduplication_compression_mode&quot;:</span> <span class="pre">&quot;disabled&quot;,</span> <span class="pre">&quot;__emulation_type&quot;:</span> <span class="pre">&quot;OPEN-V-CVS&quot;,</span> <span class="pre">&quot;__entitlement_status&quot;:</span> <span class="pre">&quot;&quot;,</span> <span class="pre">&quot;__hostgroups&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;__is_alua&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_command_device&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_data_reduction_share_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_device_group_definition_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_encryption_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_security_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_user_authentication_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_write_protected&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_write_protected_by_key&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__iscsi_targets&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;__ldev_id&quot;:</span> <span class="pre">36,</span> <span class="pre">&quot;__logical_unit_id_hex_format&quot;:</span> <span class="pre">&quot;00:00:24&quot;,</span> <span class="pre">&quot;__name&quot;:</span> <span class="pre">&quot;RD_LOCK_TEST_120424&quot;,</span> <span class="pre">&quot;__num_of_ports&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;__nvm_subsystems&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;__parity_group_id&quot;:</span> <span class="pre">&quot;&quot;,</span> <span class="pre">&quot;__partner_id&quot;:</span> <span class="pre">&quot;&quot;,</span> <span class="pre">&quot;__path_count&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;__pool_id&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;__provision_type&quot;:</span> <span class="pre">&quot;CVSHDP&quot;,</span> <span class="pre">&quot;__qos_settings&quot;:</span> <span class="pre">{},</span> <span class="pre">&quot;__resource_group_id&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;__snapshots&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;__status&quot;:</span> <span class="pre">&quot;NML&quot;,</span> <span class="pre">&quot;__storage_serial_number&quot;:</span> <span class="pre">&quot;40014&quot;,</span> <span class="pre">&quot;__subscriber_id&quot;:</span> <span class="pre">&quot;&quot;,</span> <span class="pre">&quot;__tiering_policy&quot;:</span> <span class="pre">{},</span> <span class="pre">&quot;__total_capacity&quot;:</span> <span class="pre">&quot;2.00GB&quot;,</span> <span class="pre">&quot;__used_capacity&quot;:</span> <span class="pre">&quot;0.00B&quot;,</span> <span class="pre">&quot;__virtual_ldev_id&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;_changed&quot;:</span> <span class="pre">true,</span> <span class="pre">&quot;_comment&quot;:</span> <span class="pre">&quot;Resource</span> <span class="pre">Groups</span> <span class="pre">unlocked</span> <span class="pre">successfully.&quot;,</span> <span class="pre">&quot;_failed&quot;:</span> <span class="pre">false}</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;___lock_session_id&quot;:</span> <span class="pre">26945,</span> <span class="pre">&quot;___lock_token&quot;:</span> <span class="pre">&quot;62316257-5362-458a-8a9a-8922beaf7460&quot;,</span> <span class="pre">&quot;___locked_resource_groups&quot;:</span> <span class="pre">[{&quot;id&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;meta_resource&quot;},</span> <span class="pre">{&quot;id&quot;:</span> <span class="pre">1,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;test-rg-1&quot;},</span> <span class="pre">{&quot;id&quot;:</span> <span class="pre">2,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;test-rg-2&quot;},</span> <span class="pre">{&quot;id&quot;:</span> <span class="pre">3,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;test-rg-3&quot;}],</span> <span class="pre">&quot;__canonical_name&quot;:</span> <span class="pre">&quot;naa.60060e80089c4e0000509c4e00000024&quot;,</span> <span class="pre">&quot;__dedup_compression_progress&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;__dedup_compression_status&quot;:</span> <span class="pre">&quot;DISABLED&quot;,</span> <span class="pre">&quot;__deduplication_compression_mode&quot;:</span> <span class="pre">&quot;disabled&quot;,</span> <span class="pre">&quot;__emulation_type&quot;:</span> <span class="pre">&quot;OPEN-V-CVS&quot;,</span> <span class="pre">&quot;__hostgroups&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;__is_alua&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_command_device&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_data_reduction_share_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_device_group_definition_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_encryption_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_security_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_user_authentication_enabled&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_write_protected&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__is_write_protected_by_key&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;__iscsi_targets&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;__ldev_id&quot;:</span> <span class="pre">36,</span> <span class="pre">&quot;__logical_unit_id_hex_format&quot;:</span> <span class="pre">&quot;00:00:24&quot;,</span> <span class="pre">&quot;__name&quot;:</span> <span class="pre">&quot;RD_LOCK_TEST_120424&quot;,</span> <span class="pre">&quot;__num_of_ports&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;__nvm_subsystems&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;__parity_group_id&quot;:</span> <span class="pre">&quot;&quot;,</span> <span class="pre">&quot;__path_count&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;__pool_id&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;__provision_type&quot;:</span> <span class="pre">&quot;CVSHDP&quot;,</span> <span class="pre">&quot;__qos_settings&quot;:</span> <span class="pre">{},</span> <span class="pre">&quot;__resource_group_id&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;__snapshots&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;__status&quot;:</span> <span class="pre">&quot;NML&quot;,</span> <span class="pre">&quot;__storage_serial_number&quot;:</span> <span class="pre">&quot;40014&quot;,</span> <span class="pre">&quot;__tiering_policy&quot;:</span> <span class="pre">{},</span> <span class="pre">&quot;__total_capacity&quot;:</span> <span class="pre">&quot;2.00GB&quot;,</span> <span class="pre">&quot;__used_capacity&quot;:</span> <span class="pre">&quot;0.00B&quot;,</span> <span class="pre">&quot;__virtual_ldev_id&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;_changed&quot;:</span> <span class="pre">true,</span> <span class="pre">&quot;_comment&quot;:</span> <span class="pre">&quot;Resource</span> <span class="pre">Groups</span> <span class="pre">unlocked</span> <span class="pre">successfully.&quot;,</span> <span class="pre">&quot;_failed&quot;:</span> <span class="pre">false}</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -701,14 +663,14 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="vsp.hv_resource_group_facts_module.html" class="btn btn-neutral float-left" title="hitachivantara.vspone_block.vsp.hv_resource_group_facts module – Retrieves resource group information from Hitachi VSP storage systems." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="vsp.hv_shadow_image_pair_module.html" class="btn btn-neutral float-right" title="hitachivantara.vspone_block.vsp.hv_shadow_image_pair module – Manages shadow image pairs on Hitachi VSP storage systems." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="vsp.hv_shadow_image_group_module.html" class="btn btn-neutral float-right" title="hitachivantara.vspone_block.vsp.hv_shadow_image_group module – Manages Remote Copy Group on Hitachi VSP storage systems." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

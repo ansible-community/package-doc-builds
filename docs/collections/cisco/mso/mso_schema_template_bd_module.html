@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cisco.mso.mso_schema_template_bd module – Manage Bridge Domains (BDs) in schema templates &mdash; Ansible Community Documentation</title>
@@ -185,7 +185,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../intersight/index.html">Cisco.Intersight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../ios/index.html">Cisco.Ios</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../iosxr/index.html">Cisco.Iosxr</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../ise/index.html">Cisco.Ise</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../meraki/index.html">Cisco.Meraki</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Cisco.Mso</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
@@ -206,7 +205,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
@@ -321,8 +319,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -340,6 +338,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -379,7 +379,7 @@
 <h1>cisco.mso.mso_schema_template_bd module – Manage Bridge Domains (BDs) in schema templates<a class="headerlink" href="#cisco-mso-mso-schema-template-bd-module-manage-bridge-domains-bds-in-schema-templates" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/mso/">cisco.mso collection</a> (version 2.9.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/mso/">cisco.mso collection</a> (version 2.10.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -540,6 +540,18 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ep_move_detection_mode"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-ep-move-detection-mode"><strong>ep_move_detection_mode</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ep_move_detection_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Enables detection of endpoint moves using Gratuitous ARP (GARP) packets.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-host"></div>
 <div class="ansibleOptionAnchor" id="parameter-hostname"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-hostname"><span id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-host"></span><strong>host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: hostname</span></p>
@@ -549,7 +561,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>If the value is not specified in the task, the value of environment variable <code class="docutils literal notranslate"><span class="pre">MSO_HOST</span></code> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-intersite_bum_traffic"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-intersite-bum-traffic"><strong>intersite_bum_traffic</strong></p>
 <a class="ansibleOptionLink" href="#parameter-intersite_bum_traffic" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -561,7 +573,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ipv6_unknown_multicast_flooding"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-ipv6-unknown-multicast-flooding"><strong>ipv6_unknown_multicast_flooding</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ipv6_unknown_multicast_flooding" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -573,7 +585,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-layer2_stretch"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-layer2-stretch"><strong>layer2_stretch</strong></p>
 <a class="ansibleOptionLink" href="#parameter-layer2_stretch" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -585,7 +597,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-layer2_unknown_unicast"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-layer2-unknown-unicast"><strong>layer2_unknown_unicast</strong></p>
 <a class="ansibleOptionLink" href="#parameter-layer2_unknown_unicast" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -597,7 +609,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-layer3_multicast"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-layer3-multicast"><strong>layer3_multicast</strong></p>
 <a class="ansibleOptionLink" href="#parameter-layer3_multicast" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -609,7 +621,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-login_domain"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-login-domain"><strong>login_domain</strong></p>
 <a class="ansibleOptionLink" href="#parameter-login_domain" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -619,7 +631,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>When using a HTTPAPI connection plugin the inventory variable <code class="docutils literal notranslate"><span class="pre">ansible_httpapi_login_domain</span></code> will be used if this attribute is not specified.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-multi_destination_flooding"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-multi-destination-flooding"><strong>multi_destination_flooding</strong></p>
 <a class="ansibleOptionLink" href="#parameter-multi_destination_flooding" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -633,7 +645,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-multicast_route_map_destination_filter"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-multicast-route-map-destination-filter"><strong>multicast_route_map_destination_filter</strong></p>
 <a class="ansibleOptionLink" href="#parameter-multicast_route_map_destination_filter" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -642,7 +654,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>This option can only be used when the BD has Layer 3 Multicast enabled.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-multicast_route_map_source_filter"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-multicast-route-map-source-filter"><strong>multicast_route_map_source_filter</strong></p>
 <a class="ansibleOptionLink" href="#parameter-multicast_route_map_source_filter" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -651,7 +663,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>This option can only be used when the BD has Layer 3 Multicast enabled.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-optimize_wan_bandwidth"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-optimize-wan-bandwidth"><strong>optimize_wan_bandwidth</strong></p>
 <a class="ansibleOptionLink" href="#parameter-optimize_wan_bandwidth" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -663,7 +675,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-output_level"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-output-level"><strong>output_level</strong></p>
 <a class="ansibleOptionLink" href="#parameter-output_level" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -680,7 +692,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -688,7 +700,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>If the value is not specified in the task, the value of environment variables <code class="docutils literal notranslate"><span class="pre">MSO_PASSWORD</span></code> or <code class="docutils literal notranslate"><span class="pre">ANSIBLE_NET_PASSWORD</span></code> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-port"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-port"><strong>port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -697,14 +709,14 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>If the value is not specified in the task, the value of environment variable <code class="docutils literal notranslate"><span class="pre">MSO_PORT</span></code> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-schema"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-schema"><strong>schema</strong></p>
 <a class="ansibleOptionLink" href="#parameter-schema" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The name of the schema.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -718,21 +730,21 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets"><strong>subnets</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The subnets associated to this BD.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets/description"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-description"><strong>description</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets/description" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The description of this subnet.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets/no_default_gateway"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-no-default-gateway"><strong>no_default_gateway</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets/no_default_gateway" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -744,7 +756,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets/primary"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-primary"><strong>primary</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets/primary" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -758,7 +770,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets/querier"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-querier"><strong>querier</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets/querier" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -770,7 +782,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets/scope"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-scope"><strong>scope</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets/scope" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -782,7 +794,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets/shared"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-shared"><strong>shared</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets/shared" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -794,7 +806,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets/subnet"></div>
 <div class="ansibleOptionAnchor" id="parameter-subnets/ip"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-subnet"><span id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-ip"></span><strong>subnet</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets/subnet" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: ip</span></p>
@@ -803,7 +815,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The IP range in CIDR notation.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnets/virtual"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-subnets-virtual"><strong>virtual</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnets/virtual" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -815,7 +827,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-template"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-template"><strong>template</strong></p>
 <a class="ansibleOptionLink" href="#parameter-template" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -824,7 +836,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>Use the name of template instead of Display Name to avoid discrepency.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-timeout"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-timeout"><strong>timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -833,7 +845,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>If the value is not specified in the task, the value of environment variable <code class="docutils literal notranslate"><span class="pre">MSO_TIMEOUT</span></code> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-unicast_routing"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-unicast-routing"><strong>unicast_routing</strong></p>
 <a class="ansibleOptionLink" href="#parameter-unicast_routing" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -846,7 +858,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-unknown_multicast_flooding"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-unknown-multicast-flooding"><strong>unknown_multicast_flooding</strong></p>
 <a class="ansibleOptionLink" href="#parameter-unknown_multicast_flooding" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -858,7 +870,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_proxy"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-use-proxy"><strong>use_proxy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_proxy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -872,7 +884,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_ssl"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-use-ssl"><strong>use_ssl</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_ssl" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -887,7 +899,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -895,7 +907,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>If the value is not specified in the task, the value of environment variables <code class="docutils literal notranslate"><span class="pre">MSO_USERNAME</span></code> or <code class="docutils literal notranslate"><span class="pre">ANSIBLE_NET_USERNAME</span></code> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -910,28 +922,28 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-virtual_mac_address"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-virtual-mac-address"><strong>virtual_mac_address</strong></p>
 <a class="ansibleOptionLink" href="#parameter-virtual_mac_address" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Virtual MAC Address</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vrf"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-vrf"><strong>vrf</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vrf" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The VRF associated to this BD. This is required only when creating a new BD.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vrf/name"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-vrf-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vrf/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the VRF to associate with.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vrf/schema"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-vrf-schema"><strong>schema</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vrf/schema" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -939,7 +951,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 <p>If this parameter is unspecified, it defaults to the current schema.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vrf/template"></div><p class="ansible-option-title" id="ansible-collections-cisco-mso-mso-schema-template-bd-module-parameter-vrf-template"><strong>template</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vrf/template" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1142,7 +1154,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-mso-mso-schem
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>hitachivantara.vspone_block.vsp.hv_hg module – Manages host group on Hitachi VSP storage system. &mdash; Ansible Community Documentation</title>
@@ -190,7 +190,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Hitachivantara Namespace</a><ul class="current">
@@ -312,8 +311,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -331,6 +330,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -370,7 +371,7 @@
 <h1>hitachivantara.vspone_block.vsp.hv_hg module – Manages host group on Hitachi VSP storage system.<a class="headerlink" href="#hitachivantara-vspone-block-vsp-hv-hg-module-manages-host-group-on-hitachi-vsp-storage-system" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hitachivantara/vspone_block/">hitachivantara.vspone_block collection</a> (version 3.3.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hitachivantara/vspone_block/">hitachivantara.vspone_block collection</a> (version 3.5.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -386,8 +387,9 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
 <li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#attributes" id="id4">Attributes</a></p></li>
-<li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
-<li><p><a class="reference internal" href="#return-values" id="id6">Return Values</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id5">Notes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id7">Return Values</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
@@ -430,16 +432,14 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <li><p>remove host mode option from host group.</p></li>
 </ol>
 </li>
-<li><p>This module is supported for both <code class="docutils literal notranslate"><span class="pre">direct</span></code> and <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection types.</p></li>
-<li><p>For <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection type examples, go to URL <a class="reference external" href="https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/hostgroup.yml">https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/hostgroup.yml</a></p></li>
-<li><p>For <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection type examples, go to URL <a class="reference external" href="https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_uai_gateway/hostgroup.yml">https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_uai_gateway/hostgroup.yml</a></p></li>
+<li><p>For examples, go to URL <a class="reference external" href="https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/hostgroup.yml">https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/hostgroup.yml</a></p></li>
 </ul>
 </section>
 <section id="requirements">
 <span id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
-<li><p>python &gt;= 3.8</p></li>
+<li><p>python &gt;= 3.9</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -462,14 +462,14 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="parameter-connection_info/address"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-connection-info-address"><strong>address</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/address" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>IP address or hostname of either the UAI gateway (if connection_type is <code class="docutils literal notranslate"><span class="pre">gateway</span></code>) or the storage system (if connection_type is <code class="docutils literal notranslate"><span class="pre">direct</span></code>).</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>IP address or hostname of the storage system.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-connection_info/api_token"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-connection-info-api-token"><strong>api_token</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/api_token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Token value to access UAI gateway. This is a required field for <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection type.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>This field is used to pass the value of the lock token to operate on locked resources.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -479,7 +479,6 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Type of connection to the storage system.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;gateway&quot;</span></code></p></li>
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;direct&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
@@ -488,31 +487,43 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="parameter-connection_info/password"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-connection-info-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for authentication. This field is valid for <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection type only, and it is a required field.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for authentication. This is a required field if api_token is not provided..</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-connection_info/subscriber_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-connection-info-subscriber-id"><strong>subscriber_id</strong></p>
-<a class="ansibleOptionLink" href="#parameter-connection_info/subscriber_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>This field is valid for <code class="docutils literal notranslate"><span class="pre">gateway</span></code> connection type only. This is an optional field and only needed to support multi-tenancy environment.</p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-connection_info/username"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-connection-info-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for authentication. This field is valid for <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection type only, and it is a required field.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for authentication. This is a required field if api_token is not provided.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec"><strong>spec</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Specification for host-group operation.</p>
+<td><div class="ansible-option-cell"><p>Specification for hostgroup operation.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-spec/asymmetric_access_priority"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-asymmetric-access-priority"><strong>asymmetric_access_priority</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/asymmetric_access_priority" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Asymmetric access priority level for ALUA host group.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code></p></li>
+</ul>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-spec/host_group_number"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-host-group-number"><strong>host_group_number</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/host_group_number" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The host group number.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/host_mode"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-host-mode"><strong>host_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/host_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -537,7 +548,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/host_mode_options"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-host-mode-options"><strong>host_mode_options</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/host_mode_options" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=integer</span></p>
 </div></td>
@@ -592,11 +603,18 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p>131 # WCE_BIT_OFF_MODE</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/ldevs"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-ldevs"><strong>ldevs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/ldevs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LDEVs to be mapped/unmapped with the host group. Supported format can be decimal or HEX.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-spec/lun"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-lun"><strong>lun</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/lun" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LUN ID to be releases the host reservation status of the LU mapped to a specified LU path.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -626,6 +644,18 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-spec/should_release_host_reserve"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-should-release-host-reserve"><strong>should_release_host_reserve</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/should_release_host_reserve" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>If the value is true, release the host reserve.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/state"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -641,14 +671,28 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/wwns"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-wwns"><strong>wwns</strong></p>
-<a class="ansibleOptionLink" href="#parameter-spec/wwns" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<a class="ansibleOptionLink" href="#parameter-spec/wwns" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>List of host WWN to add or remove.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-spec/wwns/nick_name"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-wwns-nick-name"><strong>nick_name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/wwns/nick_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Nickname of the host.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-spec/wwns/wwn"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-spec-wwns-wwn"><strong>wwn</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/wwns/wwn" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>WWN of the host.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -661,18 +705,18 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-storage_system_info"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-storage-system-info"><strong>storage_system_info</strong></p>
 <a class="ansibleOptionLink" href="#parameter-storage_system_info" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Information about the Hitachi storage system. This field is required for gateway connection type only.</p>
+<td><div class="ansible-option-cell"><p>Information about the storage system. This field is an optional field.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-storage_system_info/serial"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-parameter-storage-system-info-serial"><strong>serial</strong></p>
 <a class="ansibleOptionLink" href="#parameter-storage_system_info/serial" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Serial number of the Hitachi storage system.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The serial number of the storage system.</p>
 </div></td>
 </tr>
 </tbody>
@@ -691,7 +735,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-attribute-check-mode"><strong>check_mode</strong></p>
 <a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
-<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-none">none</strong></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Determines if the module should run in check mode.</p>
 </div></td>
@@ -699,9 +743,19 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </tbody>
 </table>
 </section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The output parameters <code class="docutils literal notranslate"><span class="pre">entitlement_status</span></code>, <code class="docutils literal notranslate"><span class="pre">subscriber_id</span></code> and <code class="docutils literal notranslate"><span class="pre">partner_id</span></code> were removed in version 3.4.0. They were also deprecated due to internal API simplification and are no longer supported.</p></li>
+<li><p>Connection type <code class="docutils literal notranslate"><span class="pre">gateway</span></code> was removed starting from version 3.4.0. Please use an earlier version if you require this connection type.</p></li>
+</ul>
+</div>
+</section>
 <section id="examples">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create host group with LUN in decimal for direct connection type</span>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create host group with LUN in decimal</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
@@ -713,26 +767,14 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
 <span class="w">      </span><span class="nt">host_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;VMWARE_EXTENSION&#39;</span>
 <span class="w">      </span><span class="nt">host_mode_options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">40</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;100000109B583B2D&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;100000109B583B2C&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wwn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;100000109B583B2D&#39;</span>
+<span class="w">          </span><span class="nt">nick_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;test1&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wwn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;100000109B583B2C&#39;</span>
+<span class="w">          </span><span class="nt">nick_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;test2&#39;</span>
 <span class="w">      </span><span class="nt">ldevs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">393</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">851</span><span class="p p-Indicator">]</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create host group with LUN in decimal for gateway connection type</span>
-<span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">    </span><span class="nt">storage_system_info</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">serial</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;446039&#39;</span>
-<span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gateway1.company.com</span>
-<span class="w">      </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;api_token_value&quot;</span>
-<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;testhg26dec&#39;</span>
-<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
-<span class="w">      </span><span class="nt">host_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;VMWARE_EXTENSION&#39;</span>
-<span class="w">      </span><span class="nt">host_mode_options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">40</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;100000109B583B2D&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;100000109B583B2C&#39;</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">ldevs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">393</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">851</span><span class="p p-Indicator">]</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create host group with LUN in HEX for direct connection type</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create host group with LUN in HEX</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
@@ -744,22 +786,14 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
 <span class="w">      </span><span class="nt">host_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;VMWARE_EXTENSION&#39;</span>
 <span class="w">      </span><span class="nt">host_mode_options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">54</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">63</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;100000109B583B2D&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;100000109B583B2C&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wwn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;200000109B3C0FD3&#39;</span>
+<span class="w">          </span><span class="nt">nick_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;test1&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wwn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;200000109B3C0FD4&#39;</span>
+<span class="w">          </span><span class="nt">nick_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;test2&#39;</span>
 <span class="w">      </span><span class="nt">ldevs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;00:23:A4&#39;</span><span class="p p-Indicator">]</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete host group for gateway connection type</span>
-<span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
-<span class="w">    </span><span class="nt">storage_system_info</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">serial</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;446039&#39;</span>
-<span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gateway1.company.com</span>
-<span class="w">      </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;api_token_value&quot;</span>
-<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;testhg26dec&#39;</span>
-<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete host group for direct connection type</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete host group</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
@@ -770,20 +804,20 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;testhg26dec&#39;</span>
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Present LUN for direct connection type</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Present LUN</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage1.company.com</span>
 <span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dummy_user&quot;</span>
 <span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dummy_password&quot;</span>
-<span class="w">    </span><span class="nt">host_group_info</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present_ldev</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;testhg26dec&#39;</span>
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
 <span class="w">      </span><span class="nt">ldevs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;00:05:77&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;00:05:7D&#39;</span><span class="p p-Indicator">]</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Unpresent LUN for direct connection type</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Unpresent LUN</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
@@ -796,7 +830,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
 <span class="w">      </span><span class="nt">ldevs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">800</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">801</span><span class="p p-Indicator">]</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add WWN for direct connection type</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add WWN</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
@@ -807,9 +841,13 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add_wwn</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;testhg26dec&#39;</span>
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
-<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;200000109B3C0FD3&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wwn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;200000109B3C0FD3&#39;</span>
+<span class="w">          </span><span class="nt">nick_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;test1&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wwn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;200000109B3C0FD4&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wwn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;200000109B3C0FD5&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove WWN for direct connection type</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove WWN</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
@@ -820,9 +858,10 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remove_wwn</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;testhg26dec&#39;</span>
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
-<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;200000109B3C0FD3&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">wwns</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wwn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;200000109B3C0FD3&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update host group for direct connection type</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update host group</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
@@ -835,11 +874,36 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
 <span class="w">      </span><span class="nt">host_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;VMWARE_EXTENSION&#39;</span>
 <span class="w">      </span><span class="nt">host_mode_options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">54</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">63</span><span class="p p-Indicator">]</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Asymmetric access priority level for ALUA host group.</span>
+<span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage1.company.com</span>
+<span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dummy_user&quot;</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dummy_password&quot;</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">host_group_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">208</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
+<span class="w">      </span><span class="nt">asymmetric_access_priority</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;high&#39;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Release host reserve status of the LU mapped to a specified LU path.</span>
+<span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hg</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage1.company.com</span>
+<span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dummy_user&quot;</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dummy_password&quot;</span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">host_group_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">150</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CL1-A&#39;</span>
+<span class="w">      </span><span class="nt">should_release_host_reserve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">lun</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 </pre></div>
 </div>
 </section>
 <section id="return-values">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
 <p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
 <table class="longtable ansible-option-table docutils align-default" style="width: 100%">
 <thead>
@@ -857,15 +921,6 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hostGroups/entitlement_status"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-entitlement-status"><strong>entitlement_status</strong></p>
-<a class="ansibleOptionLink" href="#return-hostGroups/entitlement_status" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Entitlement status of the host group.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;assigned&quot;</span></code></p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/host_group_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-host-group-id"><strong>host_group_id</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/host_group_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -874,7 +929,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">93</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/host_group_name"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-host-group-name"><strong>host_group_name</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/host_group_name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -883,7 +938,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;ansible-test-hg&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/host_mode"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-host-mode"><strong>host_mode</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/host_mode" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -892,7 +947,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;STANDARD&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/host_mode_options"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-host-mode-options"><strong>host_mode_options</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/host_mode_options" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -900,7 +955,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/host_mode_options/host_mode_option"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-host-mode-options-host-mode-option"><strong>host_mode_option</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/host_mode_options/host_mode_option" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -909,7 +964,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;EXTENDED_COPY&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/host_mode_options/host_mode_option_number"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-host-mode-options-host-mode-option-number"><strong>host_mode_option_number</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/host_mode_options/host_mode_option_number" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -918,7 +973,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">54</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/lun_paths"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-lun-paths"><strong>lun_paths</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/lun_paths" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -926,7 +981,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/lun_paths/ldevId"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-lun-paths-ldevid"><strong>ldevId</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/lun_paths/ldevId" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -935,22 +990,13 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">166</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/lun_paths/lunId"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-lun-paths-lunid"><strong>lunId</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/lun_paths/lunId" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>ID of the LUN.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">0</span></code></p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hostGroups/partner_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-partner-id"><strong>partner_id</strong></p>
-<a class="ansibleOptionLink" href="#return-hostGroups/partner_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Partner ID associated with the host group.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;partnerid&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -981,15 +1027,6 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hostGroups/subscriber_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-subscriber-id"><strong>subscriber_id</strong></p>
-<a class="ansibleOptionLink" href="#return-hostGroups/subscriber_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Subscriber ID associated with the host group.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;811150&quot;</span></code></p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/wwns"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-wwns"><strong>wwns</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/wwns" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -997,7 +1034,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/wwns/id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-wwns-id"><strong>id</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/wwns/id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1006,7 +1043,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;1212121212121212&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hostGroups/wwns/name"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hg-module-return-hostgroups-wwns-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#return-hostGroups/wwns/name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1047,7 +1084,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

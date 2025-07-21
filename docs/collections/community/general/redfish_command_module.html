@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.general.redfish_command module – Manages Out-Of-Band controllers using Redfish APIs &mdash; Ansible Community Documentation</title>
@@ -208,6 +208,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Community.Mysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../okd/index.html">Community.Okd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../postgresql/index.html">Community.Postgresql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxmox/index.html">Community.Proxmox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../proxysql/index.html">Community.Proxysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../rabbitmq/index.html">Community.Rabbitmq</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../routeros/index.html">Community.Routeros</a></li>
@@ -225,7 +226,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
@@ -337,8 +337,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -356,6 +356,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -395,7 +397,7 @@
 <h1>community.general.redfish_command module – Manages Out-Of-Band controllers using Redfish APIs<a class="headerlink" href="#community-general-redfish-command-module-manages-out-of-band-controllers-using-redfish-apis" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 10.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 11.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -499,31 +501,40 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ca_path"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-ca-path"><strong>ca_path</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ca_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 10.6.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>PEM formatted file that contains a CA certificate to be used for validation.</p>
+<p>Only used if <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-redfish-command-module-parameter-validate-certs"><span class="std std-ref"><span class="pre">validate_certs=true</span></span></a></code>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-category"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-category"><strong>category</strong></p>
 <a class="ansibleOptionLink" href="#parameter-category" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Category to execute on OOB controller.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ciphers"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-ciphers"><strong>ciphers</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ciphers" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 9.2.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>SSL/TLS Ciphers to use for the request.</p>
+<td><div class="ansible-option-cell"><p>TLS/SSL Ciphers to use for the request.</p>
 <p>When a list is provided, all ciphers are joined in order with <code class="ansible-value docutils literal notranslate"><span class="pre">:</span></code>.</p>
 <p>See the <a class="reference external" href="https://www.openssl.org/docs/manmaster/man1/openssl-ciphers.html#CIPHER-LIST-FORMAT">OpenSSL Cipher List Format</a> for more details.</p>
 <p>The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-command"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-command"><strong>command</strong></p>
 <a class="ansibleOptionLink" href="#parameter-command" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>List of commands to execute on OOB controller.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-id"></div>
 <div class="ansibleOptionAnchor" id="parameter-account_id"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-id"><span id="ansible-collections-community-general-redfish-command-module-parameter-account-id"></span><strong>id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: account_id</span></p>
@@ -533,7 +544,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Can also be used in account creation to work around vendor issues where the ID of the new user is required in the POST request.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-new_password"></div>
 <div class="ansibleOptionAnchor" id="parameter-account_password"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-new-password"><span id="ansible-collections-community-general-redfish-command-module-parameter-account-password"></span><strong>new_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-new_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: account_password</span></p>
@@ -542,7 +553,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>New password of account to add/modify.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-new_username"></div>
 <div class="ansibleOptionAnchor" id="parameter-account_username"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-new-username"><span id="ansible-collections-community-general-redfish-command-module-parameter-account-username"></span><strong>new_username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-new_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: account_username</span></p>
@@ -551,7 +562,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Username of account to add/delete/modify.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-oem_account_types"></div>
 <div class="ansibleOptionAnchor" id="parameter-account_oemaccounttypes"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-oem-account-types"><span id="ansible-collections-community-general-redfish-command-module-parameter-account-oemaccounttypes"></span><strong>oem_account_types</strong></p>
 <a class="ansibleOptionLink" href="#parameter-oem_account_types" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: account_oemaccounttypes</span></p>
@@ -561,14 +572,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Array of OEM account types to apply to a user account.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Password for authenticating to OOB controller.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reset_to_defaults_mode"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-reset-to-defaults-mode"><strong>reset_to_defaults_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reset_to_defaults_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 8.6.0</em></p>
@@ -582,7 +593,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-resource_id"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-resource-id"><strong>resource_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-resource_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 0.2.0</em></p>
@@ -590,7 +601,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>ID of the System, Manager or Chassis to modify.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-roleid"></div>
 <div class="ansibleOptionAnchor" id="parameter-account_roleid"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-roleid"><span id="ansible-collections-community-general-redfish-command-module-parameter-account-roleid"></span><strong>roleid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-roleid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: account_roleid</span></p>
@@ -599,7 +610,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Role of account to add/modify.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-session_uri"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-session-uri"><strong>session_uri</strong></p>
 <a class="ansibleOptionLink" href="#parameter-session_uri" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 2.3.0</em></p>
@@ -607,7 +618,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>URI of the session resource.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-strip_etag_quotes"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-strip-etag-quotes"><strong>strip_etag_quotes</strong></p>
 <a class="ansibleOptionLink" href="#parameter-strip_etag_quotes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 3.7.0</em></p>
@@ -621,7 +632,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-timeout"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-timeout"><strong>timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -630,14 +641,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">60</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-uefi_target"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-uefi-target"><strong>uefi_target</strong></p>
 <a class="ansibleOptionLink" href="#parameter-uefi_target" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>UEFI boot target when bootdevice is “UefiTarget”.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_apply_time"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-apply-time"><strong>update_apply_time</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_apply_time" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 6.1.0</em></p>
@@ -653,7 +664,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_creds"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-creds"><strong>update_creds</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_creds" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 0.2.0</em></p>
@@ -661,21 +672,21 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Credentials for retrieving the update image.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_creds/password"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-creds-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_creds/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for retrieving the update image.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_creds/username"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-creds-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_creds/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for retrieving the update image.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_custom_oem_header"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-custom-oem-header"><strong>update_custom_oem_header</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_custom_oem_header" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 10.1.0</em></p>
@@ -686,7 +697,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>If set, then <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-redfish-command-module-parameter-update-custom-oem-params"><span class="std std-ref"><span class="pre">update_custom_oem_params</span></span></a></strong></code> is required too.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_custom_oem_mime_type"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-custom-oem-mime-type"><strong>update_custom_oem_mime_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_custom_oem_mime_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 10.1.0</em></p>
@@ -694,7 +705,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>MIME Type for custom OEM properties for HTTP Multipart Push updates.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_custom_oem_params"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-custom-oem-params"><strong>update_custom_oem_params</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_custom_oem_params" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 10.1.0</em></p>
@@ -704,7 +715,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>The properties will be passed raw without any validation or conversion by Ansible. This means the content can be a file, a string, or any other data. If the content is a dict that should be converted to JSON, then the content must be converted to JSON before passing it to this module using the <a class="reference internal" href="../../ansible/builtin/to_json_filter.html#ansible-collections-ansible-builtin-to-json-filter"><span class="std std-ref">ansible.builtin.to_json</span></a> filter.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_handle"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-handle"><strong>update_handle</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_handle" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 6.1.0</em></p>
@@ -712,7 +723,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Handle to check the status of an update in progress.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_image_file"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-image-file"><strong>update_image_file</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_image_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 7.1.0</em></p>
@@ -720,7 +731,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Filename, with optional path, of the image for the update.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_image_uri"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-image-uri"><strong>update_image_uri</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_image_uri" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 0.2.0</em></p>
@@ -728,7 +739,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>URI of the image for the update.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_oem_params"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-oem-params"><strong>update_oem_params</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_oem_params" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 7.5.0</em></p>
@@ -736,7 +747,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Properties for HTTP Multipart Push Updates.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_protocol"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-protocol"><strong>update_protocol</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 0.2.0</em></p>
@@ -744,7 +755,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Protocol for the update.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_targets"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-targets"><strong>update_targets</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_targets" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 0.2.0</em></p>
@@ -753,7 +764,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_username"></div>
 <div class="ansibleOptionAnchor" id="parameter-account_updatename"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-update-username"><span id="ansible-collections-community-general-redfish-command-module-parameter-account-updatename"></span><strong>update_username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: account_updatename</span></p>
@@ -763,11 +774,25 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>New user name for updating account_username.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Username for authenticating to OOB controller.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-community-general-redfish-command-module-parameter-validate-certs"><strong>validate_certs</strong></p>
+<a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 10.6.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code>, TLS/SSL certificates will not be validated.</p>
+<p>Set this to <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> to enable certificate checking. Should be used together with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-redfish-command-module-parameter-ca-path"><span class="std std-ref"><span class="pre">ca_path</span></span></a></strong></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -1450,7 +1475,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

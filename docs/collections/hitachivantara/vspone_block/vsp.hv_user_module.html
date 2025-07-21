@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.19.1" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>hitachivantara.vspone_block.vsp.hv_user module – Manages users on Hitachi VSP storage systems. &mdash; Ansible Community Documentation</title>
@@ -190,7 +190,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Hitachivantara Namespace</a><ul class="current">
@@ -312,8 +311,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -331,6 +330,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -370,7 +371,7 @@
 <h1>hitachivantara.vspone_block.vsp.hv_user module – Manages users on Hitachi VSP storage systems.<a class="headerlink" href="#hitachivantara-vspone-block-vsp-hv-user-module-manages-users-on-hitachi-vsp-storage-systems" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hitachivantara/vspone_block/">hitachivantara.vspone_block collection</a> (version 3.3.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hitachivantara/vspone_block/">hitachivantara.vspone_block collection</a> (version 3.5.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -386,8 +387,9 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
 <li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#attributes" id="id4">Attributes</a></p></li>
-<li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
-<li><p><a class="reference internal" href="#return-values" id="id6">Return Values</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id5">Notes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id7">Return Values</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
@@ -395,15 +397,14 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <ul class="simple">
 <li><p>This module allows the creation and deletion of users on Hitachi VSP storage systems.</p></li>
 <li><p>It also enables add/remove user to/from the user groups.</p></li>
-<li><p>This module is supported for <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection type.</p></li>
-<li><p>For <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection type examples, go to URL <a class="reference external" href="https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/user.yml">https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/user.yml</a></p></li>
+<li><p>For examples, go to URL <a class="reference external" href="https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/user.yml">https://github.com/hitachi-vantara/vspone-block-ansible/blob/main/playbooks/vsp_direct/user.yml</a></p></li>
 </ul>
 </section>
 <section id="requirements">
 <span id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
-<li><p>python &gt;= 3.8</p></li>
+<li><p>python &gt;= 3.9</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -433,14 +434,14 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="parameter-connection_info/password"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-connection-info-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for authentication. This field is valid for <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection type only, and it is a required field.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password for authentication. This is a required field.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-connection_info/username"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-connection-info-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_info/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for authentication. This field is valid for <code class="docutils literal notranslate"><span class="pre">direct</span></code> connection type only, and it is a required field.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username for authentication. This is a required field.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -451,34 +452,46 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-spec/authentication"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-spec-authentication"><strong>authentication</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/authentication" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The authentication method for the user. Required for user creation.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;local&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;external&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/group_names"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-spec-group-names"><strong>group_names</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/group_names" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>User group name. You can specify up to 8 group names.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-spec-id"><strong>id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The ID of the user.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/name"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-spec-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the user.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/password"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-spec-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The password of the user. The password is ignored if the authentication attribute is external.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The password of the user.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/state"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-spec-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -492,7 +505,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -520,7 +533,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-user-module-attribute-check-mode"><strong>check_mode</strong></p>
 <a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
-<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-none">none</strong></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Determines if the module should run in check mode.</p>
 </div></td>
@@ -528,8 +541,17 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </tbody>
 </table>
 </section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Connection type <code class="docutils literal notranslate"><span class="pre">gateway</span></code> was removed starting from version 3.4.0. Please use an earlier version if you require this connection type.</p></li>
+</ul>
+</div>
+</section>
 <section id="examples">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a User</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_user_group</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
@@ -563,8 +585,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add_user_group</span>
 <span class="w">      </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;devUser&quot;</span>
-<span class="w">      </span><span class="nt">group_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">        </span><span class="s">&quot;devGroup3_new_4&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">group_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;devGroup3_new_4&quot;</span><span class="p p-Indicator">]</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove User from  User Groups by User ID</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_user_group</span><span class="p">:</span>
@@ -575,9 +596,9 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">remove_user_group</span>
 <span class="w">      </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;devUser&quot;</span>
-<span class="w">      </span><span class="nt">group_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
-<span class="w">        </span><span class="s">&quot;devGroup3_new_4&quot;</span><span class="p p-Indicator">]</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a Usere Group by ID</span>
+<span class="w">      </span><span class="nt">group_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;devGroup3_new_4&quot;</span><span class="p p-Indicator">]</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a User Group by ID</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_user_group</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">connection_info</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage1.company.com</span>
@@ -590,7 +611,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div>
 </section>
 <section id="return-values">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
 <p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
 <table class="longtable ansible-option-table docutils align-default" style="width: 100%">
 <thead>
@@ -693,7 +714,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 

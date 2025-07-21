@@ -129,6 +129,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="porting_guides.html">Ansible Porting Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_12.html">Ansible 12 Porting Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="porting_guide_11.html">Ansible 11 Porting Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="porting_guide_10.html">Ansible 10 Porting Guide</a></li>
 <li class="toctree-l2"><a class="reference internal" href="porting_guide_9.html">Ansible 9 Porting Guide</a></li>
@@ -311,8 +312,8 @@
     
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
     
@@ -330,6 +331,8 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
@@ -477,12 +480,12 @@ static <code class="docutils literal notranslate"><span class="pre">import_*</sp
 <section id="fixed-handling-of-keywords-and-inline-variables">
 <h3><a class="toc-backref" href="#id4" role="doc-backlink">Fixed handling of keywords and inline variables</a><a class="headerlink" href="#fixed-handling-of-keywords-and-inline-variables" title="Link to this heading"></a></h3>
 <p>We made several fixes to how we handle keywords and ‘inline variables’, to avoid conflating the two. Unfortunately these changes mean you must specify whether <cite>name</cite> is a keyword or a variable when calling roles. If you have playbooks that look like this:</p>
-<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">roles</span><span class="p">:</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">roles</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span><span class="w"> </span><span class="nv">myrole</span><span class="p p-Indicator">,</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">Justin</span><span class="p p-Indicator">,</span><span class="nt"> othervar</span><span class="p">:</span><span class="w"> </span><span class="nv">othervalue</span><span class="p p-Indicator">,</span><span class="nt"> become</span><span class="p">:</span><span class="w"> </span><span class="nv">True</span><span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>You will run into errors because Ansible reads name in this context as a keyword. Beginning in 2.5, if you want to use a variable name that is also a keyword, you must explicitly declare it as a variable for the role:</p>
-<div class="highlight-YAML+Jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">roles</span><span class="p">:</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">roles</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span><span class="w"> </span><span class="nv">myrole</span><span class="p p-Indicator">,</span><span class="nt"> vars</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">Justin</span><span class="p p-Indicator">,</span><span class="nt"> othervar</span><span class="p">:</span><span class="w"> </span><span class="nv">othervalue</span><span class="p p-Indicator">},</span><span class="nt"> become</span><span class="p">:</span><span class="w"> </span><span class="nv">True</span><span class="p p-Indicator">}</span>
 </pre></div>
 </div>
@@ -932,7 +935,7 @@ Note that eAPI and NX-API still require <code class="docutils literal notranslat
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Jul 21, 2025.
       </span></p>
   </div>
 
