@@ -990,6 +990,31 @@ which can occur when the input is the <code class="docutils literal notranslate"
 <p>This filter now returns <code class="docutils literal notranslate"><span class="pre">False</span></code> instead of <code class="docutils literal notranslate"><span class="pre">None</span></code> when the input is <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 The aforementioned deprecation warning is also issued in this case.</p>
 </li>
+<li><p>Passing nested non-scalars with embedded templates that may resolve to <code class="docutils literal notranslate"><span class="pre">Undefined</span></code> to Jinja2
+filter plugins, such as <code class="docutils literal notranslate"><span class="pre">default</span></code> and <code class="docutils literal notranslate"><span class="pre">mandatory</span></code>, and test plugins including <code class="docutils literal notranslate"><span class="pre">defined</span></code> and <code class="docutils literal notranslate"><span class="pre">undefined</span></code>
+no longer evaluate as they did in previous versions because nested non-scalars with embedded templates are templated
+on use only.
+In 2.19, this assertion passes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">assert</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">that</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># Unlike earlier versions, complex_var is defined even though complex_var.nested is not.</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">complex_var is defined</span>
+<span class="w">      </span><span class="c1"># Unlike earlier versions, the default value is not applied because complex_var is defined.</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(complex_var | default(unused)).nested is undefined</span>
+<span class="w">      </span><span class="c1"># Like earlier versions, directly accessing complex_var.nested evaluates as undefined.</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">complex_var.nested is undefined</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">complex_var</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># Before 2.19, complex_var.nested is evaluated immediately when complex_var is accessed.</span>
+<span class="w">      </span><span class="c1"># In 2.19, complex_var.nested is evaluated only when it is accessed.</span>
+<span class="w">      </span><span class="nt">nested</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">undefined_variable</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">unused</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># This variable is used only if complex_var is undefined.</span>
+<span class="w">      </span><span class="c1"># This only happens in ansible-core before 2.19.</span>
+<span class="w">      </span><span class="nt">nested</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+</pre></div>
+</div>
+</li>
 </ul>
 </section>
 </section>
@@ -1014,7 +1039,7 @@ The aforementioned deprecation warning is also issued in this case.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 21, 2025.
+      <span class="lastupdated">Last updated on Jul 22, 2025.
       </span></p>
   </div>
 
