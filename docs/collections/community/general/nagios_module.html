@@ -400,7 +400,7 @@
 <h1>community.general.nagios module – Perform common tasks in Nagios related to downtime and notifications<a class="headerlink" href="#community-general-nagios-module-perform-common-tasks-in-nagios-related-to-downtime-and-notifications" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 11.1.2).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 11.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -515,12 +515,12 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-services"></div>
 <div class="ansibleOptionAnchor" id="parameter-service"></div><p class="ansible-option-title" id="ansible-collections-community-general-nagios-module-parameter-services"><span id="ansible-collections-community-general-nagios-module-parameter-service"></span><strong>services</strong></p>
 <a class="ansibleOptionLink" href="#parameter-services" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: service</span></p>
-<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>What to manage downtime/alerts for. Separate multiple services with commas.</p>
 <p><strong>Required</strong> option when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nagios-module-parameter-action"><span class="std std-ref"><span class="pre">action</span></span></a></strong></code> is one of: <code class="ansible-value docutils literal notranslate"><span class="pre">downtime</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">acknowledge</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">forced_check</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">enable_alerts</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">disable_alerts</span></code>.</p>
-<p>You can specify multiple services at once by separating them with commas, for example <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-nagios-module-parameter-services"><span class="std std-ref"><span class="pre">services=httpd,nfs,puppet</span></span></a></code>.</p>
 <p>When specifying what <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nagios-module-parameter-services"><span class="std std-ref"><span class="pre">services</span></span></a></strong></code> to handle there is a special service value, <code class="ansible-value docutils literal notranslate"><span class="pre">host</span></code>, which handles alerts/downtime/acknowledge for the <em>host itself</em>, for example <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-nagios-module-parameter-services"><span class="std std-ref"><span class="pre">services=host</span></span></a></code>. This keyword may not be given with other services at the same time. <strong>Setting alerts/downtime/acknowledge for a host does not affect alerts/downtime/acknowledge for any of the services running on it.</strong> To schedule downtime for all <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nagios-module-parameter-services"><span class="std std-ref"><span class="pre">services</span></span></a></strong></code> on particular host use keyword <code class="ansible-value docutils literal notranslate"><span class="pre">all</span></code>, for example <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-nagios-module-parameter-services"><span class="std std-ref"><span class="pre">services=all</span></span></a></code>.</p>
+<p>Before community.general 11.2.0, one could specify multiple services at once by separating them with commas, for example <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-nagios-module-parameter-services"><span class="std std-ref"><span class="pre">services=httpd,nfs,puppet</span></span></a></code>. Since community.general 11.2.0, there can be spaces around the commas, and an actual list can be provided.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -682,7 +682,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disable httpd and nfs alerts</span>
 <span class="w">  </span><span class="nt">community.general.nagios</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disable_alerts</span>
-<span class="w">    </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">httpd,nfs</span>
+<span class="w">    </span><span class="nt">service</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">httpd</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nfs</span>
 <span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">inventory_hostname</span> <span class="cp">}}</span><span class="s">&#39;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disable HOST alerts</span>
@@ -749,7 +751,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 11, 2025.
+      <span class="lastupdated">Last updated on Aug 12, 2025.
       </span></p>
   </div>
 
