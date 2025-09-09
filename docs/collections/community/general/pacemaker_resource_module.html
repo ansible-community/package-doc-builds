@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="community.general.packet_device module – Manage a bare metal server in the Packet Host" href="packet_device_module.html" />
+    <link rel="next" title="community.general.pacemaker_stonith module – Manage Pacemaker STONITH" href="pacemaker_stonith_module.html" />
     <link rel="prev" title="community.general.pacemaker_info module – Gather information about Pacemaker cluster" href="pacemaker_info_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -400,7 +400,7 @@
 <h1>community.general.pacemaker_resource module – Manage pacemaker resources<a class="headerlink" href="#community-general-pacemaker-resource-module-manage-pacemaker-resources" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 11.2.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 11.3.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -434,9 +434,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-general-pacemaker-resource-module-parameter-name"><strong>name</strong></p>
-<a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+<a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Specify the resource name to create.</p>
+<td><div class="ansible-option-cell"><p>Specify the resource name to create or clone to.</p>
+<p>This is required if <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-pacemaker-resource-module-parameter-state"><span class="std std-ref"><span class="pre">state=present</span></span></a></code>, <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-pacemaker-resource-module-parameter-state"><span class="std std-ref"><span class="pre">state=absent</span></span></a></code>, <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-pacemaker-resource-module-parameter-state"><span class="std std-ref"><span class="pre">state=enabled</span></span></a></code>, or <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-pacemaker-resource-module-parameter-state"><span class="std std-ref"><span class="pre">state=disabled</span></span></a></code>.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -465,6 +466,22 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-resource_argument/argument_option" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Options to associate with resource action.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-resource_clone_ids"></div><p class="ansible-option-title" id="ansible-collections-community-general-pacemaker-resource-module-parameter-resource-clone-ids"><strong>resource_clone_ids</strong></p>
+<a class="ansibleOptionLink" href="#parameter-resource_clone_ids" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of clone resource IDs to clone from.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-resource_clone_meta"></div><p class="ansible-option-title" id="ansible-collections-community-general-pacemaker-resource-module-parameter-resource-clone-meta"><strong>resource_clone_meta</strong></p>
+<a class="ansibleOptionLink" href="#parameter-resource_clone_meta" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of metadata to associate with clone resource.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -537,12 +554,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Indicate desired state for cluster resource.</p>
+<p>The states <code class="ansible-value docutils literal notranslate"><span class="pre">cleanup</span></code> and <code class="ansible-value docutils literal notranslate"><span class="pre">cloned</span></code> have been added in community.general 11.3.0.</p>
+<p>If <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-pacemaker-resource-module-parameter-state"><span class="std std-ref"><span class="pre">state=cloned</span></span></a></code> or <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-pacemaker-resource-module-parameter-state"><span class="std std-ref"><span class="pre">state=present</span></span></a></code>, you can set <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-pacemaker-resource-module-parameter-resource-clone-ids"><span class="std std-ref"><span class="pre">resource_clone_ids</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-pacemaker-resource-module-parameter-resource-clone-meta"><span class="std std-ref"><span class="pre">resource_clone_meta</span></span></a></strong></code> to determine exactly what and how to clone.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;present&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;cloned&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;enabled&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;disabled&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;cleanup&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -660,14 +681,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="pacemaker_info_module.html" class="btn btn-neutral float-left" title="community.general.pacemaker_info module – Gather information about Pacemaker cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="packet_device_module.html" class="btn btn-neutral float-right" title="community.general.packet_device module – Manage a bare metal server in the Packet Host" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pacemaker_stonith_module.html" class="btn btn-neutral float-right" title="community.general.pacemaker_stonith module – Manage Pacemaker STONITH" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 08, 2025.
+      <span class="lastupdated">Last updated on Sep 09, 2025.
       </span></p>
   </div>
 
