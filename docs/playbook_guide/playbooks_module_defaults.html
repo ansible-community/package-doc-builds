@@ -18,7 +18,7 @@
     <link rel="canonical" href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_module_defaults.html"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
+      <script src="../_static/documentation_options.js?v=22a17294"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -78,8 +78,8 @@
       <script>
         function switchVersionTo(slug) {
           var current_url_path = window.location.pathname;
-          var url_version = current_url_path.search("/devel/") > -1
-            ? "/devel/"
+          var url_version = current_url_path.search("/12/") > -1
+            ? "/12/"
             : "/latest/";
           var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
           window.location.replace(new_version_url);
@@ -100,8 +100,15 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
-            selected="selected"
+            
         >
             devel
         </option>
@@ -159,7 +166,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using variables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="guide_rolling_upgrade.html">Playbook Example: Continuous Delivery and Rolling Upgrades</a></li>
 </ul>
@@ -300,13 +307,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
         msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -341,7 +352,7 @@
 <span id="id1"></span><h1>Module defaults<a class="headerlink" href="#module-defaults" title="Link to this heading"></a></h1>
 <p>If you frequently call the same module with the same arguments, it can be useful to define default arguments for that particular module using the <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code> keyword.</p>
 <p>Here is a basic example:</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">ansible.builtin.file</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span>
@@ -365,7 +376,7 @@
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code> keyword can be used at the play, block, and task level. Any module arguments explicitly specified in a task will override any established default for that module argument.</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">block</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">block</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
 <span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Different</span><span class="nv"> </span><span class="s">message&quot;</span>
@@ -375,7 +386,7 @@
 </pre></div>
 </div>
 <p>You can remove any previously established defaults for a module by specifying an empty dict.</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create file1</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create file1</span>
 <span class="w">  </span><span class="nt">ansible.builtin.file</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">touch</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/file1</span>
@@ -389,7 +400,7 @@
 </div>
 <p>Here are some more realistic use cases for this feature.</p>
 <p>Interacting with an API that requires auth.</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">ansible.builtin.uri</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">force_basic_auth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -410,7 +421,7 @@
 </pre></div>
 </div>
 <p>Setting a default AWS region for specific EC2-related modules.</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">my_region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
 <span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
@@ -431,7 +442,7 @@
 </div>
 <p>Here is an example <code class="docutils literal notranslate"><span class="pre">runtime.yml</span></code> file for the <code class="docutils literal notranslate"><span class="pre">ns.coll</span></code> collection.
 This file defines an action group named <code class="docutils literal notranslate"><span class="pre">ns.coll.my_group</span></code> and places the <code class="docutils literal notranslate"><span class="pre">sample_module</span></code> from <code class="docutils literal notranslate"><span class="pre">ns.coll</span></code> and <code class="docutils literal notranslate"><span class="pre">another_module</span></code> from <code class="docutils literal notranslate"><span class="pre">another.collection</span></code> into the group.</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="c1"># collections/ansible_collections/ns/coll/meta/runtime.yml</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># collections/ansible_collections/ns/coll/meta/runtime.yml</span>
 <span class="nt">action_groups</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">my_group</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sample_module</span>
@@ -439,7 +450,7 @@ This file defines an action group named <code class="docutils literal notranslat
 </pre></div>
 </div>
 <p>This group can now be used in a playbook like this:</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">group/ns.coll.my_group</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">option_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">option_value</span>
@@ -490,7 +501,7 @@ This file defines an action group named <code class="docutils literal notranslat
 </ul>
 <p>Use the groups with <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code> by prefixing the group name with <code class="docutils literal notranslate"><span class="pre">group/</span></code> - for example <code class="docutils literal notranslate"><span class="pre">group/aws</span></code>.</p>
 <p>In a playbook, you can set module defaults for whole groups of modules, such as setting a common AWS region.</p>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="c1"># example_play.yml</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># example_play.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">group/aws</span><span class="p">:</span>
@@ -525,7 +536,7 @@ This file defines an action group named <code class="docutils literal notranslat
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 21, 2025.
+      <span class="lastupdated">Last updated on Sep 15, 2025.
       </span></p>
   </div>
 

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Backporting and Ansible inclusion &mdash; Ansible Community Documentation</title>
+  <title>Ansible Collection Maintenance and Workflow &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
@@ -18,7 +18,7 @@
     <link rel="canonical" href="https://docs.ansible.com/ansible/latest/community/maintainers_workflow.html"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
+      <script src="../_static/documentation_options.js?v=22a17294"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -78,8 +78,8 @@
       <script>
         function switchVersionTo(slug) {
           var current_url_path = window.location.pathname;
-          var url_version = current_url_path.search("/devel/") > -1
-            ? "/devel/"
+          var url_version = current_url_path.search("/12/") > -1
+            ? "/12/"
             : "/latest/";
           var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
           window.location.replace(new_version_url);
@@ -100,8 +100,15 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
-            selected="selected"
+            
         >
             devel
         </option>
@@ -155,9 +162,8 @@
 <li class="toctree-l3"><a class="reference internal" href="maintainers_guidelines.html">Maintainer responsibilities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maintainers_guidelines.html#expanding-the-collection-community">Expanding the collection community</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maintainers_guidelines.html#maintaining-good-collection-documentation">Maintaining good collection documentation</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Backporting and Ansible inclusion</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#collection-maintainers">Collection maintainers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-maintainers">Module maintainers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Ansible Collection Maintenance and Workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#managing-pull-requests">Managing pull requests</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#releasing-a-collection">Releasing a collection</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#backporting">Backporting</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#including-a-collection-in-ansible">Including a collection in Ansible</a></li>
@@ -250,7 +256,7 @@
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="contributions_collections.html">Ansible Collections Contributor Guide</a></li>
           <li class="breadcrumb-item"><a href="maintainers.html">Guidelines for collection maintainers</a></li>
-      <li class="breadcrumb-item active">Backporting and Ansible inclusion</li>
+      <li class="breadcrumb-item active">Ansible Collection Maintenance and Workflow</li>
   <li class="wy-breadcrumbs-aside">
             <!-- Remove main index page as it is no longer editable -->
             
@@ -295,13 +301,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
         msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -332,73 +342,55 @@
   
            <div itemprop="articleBody">
              
-  <section id="backporting-and-ansible-inclusion">
-<span id="maintainers-workflow"></span><h1>Backporting and Ansible inclusion<a class="headerlink" href="#backporting-and-ansible-inclusion" title="Link to this heading"></a></h1>
-<p>Each collection community can set its own rules and workflow for managing pull requests, bug reports, documentation issues, and feature requests, as well as adding and replacing maintainers. Maintainers review and merge pull requests following the:</p>
+  <section id="ansible-collection-maintenance-and-workflow">
+<span id="maintainers-workflow"></span><h1>Ansible Collection Maintenance and Workflow<a class="headerlink" href="#ansible-collection-maintenance-and-workflow" title="Link to this heading"></a></h1>
+<p>Each collection community can set its own rules and workflows for managing pull requests (PRs), bug reports, documentation issues, feature requests, as well as for adding and replacing maintainers.</p>
+<p>Collection maintainers have <code class="docutils literal notranslate"><span class="pre">write</span></code> or higher access to a collection, allowing them to merge pull requests and perform other administrative tasks.</p>
+<section id="managing-pull-requests">
+<h2>Managing pull requests<a class="headerlink" href="#managing-pull-requests" title="Link to this heading"></a></h2>
+<p>Maintainers review and merge PRs according to the following guidelines:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="code_of_conduct.html#code-of-conduct"><span class="std std-ref">Community Code of Conduct</span></a></p></li>
 <li><p><a class="reference internal" href="maintainers_guidelines.html#maintainer-requirements"><span class="std std-ref">Maintainer responsibilities</span></a></p></li>
 <li><p><a class="reference internal" href="committer_guidelines.html#committer-general-rules"><span class="std std-ref">Committer guidelines</span></a></p></li>
 <li><p><a class="reference internal" href="collection_contributors/collection_reviewing.html#review-checklist"><span class="std std-ref">PR review checklist</span></a></p></li>
 </ul>
-<p>There can be two kinds of maintainers: <a class="reference internal" href="#collection-maintainers"><span class="std std-ref">Collection maintainers</span></a> and <a class="reference internal" href="#module-maintainers"><span class="std std-ref">Module maintainers</span></a>.</p>
-<section id="collection-maintainers">
-<span id="id1"></span><h2>Collection maintainers<a class="headerlink" href="#collection-maintainers" title="Link to this heading"></a></h2>
-<p>Collection-scope maintainers are contributors who have the <code class="docutils literal notranslate"><span class="pre">write</span></code> or higher access level in a collection. They have commit rights and can merge pull requests, among other permissions.</p>
-<p>When a collection maintainer considers a contribution to a file significant enough
-(for example, fixing a complex bug, adding a feature, providing regular reviews, and so on),
-they can invite the author to become a module maintainer.</p>
-</section>
-<section id="module-maintainers">
-<span id="id2"></span><h2>Module maintainers<a class="headerlink" href="#module-maintainers" title="Link to this heading"></a></h2>
-<p>Module-scope maintainers exist in collections that have the <a class="reference external" href="https://github.com/ansible-community/collection_bot">collection bot</a>,
-for example, <a class="reference external" href="https://github.com/ansible-collections/community.general">community.general</a>
-and <a class="reference external" href="https://github.com/ansible-collections/community.network">community.network</a>.</p>
-<p>Being a module maintainer is the stage prior to becoming a collection maintainer. Module maintainers are contributors who are listed in <code class="docutils literal notranslate"><span class="pre">.github/BOTMETA.yml</span></code>. The scope can be any file (for example, a module or plugin), directory, or repository. Because in most cases the scope is a module or group of modules, we call these contributors module maintainers. The collection bot notifies module maintainers when issues/pull requests related to files they maintain are created.</p>
-<p>Module maintainers have indirect commit rights implemented through the <a class="reference external" href="https://github.com/ansible-community/collection_bot">collection bot</a>.
-When two module maintainers comment with the keywords <code class="docutils literal notranslate"><span class="pre">shipit</span></code>, <code class="docutils literal notranslate"><span class="pre">LGTM</span></code>, or <code class="docutils literal notranslate"><span class="pre">+1</span></code> on a pull request
-which changes a module they maintain, the collection bot merges the pull request automatically.</p>
-<p>For more information about the collection bot and its interface,
-see to the <a class="reference external" href="https://github.com/ansible-community/collection_bot/blob/main/ISSUE_HELP.md">Collection bot overview</a>.</p>
 </section>
 <section id="releasing-a-collection">
 <h2>Releasing a collection<a class="headerlink" href="#releasing-a-collection" title="Link to this heading"></a></h2>
-<p>Collection maintainers are responsible for releasing new versions of a collection. Generally, releasing a collection consists of:</p>
+<p>Collection maintainers are responsible for releasing new collection versions. The general release process includes:</p>
 <ol class="arabic simple">
-<li><p>Planning and announcement.</p></li>
-<li><p>Generating a changelog.</p></li>
-<li><p>Creating a release Git tag and pushing it.</p></li>
-<li><p>Automatically publishing the release tarball on <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a> through the <a class="reference external" href="https://dashboard.zuul.ansible.com/t/ansible/builds?pipeline=release">Zuul dashboard</a>.</p></li>
-<li><p>Final announcement.</p></li>
-<li><p>Optionally, <a class="reference external" href="https://github.com/ansible-collections/ansible-inclusion">file a request to include a new collection into the Ansible package</a>.</p></li>
+<li><p><strong>Planning and announcement</strong>: Define the release scope and communicate it.</p></li>
+<li><p><strong>Changelog generation</strong>: Create a comprehensive list of changes.</p></li>
+<li><p><strong>Git tagging</strong>: Create and push a release Git tag.</p></li>
+<li><p><strong>Automated publication</strong>: The release tarball is automatically published on <a class="reference external" href="https://galaxy.ansible.com/">Ansible Galaxy</a> via the <a class="reference external" href="https://dashboard.zuul.ansible.com/t/ansible/builds?pipeline=release">Zuul dashboard</a> or a custom GitHub Actions workflow.</p></li>
+<li><p><strong>Final announcement</strong>: Communicate the successful release.</p></li>
 </ol>
-<p>See <a class="reference internal" href="collection_contributors/collection_releasing.html#releasing-collections"><span class="std std-ref">Releasing collections</span></a> for details.</p>
+<p>See <a class="reference internal" href="collection_contributors/collection_releasing.html#releasing-collections"><span class="std std-ref">Releasing collections</span></a> for more information.</p>
 </section>
 <section id="backporting">
-<span id="id4"></span><h2>Backporting<a class="headerlink" href="#backporting" title="Link to this heading"></a></h2>
-<p>Collection maintainers backport merged pull requests to stable branches
-following the <a class="reference external" href="https://semver.org/">semantic versioning</a> and release policies of the collections.</p>
-<p>The manual backport process is similar to the <a class="reference internal" href="development_process.html#backport-process"><span class="std std-ref">ansible-core backporting guidelines</span></a>.</p>
-<p>For convenience, backporting can be implemented automatically using GitHub bots (for example, with the <a class="reference external" href="https://github.com/apps/patchback">Patchback app</a>) and labeling as it is done in <a class="reference external" href="https://github.com/ansible-collections/community.general">community.general</a> and <a class="reference external" href="https://github.com/ansible-collections/community.network">community.network</a>.</p>
+<span id="id1"></span><h2>Backporting<a class="headerlink" href="#backporting" title="Link to this heading"></a></h2>
+<p>Collection maintainers backport merged pull requests to stable branches if they exist. This process adheres to the collection’s <a class="reference external" href="https://semver.org/">semantic versioning</a> and release policies.</p>
+<p>The manual backporting process mirrors the <a class="reference internal" href="development_process.html#backport-process"><span class="std std-ref">ansible-core backporting guidelines</span></a>.</p>
+<p>For streamlined backporting, GitHub bots like the <a class="reference external" href="https://github.com/apps/patchback">Patchback app</a> can automate the process through labeling, as implemented in the <a class="reference external" href="https://github.com/ansible-collections/community.general">community.general</a> collection.</p>
 </section>
 <section id="including-a-collection-in-ansible">
 <span id="including-collection-ansible"></span><h2>Including a collection in Ansible<a class="headerlink" href="#including-a-collection-in-ansible" title="Link to this heading"></a></h2>
-<p>If a collection is not included in Ansible (not shipped with Ansible package), maintainers can submit the collection for inclusion by creating a discussion under the <a class="reference external" href="https://github.com/ansible-collections/ansible-inclusion">ansible-collections/ansible-inclusion repository</a>. For more information, see the <a class="reference external" href="https://github.com/ansible-collections/ansible-inclusion/blob/main/README.md">repository’s README</a>, and the <a class="reference internal" href="collection_contributors/collection_requirements.html#collections-requirements"><span class="std std-ref">Ansible community package collections requirements</span></a>.</p>
+<p>To include a collection in the Ansible community package, maintainers create a discussion in the <a class="reference external" href="https://github.com/ansible-collections/ansible-inclusion">ansible-collections/ansible-inclusion repository</a>. See the <a class="reference external" href="https://github.com/ansible-collections/ansible-inclusion/blob/main/README.md">submission process</a> and the <a class="reference internal" href="collection_contributors/collection_requirements.html#collections-requirements"><span class="std std-ref">Ansible community package collections requirements</span></a> for details.</p>
 </section>
 </section>
 <section id="stepping-down-as-a-collection-maintainer">
 <h1>Stepping down as a collection maintainer<a class="headerlink" href="#stepping-down-as-a-collection-maintainer" title="Link to this heading"></a></h1>
-<p>Times change, and so may your ability to continue as a collection maintainer. We ask that you do not step down silently.</p>
-<p>If you feel you don’t have time to maintain your collection anymore, you should:</p>
-<ul class="simple">
-<li><p>Inform other maintainers about it.</p></li>
-<li><p>If the collection is under the <code class="docutils literal notranslate"><span class="pre">ansible-collections</span></code> organization, also inform relevant <a class="reference internal" href="communication.html#communication-irc"><span class="std std-ref">Real-time chat</span></a>, the <code class="docutils literal notranslate"><span class="pre">community</span></code> chat channels on IRC or matrix, or by email <code class="docutils literal notranslate"><span class="pre">ansible-community&#64;redhat.com</span></code>.</p></li>
-<li><p>Look at active contributors in the collection to find new maintainers among them. Discuss the potential candidates with other maintainers or with the community team.</p></li>
-<li><p>If you failed to find a replacement, create a pinned issue in the collection, announcing that the collection needs new maintainers.</p></li>
-<li><p>Make the same announcement through the <a class="reference external" href="https://forum.ansible.com/t/about-the-newsletter-category/166">Bullhorn newsletter</a>.</p></li>
-<li><p>Please be around to discuss potential candidates found by other maintainers or by the community team.</p></li>
-</ul>
-<p>Remember, this is a community, so you can come back at any time in the future.</p>
+<p>If you can no longer continue as a collection maintainer, follow these steps:</p>
+<ol class="arabic simple">
+<li><p><strong>Inform other maintainers</strong>: Notify your co-maintainers.</p></li>
+<li><p><strong>Notify the community</strong>: For collections under the <code class="docutils literal notranslate"><span class="pre">ansible-collections</span></code> GitHub organization, inform the relevant <a class="reference internal" href="communication.html#communication-irc"><span class="std std-ref">Real-time chat</span></a> channels, or email <code class="docutils literal notranslate"><span class="pre">ansible-community&#64;redhat.com</span></code>.</p></li>
+<li><p><strong>Identify potential replacements</strong>: Look for active contributors within the collection who could become new maintainers. Discuss these candidates with other maintainers or the <a class="reference external" href="https://forum.ansible.com/g/CommunityEngTeam">Ansible community team</a>.</p></li>
+<li><p><strong>Announce the need for maintainers (if no replacement is found)</strong>: If you cannot find a replacement, create a pinned issue in the collection repository announcing the need for new maintainers.</p></li>
+<li><p><strong>Post in the Bullhorn newsletter</strong>: Make the same announcement through the <a class="reference external" href="https://forum.ansible.com/t/about-the-newsletter-category/166">Bullhorn newsletter</a>.</p></li>
+<li><p><strong>Engage in candidate discussions</strong>: Be available to discuss potential candidates identified by other maintainers or the community team.</p></li>
+</ol>
+<p>Remember, this is a community and you are welcome to rejoin at any time.</p>
 </section>
 
 
@@ -415,7 +407,7 @@ following the <a class="reference external" href="https://semver.org/">semantic 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 21, 2025.
+      <span class="lastupdated">Last updated on Sep 15, 2025.
       </span></p>
   </div>
 

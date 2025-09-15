@@ -18,7 +18,7 @@
     <link rel="canonical" href="https://docs.ansible.com/ansible/latest/os_guide/windows_winrm.html"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
+      <script src="../_static/documentation_options.js?v=22a17294"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -78,8 +78,8 @@
       <script>
         function switchVersionTo(slug) {
           var current_url_path = window.location.pathname;
-          var url_version = current_url_path.search("/devel/") > -1
-            ? "/devel/"
+          var url_version = current_url_path.search("/12/") > -1
+            ? "/12/"
             : "/latest/";
           var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
           window.location.replace(new_version_url);
@@ -100,8 +100,15 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
-            selected="selected"
+            
         >
             devel
         </option>
@@ -141,6 +148,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="intro_bsd.html">Managing BSD hosts with Ansible</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="intro_windows.html">Managing Windows hosts with Ansible</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="windows_app_control.html">Windows App Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="windows_dsc.html">Desired State Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="windows_performance.html">Windows performance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="windows_ssh.html">Windows SSH</a></li>
@@ -296,13 +304,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-        /* temp - add extra warning about core-2.19. This should move to latest at release time */
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
         msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -372,8 +384,8 @@ Server 2012, WinRM has been enabled by default, but in some cases, extra
 configuration is required to use WinRM with Ansible.</p>
 <p>Ansible can use WinRM through the <a class="reference internal" href="../collections/ansible/builtin/psrp_connection.html#psrp-connection"><span class="std std-ref">psrp</span></a> or <a class="reference internal" href="../collections/ansible/builtin/winrm_connection.html#winrm-connection"><span class="std std-ref">winrm</span></a> connection plugins. These plugins have their own Python requirements that are not included in the Ansible package and must be installed separately.</p>
 <p>If you chose the <code class="docutils literal notranslate"><span class="pre">pipx</span></code> install instructions, you can install those requirements by running the following:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pipx<span class="w"> </span>inject<span class="w"> </span><span class="s2">&quot;pypsrp&lt;=1.0.0&quot;</span><span class="w">  </span><span class="c1"># for psrp</span>
-pipx<span class="w"> </span>inject<span class="w"> </span><span class="s2">&quot;pywinrm&gt;=0.4.0&quot;</span><span class="w">  </span><span class="c1"># for winrm</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pipx<span class="w"> </span>inject<span class="w"> </span>ansible<span class="w"> </span><span class="s2">&quot;pypsrp&lt;=1.0.0&quot;</span><span class="w">  </span><span class="c1"># for psrp</span>
+pipx<span class="w"> </span>inject<span class="w"> </span>ansible<span class="w"> </span><span class="s2">&quot;pywinrm&gt;=0.4.0&quot;</span><span class="w">  </span><span class="c1"># for winrm</span>
 </pre></div>
 </div>
 <p>Or, if you chose the <code class="docutils literal notranslate"><span class="pre">pip</span></code> install instructions:</p>
@@ -938,7 +950,7 @@ Connection<span class="w"> </span>to<span class="w"> </span>server<span class="w
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 21, 2025.
+      <span class="lastupdated">Last updated on Sep 15, 2025.
       </span></p>
   </div>
 
