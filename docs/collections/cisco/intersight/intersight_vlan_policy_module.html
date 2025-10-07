@@ -394,7 +394,7 @@
 <h1>cisco.intersight.intersight_vlan_policy module – Manage VLAN Policies and VLANs for Cisco Intersight<a class="headerlink" href="#cisco-intersight-intersight-vlan-policy-module-manage-vlan-policies-and-vlans-for-cisco-intersight" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -442,9 +442,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>Filename (absolute path) or string of PEM formatted private key data to be used for Intersight API authentication.</p>
 <p>If a string is used, Ansible vault should be used to encrypt string data.</p>
-<p>Ex. ansible-vault encrypt_string –vault-id <a class="reference external" href="mailto:tme&#37;&#52;&#48;/Users/dsoper/Documents/vault_password_file">tme<span>&#64;</span>/Users/dsoper/Documents/vault_password_file</a> ‘—–BEGIN EC PRIVATE KEY—–</p>
+<p>Ex. ansible-vault encrypt_string --vault-id <a class="reference external" href="mailto:tme&#37;&#52;&#48;/Users/dsoper/Documents/vault_password_file">tme<span>&#64;</span>/Users/dsoper/Documents/vault_password_file</a> ‘-----BEGIN EC PRIVATE KEY-----</p>
 <p>&lt;your private key data&gt;</p>
-<p>—–END EC PRIVATE KEY—–’</p>
+<p>-----END EC PRIVATE KEY-----’</p>
 <p>If not set, the value of the INTERSIGHT_API_PRIVATE_KEY environment variable is used.</p>
 </div></td>
 </tr>
@@ -625,13 +625,17 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vlans/vlan_id"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-vlan-policy-module-parameter-vlans-vlan-id"><strong>vlan_id</strong></p>
-<a class="ansibleOptionLink" href="#parameter-vlans/vlan_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span> / <span class="ansible-option-required">required</span></p>
+<a class="ansibleOptionLink" href="#parameter-vlans/vlan_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Enter a valid VLAN ID or ID range between 2 and 4093. You can enter a range of IDs using a hyphen, and you can enter multiple IDs or ID ranges separated by commas.</p>
-<p>Examples of valid VLAN IDs or ID ranges are 50, 200, 2000-2100. You cannot use VLANs from 4043-4047, 4094, and 4095 because these IDs are reserved for system use.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Enter a valid VLAN ID or ID range between 2 and 4093.</p>
+<p>You can enter a range of IDs using a hyphen (e.g., “30-40” will create VLANs 30 through 40).</p>
+<p>Examples of valid VLAN IDs or ID ranges are 50, 200, “2000-2100”.</p>
+<p>You cannot use VLANs from 4043-4047, 4094, and 4095 because these IDs are reserved for system use.</p>
 <p>You can create a maximum of 3000 VLANs at a time.</p>
-<p>VLAN ID number (1-4094).</p>
+<p>VLAN ID - single ID 100 or range “30-40” (ranges require quotes).</p>
 <p>Must be unique within the fabric interconnect domain.</p>
+<p>When using ranges, multiple VLANs will be created with names following the pattern prefix_vlanid.</p>
+<p>For non-contiguous VLANs, create separate VLAN blocks rather than using comma-separated values.</p>
 </div></td>
 </tr>
 </tbody>
@@ -730,6 +734,31 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">        </span><span class="nt">auto_allow_on_uplinks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VLAN Policy with VLAN ranges</span>
+<span class="w">  </span><span class="nt">cisco.intersight.intersight_vlan_policy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;range-vlan-policy&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Policy</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">VLAN</span><span class="nv"> </span><span class="s">ranges&quot;</span>
+<span class="w">    </span><span class="nt">vlans</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;prod&quot;</span>
+<span class="w">        </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;30-40&quot;</span>
+<span class="w">        </span><span class="nt">auto_allow_on_uplinks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">enable_sharing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">        </span><span class="nt">multicast_policy_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default-multicast-policy&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dev&quot;</span>
+<span class="w">        </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100-110&quot;</span>
+<span class="w">        </span><span class="nt">auto_allow_on_uplinks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">enable_sharing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">        </span><span class="nt">multicast_policy_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default-multicast-policy&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mgmt&quot;</span>
+<span class="w">        </span><span class="nt">vlan_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200</span>
+<span class="w">        </span><span class="nt">auto_allow_on_uplinks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">enable_sharing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">        </span><span class="nt">multicast_policy_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default-multicast-policy&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VLAN Policy with minimal configuration (policy only)</span>
 <span class="w">  </span><span class="nt">cisco.intersight.intersight_vlan_policy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -813,7 +842,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 06, 2025.
+      <span class="lastupdated">Last updated on Oct 07, 2025.
       </span></p>
   </div>
 
