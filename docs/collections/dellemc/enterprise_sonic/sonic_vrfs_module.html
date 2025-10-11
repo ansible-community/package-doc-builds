@@ -389,7 +389,7 @@
 <h1>dellemc.enterprise_sonic.sonic_vrfs module – Manage VRFs and associate VRFs to interfaces such as, Eth, LAG, VLAN, and loopback<a class="headerlink" href="#dellemc-enterprise-sonic-sonic-vrfs-module-manage-vrfs-and-associate-vrfs-to-interfaces-such-as-eth-lag-vlan-and-loopback" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/dellemc/enterprise_sonic/">dellemc.enterprise_sonic collection</a> (version 3.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/dellemc/enterprise_sonic/">dellemc.enterprise_sonic collection</a> (version 3.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -411,10 +411,6 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Manages VRF and VRF interface attributes in Enterprise SONiC Distribution by Dell Technologies.</p></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This module has a corresponding <a class="reference internal" href="../../../plugins/action.html#action-plugins"><span class="std std-ref">action plugin</span></a>.</p>
-</div>
 </section>
 <section id="parameters">
 <h2><a class="toc-backref" href="#id2" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
@@ -484,110 +480,111 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Tested against Enterprise SONiC Distribution by Dell Technologies.</p></li>
 <li><p>Supports <code class="docutils literal notranslate"><span class="pre">check_mode</span></code>.</p></li>
+<li><p>This module does not support the deletion of mgmt VRF. Deletion of mgmt VRF can be done using the “sonic_config” resource module as shown in “playbooks/common_examples/mgmt_vrf_off.yaml”. It can also be done using the SONiC CLI or by using a standalone REST API.</p></li>
 </ul>
 </div>
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using deleted</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using &quot;deleted&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
-<span class="c1">#show ip vrf</span>
-<span class="c1">#VRF-NAME            INTERFACES</span>
-<span class="c1">#----------------------------------------------------------------</span>
-<span class="c1">#Vrfcheck1</span>
-<span class="c1">#Vrfcheck2</span>
-<span class="c1">#Vrfcheck3           Eth1/3</span>
+<span class="c1"># show ip vrf</span>
+<span class="c1"># VRF-NAME            INTERFACES</span>
+<span class="c1"># ----------------------------------------------------------------</span>
+<span class="c1"># Vrfcheck1</span>
+<span class="c1"># Vrfcheck2</span>
+<span class="c1"># Vrfcheck3           Eth1/3</span>
 <span class="c1">#                    Eth1/14</span>
 <span class="c1">#                    Eth1/16</span>
 <span class="c1">#                    Eth1/17</span>
-<span class="c1">#Vrfcheck4           Eth1/5</span>
+<span class="c1"># Vrfcheck4           Eth1/5</span>
 <span class="c1">#                    Eth1/6</span>
 <span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configuring vrf deleted state</span>
 <span class="w">  </span><span class="nt">dellemc.enterprise_sonic.sonic_vrfs</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
-<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vrfcheck4</span>
-<span class="w">       </span><span class="nt">members</span><span class="p">:</span>
-<span class="w">         </span><span class="nt">interfaces</span><span class="p">:</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/6</span>
-<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vrfcheck3</span>
-<span class="w">       </span><span class="nt">members</span><span class="p">:</span>
-<span class="w">         </span><span class="nt">interfaces</span><span class="p">:</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/3</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/14</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vrfcheck4</span>
+<span class="w">        </span><span class="nt">members</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">interfaces</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/6</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vrfcheck3</span>
+<span class="w">        </span><span class="nt">members</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">interfaces</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/3</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/14</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deleted</span>
 <span class="c1">#</span>
 <span class="c1"># After state:</span>
 <span class="c1"># ------------</span>
 <span class="c1">#</span>
-<span class="c1">#show ip vrf</span>
-<span class="c1">#VRF-NAME            INTERFACES</span>
-<span class="c1">#----------------------------------------------------------------</span>
-<span class="c1">#Vrfcheck1</span>
-<span class="c1">#Vrfcheck2</span>
-<span class="c1">#Vrfcheck3           Eth1/16</span>
+<span class="c1"># show ip vrf</span>
+<span class="c1"># VRF-NAME            INTERFACES</span>
+<span class="c1"># ----------------------------------------------------------------</span>
+<span class="c1"># Vrfcheck1</span>
+<span class="c1"># Vrfcheck2</span>
+<span class="c1"># Vrfcheck3           Eth1/16</span>
 <span class="c1">#                    Eth1/17</span>
-<span class="c1">#Vrfcheck4           Eth1/5</span>
+<span class="c1"># Vrfcheck4           Eth1/5</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
-<span class="c1"># Using merged</span>
+<span class="c1"># Using &quot;merged&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
-<span class="c1">#show ip vrf</span>
-<span class="c1">#VRF-NAME            INTERFACES</span>
-<span class="c1">#----------------------------------------------------------------</span>
-<span class="c1">#Vrfcheck1</span>
-<span class="c1">#Vrfcheck2</span>
-<span class="c1">#Vrfcheck3           Eth1/16</span>
+<span class="c1"># show ip vrf</span>
+<span class="c1"># VRF-NAME            INTERFACES</span>
+<span class="c1"># ----------------------------------------------------------------</span>
+<span class="c1"># Vrfcheck1</span>
+<span class="c1"># Vrfcheck2</span>
+<span class="c1"># Vrfcheck3           Eth1/16</span>
 <span class="c1">#                    Eth1/17</span>
-<span class="c1">#Vrfcheck4</span>
+<span class="c1"># Vrfcheck4</span>
 <span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configuring vrf merged state</span>
 <span class="w">  </span><span class="nt">dellemc.enterprise_sonic.sonic_vrfs</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
-<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vrfcheck4</span>
-<span class="w">       </span><span class="nt">members</span><span class="p">:</span>
-<span class="w">         </span><span class="nt">interfaces</span><span class="p">:</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/5</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/6</span>
-<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vrfcheck3</span>
-<span class="w">       </span><span class="nt">members</span><span class="p">:</span>
-<span class="w">         </span><span class="nt">interfaces</span><span class="p">:</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/3</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/14</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vrfcheck4</span>
+<span class="w">        </span><span class="nt">members</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">interfaces</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/5</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/6</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vrfcheck3</span>
+<span class="w">        </span><span class="nt">members</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">interfaces</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/3</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Eth1/14</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">merged</span>
 <span class="c1">#</span>
 <span class="c1"># After state:</span>
 <span class="c1"># ------------</span>
 <span class="c1">#</span>
-<span class="c1">#show ip vrf</span>
-<span class="c1">#VRF-NAME            INTERFACES</span>
-<span class="c1">#----------------------------------------------------------------</span>
-<span class="c1">#Vrfcheck1</span>
-<span class="c1">#Vrfcheck2</span>
-<span class="c1">#Vrfcheck3           Eth1/3</span>
+<span class="c1"># show ip vrf</span>
+<span class="c1"># VRF-NAME            INTERFACES</span>
+<span class="c1"># ----------------------------------------------------------------</span>
+<span class="c1"># Vrfcheck1</span>
+<span class="c1"># Vrfcheck2</span>
+<span class="c1"># Vrfcheck3           Eth1/3</span>
 <span class="c1">#                    Eth1/14</span>
 <span class="c1">#                    Eth1/16</span>
 <span class="c1">#                    Eth1/17</span>
-<span class="c1">#Vrfcheck4           Eth1/5</span>
+<span class="c1"># Vrfcheck4           Eth1/5</span>
 <span class="c1">#                    Eth1/6</span>
 <span class="c1">#</span>
-<span class="c1"># Using overridden</span>
+<span class="c1"># Using &quot;overridden&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
-<span class="c1">#show ip vrf</span>
-<span class="c1">#VRF-NAME            INTERFACES</span>
-<span class="c1">#----------------------------------------------------------------</span>
-<span class="c1">#Vrfcheck1</span>
-<span class="c1">#Vrfcheck2</span>
-<span class="c1">#Vrfcheck3           Eth1/7</span>
+<span class="c1"># show ip vrf</span>
+<span class="c1"># VRF-NAME            INTERFACES</span>
+<span class="c1"># ----------------------------------------------------------------</span>
+<span class="c1"># Vrfcheck1</span>
+<span class="c1"># Vrfcheck2</span>
+<span class="c1"># Vrfcheck3           Eth1/7</span>
 <span class="c1">#                    Eth1/8</span>
 <span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Overridden VRF configuration</span>
@@ -609,26 +606,26 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># After state:</span>
 <span class="c1"># ------------</span>
 <span class="c1">#</span>
-<span class="c1">#show ip vrf</span>
-<span class="c1">#VRF-NAME            INTERFACES</span>
-<span class="c1">#----------------------------------------------------------------</span>
-<span class="c1">#Vrfcheck1           Eth1/3</span>
+<span class="c1"># show ip vrf</span>
+<span class="c1"># VRF-NAME            INTERFACES</span>
+<span class="c1"># ----------------------------------------------------------------</span>
+<span class="c1"># Vrfcheck1           Eth1/3</span>
 <span class="c1">#                    Eth1/14</span>
-<span class="c1">#Vrfcheck2</span>
-<span class="c1">#Vrfcheck3           Eth1/5</span>
+<span class="c1"># Vrfcheck2</span>
+<span class="c1"># Vrfcheck3           Eth1/5</span>
 <span class="c1">#                    Eth1/6</span>
 <span class="c1">#</span>
-<span class="c1"># Using replaced</span>
+<span class="c1"># Using &quot;replaced&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
-<span class="c1">#show ip vrf</span>
-<span class="c1">#VRF-NAME            INTERFACES</span>
-<span class="c1">#----------------------------------------------------------------</span>
-<span class="c1">#Vrfcheck1           Eth1/3</span>
-<span class="c1">#Vrfcheck2</span>
-<span class="c1">#Vrfcheck3           Eth1/5</span>
+<span class="c1"># show ip vrf</span>
+<span class="c1"># VRF-NAME            INTERFACES</span>
+<span class="c1"># ----------------------------------------------------------------</span>
+<span class="c1"># Vrfcheck1           Eth1/3</span>
+<span class="c1"># Vrfcheck2</span>
+<span class="c1"># Vrfcheck3           Eth1/5</span>
 <span class="c1">#                    Eth1/6</span>
 <span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Replace VRF configuration</span>
@@ -650,13 +647,13 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># After state:</span>
 <span class="c1"># ------------</span>
 <span class="c1">#</span>
-<span class="c1">#show ip vrf</span>
-<span class="c1">#VRF-NAME            INTERFACES</span>
-<span class="c1">#----------------------------------------------------------------</span>
-<span class="c1">#Vrfcheck1           Eth1/3</span>
-<span class="c1">#                    Eth1/14</span>
-<span class="c1">#Vrfcheck2</span>
-<span class="c1">#Vrfcheck3           Eth1/5</span>
+<span class="c1"># show ip vrf</span>
+<span class="c1"># VRF-NAME            INTERFACES</span>
+<span class="c1"># ----------------------------------------------------------------</span>
+<span class="c1"># Vrfcheck1           Eth1/3</span>
+<span class="c1">#                     Eth1/14</span>
+<span class="c1"># Vrfcheck2</span>
+<span class="c1"># Vrfcheck3           Eth1/5</span>
 <span class="c1">#                    Eth1/6</span>
 <span class="c1">#</span>
 </pre></div>
@@ -731,7 +728,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 10, 2025.
+      <span class="lastupdated">Last updated on Oct 11, 2025.
       </span></p>
   </div>
 
