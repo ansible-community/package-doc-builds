@@ -424,6 +424,21 @@ the same module name.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-armor"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-slurp-module-parameter-armor"><strong>armor</strong></p>
+<a class="ansibleOptionLink" href="#parameter-armor" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in ansible-core 2.21</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>To safely deliver the data requested, armor it by base64 encoding it.</p>
+<p>This is mainly done to avoid issues with binary data or to preserve non-UTF-8 encodings, as the content will be converted to UTF-8 due to the JSON transport used.</p>
+<p>For windows support, check the ansible.windows collection.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-src"></div>
 <div class="ansibleOptionAnchor" id="parameter-path"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-slurp-module-parameter-src"><span id="ansible-collections-ansible-builtin-slurp-module-parameter-path"></span><strong>src</strong></p>
 <a class="ansibleOptionLink" href="#parameter-src" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: path</span></p>
@@ -502,6 +517,16 @@ the same module name.</p>
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">mounts</span><span class="o">[</span><span class="s1">&#39;content&#39;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">b64decode</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Find out what the remote machine&#39;s mounts are, no armor</span>
+<span class="w">  </span><span class="nt">ansible.builtin.slurp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/proc/mounts</span>
+<span class="w">    </span><span class="nt">armor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mounts</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print returned information</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">mounts</span><span class="o">[</span><span class="s1">&#39;content&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
 <span class="c1"># From the commandline, find the pid of the remote machine&#39;s sshd</span>
 <span class="c1"># $ ansible host -m ansible.builtin.slurp -a &#39;src=/var/run/sshd.pid&#39;</span>
 <span class="c1"># host | SUCCESS =&gt; {</span>
@@ -538,7 +563,7 @@ the same module name.</p>
 <div class="ansibleOptionAnchor" id="return-encoding"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-slurp-module-return-encoding"><strong>encoding</strong></p>
 <a class="ansibleOptionLink" href="#return-encoding" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Type of encoding used for file</p>
+<td><div class="ansible-option-cell"><p>Current encoding of the file content, it can be <code class="docutils literal notranslate"><span class="pre">base64</span></code> or <code class="docutils literal notranslate"><span class="pre">UTF-8</span></code> depending on the value of the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-slurp-module-parameter-armor"><span class="std std-ref"><span class="pre">armor</span></span></a></strong></code> option.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;base64&quot;</span></code></p>
 </div></td>
@@ -586,7 +611,7 @@ the same module name.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 17, 2025.
+      <span class="lastupdated">Last updated on Oct 18, 2025.
       </span></p>
   </div>
 
