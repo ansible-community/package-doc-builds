@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dellemc.enterprise_sonic.sonic_aaa module – Manage AAA configuration on SONiC &mdash; Ansible Community Documentation</title>
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -225,6 +232,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -313,13 +321,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -334,11 +342,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -346,6 +360,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -373,7 +389,7 @@
 <h1>dellemc.enterprise_sonic.sonic_aaa module – Manage AAA configuration on SONiC<a class="headerlink" href="#dellemc-enterprise-sonic-sonic-aaa-module-manage-aaa-configuration-on-sonic" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/dellemc/enterprise_sonic/">dellemc.enterprise_sonic collection</a> (version 3.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/dellemc/enterprise_sonic/">dellemc.enterprise_sonic collection</a> (version 3.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -395,10 +411,6 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>This module provides configuration management of AAA for devices running SONiC.</p></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This module has a corresponding <a class="reference internal" href="../../../plugins/action.html#action-plugins"><span class="std std-ref">action plugin</span></a>.</p>
-</div>
 </section>
 <section id="parameters">
 <h2><a class="toc-backref" href="#id2" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
@@ -431,12 +443,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-config/authentication/auth_method" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the order of the methods in which to authenticate login</p>
+<p>Any 1 choice may be specified or 2 choices consisting of local and another group may be specified</p>
+<p><code class="docutils literal notranslate"><span class="pre">cac-piv</span></code> option is only available in devices running sonic 4.5.0 and above.</p>
+<p>MFA is not applicable when <code class="docutils literal notranslate"><span class="pre">cac-piv</span></code> is configured as first factor for authentication.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ldap&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;local&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;radius&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;tacacs+&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;cac-piv&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -461,6 +477,31 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-config/authentication/login_mfa_console"></div><p class="ansible-option-title" id="ansible-collections-dellemc-enterprise-sonic-sonic-aaa-module-parameter-config-authentication-login-mfa-console"><strong>login_mfa_console</strong></p>
+<a class="ansibleOptionLink" href="#parameter-config/authentication/login_mfa_console" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in dellemc.enterprise_sonic 3.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Enable/disable MFA method for console access.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-config/authentication/mfa_auth_method"></div><p class="ansible-option-title" id="ansible-collections-dellemc-enterprise-sonic-sonic-aaa-module-parameter-config-authentication-mfa-auth-method"><strong>mfa_auth_method</strong></p>
+<a class="ansibleOptionLink" href="#parameter-config/authentication/mfa_auth_method" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in dellemc.enterprise_sonic 3.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies RSA SecurID as multi-factor authentication method.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;rsa-securid&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -596,13 +637,22 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using Merged</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using &quot;merged&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># sonic# show aaa</span>
 <span class="c1"># (No AAA configuration present)</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : None</span>
+<span class="c1"># Console Exempted               : None</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Merge AAA configuration</span>
 <span class="w">  </span><span class="nt">dellemc.enterprise_sonic.sonic_aaa</span><span class="p">:</span>
@@ -611,10 +661,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">        </span><span class="nt">auth_method</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ldap</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">radius</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tacacs+</span>
-<span class="w">        </span><span class="nt">console_auth_local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">        </span><span class="nt">failthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">        </span><span class="nt">console_auth_local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">failthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">mfa_auth_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;rsa-securid&#39;</span>
+<span class="w">        </span><span class="nt">login_mfa_console</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">authorization</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">commands_auth_method</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
@@ -643,7 +693,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># AAA Authentication Information</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># failthrough  : True</span>
-<span class="c1"># login-method : local, ldap, radius, tacacs+</span>
+<span class="c1"># login-method : local, ldap</span>
+<span class="c1"># login-mfa    : rsa-securid</span>
 <span class="c1"># console authentication  : local</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># AAA Authorization Information</span>
@@ -658,9 +709,18 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># passwd-method   : login</span>
 <span class="c1"># shadow-method   : ldap</span>
 <span class="c1"># sudoers-method  : local</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : rsa-securid</span>
+<span class="c1"># Console Exempted               : No</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 
-<span class="c1"># Using Replaced</span>
+<span class="c1"># Using &quot;replaced&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
@@ -670,7 +730,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># AAA Authentication Information</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># failthrough  : True</span>
-<span class="c1"># login-method : local, ldap, radius, tacacs+</span>
+<span class="c1"># login-method : local, ldap</span>
+<span class="c1"># login-mfa    : rsa-securid</span>
 <span class="c1"># console authentication  : local</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># AAA Authorization Information</span>
@@ -685,13 +746,25 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># passwd-method   : login</span>
 <span class="c1"># shadow-method   : ldap</span>
 <span class="c1"># sudoers-method  : local</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : rsa-securid</span>
+<span class="c1"># Console Exempted               : No</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Replace AAA configuration</span>
 <span class="w">  </span><span class="nt">dellemc.enterprise_sonic.sonic_aaa</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">authentication</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">console_auth_local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">        </span><span class="nt">failthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">        </span><span class="nt">auth_method</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cac-piv</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<span class="w">        </span><span class="nt">console_auth_local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">failthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">      </span><span class="nt">authorization</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">commands_auth_method</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
@@ -708,7 +781,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># AAA Authentication Information</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># failthrough  : False</span>
-<span class="c1"># login-method :</span>
+<span class="c1"># login-method : cac-piv, local</span>
+<span class="c1"># login-mfa    : None</span>
 <span class="c1"># console authentication  : local</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># AAA Authorization Information</span>
@@ -718,9 +792,18 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># AAA Name-Service Information</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># group-method    : ldap</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : None</span>
+<span class="c1"># Console Exempted               : None</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 
-<span class="c1"># Using Overridden</span>
+<span class="c1"># Using &quot;overridden&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
@@ -730,7 +813,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># AAA Authentication Information</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># failthrough  : True</span>
-<span class="c1"># login-method : local, ldap, radius, tacacs+</span>
+<span class="c1"># login-method : local, ldap</span>
+<span class="c1"># login-mfa    : rsa-securid</span>
 <span class="c1"># console authentication  : local</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># AAA Authorization Information</span>
@@ -745,6 +829,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># passwd-method   : login</span>
 <span class="c1"># shadow-method   : ldap</span>
 <span class="c1"># sudoers-method  : local</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : rsa-securid</span>
+<span class="c1"># Console Exempted               : Yes</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Override AAA configuration</span>
 <span class="w">  </span><span class="nt">dellemc.enterprise_sonic.sonic_aaa</span><span class="p">:</span>
@@ -752,8 +845,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">      </span><span class="nt">authentication</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">auth_method</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tacacs+</span>
-<span class="w">        </span><span class="nt">console_auth_local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">        </span><span class="nt">failthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">        </span><span class="nt">console_auth_local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">failthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">mfa_auth_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;rsa-securid&#39;</span>
+<span class="w">        </span><span class="nt">login_mfa_console</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overridden</span>
 
 <span class="c1"># After state:</span>
@@ -765,10 +860,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># failthrough  : True</span>
 <span class="c1"># login-method : tacacs+</span>
+<span class="c1"># login-mfa    : rsa-securid</span>
 <span class="c1"># console authentication  : local</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : rsa-securid</span>
+<span class="c1"># Console Exempted               : No</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 
-<span class="c1"># Using Deleted</span>
+<span class="c1"># Using &quot;deleted&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
@@ -778,7 +883,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># AAA Authentication Information</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># failthrough  : True</span>
-<span class="c1"># login-method : local, ldap, radius, tacacs+</span>
+<span class="c1"># login-method : local, ldap</span>
+<span class="c1"># login-mfa    : rsa-securid</span>
 <span class="c1"># console authentication  : local</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># AAA Authorization Information</span>
@@ -793,6 +899,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># passwd-method   : login</span>
 <span class="c1"># shadow-method   : ldap</span>
 <span class="c1"># sudoers-method  : local</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : rsa-securid</span>
+<span class="c1"># Console Exempted               : No</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete AAA individual attributes</span>
 <span class="w">  </span><span class="nt">dellemc.enterprise_sonic.sonic_aaa</span><span class="p">:</span>
@@ -801,10 +916,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">        </span><span class="nt">auth_method</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ldap</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">radius</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tacacs+</span>
-<span class="w">        </span><span class="nt">console_auth_local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">        </span><span class="nt">failthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">        </span><span class="nt">console_auth_local</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">failthrough</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">mfa_auth_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;rsa-securid&#39;</span>
+<span class="w">        </span><span class="nt">login_mfa_console</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">authorization</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">commands_auth_method</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
@@ -830,9 +945,18 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#</span>
 <span class="c1"># sonic# show aaa</span>
 <span class="c1"># (No AAA configuration present)</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : None</span>
+<span class="c1"># Console Exempted               : None</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 
-<span class="c1"># Using Deleted</span>
+<span class="c1"># Using &quot;deleted&quot; state</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
@@ -842,7 +966,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># AAA Authentication Information</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># failthrough  : True</span>
-<span class="c1"># login-method : local, ldap, radius, tacacs+</span>
+<span class="c1"># login-method : local, ldap</span>
+<span class="c1"># login-mfa    : rsa-securid</span>
 <span class="c1"># console authentication  : local</span>
 <span class="c1"># ---------------------------------------------------------</span>
 <span class="c1"># AAA Authorization Information</span>
@@ -857,6 +982,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># passwd-method   : login</span>
 <span class="c1"># shadow-method   : ldap</span>
 <span class="c1"># sudoers-method  : local</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : rsa-securid</span>
+<span class="c1"># Console Exempted               : Yes</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete all AAA configuration</span>
 <span class="w">  </span><span class="nt">dellemc.enterprise_sonic.sonic_aaa</span><span class="p">:</span>
@@ -868,6 +1002,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#</span>
 <span class="c1"># sonic# show aaa</span>
 <span class="c1"># (No AAA configuration present)</span>
+<span class="c1">#</span>
+<span class="c1"># sonic# show mfa</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># Multi-factor Authentication Information</span>
+<span class="c1"># ---------------------------------------------------------</span>
+<span class="c1"># MFA Authentication             : None</span>
+<span class="c1"># Console Exempted               : None</span>
+<span class="c1"># MFA Service Security Profile   : None</span>
+<span class="c1"># RSA SecurID Security Profile   : None</span>
 </pre></div>
 </div>
 </section>
@@ -883,29 +1026,26 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-after"></div><p class="ansible-option-title" id="ansible-collections-dellemc-enterprise-sonic-sonic-aaa-module-return-after"><strong>after</strong></p>
-<a class="ansibleOptionLink" href="#return-after" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<a class="ansibleOptionLink" href="#return-after" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The resulting configuration module invocation.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when changed</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-after%28generated%29"></div><p class="ansible-option-title" id="ansible-collections-dellemc-enterprise-sonic-sonic-aaa-module-return-after-generated"><strong>after(generated)</strong></p>
-<a class="ansibleOptionLink" href="#return-after%28generated%29" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<a class="ansibleOptionLink" href="#return-after%28generated%29" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The generated configuration module invocation.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <code class="docutils literal notranslate"><span class="pre">check_mode</span></code></p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format\n</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-before"></div><p class="ansible-option-title" id="ansible-collections-dellemc-enterprise-sonic-sonic-aaa-module-return-before"><strong>before</strong></p>
-<a class="ansibleOptionLink" href="#return-before" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<a class="ansibleOptionLink" href="#return-before" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The configuration prior to the module invocation.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -922,7 +1062,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <section id="authors">
 <h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>Shade Talabi (&#64;stalabi1)</p></li>
+<li><ol class="upperalpha simple" start="19">
+<li><p>Talabi (&#64;stalabi1)</p></li>
+</ol>
+</li>
 </ul>
 </section>
 <section id="collection-links">
@@ -949,7 +1092,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

@@ -100,6 +100,13 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
             selected="selected"
         >
@@ -354,8 +361,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#network-group-modules">NETWORK_GROUP_MODULES</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#old-plugin-cache-clearing">OLD_PLUGIN_CACHE_CLEARING</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pager">PAGER</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#paramiko-host-key-auto-add">PARAMIKO_HOST_KEY_AUTO_ADD</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#paramiko-look-for-keys">PARAMIKO_LOOK_FOR_KEYS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#persistent-command-timeout">PERSISTENT_COMMAND_TIMEOUT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#persistent-connect-retry-timeout">PERSISTENT_CONNECT_RETRY_TIMEOUT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#persistent-connect-timeout">PERSISTENT_CONNECT_TIMEOUT</a></li>
@@ -369,6 +374,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#run-vars-plugins">RUN_VARS_PLUGINS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#show-custom-stats">SHOW_CUSTOM_STATS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ssh-agent">SSH_AGENT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssh-agent-executable">SSH_AGENT_EXECUTABLE</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ssh-agent-key-lifetime">SSH_AGENT_KEY_LIFETIME</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#string-type-filters">STRING_TYPE_FILTERS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#system-warnings">SYSTEM_WARNINGS</a></li>
@@ -387,7 +393,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#win-async-startup-timeout">WIN_ASYNC_STARTUP_TIMEOUT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#worker-shutdown-poll-count">WORKER_SHUTDOWN_POLL_COUNT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#worker-shutdown-poll-delay">WORKER_SHUTDOWN_POLL_DELAY</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#wrap-stderr">WRAP_STDERR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#yaml-filename-extensions">YAML_FILENAME_EXTENSIONS</a></li>
 </ul>
 </li>
@@ -462,13 +467,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -483,11 +488,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -495,6 +506,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -771,11 +784,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2.22</p>
+<dt class="field-odd">Note<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This configuration is now deprecated and scheduled for removal.</p>
 </dd>
-<dt class="field-even">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-even"><p>This setting has no effect.</p>
+<dt class="field-even">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.22</p>
+</dd>
+<dt class="field-odd">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This setting has no effect.</p>
 </dd>
 </dl>
 </section>
@@ -797,16 +813,20 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-odd"><p>[defaults]</p>
 </dd>
 <dt class="field-even">Key<span class="colon">:</span></dt>
-<dd class="field-even"><p>cowsay_enabled_stencils
-:Version Added: 2.11</p>
+<dd class="field-even"><p>cowsay_enabled_stencils</p>
+</dd>
+<dt class="field-odd">Version Added<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.11</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-6"></span><a class="reference internal" href="#envvar-ANSIBLE_COW_ACCEPTLIST"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_COW_ACCEPTLIST</span></code></a>
-:Version Added: 2.11</p>
+<dd class="field-odd"><p><span class="target" id="index-6"></span><a class="reference internal" href="#envvar-ANSIBLE_COW_ACCEPTLIST"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_COW_ACCEPTLIST</span></code></a></p>
+</dd>
+<dt class="field-even">Version Added<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.11</p>
 </dd>
 </dl>
 </dd>
@@ -1319,16 +1339,20 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-odd"><p>[defaults]</p>
 </dd>
 <dt class="field-even">Key<span class="colon">:</span></dt>
-<dd class="field-even"><p>callbacks_enabled
-:Version Added: 2.11</p>
+<dd class="field-even"><p>callbacks_enabled</p>
+</dd>
+<dt class="field-odd">Version Added<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.11</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-23"></span><a class="reference internal" href="#envvar-ANSIBLE_CALLBACKS_ENABLED"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_CALLBACKS_ENABLED</span></code></a>
-:Version Added: 2.11</p>
+<dd class="field-odd"><p><span class="target" id="index-23"></span><a class="reference internal" href="#envvar-ANSIBLE_CALLBACKS_ENABLED"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_CALLBACKS_ENABLED</span></code></a></p>
+</dd>
+<dt class="field-even">Version Added<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.11</p>
 </dd>
 </dl>
 </dd>
@@ -1402,16 +1426,20 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-odd"><p>[defaults]</p>
 </dd>
 <dt class="field-even">Key<span class="colon">:</span></dt>
-<dd class="field-even"><p>collections_path
-:Version Added: 2.10</p>
+<dd class="field-even"><p>collections_path</p>
+</dd>
+<dt class="field-odd">Version Added<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.10</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-25"></span><a class="reference internal" href="#envvar-ANSIBLE_COLLECTIONS_PATH"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_COLLECTIONS_PATH</span></code></a>
-:Version Added: 2.10</p>
+<dd class="field-odd"><p><span class="target" id="index-25"></span><a class="reference internal" href="#envvar-ANSIBLE_COLLECTIONS_PATH"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_COLLECTIONS_PATH</span></code></a></p>
+</dd>
+<dt class="field-even">Version Added<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.10</p>
 </dd>
 </dl>
 </dd>
@@ -2216,14 +2244,18 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-even"><p>2.23</p>
+<dt class="field-even">Note<span class="colon">:</span></dt>
+<dd class="field-even"><p>This configuration is now deprecated and scheduled for removal.
+You should update to a current alternative.</p>
 </dd>
-<dt class="field-odd">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This option is no longer used in the Ansible Core code base.</p>
+<dt class="field-odd">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.23</p>
 </dd>
-<dt class="field-even">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-even"><p>Lookup plugins are responsible for tagging strings containing templates to allow evaluation as a template.</p>
+<dt class="field-even">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-even"><p>This option is no longer used in the Ansible Core code base.</p>
+</dd>
+<dt class="field-odd">Current alternatives<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Lookup plugins are responsible for tagging strings containing templates to allow evaluation as a template.</p>
 </dd>
 </dl>
 </section>
@@ -2851,7 +2883,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-even"><p>pathlist</p>
 </dd>
 <dt class="field-odd">Default<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">/etc/ansible/hosts</span></code></p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">['/etc/ansible/hosts']</span></code></p>
 </dd>
 <dt class="field-even">Ini<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
@@ -2990,14 +3022,18 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-even"><p>2.23</p>
+<dt class="field-even">Note<span class="colon">:</span></dt>
+<dd class="field-even"><p>This configuration is now deprecated and scheduled for removal.
+You should update to a current alternative.</p>
 </dd>
-<dt class="field-odd">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Jinja2 extensions have been deprecated</p>
+<dt class="field-odd">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.23</p>
 </dd>
-<dt class="field-even">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-even"><p>Ansible-supported Jinja plugins (tests, filters, lookups)</p>
+<dt class="field-even">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-even"><p>Jinja2 extensions have been deprecated</p>
+</dd>
+<dt class="field-odd">Current alternatives<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Ansible-supported Jinja plugins (tests, filters, lookups)</p>
 </dd>
 </dl>
 </section>
@@ -3033,14 +3069,18 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2.23</p>
+<dt class="field-odd">Note<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This configuration is now deprecated and scheduled for removal.
+You should update to a current alternative.</p>
 </dd>
-<dt class="field-even">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-even"><p>This option is no longer used in the Ansible Core code base.</p>
+<dt class="field-even">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.23</p>
 </dd>
-<dt class="field-odd">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Jinja2 native mode is now the default and only option.</p>
+<dt class="field-odd">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This option is no longer used in the Ansible Core code base.</p>
+</dd>
+<dt class="field-even">Current alternatives<span class="colon">:</span></dt>
+<dd class="field-even"><p>Jinja2 native mode is now the default and only option.</p>
 </dd>
 </dl>
 </section>
@@ -3107,14 +3147,18 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2.22</p>
+<dt class="field-odd">Note<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This configuration is now deprecated and scheduled for removal.
+You should update to a current alternative.</p>
 </dd>
-<dt class="field-even">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-even"><p>This option was moved to the plugin itself</p>
+<dt class="field-even">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.22</p>
 </dd>
-<dt class="field-odd">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Use the option from the plugin itself.</p>
+<dt class="field-odd">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This option was moved to the plugin itself</p>
+</dd>
+<dt class="field-even">Current alternatives<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use the option from the plugin itself.</p>
 </dd>
 </dl>
 </section>
@@ -3280,7 +3324,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <span id="id86"></span><h3>DEFAULT_MANAGED_STR<a class="headerlink" href="#default-managed-str" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Sets the macro for the ‘ansible_managed’ variable available for <a class="reference external" href="https://docs.ansible.com/ansible/11/collections/ansible/builtin/template_module.html#ansible-collections-ansible-builtin-template-module" title="(in Ansible v11)"><span class="xref std std-ref">ansible_collections.ansible.builtin.template_module</span></a> and <a class="reference external" href="https://docs.ansible.com/ansible/11/collections/ansible/windows/win_template_module.html#ansible-collections-ansible-windows-win-template-module" title="(in Ansible v11)"><span class="xref std std-ref">ansible_collections.ansible.windows.win_template_module</span></a>.  This is only relevant to those two modules.</p>
+<dd class="field-odd"><p>Sets the macro for the ‘ansible_managed’ variable available for <a class="reference external" href="https://docs.ansible.com/ansible/12/collections/ansible/builtin/template_module.html#ansible-collections-ansible-builtin-template-module" title="(in Ansible v12)"><span class="xref std std-ref">ansible_collections.ansible.builtin.template_module</span></a> and <a class="reference external" href="https://docs.ansible.com/ansible/12/collections/ansible/windows/win_template_module.html#ansible-collections-ansible-windows-win-template-module" title="(in Ansible v12)"><span class="xref std std-ref">ansible_collections.ansible.windows.win_template_module</span></a>.  This is only relevant to those two modules.</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Ansible</span> <span class="pre">managed</span></code></p>
@@ -3294,6 +3338,19 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-even"><p>ansible_managed</p>
 </dd>
 </dl>
+</dd>
+<dt class="field-even">Note<span class="colon">:</span></dt>
+<dd class="field-even"><p>This configuration is now deprecated and scheduled for removal.
+You should update to a current alternative.</p>
+</dd>
+<dt class="field-odd">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.23</p>
+</dd>
+<dt class="field-even">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <cite>ansible_managed</cite> variable can be set just like any other variable, or a different variable can be used.</p>
+</dd>
+<dt class="field-odd">Current alternatives<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Set the <cite>ansible_managed</cite> variable, or use any custom variable in templates.</p>
 </dd>
 </dl>
 </section>
@@ -3530,8 +3587,10 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">name<span class="colon">:</span></dt>
-<dd class="field-odd"><p><cite>ansible_no_target_syslog</cite>
-:Version Added: 2.10</p>
+<dd class="field-odd"><p><cite>ansible_no_target_syslog</cite></p>
+</dd>
+<dt class="field-even">Version Added<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.10</p>
 </dd>
 </dl>
 </dd>
@@ -3566,14 +3625,18 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-even"><p>2.23</p>
+<dt class="field-even">Note<span class="colon">:</span></dt>
+<dd class="field-even"><p>This configuration is now deprecated and scheduled for removal.
+You should update to a current alternative.</p>
 </dd>
-<dt class="field-odd">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This option is no longer used in the Ansible Core code base.</p>
+<dt class="field-odd">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.23</p>
 </dd>
-<dt class="field-even">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-even"><p>There is no alternative at the moment. A different mechanism would have to be implemented in the current code base.</p>
+<dt class="field-even">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-even"><p>This option is no longer used in the Ansible Core code base.</p>
+</dd>
+<dt class="field-odd">Current alternatives<span class="colon">:</span></dt>
+<dd class="field-odd"><p>There is no alternative at the moment. A different mechanism would have to be implemented in the current code base.</p>
 </dd>
 </dl>
 </section>
@@ -3767,7 +3830,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-even"><p>list</p>
 </dd>
 <dt class="field-odd">Default<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">fuse,</span> <span class="pre">nfs,</span> <span class="pre">vboxsf,</span> <span class="pre">ramfs,</span> <span class="pre">9p,</span> <span class="pre">vfat</span></code></p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">['fuse',</span> <span class="pre">'nfs',</span> <span class="pre">'vboxsf',</span> <span class="pre">'ramfs',</span> <span class="pre">'9p',</span> <span class="pre">'vfat']</span></code></p>
 </dd>
 <dt class="field-even">Ini<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
@@ -3782,8 +3845,10 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-96"></span><a class="reference internal" href="#envvar-ANSIBLE_SELINUX_SPECIAL_FS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SELINUX_SPECIAL_FS</span></code></a>
-:Version Added: 2.9</p>
+<dd class="field-odd"><p><span class="target" id="index-96"></span><a class="reference internal" href="#envvar-ANSIBLE_SELINUX_SPECIAL_FS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SELINUX_SPECIAL_FS</span></code></a></p>
+</dd>
+<dt class="field-even">Version Added<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.9</p>
 </dd>
 </dl>
 </dd>
@@ -4035,7 +4100,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <span id="id111"></span><h3>DEFAULT_TRANSPORT<a class="headerlink" href="#default-transport" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Can be any connection plugin available to your ansible installation. There is also a (DEPRECATED) special ‘smart’ option, that will toggle between ‘ssh’ and ‘paramiko’ depending on controller OS and ssh versions.</p>
+<dd class="field-odd"><p>Can be any connection plugin available to your ansible installation.</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">ssh</span></code></p>
@@ -4091,14 +4156,18 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2.23</p>
+<dt class="field-odd">Note<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This configuration is now deprecated and scheduled for removal.
+You should update to a current alternative.</p>
 </dd>
-<dt class="field-even">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-even"><p>This option is no longer used in the Ansible Core code base.</p>
+<dt class="field-even">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.23</p>
 </dd>
-<dt class="field-odd">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-odd"><p>There is no alternative at the moment. A different mechanism would have to be implemented in the current code base.</p>
+<dt class="field-odd">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This option is no longer used in the Ansible Core code base.</p>
+</dd>
+<dt class="field-even">Current alternatives<span class="colon">:</span></dt>
+<dd class="field-even"><p>There is no alternative at the moment. A different mechanism would have to be implemented in the current code base.</p>
 </dd>
 </dl>
 </section>
@@ -4339,8 +4408,10 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">name<span class="colon">:</span></dt>
-<dd class="field-odd"><p><cite>ansible_deprecation_warnings</cite>
-:Version Added: 2.19</p>
+<dd class="field-odd"><p><cite>ansible_deprecation_warnings</cite></p>
+</dd>
+<dt class="field-even">Version Added<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.19</p>
 </dd>
 </dl>
 </dd>
@@ -4514,13 +4585,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-even"><p>list</p>
 </dd>
 <dt class="field-odd">Default<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">never</span></code></p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">['never']</span></code></p>
 </dd>
 <dt class="field-even">Choices<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p>error</p></li>
 <li><p>warning</p></li>
 <li><p>deprecated</p></li>
+<li><p>deprecated_value</p></li>
 <li><p>always</p></li>
 <li><p>never</p></li>
 </ul>
@@ -4673,8 +4745,10 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-odd"><p>[defaults]</p>
 </dd>
 <dt class="field-even">Key<span class="colon">:</span></dt>
-<dd class="field-even"><p>editor
-:Version Added: 2.15</p>
+<dd class="field-even"><p>editor</p>
+</dd>
+<dt class="field-odd">Version Added<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.15</p>
 </dd>
 </dl>
 </dd>
@@ -5488,7 +5562,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <span id="id155"></span><h3>INTERPRETER_PYTHON<a class="headerlink" href="#interpreter-python" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Path to the Python interpreter to be used for module execution on remote targets, or an automatic discovery mode. Supported discovery modes are <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default), <code class="docutils literal notranslate"><span class="pre">auto_silent</span></code>, <code class="docutils literal notranslate"><span class="pre">auto_legacy</span></code>, and <code class="docutils literal notranslate"><span class="pre">auto_legacy_silent</span></code>. All discovery modes match against an ordered list of well-known Python interpreter locations. The fallback behavior will issue a warning that the interpreter should be set explicitly (since interpreters installed later may change which one is used). This warning behavior can be disabled by setting <code class="docutils literal notranslate"><span class="pre">auto_silent</span></code>. The <code class="docutils literal notranslate"><span class="pre">auto_legacy</span></code> modes are deprecated and behave the same as their respective <code class="docutils literal notranslate"><span class="pre">auto</span></code> modes. They exist for backward-compatibility with older Ansible releases that always defaulted to <code class="docutils literal notranslate"><span class="pre">/usr/bin/python3</span></code>, which will use that interpreter if present.</p>
+<dd class="field-odd"><p>Path to the Python interpreter to be used for module execution on remote targets, or an automatic discovery mode. Supported discovery modes are <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default), and <code class="docutils literal notranslate"><span class="pre">auto_silent</span></code>. All discovery modes match against an ordered list of well-known Python interpreter locations. The fallback behavior will issue a warning that the interpreter should be set explicitly (since interpreters installed later may change which one is used). This warning behavior can be disabled by setting <code class="docutils literal notranslate"><span class="pre">auto_silent</span></code>. The <code class="docutils literal notranslate"><span class="pre">auto_legacy*</span></code> modes are removed. They exist for backward-compatibility with older Ansible releases that always defaulted to <code class="docutils literal notranslate"><span class="pre">/usr/bin/python3</span></code>, which will use that interpreter if present.</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p>
@@ -5529,7 +5603,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-odd"><p>list</p>
 </dd>
 <dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">['python3.13',</span> <span class="pre">'python3.12',</span> <span class="pre">'python3.11',</span> <span class="pre">'python3.10',</span> <span class="pre">'python3.9',</span> <span class="pre">'python3.8',</span> <span class="pre">'/usr/bin/python3',</span> <span class="pre">'python3']</span></code></p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">['python3.14',</span> <span class="pre">'python3.13',</span> <span class="pre">'python3.12',</span> <span class="pre">'python3.11',</span> <span class="pre">'python3.10',</span> <span class="pre">'python3.9',</span> <span class="pre">'/usr/bin/python3',</span> <span class="pre">'python3']</span></code></p>
 </dd>
 <dt class="field-odd">Version Added<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2.8</p>
@@ -5683,7 +5757,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-even"><p>list</p>
 </dd>
 <dt class="field-odd">Default<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">{{(REJECT_EXTS</span> <span class="pre">+</span> <span class="pre">('.orig',</span> <span class="pre">'.cfg',</span> <span class="pre">'.retry'))}}</span></code></p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">REJECT_EXTS</span> <span class="pre">+</span> <span class="pre">['.orig',</span> <span class="pre">'.cfg',</span> <span class="pre">'.retry']</span> <span class="pre">}}</span></code></p>
 </dd>
 <dt class="field-even">Ini<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
@@ -5930,7 +6004,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-even"><p>list</p>
 </dd>
 <dt class="field-odd">Default<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">{{(REJECT_EXTS</span> <span class="pre">+</span> <span class="pre">('.yaml',</span> <span class="pre">'.yml',</span> <span class="pre">'.ini'))}}</span></code></p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">REJECT_EXTS</span> <span class="pre">+</span> <span class="pre">['.yaml',</span> <span class="pre">'.yml',</span> <span class="pre">'.ini']</span> <span class="pre">}}</span></code></p>
 </dd>
 <dt class="field-even">Ini<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
@@ -6087,8 +6161,10 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dd class="field-odd"><p>[defaults]</p>
 </dd>
 <dt class="field-even">Key<span class="colon">:</span></dt>
-<dd class="field-even"><p>pager
-:Version Added: 2.15</p>
+<dd class="field-even"><p>pager</p>
+</dd>
+<dt class="field-odd">Version Added<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.15</p>
 </dd>
 </dl>
 </dd>
@@ -6113,82 +6189,8 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd>
 </dl>
 </section>
-<section id="paramiko-host-key-auto-add">
-<span id="id174"></span><h3>PARAMIKO_HOST_KEY_AUTO_ADD<a class="headerlink" href="#paramiko-host-key-auto-add" title="Link to this heading"></a></h3>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt class="field-odd">Ini<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="field-list simple">
-<dt class="field-odd">Section<span class="colon">:</span></dt>
-<dd class="field-odd"><p>[paramiko_connection]</p>
-</dd>
-<dt class="field-even">Key<span class="colon">:</span></dt>
-<dd class="field-even"><p>host_key_auto_add</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Environment<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="field-list simple">
-<dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-168"></span><a class="reference internal" href="#envvar-ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD</span></code></a></p>
-</dd>
-</dl>
-</dd>
-<dt class="field-odd">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2.20</p>
-</dd>
-<dt class="field-even">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-even"><p>This option was moved to the plugin itself</p>
-</dd>
-<dt class="field-odd">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Use the option from the plugin itself.</p>
-</dd>
-</dl>
-</section>
-<section id="paramiko-look-for-keys">
-<span id="id175"></span><h3>PARAMIKO_LOOK_FOR_KEYS<a class="headerlink" href="#paramiko-look-for-keys" title="Link to this heading"></a></h3>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-<dt class="field-even">Default<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-</dd>
-<dt class="field-odd">Ini<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="field-list simple">
-<dt class="field-odd">Section<span class="colon">:</span></dt>
-<dd class="field-odd"><p>[paramiko_connection]</p>
-</dd>
-<dt class="field-even">Key<span class="colon">:</span></dt>
-<dd class="field-even"><p>look_for_keys</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Environment<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="field-list simple">
-<dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-169"></span><a class="reference internal" href="#envvar-ANSIBLE_PARAMIKO_LOOK_FOR_KEYS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PARAMIKO_LOOK_FOR_KEYS</span></code></a></p>
-</dd>
-</dl>
-</dd>
-<dt class="field-odd">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2.20</p>
-</dd>
-<dt class="field-even">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-even"><p>This option was moved to the plugin itself</p>
-</dd>
-<dt class="field-odd">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Use the option from the plugin itself.</p>
-</dd>
-</dl>
-</section>
 <section id="persistent-command-timeout">
-<span id="id176"></span><h3>PERSISTENT_COMMAND_TIMEOUT<a class="headerlink" href="#persistent-command-timeout" title="Link to this heading"></a></h3>
+<span id="id174"></span><h3>PERSISTENT_COMMAND_TIMEOUT<a class="headerlink" href="#persistent-command-timeout" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This controls the amount of time to wait for a response from a remote device before timing out a persistent connection.</p>
@@ -6212,14 +6214,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-170"></span><a class="reference internal" href="#envvar-ANSIBLE_PERSISTENT_COMMAND_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_COMMAND_TIMEOUT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-168"></span><a class="reference internal" href="#envvar-ANSIBLE_PERSISTENT_COMMAND_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_COMMAND_TIMEOUT</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="persistent-connect-retry-timeout">
-<span id="id177"></span><h3>PERSISTENT_CONNECT_RETRY_TIMEOUT<a class="headerlink" href="#persistent-connect-retry-timeout" title="Link to this heading"></a></h3>
+<span id="id175"></span><h3>PERSISTENT_CONNECT_RETRY_TIMEOUT<a class="headerlink" href="#persistent-connect-retry-timeout" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This controls the retry timeout for persistent connection to connect to the local domain socket.</p>
@@ -6243,14 +6245,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-171"></span><a class="reference internal" href="#envvar-ANSIBLE_PERSISTENT_CONNECT_RETRY_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_CONNECT_RETRY_TIMEOUT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-169"></span><a class="reference internal" href="#envvar-ANSIBLE_PERSISTENT_CONNECT_RETRY_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_CONNECT_RETRY_TIMEOUT</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="persistent-connect-timeout">
-<span id="id178"></span><h3>PERSISTENT_CONNECT_TIMEOUT<a class="headerlink" href="#persistent-connect-timeout" title="Link to this heading"></a></h3>
+<span id="id176"></span><h3>PERSISTENT_CONNECT_TIMEOUT<a class="headerlink" href="#persistent-connect-timeout" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This controls how long the persistent connection will remain idle before it is destroyed.</p>
@@ -6274,14 +6276,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-172"></span><a class="reference internal" href="#envvar-ANSIBLE_PERSISTENT_CONNECT_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_CONNECT_TIMEOUT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-170"></span><a class="reference internal" href="#envvar-ANSIBLE_PERSISTENT_CONNECT_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_CONNECT_TIMEOUT</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="persistent-control-path-dir">
-<span id="id179"></span><h3>PERSISTENT_CONTROL_PATH_DIR<a class="headerlink" href="#persistent-control-path-dir" title="Link to this heading"></a></h3>
+<span id="id177"></span><h3>PERSISTENT_CONTROL_PATH_DIR<a class="headerlink" href="#persistent-control-path-dir" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Path to the socket to be used by the connection persistence system.</p>
@@ -6305,14 +6307,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-173"></span><a class="reference internal" href="#envvar-ANSIBLE_PERSISTENT_CONTROL_PATH_DIR"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_CONTROL_PATH_DIR</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-171"></span><a class="reference internal" href="#envvar-ANSIBLE_PERSISTENT_CONTROL_PATH_DIR"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PERSISTENT_CONTROL_PATH_DIR</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="playbook-dir">
-<span id="id180"></span><h3>PLAYBOOK_DIR<a class="headerlink" href="#playbook-dir" title="Link to this heading"></a></h3>
+<span id="id178"></span><h3>PLAYBOOK_DIR<a class="headerlink" href="#playbook-dir" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A number of non-playbook CLIs have a <code class="docutils literal notranslate"><span class="pre">--playbook-dir</span></code> argument; this sets the default value for it.</p>
@@ -6336,14 +6338,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-174"></span><a class="reference internal" href="#envvar-ANSIBLE_PLAYBOOK_DIR"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PLAYBOOK_DIR</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-172"></span><a class="reference internal" href="#envvar-ANSIBLE_PLAYBOOK_DIR"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PLAYBOOK_DIR</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="playbook-vars-root">
-<span id="id181"></span><h3>PLAYBOOK_VARS_ROOT<a class="headerlink" href="#playbook-vars-root" title="Link to this heading"></a></h3>
+<span id="id179"></span><h3>PLAYBOOK_VARS_ROOT<a class="headerlink" href="#playbook-vars-root" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This sets which playbook dirs will be used as a root to process vars plugins, which includes finding host_vars/group_vars.</p>
@@ -6389,14 +6391,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-175"></span><a class="reference internal" href="#envvar-ANSIBLE_PLAYBOOK_VARS_ROOT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PLAYBOOK_VARS_ROOT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-173"></span><a class="reference internal" href="#envvar-ANSIBLE_PLAYBOOK_VARS_ROOT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PLAYBOOK_VARS_ROOT</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="plugin-filters-cfg">
-<span id="id182"></span><h3>PLUGIN_FILTERS_CFG<a class="headerlink" href="#plugin-filters-cfg" title="Link to this heading"></a></h3>
+<span id="id180"></span><h3>PLUGIN_FILTERS_CFG<a class="headerlink" href="#plugin-filters-cfg" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A path to configuration for filtering which plugins installed on the system are allowed to be used. See <a class="reference internal" href="../module_plugin_guide/plugin_filtering_config.html#plugin-filtering-config"><span class="std std-ref">Rejecting modules</span></a> for details of the filter file’s format.  The default is /etc/ansible/plugin_filters.yml</p>
@@ -6423,7 +6425,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dl>
 </section>
 <section id="python-module-rlimit-nofile">
-<span id="id183"></span><h3>PYTHON_MODULE_RLIMIT_NOFILE<a class="headerlink" href="#python-module-rlimit-nofile" title="Link to this heading"></a></h3>
+<span id="id181"></span><h3>PYTHON_MODULE_RLIMIT_NOFILE<a class="headerlink" href="#python-module-rlimit-nofile" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Attempts to set RLIMIT_NOFILE soft limit to the specified value when executing Python modules (can speed up subprocess usage on Python 2.x. See <a class="reference external" href="https://bugs.python.org/issue11284">https://bugs.python.org/issue11284</a>). The value will be limited by the existing hard limit. Default value of 0 does not attempt to adjust existing system-defined limits.</p>
@@ -6447,7 +6449,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-176"></span><a class="reference internal" href="#envvar-ANSIBLE_PYTHON_MODULE_RLIMIT_NOFILE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PYTHON_MODULE_RLIMIT_NOFILE</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-174"></span><a class="reference internal" href="#envvar-ANSIBLE_PYTHON_MODULE_RLIMIT_NOFILE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PYTHON_MODULE_RLIMIT_NOFILE</span></code></a></p>
 </dd>
 </dl>
 </dd>
@@ -6461,7 +6463,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dl>
 </section>
 <section id="retry-files-enabled">
-<span id="id184"></span><h3>RETRY_FILES_ENABLED<a class="headerlink" href="#retry-files-enabled" title="Link to this heading"></a></h3>
+<span id="id182"></span><h3>RETRY_FILES_ENABLED<a class="headerlink" href="#retry-files-enabled" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This controls whether a failed Ansible playbook should create a .retry file.</p>
@@ -6485,14 +6487,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-177"></span><a class="reference internal" href="#envvar-ANSIBLE_RETRY_FILES_ENABLED"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_RETRY_FILES_ENABLED</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-175"></span><a class="reference internal" href="#envvar-ANSIBLE_RETRY_FILES_ENABLED"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_RETRY_FILES_ENABLED</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="retry-files-save-path">
-<span id="id185"></span><h3>RETRY_FILES_SAVE_PATH<a class="headerlink" href="#retry-files-save-path" title="Link to this heading"></a></h3>
+<span id="id183"></span><h3>RETRY_FILES_SAVE_PATH<a class="headerlink" href="#retry-files-save-path" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This sets the path in which Ansible will save .retry files when a playbook fails and retry files are enabled. This file will be overwritten after each run with the list of failed hosts from all plays.</p>
@@ -6516,14 +6518,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-178"></span><a class="reference internal" href="#envvar-ANSIBLE_RETRY_FILES_SAVE_PATH"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_RETRY_FILES_SAVE_PATH</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-176"></span><a class="reference internal" href="#envvar-ANSIBLE_RETRY_FILES_SAVE_PATH"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_RETRY_FILES_SAVE_PATH</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="run-vars-plugins">
-<span id="id186"></span><h3>RUN_VARS_PLUGINS<a class="headerlink" href="#run-vars-plugins" title="Link to this heading"></a></h3>
+<span id="id184"></span><h3>RUN_VARS_PLUGINS<a class="headerlink" href="#run-vars-plugins" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This setting can be used to optimize vars_plugin usage depending on the user’s inventory size and play selection.</p>
@@ -6566,14 +6568,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-179"></span><a class="reference internal" href="#envvar-ANSIBLE_RUN_VARS_PLUGINS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_RUN_VARS_PLUGINS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-177"></span><a class="reference internal" href="#envvar-ANSIBLE_RUN_VARS_PLUGINS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_RUN_VARS_PLUGINS</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="show-custom-stats">
-<span id="id187"></span><h3>SHOW_CUSTOM_STATS<a class="headerlink" href="#show-custom-stats" title="Link to this heading"></a></h3>
+<span id="id185"></span><h3>SHOW_CUSTOM_STATS<a class="headerlink" href="#show-custom-stats" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This adds the custom stats set via the set_stats plugin to the default output.</p>
@@ -6597,14 +6599,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-180"></span><a class="reference internal" href="#envvar-ANSIBLE_SHOW_CUSTOM_STATS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SHOW_CUSTOM_STATS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-178"></span><a class="reference internal" href="#envvar-ANSIBLE_SHOW_CUSTOM_STATS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SHOW_CUSTOM_STATS</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="ssh-agent">
-<span id="id188"></span><h3>SSH_AGENT<a class="headerlink" href="#ssh-agent" title="Link to this heading"></a></h3>
+<span id="id186"></span><h3>SSH_AGENT<a class="headerlink" href="#ssh-agent" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Manage an SSH Agent via Ansible. A configuration of <code class="docutils literal notranslate"><span class="pre">none</span></code> will not interact with an agent, <code class="docutils literal notranslate"><span class="pre">auto</span></code> will start and destroy an agent via <code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code> binary during the run, and a path to an SSH_AUTH_SOCK will allow interaction with a pre-existing agent.</p>
@@ -6631,14 +6633,48 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-181"></span><a class="reference internal" href="#envvar-ANSIBLE_SSH_AGENT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SSH_AGENT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-179"></span><a class="reference internal" href="#envvar-ANSIBLE_SSH_AGENT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SSH_AGENT</span></code></a></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="ssh-agent-executable">
+<span id="id187"></span><h3>SSH_AGENT_EXECUTABLE<a class="headerlink" href="#ssh-agent-executable" title="Link to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>When <code class="docutils literal notranslate"><span class="pre">SSH_AGENT</span></code> is <code class="docutils literal notranslate"><span class="pre">auto</span></code>, the path or name of the ssh agent executable to start.</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code></p>
+</dd>
+<dt class="field-even">Version Added<span class="colon">:</span></dt>
+<dd class="field-even"><p>2.19</p>
+</dd>
+<dt class="field-odd">Ini<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">Section<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[connection]</p>
+</dd>
+<dt class="field-even">Key<span class="colon">:</span></dt>
+<dd class="field-even"><p>ssh_agent_executable</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Environment<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="field-list simple">
+<dt class="field-odd">Variable<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="target" id="index-180"></span><a class="reference internal" href="#envvar-ANSIBLE_SSH_AGENT_EXECUTABLE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SSH_AGENT_EXECUTABLE</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="ssh-agent-key-lifetime">
-<span id="id189"></span><h3>SSH_AGENT_KEY_LIFETIME<a class="headerlink" href="#ssh-agent-key-lifetime" title="Link to this heading"></a></h3>
+<span id="id188"></span><h3>SSH_AGENT_KEY_LIFETIME<a class="headerlink" href="#ssh-agent-key-lifetime" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>For keys inserted into an agent defined by <code class="docutils literal notranslate"><span class="pre">SSH_AGENT</span></code>, define a lifetime, in seconds, that the key may remain in the agent.</p>
@@ -6662,14 +6698,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-182"></span><a class="reference internal" href="#envvar-ANSIBLE_SSH_AGENT_KEY_LIFETIME"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SSH_AGENT_KEY_LIFETIME</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-181"></span><a class="reference internal" href="#envvar-ANSIBLE_SSH_AGENT_KEY_LIFETIME"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SSH_AGENT_KEY_LIFETIME</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="string-type-filters">
-<span id="id190"></span><h3>STRING_TYPE_FILTERS<a class="headerlink" href="#string-type-filters" title="Link to this heading"></a></h3>
+<span id="id189"></span><h3>STRING_TYPE_FILTERS<a class="headerlink" href="#string-type-filters" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This list of filters avoids ‘type conversion’ when templating variables. Useful when you want to avoid conversion into lists or dictionaries for JSON strings, for example.</p>
@@ -6693,23 +6729,27 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-183"></span><a class="reference internal" href="#envvar-ANSIBLE_STRING_TYPE_FILTERS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_STRING_TYPE_FILTERS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-182"></span><a class="reference internal" href="#envvar-ANSIBLE_STRING_TYPE_FILTERS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_STRING_TYPE_FILTERS</span></code></a></p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Deprecated in<span class="colon">:</span></dt>
-<dd class="field-even"><p>2.23</p>
+<dt class="field-even">Note<span class="colon">:</span></dt>
+<dd class="field-even"><p>This configuration is now deprecated and scheduled for removal.
+You should update to a current alternative.</p>
 </dd>
-<dt class="field-odd">Deprecated detail<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This option has no effect.</p>
+<dt class="field-odd">Scheduled removal<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2.23</p>
 </dd>
-<dt class="field-even">Deprecated alternatives<span class="colon">:</span></dt>
-<dd class="field-even"><p>None; native types returned from filters are always preserved.</p>
+<dt class="field-even">Deprecation reason<span class="colon">:</span></dt>
+<dd class="field-even"><p>This option has no effect.</p>
+</dd>
+<dt class="field-odd">Current alternatives<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None; native types returned from filters are always preserved.</p>
 </dd>
 </dl>
 </section>
 <section id="system-warnings">
-<span id="id191"></span><h3>SYSTEM_WARNINGS<a class="headerlink" href="#system-warnings" title="Link to this heading"></a></h3>
+<span id="id190"></span><h3>SYSTEM_WARNINGS<a class="headerlink" href="#system-warnings" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Allows disabling of warnings related to potential issues on the system running Ansible itself (not on the managed hosts). These may include warnings about third-party packages or other conditions that should be resolved if possible.</p>
@@ -6733,14 +6773,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-184"></span><a class="reference internal" href="#envvar-ANSIBLE_SYSTEM_WARNINGS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SYSTEM_WARNINGS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-183"></span><a class="reference internal" href="#envvar-ANSIBLE_SYSTEM_WARNINGS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SYSTEM_WARNINGS</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="tags-run">
-<span id="id192"></span><h3>TAGS_RUN<a class="headerlink" href="#tags-run" title="Link to this heading"></a></h3>
+<span id="id191"></span><h3>TAGS_RUN<a class="headerlink" href="#tags-run" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>default list of tags to run in your plays, Skip Tags has precedence.</p>
@@ -6767,14 +6807,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-185"></span><a class="reference internal" href="#envvar-ANSIBLE_RUN_TAGS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_RUN_TAGS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-184"></span><a class="reference internal" href="#envvar-ANSIBLE_RUN_TAGS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_RUN_TAGS</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="tags-skip">
-<span id="id193"></span><h3>TAGS_SKIP<a class="headerlink" href="#tags-skip" title="Link to this heading"></a></h3>
+<span id="id192"></span><h3>TAGS_SKIP<a class="headerlink" href="#tags-skip" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>default list of tags to skip in your plays, has precedence over Run Tags</p>
@@ -6801,14 +6841,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-186"></span><a class="reference internal" href="#envvar-ANSIBLE_SKIP_TAGS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SKIP_TAGS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-185"></span><a class="reference internal" href="#envvar-ANSIBLE_SKIP_TAGS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_SKIP_TAGS</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="target-log-info">
-<span id="id194"></span><h3>TARGET_LOG_INFO<a class="headerlink" href="#target-log-info" title="Link to this heading"></a></h3>
+<span id="id193"></span><h3>TARGET_LOG_INFO<a class="headerlink" href="#target-log-info" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A string to insert into target logging for tracking purposes</p>
@@ -6829,7 +6869,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-187"></span><a class="reference internal" href="#envvar-ANSIBLE_TARGET_LOG_INFO"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_TARGET_LOG_INFO</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-186"></span><a class="reference internal" href="#envvar-ANSIBLE_TARGET_LOG_INFO"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_TARGET_LOG_INFO</span></code></a></p>
 </dd>
 </dl>
 </dd>
@@ -6843,7 +6883,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dl>
 </section>
 <section id="task-debugger-ignore-errors">
-<span id="id195"></span><h3>TASK_DEBUGGER_IGNORE_ERRORS<a class="headerlink" href="#task-debugger-ignore-errors" title="Link to this heading"></a></h3>
+<span id="id194"></span><h3>TASK_DEBUGGER_IGNORE_ERRORS<a class="headerlink" href="#task-debugger-ignore-errors" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This option defines whether the task debugger will be invoked on a failed task when ignore_errors=True is specified. True specifies that the debugger will honor ignore_errors, and False will not honor ignore_errors.</p>
@@ -6870,14 +6910,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-188"></span><a class="reference internal" href="#envvar-ANSIBLE_TASK_DEBUGGER_IGNORE_ERRORS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_TASK_DEBUGGER_IGNORE_ERRORS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-187"></span><a class="reference internal" href="#envvar-ANSIBLE_TASK_DEBUGGER_IGNORE_ERRORS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_TASK_DEBUGGER_IGNORE_ERRORS</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="task-timeout">
-<span id="id196"></span><h3>TASK_TIMEOUT<a class="headerlink" href="#task-timeout" title="Link to this heading"></a></h3>
+<span id="id195"></span><h3>TASK_TIMEOUT<a class="headerlink" href="#task-timeout" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Set the maximum time (in seconds) for a task action to execute in. Timeout runs independently from templating or looping. It applies per each attempt of executing the task’s action and remains unchanged by the total time spent on a task. When the action execution exceeds the timeout, Ansible interrupts the process. This is registered as a failure due to outside circumstances, not a task failure, to receive appropriate response and recovery process. If set to 0 (the default) there is no timeout.</p>
@@ -6904,14 +6944,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-189"></span><a class="reference internal" href="#envvar-ANSIBLE_TASK_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_TASK_TIMEOUT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-188"></span><a class="reference internal" href="#envvar-ANSIBLE_TASK_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_TASK_TIMEOUT</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="transform-invalid-group-chars">
-<span id="id197"></span><h3>TRANSFORM_INVALID_GROUP_CHARS<a class="headerlink" href="#transform-invalid-group-chars" title="Link to this heading"></a></h3>
+<span id="id196"></span><h3>TRANSFORM_INVALID_GROUP_CHARS<a class="headerlink" href="#transform-invalid-group-chars" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Make ansible transform invalid characters in group names supplied by inventory sources.</p>
@@ -6966,14 +7006,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-190"></span><a class="reference internal" href="#envvar-ANSIBLE_TRANSFORM_INVALID_GROUP_CHARS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_TRANSFORM_INVALID_GROUP_CHARS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-189"></span><a class="reference internal" href="#envvar-ANSIBLE_TRANSFORM_INVALID_GROUP_CHARS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_TRANSFORM_INVALID_GROUP_CHARS</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="use-persistent-connections">
-<span id="id198"></span><h3>USE_PERSISTENT_CONNECTIONS<a class="headerlink" href="#use-persistent-connections" title="Link to this heading"></a></h3>
+<span id="id197"></span><h3>USE_PERSISTENT_CONNECTIONS<a class="headerlink" href="#use-persistent-connections" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Toggles the use of persistence for connections.</p>
@@ -6997,14 +7037,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-191"></span><a class="reference internal" href="#envvar-ANSIBLE_USE_PERSISTENT_CONNECTIONS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_USE_PERSISTENT_CONNECTIONS</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-190"></span><a class="reference internal" href="#envvar-ANSIBLE_USE_PERSISTENT_CONNECTIONS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_USE_PERSISTENT_CONNECTIONS</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="validate-action-group-metadata">
-<span id="id199"></span><h3>VALIDATE_ACTION_GROUP_METADATA<a class="headerlink" href="#validate-action-group-metadata" title="Link to this heading"></a></h3>
+<span id="id198"></span><h3>VALIDATE_ACTION_GROUP_METADATA<a class="headerlink" href="#validate-action-group-metadata" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A toggle to disable validating a collection’s ‘metadata’ entry for a module_defaults action group. Metadata containing unexpected fields or value types will produce a warning when this is True.</p>
@@ -7031,14 +7071,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-192"></span><a class="reference internal" href="#envvar-ANSIBLE_VALIDATE_ACTION_GROUP_METADATA"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VALIDATE_ACTION_GROUP_METADATA</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-191"></span><a class="reference internal" href="#envvar-ANSIBLE_VALIDATE_ACTION_GROUP_METADATA"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VALIDATE_ACTION_GROUP_METADATA</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="variable-plugins-enabled">
-<span id="id200"></span><h3>VARIABLE_PLUGINS_ENABLED<a class="headerlink" href="#variable-plugins-enabled" title="Link to this heading"></a></h3>
+<span id="id199"></span><h3>VARIABLE_PLUGINS_ENABLED<a class="headerlink" href="#variable-plugins-enabled" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Accept list for variable plugins that require it.</p>
@@ -7065,14 +7105,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-193"></span><a class="reference internal" href="#envvar-ANSIBLE_VARS_ENABLED"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VARS_ENABLED</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-192"></span><a class="reference internal" href="#envvar-ANSIBLE_VARS_ENABLED"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VARS_ENABLED</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="variable-precedence">
-<span id="id201"></span><h3>VARIABLE_PRECEDENCE<a class="headerlink" href="#variable-precedence" title="Link to this heading"></a></h3>
+<span id="id200"></span><h3>VARIABLE_PRECEDENCE<a class="headerlink" href="#variable-precedence" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Allows to change the group variable precedence merge order.</p>
@@ -7099,14 +7139,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-194"></span><a class="reference internal" href="#envvar-ANSIBLE_PRECEDENCE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PRECEDENCE</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-193"></span><a class="reference internal" href="#envvar-ANSIBLE_PRECEDENCE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_PRECEDENCE</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="vault-encrypt-salt">
-<span id="id202"></span><h3>VAULT_ENCRYPT_SALT<a class="headerlink" href="#vault-encrypt-salt" title="Link to this heading"></a></h3>
+<span id="id201"></span><h3>VAULT_ENCRYPT_SALT<a class="headerlink" href="#vault-encrypt-salt" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The salt to use for the vault encryption. If it is not provided, a random salt will be used.</p>
@@ -7130,14 +7170,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-195"></span><a class="reference internal" href="#envvar-ANSIBLE_VAULT_ENCRYPT_SALT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VAULT_ENCRYPT_SALT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-194"></span><a class="reference internal" href="#envvar-ANSIBLE_VAULT_ENCRYPT_SALT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VAULT_ENCRYPT_SALT</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="verbose-to-stderr">
-<span id="id203"></span><h3>VERBOSE_TO_STDERR<a class="headerlink" href="#verbose-to-stderr" title="Link to this heading"></a></h3>
+<span id="id202"></span><h3>VERBOSE_TO_STDERR<a class="headerlink" href="#verbose-to-stderr" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Force ‘verbose’ option to use stderr instead of stdout</p>
@@ -7164,14 +7204,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-196"></span><a class="reference internal" href="#envvar-ANSIBLE_VERBOSE_TO_STDERR"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VERBOSE_TO_STDERR</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-195"></span><a class="reference internal" href="#envvar-ANSIBLE_VERBOSE_TO_STDERR"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_VERBOSE_TO_STDERR</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="win-async-startup-timeout">
-<span id="id204"></span><h3>WIN_ASYNC_STARTUP_TIMEOUT<a class="headerlink" href="#win-async-startup-timeout" title="Link to this heading"></a></h3>
+<span id="id203"></span><h3>WIN_ASYNC_STARTUP_TIMEOUT<a class="headerlink" href="#win-async-startup-timeout" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>For asynchronous tasks in Ansible (covered in Asynchronous Actions and Polling), this is how long, in seconds, to wait for the task spawned by Ansible to connect back to the named pipe used on Windows systems. The default is 5 seconds. This can be too low on slower systems, or systems under heavy load. This is not the total time an async command can run for, but is a separate timeout to wait for an async command to start. The task will only start to be timed against its async_timeout once it has connected to the pipe, so the overall maximum duration the task can take will be extended by the amount specified here.</p>
@@ -7198,7 +7238,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-even">Environment<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-197"></span><a class="reference internal" href="#envvar-ANSIBLE_WIN_ASYNC_STARTUP_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_WIN_ASYNC_STARTUP_TIMEOUT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-196"></span><a class="reference internal" href="#envvar-ANSIBLE_WIN_ASYNC_STARTUP_TIMEOUT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_WIN_ASYNC_STARTUP_TIMEOUT</span></code></a></p>
 </dd>
 </dl>
 </dd>
@@ -7212,7 +7252,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dl>
 </section>
 <section id="worker-shutdown-poll-count">
-<span id="id205"></span><h3>WORKER_SHUTDOWN_POLL_COUNT<a class="headerlink" href="#worker-shutdown-poll-count" title="Link to this heading"></a></h3>
+<span id="id204"></span><h3>WORKER_SHUTDOWN_POLL_COUNT<a class="headerlink" href="#worker-shutdown-poll-count" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The maximum number of times to check Task Queue Manager worker processes to verify they have exited cleanly. After this limit is reached any worker processes still running will be terminated. This is for internal use only.</p>
@@ -7229,14 +7269,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-198"></span><a class="reference internal" href="#envvar-ANSIBLE_WORKER_SHUTDOWN_POLL_COUNT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_WORKER_SHUTDOWN_POLL_COUNT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-197"></span><a class="reference internal" href="#envvar-ANSIBLE_WORKER_SHUTDOWN_POLL_COUNT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_WORKER_SHUTDOWN_POLL_COUNT</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="worker-shutdown-poll-delay">
-<span id="id206"></span><h3>WORKER_SHUTDOWN_POLL_DELAY<a class="headerlink" href="#worker-shutdown-poll-delay" title="Link to this heading"></a></h3>
+<span id="id205"></span><h3>WORKER_SHUTDOWN_POLL_DELAY<a class="headerlink" href="#worker-shutdown-poll-delay" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of seconds to sleep between polling loops when checking Task Queue Manager worker processes to verify they have exited cleanly. This is for internal use only.</p>
@@ -7253,38 +7293,14 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-199"></span><a class="reference internal" href="#envvar-ANSIBLE_WORKER_SHUTDOWN_POLL_DELAY"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_WORKER_SHUTDOWN_POLL_DELAY</span></code></a></p>
-</dd>
-</dl>
-</dd>
-</dl>
-</section>
-<section id="wrap-stderr">
-<span id="id207"></span><h3>WRAP_STDERR<a class="headerlink" href="#wrap-stderr" title="Link to this heading"></a></h3>
-<dl class="field-list simple">
-<dt class="field-odd">Description<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Control line-wrapping behavior on console warnings and errors from default output callbacks (eases pattern-based output testing)</p>
-</dd>
-<dt class="field-even">Type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-<dt class="field-odd">Default<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt class="field-even">Version Added<span class="colon">:</span></dt>
-<dd class="field-even"><p>2.19</p>
-</dd>
-<dt class="field-odd">Environment<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="field-list simple">
-<dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-200"></span><a class="reference internal" href="#envvar-ANSIBLE_WRAP_STDERR"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_WRAP_STDERR</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-198"></span><a class="reference internal" href="#envvar-ANSIBLE_WORKER_SHUTDOWN_POLL_DELAY"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_WORKER_SHUTDOWN_POLL_DELAY</span></code></a></p>
 </dd>
 </dl>
 </dd>
 </dl>
 </section>
 <section id="yaml-filename-extensions">
-<span id="id208"></span><h3>YAML_FILENAME_EXTENSIONS<a class="headerlink" href="#yaml-filename-extensions" title="Link to this heading"></a></h3>
+<span id="id206"></span><h3>YAML_FILENAME_EXTENSIONS<a class="headerlink" href="#yaml-filename-extensions" title="Link to this heading"></a></h3>
 <dl class="field-list simple">
 <dt class="field-odd">Description<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Check all of these extensions when looking for ‘variable’ files which should be YAML or JSON or vaulted versions of these. This affects vars_files, include_vars, inventory and vars plugins among others.</p>
@@ -7308,7 +7324,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dt class="field-odd">Environment<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Variable<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="target" id="index-201"></span><a class="reference internal" href="#envvar-ANSIBLE_YAML_FILENAME_EXT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_YAML_FILENAME_EXT</span></code></a></p>
+<dd class="field-odd"><p><span class="target" id="index-199"></span><a class="reference internal" href="#envvar-ANSIBLE_YAML_FILENAME_EXT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ANSIBLE_YAML_FILENAME_EXT</span></code></a></p>
 </dd>
 </dl>
 </dd>
@@ -8141,7 +8157,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-ANSIBLE_TRANSPORT">
 <span class="sig-name descname"><span class="pre">ANSIBLE_TRANSPORT</span></span><a class="headerlink" href="#envvar-ANSIBLE_TRANSPORT" title="Link to this definition"></a></dt>
-<dd><p>Can be any connection plugin available to your ansible installation.There is also a (DEPRECATED) special ‘smart’ option, that will toggle between ‘ssh’ and ‘paramiko’ depending on controller OS and ssh versions.</p>
+<dd><p>Can be any connection plugin available to your ansible installation.</p>
 <p>See also <a class="reference internal" href="#default-transport"><span class="std std-ref">DEFAULT_TRANSPORT</span></a></p>
 </dd></dl>
 
@@ -8421,7 +8437,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-ANSIBLE_PYTHON_INTERPRETER">
 <span class="sig-name descname"><span class="pre">ANSIBLE_PYTHON_INTERPRETER</span></span><a class="headerlink" href="#envvar-ANSIBLE_PYTHON_INTERPRETER" title="Link to this definition"></a></dt>
-<dd><p>Path to the Python interpreter to be used for module execution on remote targets, or an automatic discovery mode. Supported discovery modes are <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default), <code class="docutils literal notranslate"><span class="pre">auto_silent</span></code>, <code class="docutils literal notranslate"><span class="pre">auto_legacy</span></code>, and <code class="docutils literal notranslate"><span class="pre">auto_legacy_silent</span></code>. All discovery modes match against an ordered list of well-known Python interpreter locations. The fallback behavior will issue a warning that the interpreter should be set explicitly (since interpreters installed later may change which one is used). This warning behavior can be disabled by setting <code class="docutils literal notranslate"><span class="pre">auto_silent</span></code>. The <code class="docutils literal notranslate"><span class="pre">auto_legacy</span></code> modes are deprecated and behave the same as their respective <code class="docutils literal notranslate"><span class="pre">auto</span></code> modes. They exist for backward-compatibility with older Ansible releases that always defaulted to <code class="docutils literal notranslate"><span class="pre">/usr/bin/python3</span></code>, which will use that interpreter if present.</p>
+<dd><p>Path to the Python interpreter to be used for module execution on remote targets, or an automatic discovery mode. Supported discovery modes are <code class="docutils literal notranslate"><span class="pre">auto</span></code> (the default), and <code class="docutils literal notranslate"><span class="pre">auto_silent</span></code>. All discovery modes match against an ordered list of well-known Python interpreter locations. The fallback behavior will issue a warning that the interpreter should be set explicitly (since interpreters installed later may change which one is used). This warning behavior can be disabled by setting <code class="docutils literal notranslate"><span class="pre">auto_silent</span></code>. The <code class="docutils literal notranslate"><span class="pre">auto_legacy*</span></code> modes are removed. They exist for backward-compatibility with older Ansible releases that always defaulted to <code class="docutils literal notranslate"><span class="pre">/usr/bin/python3</span></code>, which will use that interpreter if present.</p>
 <p>See also <a class="reference internal" href="#interpreter-python"><span class="std std-ref">INTERPRETER_PYTHON</span></a></p>
 </dd></dl>
 
@@ -8542,18 +8558,6 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd></dl>
 
 <dl class="std envvar">
-<dt class="sig sig-object std" id="envvar-ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD">
-<span class="sig-name descname"><span class="pre">ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD</span></span><a class="headerlink" href="#envvar-ANSIBLE_PARAMIKO_HOST_KEY_AUTO_ADD" title="Link to this definition"></a></dt>
-<dd><p>See also <a class="reference internal" href="#paramiko-host-key-auto-add"><span class="std std-ref">PARAMIKO_HOST_KEY_AUTO_ADD</span></a></p>
-</dd></dl>
-
-<dl class="std envvar">
-<dt class="sig sig-object std" id="envvar-ANSIBLE_PARAMIKO_LOOK_FOR_KEYS">
-<span class="sig-name descname"><span class="pre">ANSIBLE_PARAMIKO_LOOK_FOR_KEYS</span></span><a class="headerlink" href="#envvar-ANSIBLE_PARAMIKO_LOOK_FOR_KEYS" title="Link to this definition"></a></dt>
-<dd><p>See also <a class="reference internal" href="#paramiko-look-for-keys"><span class="std std-ref">PARAMIKO_LOOK_FOR_KEYS</span></a></p>
-</dd></dl>
-
-<dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-ANSIBLE_PERSISTENT_CONTROL_PATH_DIR">
 <span class="sig-name descname"><span class="pre">ANSIBLE_PERSISTENT_CONTROL_PATH_DIR</span></span><a class="headerlink" href="#envvar-ANSIBLE_PERSISTENT_CONTROL_PATH_DIR" title="Link to this definition"></a></dt>
 <dd><p>Path to the socket to be used by the connection persistence system.</p>
@@ -8635,6 +8639,13 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 <span class="sig-name descname"><span class="pre">ANSIBLE_SSH_AGENT</span></span><a class="headerlink" href="#envvar-ANSIBLE_SSH_AGENT" title="Link to this definition"></a></dt>
 <dd><p>Manage an SSH Agent via Ansible. A configuration of <code class="docutils literal notranslate"><span class="pre">none</span></code> will not interact with an agent, <code class="docutils literal notranslate"><span class="pre">auto</span></code> will start and destroy an agent via <code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code> binary during the run, and a path to an SSH_AUTH_SOCK will allow interaction with a pre-existing agent.</p>
 <p>See also <a class="reference internal" href="#ssh-agent"><span class="std std-ref">SSH_AGENT</span></a></p>
+</dd></dl>
+
+<dl class="std envvar">
+<dt class="sig sig-object std" id="envvar-ANSIBLE_SSH_AGENT_EXECUTABLE">
+<span class="sig-name descname"><span class="pre">ANSIBLE_SSH_AGENT_EXECUTABLE</span></span><a class="headerlink" href="#envvar-ANSIBLE_SSH_AGENT_EXECUTABLE" title="Link to this definition"></a></dt>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">SSH_AGENT</span></code> is <code class="docutils literal notranslate"><span class="pre">auto</span></code>, the path or name of the ssh agent executable to start.</p>
+<p>See also <a class="reference internal" href="#ssh-agent-executable"><span class="std std-ref">SSH_AGENT_EXECUTABLE</span></a></p>
 </dd></dl>
 
 <dl class="std envvar">
@@ -8729,13 +8740,6 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 </dd></dl>
 
 <dl class="std envvar">
-<dt class="sig sig-object std" id="envvar-ANSIBLE_WRAP_STDERR">
-<span class="sig-name descname"><span class="pre">ANSIBLE_WRAP_STDERR</span></span><a class="headerlink" href="#envvar-ANSIBLE_WRAP_STDERR" title="Link to this definition"></a></dt>
-<dd><p>Control line-wrapping behavior on console warnings and errors from default output callbacks (eases pattern-based output testing)</p>
-<p>See also <a class="reference internal" href="#wrap-stderr"><span class="std std-ref">WRAP_STDERR</span></a></p>
-</dd></dl>
-
-<dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-ANSIBLE_YAML_FILENAME_EXT">
 <span class="sig-name descname"><span class="pre">ANSIBLE_YAML_FILENAME_EXT</span></span><a class="headerlink" href="#envvar-ANSIBLE_YAML_FILENAME_EXT" title="Link to this definition"></a></dt>
 <dd><p>Check all of these extensions when looking for ‘variable’ files which should be YAML or JSON or vaulted versions of these.This affects vars_files, include_vars, inventory and vars plugins among others.</p>
@@ -8780,7 +8784,7 @@ you can use the command line utility mentioned above (<cite>ansible-config</cite
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

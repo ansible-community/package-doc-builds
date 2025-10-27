@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>vmware.vmware.guest_info module – Gather guest information &mdash; Ansible Community Documentation</title>
@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="vmware.vmware.import_content_library_ovf module – Import an OVF or OVA file to a content library from a remote source." href="import_content_library_ovf_module.html" />
+    <link rel="next" title="vmware.vmware.import_content_library_iso module – Import an ISO file to a content library from a remote source." href="import_content_library_iso_module.html" />
     <link rel="prev" title="vmware.vmware.folder_template_from_vm module – Create a template in a local VCenter folder from an existing VM" href="folder_template_from_vm_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -215,6 +222,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -309,13 +317,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -330,11 +338,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -342,6 +356,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -369,7 +385,7 @@
 <h1>vmware.vmware.guest_info module – Gather guest information<a class="headerlink" href="#vmware-vmware-guest-info-module-gather-guest-information" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware/">vmware.vmware collection</a> (version 1.11.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware/">vmware.vmware collection</a> (version 2.4.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -412,6 +428,39 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
+<div class="ansibleOptionAnchor" id="parameter-datacenter_name"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-datacenter-name"><span id="ansible-collections-vmware-vmware-guest-info-module-parameter-datacenter"></span><strong>datacenter</strong></p>
+<a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: datacenter_name</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The datacenter with the VM you would like to query.</p>
+<p>This is only used if the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-guest-info-module-parameter-folder"><span class="std std-ref"><span class="pre">folder</span></span></a></strong></code> parameter is supplied as a relative path.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-folder"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-folder"><strong>folder</strong></p>
+<a class="ansibleOptionLink" href="#parameter-folder" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Absolute or relative folder path to search for the virtual machine.</p>
+<p>This parameter is only used if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-guest-info-module-parameter-name"><span class="std std-ref"><span class="pre">name</span></span></a></strong></code> is supplied, and can help identify the machine you want to query.</p>
+<p>For example ‘datacenter name/vm/path/to/folder’ or ‘path/to/folder’</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-folder_paths_are_absolute"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-folder-paths-are-absolute"><strong>folder_paths_are_absolute</strong></p>
+<a class="ansibleOptionLink" href="#parameter-folder_paths_are_absolute" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If true, any folder path parameters are treated as absolute paths.</p>
+<p>If false, modules will try to intelligently determine if the path is absolute or relative.</p>
+<p>This option is useful when your environment has a complex folder structure. By default, modules will try to intelligently determine if the path is absolute or relative. They may mistakenly prepend the datacenter name or other folder names, and this option can be used to avoid this.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-gather_tags"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-gather-tags"><strong>gather_tags</strong></p>
 <a class="ansibleOptionLink" href="#parameter-gather_tags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -423,21 +472,21 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-guest_password"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-guest-password"><strong>guest_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-guest_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The password of the user to be used to connect to guest vm and fetch environment info.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-guest_username"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-guest-username"><strong>guest_username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-guest_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The username to be used to connect to guest vm and fetch environment info.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-hostname"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-hostname"><strong>hostname</strong></p>
 <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -445,7 +494,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p>If the value is not specified in the task, the value of environment variable <a class="reference internal" href="../../environment_variables.html#envvar-VMWARE_HOST"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">VMWARE_HOST</span></code></a> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-moid"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-moid"><strong>moid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-moid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -453,7 +502,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p>Only one of name, moid, uuid is allowed</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div>
 <div class="ansibleOptionAnchor" id="parameter-guest_name"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-name"><span id="ansible-collections-vmware-vmware-guest-info-module-parameter-guest-name"></span><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: guest_name</span></p>
@@ -463,7 +512,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p>Only one of name, moid, uuid is allowed</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name_match"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-name-match"><strong>name_match</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name_match" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -475,7 +524,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div>
 <div class="ansibleOptionAnchor" id="parameter-pass"></div>
 <div class="ansibleOptionAnchor" id="parameter-pwd"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-pwd"><span id="ansible-collections-vmware-vmware-guest-info-module-parameter-password"></span><span id="ansible-collections-vmware-vmware-guest-info-module-parameter-pass"></span><strong>password</strong></p>
@@ -486,7 +535,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p>If the value is not specified in the task, the value of environment variable <a class="reference internal" href="../../environment_variables.html#envvar-VMWARE_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">VMWARE_PASSWORD</span></code></a> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-port"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-port"><strong>port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -495,14 +544,14 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">443</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-properties"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-properties"><strong>properties</strong></p>
 <a class="ansibleOptionLink" href="#parameter-properties" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>If the schema is ‘vsphere’, gather these specific properties only</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-proxy-host"><strong>proxy_host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -511,7 +560,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p>If the value is not specified in the task, the value of environment variable <a class="reference internal" href="../../environment_variables.html#envvar-VMWARE_PROXY_HOST"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">VMWARE_PROXY_HOST</span></code></a> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-proxy-port"><strong>proxy_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -519,7 +568,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p>If the value is not specified in the task, the value of environment variable <a class="reference internal" href="../../environment_variables.html#envvar-VMWARE_PROXY_PORT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">VMWARE_PROXY_PORT</span></code></a> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_protocol"></div>
 <div class="ansibleOptionAnchor" id="parameter-protocol"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-proxy-protocol"><span id="ansible-collections-vmware-vmware-guest-info-module-parameter-protocol"></span><strong>proxy_protocol</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: protocol</span></p>
@@ -534,7 +583,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-schema"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-schema"><strong>schema</strong></p>
 <a class="ansibleOptionLink" href="#parameter-schema" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -546,7 +595,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_instance_uuid"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-use-instance-uuid"><strong>use_instance_uuid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_instance_uuid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -559,7 +608,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div>
 <div class="ansibleOptionAnchor" id="parameter-admin"></div>
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-username"><span id="ansible-collections-vmware-vmware-guest-info-module-parameter-user"></span><span id="ansible-collections-vmware-vmware-guest-info-module-parameter-admin"></span><strong>username</strong></p>
@@ -570,7 +619,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p>If the value is not specified in the task, the value of environment variable <a class="reference internal" href="../../environment_variables.html#envvar-VMWARE_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">VMWARE_USER</span></code></a> will be used instead.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-uuid"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-uuid"><strong>uuid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-uuid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -578,7 +627,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <p>Only one of name, moid, uuid is allowed</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-vmware-vmware-guest-info-module-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -622,7 +671,7 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 <ul class="simple">
 <li><p>All modules require API write access and hence are not supported on a free ESXi license.</p></li>
 <li><p>All variables and VMware object names are case sensitive.</p></li>
-<li><p>Modules may rely on the ‘requests’ python library, which does not use the system certificate store by default. You can specify the certificate store by setting the REQUESTS_CA_BUNDLE environment variable. Example: ‘export REQUESTS_CA_BUNDLE=/path/to/your/ca_bundle.pem’</p></li>
+<li><p>Modules may rely on the ‘requests’ python library, which does not use the system certificate store by default. You can specify the certificate store by setting the REQUESTS_CA_BUNDLE environment variable. Note having this variable set may cause a ‘false’ value for the ‘validate_certs’ option to be ignored in some cases. Example: ‘export REQUESTS_CA_BUNDLE=/path/to/your/ca_bundle.pem’</p></li>
 </ul>
 </div>
 </section>
@@ -684,14 +733,14 @@ see <a class="reference internal" href="#ansible-collections-vmware-vmware-guest
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="folder_template_from_vm_module.html" class="btn btn-neutral float-left" title="vmware.vmware.folder_template_from_vm module – Create a template in a local VCenter folder from an existing VM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="import_content_library_ovf_module.html" class="btn btn-neutral float-right" title="vmware.vmware.import_content_library_ovf module – Import an OVF or OVA file to a content library from a remote source." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="import_content_library_iso_module.html" class="btn btn-neutral float-right" title="vmware.vmware.import_content_library_iso module – Import an ISO file to a content library from a remote source." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

@@ -100,6 +100,13 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
             selected="selected"
         >
@@ -227,7 +234,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-fix-protocol-error-file-name-does-not-match-request-when-fetching-a-file">How do I fix ‘protocol error: file name does not match request’ when fetching a file?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#does-ansible-support-multiple-factor-authentication-2fa-mfa-biometrics-finterprint-usbkey-otp">Does Ansible support multiple factor authentication 2FA/MFA/biometrics/finterprint/usbkey/OTP/…</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-validate-option-is-not-enough-for-my-needs-what-do-i-do">The ‘validate’ option is not enough for my needs, what do I do?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#why-does-the-regex-search-filter-return-none-instead-of-an-empty-string">Why does the <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> filter return <cite>None</cite> instead of an empty string?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-submit-a-change-to-the-documentation">How do I submit a change to the documentation?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-is-the-difference-between-ansible-legacy-and-ansible-builtin-collections">What is the difference between <code class="docutils literal notranslate"><span class="pre">ansible.legacy</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible.builtin</span></code> collections?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-don-t-see-my-question-here">I don’t see my question here</a></li>
@@ -293,13 +299,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -314,11 +320,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -326,6 +338,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -830,7 +844,7 @@ You shouldn’t put plaintext passwords in your playbook or host_vars; instead, 
 <p>The dot notation comes from Jinja and works fine for variables without special
 characters. If your variable contains dots (.), colons (:), or dashes (-), if
 a key begins and ends with two underscores, or if a key uses any of the known
-public attributes, it is safer to use the array notation. See <a class="reference internal" href="../playbook_guide/playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a>
+public attributes, it is safer to use the array notation. See <a class="reference internal" href="../playbook_guide/playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using variables</span></a>
 for a list of the known public attributes.</p>
 <div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">item[0][&#39;checksum:md5&#39;]</span>
 <span class="x">item[&#39;section&#39;][&#39;2.1&#39;]</span>
@@ -876,7 +890,7 @@ be overwritten by malicious values in the <code class="docutils literal notransl
 target machine. To mitigate this risk:</p>
 <ul class="simple">
 <li><p>set bulk variables at a level of precedence greater than <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">facts</span></code> in the order of precedence
-found in <a class="reference internal" href="../playbook_guide/playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">Variable precedence: Where should I put a variable?</span></a> (the example above is safe because play vars take
+found in <a class="reference internal" href="../playbook_guide/playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">Variable precedence: where should I put a variable?</span></a> (the example above is safe because play vars take
 precedence over facts)</p></li>
 <li><p>disable the <a class="reference internal" href="config.html#inject-facts-as-vars"><span class="std std-ref">INJECT_FACTS_AS_VARS</span></a> configuration setting to prevent fact values from colliding
 with variables (this will also disable the original warning)</p></li>
@@ -1031,23 +1045,6 @@ and backups, which most file based modules also support:</p>
 </pre></div>
 </div>
 </section>
-<section id="why-does-the-regex-search-filter-return-none-instead-of-an-empty-string">
-<span id="jinja2-faqs"></span><h2>Why does the <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> filter return <cite>None</cite> instead of an empty string?<a class="headerlink" href="#why-does-the-regex-search-filter-return-none-instead-of-an-empty-string" title="Link to this heading"></a></h2>
-<p>Until the jinja2 2.10 release, Jinja was only able to return strings, but Ansible needed Python objects in some cases. Ansible uses <code class="docutils literal notranslate"><span class="pre">safe_eval</span></code> and  only sends strings that look like certain types of Python objects through this function. With <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> that does not find a match, the result (<code class="docutils literal notranslate"><span class="pre">None</span></code>) is converted to the string “None” which is not useful in non-native jinja2.</p>
-<p>The following example of a single templating action shows this behavior:</p>
-<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="cp">}}</span>
-</pre></div>
-</div>
-<p>This example does not result in a Python <code class="docutils literal notranslate"><span class="pre">None</span></code>, so Ansible historically converted it to “” (empty string).</p>
-<p>The native jinja2 functionality actually allows us to return full Python objects, that are always represented as Python objects everywhere, and as such the result of a single templating action with <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> can result in the Python <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Native jinja2 functionality is not needed when <code class="docutils literal notranslate"><span class="pre">regex_search</span></code> is used as an intermediate result that is then compared to the jinja2 <code class="docutils literal notranslate"><span class="pre">none</span></code> test.</p>
-<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="s1">&#39;ansible&#39;</span> <span class="o">|</span> <span class="nf">regex_search</span><span class="o">(</span><span class="s1">&#39;foobar&#39;</span><span class="o">)</span> <span class="k">is</span> <span class="nf">none</span> <span class="cp">}}</span>
-</pre></div>
-</div>
-</div>
-</section>
 <section id="how-do-i-submit-a-change-to-the-documentation">
 <span id="docs-contributions"></span><h2>How do I submit a change to the documentation?<a class="headerlink" href="#how-do-i-submit-a-change-to-the-documentation" title="Link to this heading"></a></h2>
 <p>Documentation for Ansible is kept in the <a class="reference external" href="https://github.com/ansible/ansible-documentation">ansible/ansible-documentation</a>
@@ -1105,7 +1102,7 @@ So this:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

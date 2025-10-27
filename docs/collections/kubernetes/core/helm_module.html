@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>kubernetes.core.helm module – Manages Kubernetes packages with the Helm package manager &mdash; Ansible Community Documentation</title>
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -223,6 +230,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -311,13 +319,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -332,11 +340,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -344,6 +358,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -371,7 +387,7 @@
 <h1>kubernetes.core.helm module – Manages Kubernetes packages with the Helm package manager<a class="headerlink" href="#kubernetes-core-helm-module-manages-kubernetes-packages-with-the-helm-package-manager" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/kubernetes/core/">kubernetes.core collection</a> (version 5.2.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/kubernetes/core/">kubernetes.core collection</a> (version 6.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -564,6 +580,23 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-insecure_skip_tls_verify"></div>
+<div class="ansibleOptionAnchor" id="parameter-skip_tls_certs_check"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-skip-tls-certs-check"><span id="ansible-collections-kubernetes-core-helm-module-parameter-insecure-skip-tls-verify"></span><strong>insecure_skip_tls_verify</strong></p>
+<a class="ansibleOptionLink" href="#parameter-insecure_skip_tls_verify" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: skip_tls_certs_check</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 5.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Skip tls certificate checks for the chart download.</p>
+<p>Do not confuse with the <code class="docutils literal notranslate"><span class="pre">validate_certs</span></code> option.</p>
+<p>This option is only available for helm &gt;= 3.16.0.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-kubeconfig"></div>
 <div class="ansibleOptionAnchor" id="parameter-kubeconfig_path"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-kubeconfig-path"><span id="ansible-collections-kubernetes-core-helm-module-parameter-kubeconfig"></span><strong>kubeconfig</strong></p>
 <a class="ansibleOptionLink" href="#parameter-kubeconfig" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: kubeconfig_path</span></p>
@@ -572,6 +605,20 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <td><div class="ansible-option-cell"><p>Helm option to specify kubeconfig path to use.</p>
 <p>If the value is not specified in the task, the value of environment variable <code class="docutils literal notranslate"><span class="pre">K8S_AUTH_KUBECONFIG</span></code> will be used instead.</p>
 <p>The configuration can be provided as dictionary. Added in version 2.4.0.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-plain_http"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-plain-http"><strong>plain_http</strong></p>
+<a class="ansibleOptionLink" href="#parameter-plain_http" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 6.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Use HTTP instead of HTTPS when working with OCI registries</p>
+<p>Requires Helm &gt;= 3.13.0</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -652,6 +699,21 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-reset_then_reuse_values"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-reset-then-reuse-values"><strong>reset_then_reuse_values</strong></p>
+<a class="ansibleOptionLink" href="#parameter-reset_then_reuse_values" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 6.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When upgrading package, reset the values to the ones built into the chart, apply the last release’s values and merge in any overrides from parameters <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-release-values"><span class="std std-ref"><span class="pre">release_values</span></span></a></strong></code>, <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-values-files"><span class="std std-ref"><span class="pre">values_files</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-set-values"><span class="std std-ref"><span class="pre">set_values</span></span></a></strong></code>.</p>
+<p>If <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-reset-values"><span class="std std-ref"><span class="pre">reset_values</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-reuse-values"><span class="std std-ref"><span class="pre">reuse_values</span></span></a></strong></code> is set to <code class="ansible-value docutils literal notranslate"><span class="pre">True</span></code>, this is ignored.</p>
+<p>This feature requires helm diff &gt;= 3.9.12.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reset_values"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-reset-values"><strong>reset_values</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reset_values" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 3.0.0</em></p>
@@ -664,7 +726,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reuse_values"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-reuse-values"><strong>reuse_values</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reuse_values" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 3.0.0</em></p>
@@ -678,7 +740,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-set_values"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-set-values"><strong>set_values</strong></p>
 <a class="ansibleOptionLink" href="#parameter-set_values" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 2.4.0</em></p>
@@ -686,14 +748,14 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <td><div class="ansible-option-cell"><p>Values to pass to chart configuration</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-set_values/value"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-set-values-value"><strong>value</strong></p>
 <a class="ansibleOptionLink" href="#parameter-set_values/value" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Value to pass to chart configuration (e.g phase=prod).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-set_values/value_type"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-set-values-value-type"><strong>value_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-set_values/value_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -710,7 +772,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-skip_crds"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-skip-crds"><strong>skip_crds</strong></p>
 <a class="ansibleOptionLink" href="#parameter-skip_crds" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 1.2.0</em></p>
@@ -723,7 +785,35 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-skip_schema_validation"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-skip-schema-validation"><strong>skip_schema_validation</strong></p>
+<a class="ansibleOptionLink" href="#parameter-skip_schema_validation" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 6.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Disables JSON schema validation for Chart and values.</p>
+<p>This feature requires helm &gt;= 3.16.0</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-take_ownership"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-take-ownership"><strong>take_ownership</strong></p>
+<a class="ansibleOptionLink" href="#parameter-take_ownership" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 6.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When upgrading, Helm will ignore the check for helm annotations and take ownership of the existing resources</p>
+<p>This feature requires helm &gt;= 3.17.0</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-timeout"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-timeout"><strong>timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 2.3.0</em></p>
@@ -733,7 +823,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <p>Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">wait_timeout</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_repo_cache"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-update-repo-cache"><strong>update_repo_cache</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_repo_cache" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -745,7 +835,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
 <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-verify-ssl"><span id="ansible-collections-kubernetes-core-helm-module-parameter-validate-certs"></span><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</span></p>
@@ -760,7 +850,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-values_files"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-values-files"><strong>values_files</strong></p>
 <a class="ansibleOptionLink" href="#parameter-values_files" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 1.1.0</em></p>
@@ -772,7 +862,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-wait"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-wait"><strong>wait</strong></p>
 <a class="ansibleOptionLink" href="#parameter-wait" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -785,7 +875,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-wait_timeout"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-wait-timeout"><strong>wait_timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-wait_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -883,6 +973,12 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
 <span class="w">    </span><span class="nt">chart_ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://github.com/grafana/helm-charts/releases/download/grafana-5.6.0/grafana-5.6.0.tgz&quot;</span>
 <span class="w">    </span><span class="nt">release_namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy Bitnami&#39;s MongoDB latest chart from OCI registry</span>
+<span class="w">  </span><span class="nt">kubernetes.core.helm</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">    </span><span class="nt">chart_ref</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oci://registry-1.docker.io/bitnamicharts/mongodb&quot;</span>
+<span class="w">    </span><span class="nt">release_namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
 
 <span class="c1"># Using complex Values</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy new-relic client chart</span>
@@ -1065,7 +1161,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

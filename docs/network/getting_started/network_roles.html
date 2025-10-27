@@ -100,6 +100,13 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
             selected="selected"
         >
@@ -263,13 +270,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -284,11 +291,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -296,6 +309,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -486,7 +501,7 @@ ip<span class="w"> </span>name-server<span class="w"> </span><span class="m">8</
 </section>
 <section id="variable-precedence">
 <h3><a class="toc-backref" href="#id4" role="doc-backlink">Variable precedence</a><a class="headerlink" href="#variable-precedence" title="Link to this heading"></a></h3>
-<p>What if you want to change the DNS servers?  You aren’t expected to change the <code class="docutils literal notranslate"><span class="pre">vars/main.yml</span></code> within the role structure. Ansible has many places where you can specify variables for a given play. See <a class="reference internal" href="../../playbook_guide/playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a> for details on variables and precedence. There are actually 21 places to put variables.  While this list can seem overwhelming at first glance, the vast majority of use cases only involve knowing the spot for variables of least precedence and how to pass variables with most precedence. See <a class="reference internal" href="../../playbook_guide/playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">Variable precedence: Where should I put a variable?</span></a> for more guidance on where you should put variables.</p>
+<p>What if you want to change the DNS servers?  You aren’t expected to change the <code class="docutils literal notranslate"><span class="pre">vars/main.yml</span></code> within the role structure. Ansible has many places where you can specify variables for a given play. See <a class="reference internal" href="../../playbook_guide/playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using variables</span></a> for details on variables and precedence. There are actually 21 places to put variables.  While this list can seem overwhelming at first glance, the vast majority of use cases only involve knowing the spot for variables of least precedence and how to pass variables with most precedence. See <a class="reference internal" href="../../playbook_guide/playbooks_variables.html#ansible-variable-precedence"><span class="std std-ref">Variable precedence: where should I put a variable?</span></a> for more guidance on where you should put variables.</p>
 <section id="lowest-precedence">
 <h4><a class="toc-backref" href="#id5" role="doc-backlink">Lowest precedence</a><a class="headerlink" href="#lowest-precedence" title="Link to this heading"></a></h4>
 <p>The lowest precedence is the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> directory within a role.  This means all the other 20 locations you could potentially specify the variable will all take higher precedence than <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, no matter what.  To immediately give the vars from the <code class="docutils literal notranslate"><span class="pre">system_demo</span></code> role the least precedence, rename the <code class="docutils literal notranslate"><span class="pre">vars</span></code> directory to <code class="docutils literal notranslate"><span class="pre">defaults</span></code>.</p>
@@ -567,7 +582,7 @@ ip<span class="w"> </span>name-server<span class="w"> </span><span class="m">192
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

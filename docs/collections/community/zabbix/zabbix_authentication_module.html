@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.zabbix.zabbix_authentication module – Update Zabbix authentication &mdash; Ansible Community Documentation</title>
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -199,6 +206,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Community.Mysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../okd/index.html">Community.Okd</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../postgresql/index.html">Community.Postgresql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxmox/index.html">Community.Proxmox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../proxysql/index.html">Community.Proxysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../rabbitmq/index.html">Community.Rabbitmq</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../routeros/index.html">Community.Routeros</a></li>
@@ -245,6 +253,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -333,13 +342,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -354,11 +363,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -366,6 +381,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -393,7 +410,7 @@
 <h1>community.zabbix.zabbix_authentication module – Update Zabbix authentication<a class="headerlink" href="#community-zabbix-zabbix-authentication-module-update-zabbix-authentication" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/zabbix/">community.zabbix collection</a> (version 3.3.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/zabbix/">community.zabbix collection</a> (version 4.1.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -544,6 +561,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <td><div class="ansible-option-cell"><p>Base DN of LDAP.</p>
 <p>This setting is required if current value of <em>ldap_configured</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 <p>Works only with Zabbix &lt;= 6.0 and is silently ignored in higher versions.</p>
+<p>Please use community.zabbix.zabbix_user_directory module instead of this parameter with Zabbix &gt;= 7.0.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -552,6 +570,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 </div></td>
 <td><div class="ansible-option-cell"><p>Bind DN of LDAP.</p>
 <p>Works only with Zabbix &lt;= 6.0 and is silently ignored in higher versions.</p>
+<p>Please use community.zabbix.zabbix_user_directory module instead of this parameter with Zabbix &gt;= 7.0.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -560,6 +579,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 </div></td>
 <td><div class="ansible-option-cell"><p>Bind password of LDAP.</p>
 <p>Works only with Zabbix &lt;= 6.0 and is silently ignored in higher versions.</p>
+<p>Please use community.zabbix.zabbix_user_directory module instead of this parameter with Zabbix &gt;= 7.0.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -579,8 +599,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-ldap_configured" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>LDAP authentication will be enabled if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
-<p>Removed in Zabbix 6.4</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -596,6 +615,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <p>e.g. <code class="docutils literal notranslate"><span class="pre">ldap://ldap.zabbix.com</span></code></p>
 <p>This setting is required if current value of <em>ldap_configured</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 <p>Works only with Zabbix &lt;= 6.0 and is silently ignored in higher versions.</p>
+<p>Please use community.zabbix.zabbix_user_directory module instead of this parameter with Zabbix &gt;= 7.0.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -618,6 +638,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <td><div class="ansible-option-cell"><p>A port number of LDAP server.</p>
 <p>This setting is required if current value of <em>ldap_configured</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 <p>Works only with Zabbix &lt;= 6.0 and is silently ignored in higher versions.</p>
+<p>Please use community.zabbix.zabbix_user_directory module instead of this parameter with Zabbix &gt;= 7.0.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -627,6 +648,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <td><div class="ansible-option-cell"><p>Search attribute of LDAP.</p>
 <p>This setting is required if current value of <em>ldap_configured</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 <p>Works only with Zabbix &lt;= 6.0 and is silently ignored in higher versions.</p>
+<p>Please use community.zabbix.zabbix_user_directory module instead of this parameter with Zabbix &gt;= 7.0.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -684,7 +706,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_encrypt_assertions" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>SAML encrypt assertions will be enabled if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -697,7 +719,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_encrypt_nameid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>SAML encrypt name ID will be enabled if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -711,7 +733,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 </div></td>
 <td><div class="ansible-option-cell"><p>SAML identify provider’s entity ID.</p>
 <p>This setting is required if current value of <em>saml_auth_enabled</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -732,7 +754,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_nameid_format" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name identifier format of SAML service provider.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -740,7 +762,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_sign_assertions" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>SAML sign assertions will be enabled if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -753,7 +775,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_sign_authn_requests" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>SAML sign AuthN requests will be enabled if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -766,7 +788,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_sign_logout_requests" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>SAML sign logout requests will be enabled if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -779,7 +801,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_sign_logout_responses" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>SAML sign logout responses will be enabled if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -792,7 +814,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_sign_messages" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>SAML sign messages will be enabled if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -805,7 +827,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <a class="ansibleOptionLink" href="#parameter-saml_slo_url" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>URL for SAML single logout service.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -814,7 +836,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 </div></td>
 <td><div class="ansible-option-cell"><p>Entity ID of SAML service provider.</p>
 <p>This setting is required if current value of <em>saml_auth_enabled</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -823,7 +845,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 </div></td>
 <td><div class="ansible-option-cell"><p>URL for single sign on service of SAML.</p>
 <p>This setting is required if current value of <em>saml_auth_enabled</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -832,7 +854,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 </div></td>
 <td><div class="ansible-option-cell"><p>User name attribute of SAML.</p>
 <p>This setting is required if current value of <em>saml_auth_enabled</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
-<p>Works only with Zabbix &lt;= 6.2 and is silently ignored in higher versions.</p>
+<p>Works only with Zabbix = 6.0 and is silently ignored in higher versions.</p>
 </div></td>
 </tr>
 </tbody>
@@ -900,7 +922,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">contain_special_characters</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">avoid_easy_to_guess</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update all authentication setting (Zabbix = 6.2)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update all authentication setting (Zabbix = 6.0)</span>
 <span class="w">  </span><span class="c1"># set task level variables as we change ansible_connection plugin here</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">ansible_network_os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.zabbix.zabbix</span>
@@ -942,7 +964,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">contain_special_characters</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">avoid_easy_to_guess</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update all authentication setting (Zabbix &gt;= 6.4)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update all authentication setting (Zabbix &gt;= 7.0)</span>
 <span class="w">  </span><span class="c1"># set task level variables as we change ansible_connection plugin here</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">ansible_network_os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.zabbix.zabbix</span>
@@ -1030,7 +1052,7 @@ see <a class="reference internal" href="#ansible-collections-community-zabbix-za
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

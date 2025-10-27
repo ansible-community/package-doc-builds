@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>purestorage.flashblade.purefb_policy module – Manage FlashBlade policies &mdash; Ansible Community Documentation</title>
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -223,6 +230,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -311,13 +319,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -332,11 +340,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -344,6 +358,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -371,7 +387,7 @@
 <h1>purestorage.flashblade.purefb_policy module – Manage FlashBlade policies<a class="headerlink" href="#purestorage-flashblade-purefb-policy-module-manage-flashblade-policies" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/purestorage/flashblade/">purestorage.flashblade collection</a> (version 1.19.2).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/purestorage/flashblade/">purestorage.flashblade collection</a> (version 1.22.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -403,7 +419,6 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <ul class="simple">
 <li><p>python &gt;= 3.9</p></li>
 <li><p>py-pure-client</p></li>
-<li><p>purity_fb &gt;= 1.12.2</p></li>
 <li><p>netaddr</p></li>
 <li><p>datetime</p></li>
 <li><p>pytz</p></li>
@@ -565,6 +580,16 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-context"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-context"><strong>context</strong></p>
+<a class="ansibleOptionLink" href="#parameter-context" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.22.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name of fleet member on which to perform the operation.</p>
+<p>This requires the array receiving the request is a member of a fleet and the context name to be a member of the same fleet.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-default_retention"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-default-retention"><strong>default_retention</strong></p>
 <a class="ansibleOptionLink" href="#parameter-default_retention" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.19.0</em></p>
@@ -573,7 +598,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>Valid values are weeks (w), days(d), hours(h), minutes(m) and seconds(s).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-desc"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-desc"><strong>desc</strong></p>
 <a class="ansibleOptionLink" href="#parameter-desc" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.14.0</em></p>
@@ -583,7 +608,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-destroy_snapshots"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-destroy-snapshots"><strong>destroy_snapshots</strong></p>
 <a class="ansibleOptionLink" href="#parameter-destroy_snapshots" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.11.0</em></p>
@@ -596,7 +621,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-disable_warnings"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-disable-warnings"><strong>disable_warnings</strong></p>
 <a class="ansibleOptionLink" href="#parameter-disable_warnings" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.18.0</em></p>
@@ -609,7 +634,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-effect"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-effect"><strong>effect</strong></p>
 <a class="ansibleOptionLink" href="#parameter-effect" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -622,7 +647,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-enabled"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-enabled"><strong>enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -634,7 +659,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-every"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-every"><strong>every</strong></p>
 <a class="ansibleOptionLink" href="#parameter-every" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -642,14 +667,14 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>Range available 300 - 31536000 (equates to 5m to 365d)</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-fb_url"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-fb-url"><strong>fb_url</strong></p>
 <a class="ansibleOptionLink" href="#parameter-fb_url" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>FlashBlade management IP address or Hostname.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-fileid_32bit"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-fileid-32bit"><strong>fileid_32bit</strong></p>
 <a class="ansibleOptionLink" href="#parameter-fileid_32bit" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -662,7 +687,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-filesystem"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-filesystem"><strong>filesystem</strong></p>
 <a class="ansibleOptionLink" href="#parameter-filesystem" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -670,7 +695,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>To amend policy members use the <em>purestorage.flashblade.purefb_fs</em> module</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-force_delete"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-force-delete"><strong>force_delete</strong></p>
 <a class="ansibleOptionLink" href="#parameter-force_delete" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -685,7 +710,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-full_control"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-full-control"><strong>full_control</strong></p>
 <a class="ansibleOptionLink" href="#parameter-full_control" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.12.0</em></p>
@@ -700,7 +725,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ignore_enforcement"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-ignore-enforcement"><strong>ignore_enforcement</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ignore_enforcement" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -715,7 +740,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-interfaces"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-interfaces"><strong>interfaces</strong></p>
 <a class="ansibleOptionLink" href="#parameter-interfaces" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.17.0</em></p>
@@ -731,7 +756,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-keep_for"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-keep-for"><strong>keep_for</strong></p>
 <a class="ansibleOptionLink" href="#parameter-keep_for" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -740,7 +765,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>Must not be set less than <em>every</em></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-max_retention"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-max-retention"><strong>max_retention</strong></p>
 <a class="ansibleOptionLink" href="#parameter-max_retention" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.19.0</em></p>
@@ -751,7 +776,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>Valid values are weeks (w), days(d), hours(h), minutes(m) and seconds(s).</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-min_retention"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-min-retention"><strong>min_retention</strong></p>
 <a class="ansibleOptionLink" href="#parameter-min_retention" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.19.0</em></p>
@@ -762,14 +787,14 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>Valid values are weeks (w), days(d), hours(h), minutes(m) and seconds(s).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the policy</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-object_resources"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-object-resources"><strong>object_resources</strong></p>
 <a class="ansibleOptionLink" href="#parameter-object_resources" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -778,7 +803,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>System-wide policy rules cannot be deleted or modified</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-permission"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-permission"><strong>permission</strong></p>
 <a class="ansibleOptionLink" href="#parameter-permission" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -791,7 +816,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-policy_type"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-policy-type"><strong>policy_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-policy_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -809,7 +834,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-principal"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-principal"><strong>principal</strong></p>
 <a class="ansibleOptionLink" href="#parameter-principal" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.12.0</em></p>
@@ -817,7 +842,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <td><div class="ansible-option-cell"><p>The user or group who is the subject of this rule, and their domain</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-read"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-read"><strong>read</strong></p>
 <a class="ansibleOptionLink" href="#parameter-read" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.12.0</em></p>
@@ -832,7 +857,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rename"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-rename"><strong>rename</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rename" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.10.0</em></p>
@@ -841,7 +866,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>Only applies to NFS and SMB policies</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-replica_link"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-replica-link"><strong>replica_link</strong></p>
 <a class="ansibleOptionLink" href="#parameter-replica_link" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -849,7 +874,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>To amend policy members use the <em>purestorage.flashblade.purefb_fs_replica</em> module</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-retention_lock"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-retention-lock"><strong>retention_lock</strong></p>
 <a class="ansibleOptionLink" href="#parameter-retention_lock" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.19.0</em></p>
@@ -865,7 +890,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rule"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-rule"><strong>rule</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rule" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -874,7 +899,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>Rules in system wide policies cannot be deleted or modified</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-s3_delimiters"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-s3-delimiters"><strong>s3_delimiters</strong></p>
 <a class="ansibleOptionLink" href="#parameter-s3_delimiters" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -884,7 +909,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>System-wide policy rules cannot be deleted or modified</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-s3_prefixes"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-s3-prefixes"><strong>s3_prefixes</strong></p>
 <a class="ansibleOptionLink" href="#parameter-s3_prefixes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -893,7 +918,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>System-wide policy rules cannot be deleted or modified</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secure"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-secure"><strong>secure</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secure" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -908,7 +933,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-security"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-security"><strong>security</strong></p>
 <a class="ansibleOptionLink" href="#parameter-security" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -929,7 +954,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;sys&quot;]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-smb_encryption"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-smb-encryption"><strong>smb_encryption</strong></p>
 <a class="ansibleOptionLink" href="#parameter-smb_encryption" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.12.0</em></p>
@@ -943,7 +968,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-source_ips"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-source-ips"><strong>source_ips</strong></p>
 <a class="ansibleOptionLink" href="#parameter-source_ips" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -952,7 +977,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>System-wide policy rules cannot be deleted or modified</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -966,7 +991,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-target"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-target"><strong>target</strong></p>
 <a class="ansibleOptionLink" href="#parameter-target" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -974,7 +999,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <td><div class="ansible-option-cell"><p>Name of policy to copy rule to</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-target_rule"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-target-rule"><strong>target_rule</strong></p>
 <a class="ansibleOptionLink" href="#parameter-target_rule" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -983,7 +1008,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>If not defined the existing rule name is used.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-timezone"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-timezone"><strong>timezone</strong></p>
 <a class="ansibleOptionLink" href="#parameter-timezone" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -991,7 +1016,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <p>If not provided, the module will attempt to get the current local timezone from the server</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-purestorage-flashblade-purefb-policy-module-parameter-user"><strong>user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in purestorage.flashblade 1.9.0</em></p>
@@ -1007,7 +1032,6 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>This module requires the <code class="docutils literal notranslate"><span class="pre">purity_fb</span></code> Python library</p></li>
 <li><p>You must set <code class="docutils literal notranslate"><span class="pre">PUREFB_URL</span></code> and <code class="docutils literal notranslate"><span class="pre">PUREFB_API</span></code> environment variables if <em>fb_url</em> and <em>api_token</em> arguments are not passed to the module directly</p></li>
 </ul>
 </div>
@@ -1040,6 +1064,14 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 <span class="w">    </span><span class="nt">keep_for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span>
 <span class="w">    </span><span class="nt">every</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span>
 <span class="w">    </span><span class="nt">timezone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Asia/Shanghai</span>
+<span class="w">    </span><span class="nt">fb_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">T-9f276a18-50ab-446e-8a0c-666a3529a1b6</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete filesystem foo from snapshot policy</span>
+<span class="w">  </span><span class="nt">purestorage.flashblade.purefb_policy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_policy</span>
+<span class="w">    </span><span class="nt">policy_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">snapshot</span>
+<span class="w">    </span><span class="nt">filesystem</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 <span class="w">    </span><span class="nt">fb_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
 <span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">T-9f276a18-50ab-446e-8a0c-666a3529a1b6</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a snapshot policy</span>
@@ -1223,7 +1255,7 @@ see <a class="reference internal" href="#ansible-collections-purestorage-flashbl
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

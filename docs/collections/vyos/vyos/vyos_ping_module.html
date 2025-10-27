@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>vyos.vyos.vyos_ping module – Tests reachability using ping from VyOS network devices &mdash; Ansible Community Documentation</title>
@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="vyos.vyos.vyos_prefix_lists module – Prefix-Lists resource module for VyOS" href="vyos_prefix_lists_module.html" />
-    <link rel="prev" title="vyos.vyos.vyos_ospfv3 module – OSPFV3 resource module" href="vyos_ospfv3_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="vyos.vyos.vyos_ospfv3 module – OSPFv3 resource module" href="vyos_ospfv3_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -215,6 +222,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -226,6 +234,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Vyos Namespace</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Vyos.Vyos</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#platform-vyos">Platform VyOS</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
 </ul>
 </li>
@@ -287,11 +297,8 @@
           <li class="breadcrumb-item"><a href="index.html">Vyos.Vyos</a></li>
       <li class="breadcrumb-item active">vyos.vyos.vyos_ping module – Tests reachability using ping from VyOS network devices</li>
   <li class="wy-breadcrumbs-aside">
-            <!-- Remove main index page as it is no longer editable -->
-            
-              <br>
-
-            
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/vyos/vyos.vyos/edit/main/plugins/modules/vyos_ping.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
   </li>
   </ul>
   <hr/>
@@ -310,13 +317,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -331,11 +338,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -343,6 +356,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -370,7 +385,7 @@
 <h1>vyos.vyos.vyos_ping module – Tests reachability using ping from VyOS network devices<a class="headerlink" href="#vyos-vyos-vyos-ping-module-tests-reachability-using-ping-from-vyos-network-devices" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vyos/vyos/">vyos.vyos collection</a> (version 5.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vyos/vyos/">vyos.vyos collection</a> (version 6.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -391,7 +406,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Tests reachability using ping from a VyOS device to a remote destination.</p></li>
-<li><p>Tested against VyOS 1.1.8 (helium)</p></li>
+<li><p>Tested against VyOS 1.3.8, 1.4.2, the upcoming 1.5, and the rolling release of spring 2025</p></li>
 <li><p>For a general purpose network module, see the <a class="reference internal" href="../../ansible/netcommon/net_ping_module.html#ansible-collections-ansible-netcommon-net-ping-module"><span class="std std-ref">ansible.netcommon.net_ping</span></a> module.</p></li>
 <li><p>For Windows targets, use the <a class="reference internal" href="../../ansible/windows/win_ping_module.html#ansible-collections-ansible-windows-win-ping-module"><span class="std std-ref">ansible.windows.win_ping</span></a> module instead.</p></li>
 <li><p>For targets running Python, use the <a class="reference internal" href="../../ansible/builtin/ping_module.html#ansible-collections-ansible-builtin-ping-module"><span class="std std-ref">ansible.builtin.ping</span></a> module instead.</p></li>
@@ -469,7 +484,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>Tested against VyOS 1.1.8 (helium).</p></li>
+<li><p>Tested against VyOS 1.3.8, 1.4.2, the upcoming 1.5, and the rolling release of spring 2025.</p></li>
 <li><p>For a general purpose network module, see the <a class="reference internal" href="../../ansible/netcommon/net_ping_module.html#ansible-collections-ansible-netcommon-net-ping-module"><span class="std std-ref">ansible.netcommon.net_ping</span></a> module.</p></li>
 <li><p>For Windows targets, use the <a class="reference internal" href="../../ansible/windows/win_ping_module.html#ansible-collections-ansible-windows-win-ping-module"><span class="std std-ref">ansible.windows.win_ping</span></a> module instead.</p></li>
 <li><p>For targets running Python, use the <a class="reference internal" href="../../ansible/builtin/ping_module.html#ansible-collections-ansible-builtin-ping-module"><span class="std std-ref">ansible.builtin.ping</span></a> module instead.</p></li>
@@ -571,8 +586,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <section id="collection-links">
 <h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
 <ul class="ansible-links">
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vyos.vyos/issues" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vyos.vyos" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://vyos.dev" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/vyos/vyos.vyos" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://vyos.dev/maniphest/task/edit/form/3/?projectPHIDs=PHID-PROJ-aryfih5l65cgcdmx4sqp" rel="noopener external" target="_blank">Report an issue</a></span></li>
+<li><span><a class="reference internal" href="index.html#communication-for-vyos-vyos"><span class="std std-ref">Communication</span></a></span></li>
 </ul>
 </section>
 </section>
@@ -584,7 +601,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="vyos_ospfv3_module.html" class="btn btn-neutral float-left" title="vyos.vyos.vyos_ospfv3 module – OSPFV3 resource module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vyos_ospfv3_module.html" class="btn btn-neutral float-left" title="vyos.vyos.vyos_ospfv3 module – OSPFv3 resource module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="vyos_prefix_lists_module.html" class="btn btn-neutral float-right" title="vyos.vyos.vyos_prefix_lists module – Prefix-Lists resource module for VyOS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -592,7 +609,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

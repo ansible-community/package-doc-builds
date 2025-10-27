@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ansible.Netcommon &mdash; Ansible Community Documentation</title>
@@ -101,6 +101,13 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
             selected="selected"
         >
@@ -174,7 +181,6 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Ansible Namespace</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../_protomatter/index.html">Ansible._Protomatter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../builtin/index.html">Ansible.Builtin</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Ansible.Netcommon</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
@@ -227,6 +233,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -314,13 +321,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -335,11 +342,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -347,6 +360,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -372,7 +387,7 @@
              
   <section id="ansible-netcommon">
 <span id="plugins-in-ansible-netcommon"></span><h1>Ansible.Netcommon<a class="headerlink" href="#ansible-netcommon" title="Link to this heading"></a></h1>
-<p>Collection version 8.0.0</p>
+<p>Collection version 8.1.0</p>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#description" id="id1">Description</a></p></li>
@@ -398,10 +413,10 @@
 </div>
 </section>
 <section id="plugin-index">
-<h2><a class="toc-backref" href="#id2" role="doc-backlink">Plugin Index</a><a class="headerlink" href="#plugin-index" title="Link to this heading"></a></h2>
+<span id="plugin-index-for-ansible-netcommon"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Plugin Index</a><a class="headerlink" href="#plugin-index" title="Link to this heading"></a></h2>
 <p>These are the plugins in the ansible.netcommon collection:</p>
 <section id="modules">
-<h3>Modules<a class="headerlink" href="#modules" title="Link to this heading"></a></h3>
+<span id="module-plugins-in-ansible-netcommon"></span><h3>Modules<a class="headerlink" href="#modules" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="cli_backup_module.html#ansible-collections-ansible-netcommon-cli-backup-module"><span class="std std-ref">cli_backup module</span></a> – Back up device configuration from network devices over network_cli</p></li>
 <li><p><a class="reference internal" href="cli_command_module.html#ansible-collections-ansible-netcommon-cli-command-module"><span class="std std-ref">cli_command module</span></a> – Run a cli command on cli-based network devices</p></li>
@@ -424,7 +439,7 @@
 </div>
 </section>
 <section id="become-plugins">
-<h3>Become Plugins<a class="headerlink" href="#become-plugins" title="Link to this heading"></a></h3>
+<span id="become-plugins-in-ansible-netcommon"></span><h3>Become Plugins<a class="headerlink" href="#become-plugins" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="enable_become.html#ansible-collections-ansible-netcommon-enable-become"><span class="std std-ref">enable become</span></a> – Switch to elevated permissions on a network device</p></li>
 </ul>
@@ -432,7 +447,7 @@
 </div>
 </section>
 <section id="cache-plugins">
-<h3>Cache Plugins<a class="headerlink" href="#cache-plugins" title="Link to this heading"></a></h3>
+<span id="cache-plugins-in-ansible-netcommon"></span><h3>Cache Plugins<a class="headerlink" href="#cache-plugins" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="memory_cache.html#ansible-collections-ansible-netcommon-memory-cache"><span class="std std-ref">memory cache</span></a> – RAM backed, non persistent cache.</p></li>
 </ul>
@@ -440,7 +455,7 @@
 </div>
 </section>
 <section id="cliconf-plugins">
-<h3>Cliconf Plugins<a class="headerlink" href="#cliconf-plugins" title="Link to this heading"></a></h3>
+<span id="cliconf-plugins-in-ansible-netcommon"></span><h3>Cliconf Plugins<a class="headerlink" href="#cliconf-plugins" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="default_cliconf.html#ansible-collections-ansible-netcommon-default-cliconf"><span class="std std-ref">default cliconf</span></a> – General purpose cliconf plugin for new platforms</p></li>
 </ul>
@@ -448,7 +463,7 @@
 </div>
 </section>
 <section id="connection-plugins">
-<h3>Connection Plugins<a class="headerlink" href="#connection-plugins" title="Link to this heading"></a></h3>
+<span id="connection-plugins-in-ansible-netcommon"></span><h3>Connection Plugins<a class="headerlink" href="#connection-plugins" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="grpc_connection.html#ansible-collections-ansible-netcommon-grpc-connection"><span class="std std-ref">grpc connection</span></a> – Provides a persistent connection using the gRPC protocol</p></li>
 <li><p><a class="reference internal" href="httpapi_connection.html#ansible-collections-ansible-netcommon-httpapi-connection"><span class="std std-ref">httpapi connection</span></a> – Use httpapi to run command on network appliances</p></li>
@@ -461,15 +476,13 @@
 </div>
 </section>
 <section id="filter-plugins">
-<h3>Filter Plugins<a class="headerlink" href="#filter-plugins" title="Link to this heading"></a></h3>
+<span id="filter-plugins-in-ansible-netcommon"></span><h3>Filter Plugins<a class="headerlink" href="#filter-plugins" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="reference internal" href="comp_type5_filter.html#ansible-collections-ansible-netcommon-comp-type5-filter"><span class="std std-ref">comp_type5 filter</span></a> – The comp_type5 filter plugin.</p></li>
 <li><p><a class="reference internal" href="hash_salt_filter.html#ansible-collections-ansible-netcommon-hash-salt-filter"><span class="std std-ref">hash_salt filter</span></a> – The hash_salt filter plugin.</p></li>
 <li><p><a class="reference internal" href="parse_cli_filter.html#ansible-collections-ansible-netcommon-parse-cli-filter"><span class="std std-ref">parse_cli filter</span></a> – parse_cli filter plugin.</p></li>
 <li><p><a class="reference internal" href="parse_cli_textfsm_filter.html#ansible-collections-ansible-netcommon-parse-cli-textfsm-filter"><span class="std std-ref">parse_cli_textfsm filter</span></a> – parse_cli_textfsm filter plugin.</p></li>
 <li><p><a class="reference internal" href="parse_xml_filter.html#ansible-collections-ansible-netcommon-parse-xml-filter"><span class="std std-ref">parse_xml filter</span></a> – The parse_xml filter plugin.</p></li>
 <li><p><a class="reference internal" href="pop_ace_filter.html#ansible-collections-ansible-netcommon-pop-ace-filter"><span class="std std-ref">pop_ace filter</span></a> – Remove ace entries from a acl source of truth.</p></li>
-<li><p><a class="reference internal" href="type5_pw_filter.html#ansible-collections-ansible-netcommon-type5-pw-filter"><span class="std std-ref">type5_pw filter</span></a> – The type5_pw filter plugin.</p></li>
 <li><p><a class="reference internal" href="vlan_expander_filter.html#ansible-collections-ansible-netcommon-vlan-expander-filter"><span class="std std-ref">vlan_expander filter</span></a> – The vlan_expander filter plugin.</p></li>
 <li><p><a class="reference internal" href="vlan_parser_filter.html#ansible-collections-ansible-netcommon-vlan-parser-filter"><span class="std std-ref">vlan_parser filter</span></a> – The vlan_parser filter plugin.</p></li>
 </ul>
@@ -477,7 +490,7 @@
 </div>
 </section>
 <section id="httpapi-plugins">
-<h3>Httpapi Plugins<a class="headerlink" href="#httpapi-plugins" title="Link to this heading"></a></h3>
+<span id="httpapi-plugins-in-ansible-netcommon"></span><h3>Httpapi Plugins<a class="headerlink" href="#httpapi-plugins" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="restconf_httpapi.html#ansible-collections-ansible-netcommon-restconf-httpapi"><span class="std std-ref">restconf httpapi</span></a> – HttpApi Plugin for devices supporting Restconf API</p></li>
 </ul>
@@ -485,7 +498,7 @@
 </div>
 </section>
 <section id="netconf-plugins">
-<h3>Netconf Plugins<a class="headerlink" href="#netconf-plugins" title="Link to this heading"></a></h3>
+<span id="netconf-plugins-in-ansible-netcommon"></span><h3>Netconf Plugins<a class="headerlink" href="#netconf-plugins" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="default_netconf.html#ansible-collections-ansible-netcommon-default-netconf"><span class="std std-ref">default netconf</span></a> – Use default netconf plugin to run standard netconf commands as per RFC</p></li>
 </ul>
@@ -513,7 +526,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

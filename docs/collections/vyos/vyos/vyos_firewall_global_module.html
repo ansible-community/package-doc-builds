@@ -4,10 +4,10 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>vyos.vyos.vyos_firewall_global module – FIREWALL global resource module &mdash; Ansible Community Documentation</title>
+  <title>vyos.vyos.vyos_firewall_global module – Firewall global resource module &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="vyos.vyos.vyos_firewall_interfaces module – FIREWALL interfaces resource module" href="vyos_firewall_interfaces_module.html" />
+    <link rel="next" title="vyos.vyos.vyos_firewall_interfaces module – Firewall interfaces resource module" href="vyos_firewall_interfaces_module.html" />
     <link rel="prev" title="vyos.vyos.vyos_facts module – Get facts about vyos devices." href="vyos_facts_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -215,6 +222,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -226,6 +234,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Vyos Namespace</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Vyos.Vyos</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#platform-vyos">Platform VyOS</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
 </ul>
 </li>
@@ -285,13 +295,10 @@
           <li class="breadcrumb-item"><a href="../../index.html">Collection Index</a></li>
           <li class="breadcrumb-item"><a href="../index.html">Collections in the Vyos Namespace</a></li>
           <li class="breadcrumb-item"><a href="index.html">Vyos.Vyos</a></li>
-      <li class="breadcrumb-item active">vyos.vyos.vyos_firewall_global module – FIREWALL global resource module</li>
+      <li class="breadcrumb-item active">vyos.vyos.vyos_firewall_global module – Firewall global resource module</li>
   <li class="wy-breadcrumbs-aside">
-            <!-- Remove main index page as it is no longer editable -->
-            
-              <br>
-
-            
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/vyos/vyos.vyos/edit/main/plugins/modules/vyos_firewall_global.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
   </li>
   </ul>
   <hr/>
@@ -310,13 +317,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -331,11 +338,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -343,6 +356,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -367,10 +382,10 @@
            <div itemprop="articleBody">
              
   <span class="target" id="ansible-collections-vyos-vyos-vyos-firewall-global-module"></span><section id="vyos-vyos-vyos-firewall-global-module-firewall-global-resource-module">
-<h1>vyos.vyos.vyos_firewall_global module – FIREWALL global resource module<a class="headerlink" href="#vyos-vyos-vyos-firewall-global-module-firewall-global-resource-module" title="Link to this heading"></a></h1>
+<h1>vyos.vyos.vyos_firewall_global module – Firewall global resource module<a class="headerlink" href="#vyos-vyos-vyos-firewall-global-module-firewall-global-resource-module" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vyos/vyos/">vyos.vyos collection</a> (version 5.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vyos/vyos/">vyos.vyos collection</a> (version 6.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -536,7 +551,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-config/group/port_group/description"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-config-group-port-group-description"><strong>description</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/group/port_group/description" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Allows you to specify a brief description for the port group.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A brief description for the port group.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -550,7 +565,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-config/group/port_group/members/port"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-config-group-port-group-members-port"><strong>port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/group/port_group/members/port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Defines the number.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specified port.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -611,7 +626,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-config/route_redirects"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-config-route-redirects"><strong>route_redirects</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/route_redirects" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>-A dictionary of Firewall icmp redirect and source route global configuration options.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A dictionary of Firewall ICMP redirect and source route global configuration options.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -714,7 +729,26 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-config/state_policy/log_level"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-config-state-policy-log-level"><strong>log_level</strong></p>
+<a class="ansibleOptionLink" href="#parameter-config/state_policy/log_level" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specify log level for packets logged.</p>
+<p>Only available in 1.4+</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;emerg&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;alert&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;crit&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;err&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;warn&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;notice&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;info&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;debug&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/syn_cookies"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-config-syn-cookies"><strong>syn_cookies</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/syn_cookies" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -728,7 +762,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/twa_hazards_protection"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-config-twa-hazards-protection"><strong>twa_hazards_protection</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/twa_hazards_protection" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -740,7 +774,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-config/validation"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-config-validation"><strong>validation</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/validation" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -756,14 +790,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-running_config"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-running-config"><strong>running_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-running_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The module, by default, will connect to the remote device and retrieve the current running-config to use as a base for comparing against the contents of source. There are times when it is not desirable to have the task get the current running-config for every task in a playbook. The <em>running_config</em> argument allows the implementer to pass in the configuration to use as the base config for comparison. This value of this option should be the output received from device by executing command <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">configuration</span> <span class="pre">commands</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">'firewall'</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -787,7 +821,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>Tested against VyOS 1.1.8 (helium).</p></li>
+<li><p>Tested against VyOS 1.3.8, 1.4.2, the upcoming 1.5, and the rolling release of spring 2025.</p></li>
+<li><p>The provided examples of commands are valid for VyOS 1.4+</p></li>
 <li><p>This module works with connection <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code>. See <a class="reference external" href="../network/user_guide/platform_vyos.html">the VyOS OS Platform Options</a>.</p></li>
 </ul>
 </div>
@@ -817,6 +852,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">connection_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">established</span>
 <span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accept</span>
 <span class="w">          </span><span class="nt">log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">          </span><span class="nt">log_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">emerg</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">connection_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">invalid</span>
 <span class="w">          </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reject</span>
 <span class="w">      </span><span class="nt">route_redirects</span><span class="p">:</span>
@@ -856,19 +892,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#        &quot;set firewall group network-group MGMT network 192.0.1.0/24&quot;,</span>
 <span class="c1">#        &quot;set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;&quot;,</span>
 <span class="c1">#        &quot;set firewall group network-group MGMT&quot;,</span>
-<span class="c1">#        &quot;set firewall ip-src-route &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall receive-redirects &#39;disable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall send-redirects &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall config-trap &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall state-policy established action &#39;accept&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall state-policy established log &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall state-policy invalid action &#39;reject&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall broadcast-ping &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall all-ping &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall log-martians &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall twa-hazards-protection &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall syn-cookies &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall source-validation &#39;strict&#39;&quot;</span>
+<span class="c1">#        &quot;set firewall global-options ip-src-route &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options receive-redirects &#39;disable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options send-redirects &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options config-trap &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options state-policy established action &#39;accept&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options state-policy established log,</span>
+<span class="c1">#        &quot;set firewall global-options state-policy established log-level &#39;emerg&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options state-policy invalid action &#39;reject&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options broadcast-ping &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options all-ping &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options log-martians &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options twa-hazards-protection &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options syn-cookies &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options source-validation &#39;strict&#39;&quot;</span>
 <span class="c1">#    ]</span>
 <span class="c1">#</span>
 <span class="c1"># &quot;after&quot;: {</span>
@@ -938,55 +975,57 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@192# run show configuration commands | grep firewall</span>
-<span class="c1"># set firewall all-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall broadcast-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options all-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options broadcast-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options ip-src-route &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options log-martians &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options receive-redirects &#39;disable&#39;</span>
+<span class="c1"># set firewall global-options send-redirects &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options source-validation &#39;strict&#39;</span>
+<span class="c1"># set firewall global-options state-policy established action &#39;accept&#39;</span>
+<span class="c1"># set firewall global-options state-policy established log &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options state-policy invalid action &#39;reject&#39;</span>
+<span class="c1"># set firewall global-options syn-cookies &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options twa-hazards-protection &#39;enable&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.1&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.3&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.5&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS description &#39;This group has the Management hosts address list&#39;</span>
 <span class="c1"># set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;</span>
 <span class="c1"># set firewall group network-group MGMT network &#39;192.0.1.0/24&#39;</span>
-<span class="c1"># set firewall ip-src-route &#39;enable&#39;</span>
-<span class="c1"># set firewall log-martians &#39;enable&#39;</span>
-<span class="c1"># set firewall receive-redirects &#39;disable&#39;</span>
-<span class="c1"># set firewall send-redirects &#39;enable&#39;</span>
-<span class="c1"># set firewall source-validation &#39;strict&#39;</span>
-<span class="c1"># set firewall state-policy established action &#39;accept&#39;</span>
-<span class="c1"># set firewall state-policy established log &#39;enable&#39;</span>
-<span class="c1"># set firewall state-policy invalid action &#39;reject&#39;</span>
-<span class="c1"># set firewall syn-cookies &#39;enable&#39;</span>
-<span class="c1"># set firewall twa-hazards-protection &#39;enable&#39;</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
+
+
 <span class="c1"># Using parsed</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Render the commands for provided  configuration</span>
 <span class="w">  </span><span class="nt">vyos.vyos.vyos_firewall_global</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">running_config</span><span class="p">:</span>
-<span class="w">      </span><span class="s">&quot;set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">all-ping</span><span class="nv"> </span><span class="s">&#39;enable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">broadcast-ping</span><span class="nv"> </span><span class="s">&#39;enable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">config-trap</span><span class="nv"> </span><span class="s">&#39;enable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">address-group</span><span class="nv"> </span><span class="s">ENG-HOSTS</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">&#39;192.0.3.1&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">address-group</span><span class="nv"> </span><span class="s">ENG-HOSTS</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">&#39;192.0.3.2&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">address-group</span><span class="nv"> </span><span class="s">ENG-HOSTS</span><span class="nv"> </span><span class="s">description</span><span class="nv"> </span><span class="s">&#39;Sales</span><span class="nv"> </span><span class="s">office</span><span class="nv"> </span><span class="s">hosts</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">list&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">address-group</span><span class="nv"> </span><span class="s">SALES-HOSTS</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">&#39;192.0.2.1&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">address-group</span><span class="nv"> </span><span class="s">SALES-HOSTS</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">&#39;192.0.2.2&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">address-group</span><span class="nv"> </span><span class="s">SALES-HOSTS</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">&#39;192.0.2.3&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">address-group</span><span class="nv"> </span><span class="s">SALES-HOSTS</span><span class="nv"> </span><span class="s">description</span><span class="nv"> </span><span class="s">&#39;Sales</span><span class="nv"> </span><span class="s">office</span><span class="nv"> </span><span class="s">hosts</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">list&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">network-group</span><span class="nv"> </span><span class="s">MGMT</span><span class="nv"> </span><span class="s">description</span><span class="nv"> </span><span class="s">&#39;This</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">Management</span><span class="nv"> </span><span class="s">network</span><span class="nv"> </span><span class="s">addresses&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">group</span><span class="nv"> </span><span class="s">network-group</span><span class="nv"> </span><span class="s">MGMT</span><span class="nv"> </span><span class="s">network</span><span class="nv"> </span><span class="s">&#39;192.0.1.0/24&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">ip-src-route</span><span class="nv"> </span><span class="s">&#39;enable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">log-martians</span><span class="nv"> </span><span class="s">&#39;enable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">receive-redirects</span><span class="nv"> </span><span class="s">&#39;disable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">send-redirects</span><span class="nv"> </span><span class="s">&#39;enable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">source-validation</span><span class="nv"> </span><span class="s">&#39;strict&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">state-policy</span><span class="nv"> </span><span class="s">established</span><span class="nv"> </span><span class="s">action</span><span class="nv"> </span><span class="s">&#39;accept&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">state-policy</span><span class="nv"> </span><span class="s">established</span><span class="nv"> </span><span class="s">log</span><span class="nv"> </span><span class="s">&#39;enable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">state-policy</span><span class="nv"> </span><span class="s">invalid</span><span class="nv"> </span><span class="s">action</span><span class="nv"> </span><span class="s">&#39;reject&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">syn-cookies</span><span class="nv"> </span><span class="s">&#39;enable&#39;</span>
-<span class="w">       </span><span class="s">set</span><span class="nv"> </span><span class="s">firewall</span><span class="nv"> </span><span class="s">twa-hazards-protection</span><span class="nv"> </span><span class="s">&#39;enable&#39;&quot;</span>
+<span class="w">    </span><span class="nt">running_config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">       </span><span class="no">set firewall global-options all-ping &#39;enable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options broadcast-ping &#39;enable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options config-trap &#39;enable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options ip-src-route &#39;enable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options log-martians &#39;enable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options receive-redirects &#39;disable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options send-redirects &#39;enable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options source-validation &#39;strict&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options state-policy established action &#39;accept&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options state-policy established log &#39;enable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options state-policy invalid action &#39;reject&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options syn-cookies &#39;enable&#39;</span>
+<span class="w">       </span><span class="no">set firewall global-options twa-hazards-protection &#39;enable&#39;&quot;</span>
+<span class="w">       </span><span class="no">set firewall group address-group ENG-HOSTS address &#39;192.0.3.1&#39;</span>
+<span class="w">       </span><span class="no">set firewall group address-group ENG-HOSTS address &#39;192.0.3.2&#39;</span>
+<span class="w">       </span><span class="no">set firewall group address-group ENG-HOSTS description &#39;Sales office hosts address list&#39;</span>
+<span class="w">       </span><span class="no">set firewall group address-group SALES-HOSTS address &#39;192.0.2.1&#39;</span>
+<span class="w">       </span><span class="no">set firewall group address-group SALES-HOSTS address &#39;192.0.2.2&#39;</span>
+<span class="w">       </span><span class="no">set firewall group address-group SALES-HOSTS address &#39;192.0.2.3&#39;</span>
+<span class="w">       </span><span class="no">set firewall group address-group SALES-HOSTS description &#39;Sales office hosts address list&#39;</span>
+<span class="w">       </span><span class="no">set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;</span>
+<span class="w">       </span><span class="no">set firewall group network-group MGMT network &#39;192.0.1.0/24&#39;</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">parsed</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
@@ -1071,6 +1110,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#    }</span>
 <span class="c1"># }</span>
 <span class="c1">#</span>
+
+
 <span class="c1">#</span>
 <span class="c1"># Using deleted</span>
 <span class="c1">#</span>
@@ -1078,25 +1119,26 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@192# run show configuration commands | grep firewall</span>
-<span class="c1"># set firewall all-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall broadcast-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options all-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options broadcast-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options ip-src-route &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options log-martians &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options receive-redirects &#39;disable&#39;</span>
+<span class="c1"># set firewall global-options send-redirects &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options source-validation &#39;strict&#39;</span>
+<span class="c1"># set firewall global-options state-policy established action &#39;accept&#39;</span>
+<span class="c1"># set firewall global-options state-policy established log &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options state-policy invalid action &#39;reject&#39;</span>
+<span class="c1"># set firewall global-options syn-cookies &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options twa-hazards-protection &#39;enable&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.1&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.3&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.5&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS description &#39;This group has the Management hosts address list&#39;</span>
 <span class="c1"># set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;</span>
 <span class="c1"># set firewall group network-group MGMT network &#39;192.0.1.0/24&#39;</span>
-<span class="c1"># set firewall ip-src-route &#39;enable&#39;</span>
-<span class="c1"># set firewall log-martians &#39;enable&#39;</span>
-<span class="c1"># set firewall receive-redirects &#39;disable&#39;</span>
-<span class="c1"># set firewall send-redirects &#39;enable&#39;</span>
-<span class="c1"># set firewall source-validation &#39;strict&#39;</span>
-<span class="c1"># set firewall state-policy established action &#39;accept&#39;</span>
-<span class="c1"># set firewall state-policy established log &#39;enable&#39;</span>
-<span class="c1"># set firewall state-policy invalid action &#39;reject&#39;</span>
-<span class="c1"># set firewall syn-cookies &#39;enable&#39;</span>
-<span class="c1"># set firewall twa-hazards-protection &#39;enable&#39;</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete attributes of firewall.</span>
 <span class="w">  </span><span class="nt">vyos.vyos.vyos_firewall_global</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">config</span><span class="p">:</span>
@@ -1109,6 +1151,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">      </span><span class="nt">ping</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">group</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deleted</span>
+
 <span class="c1">#</span>
 <span class="c1">#</span>
 <span class="c1"># ------------------------</span>
@@ -1178,18 +1221,18 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#        &quot;validation&quot;: &quot;strict&quot;</span>
 <span class="c1">#    }</span>
 <span class="c1"># &quot;commands&quot;: [</span>
-<span class="c1">#        &quot;delete firewall source-validation&quot;,</span>
-<span class="c1">#        &quot;delete firewall group&quot;,</span>
-<span class="c1">#        &quot;delete firewall log-martians&quot;,</span>
-<span class="c1">#        &quot;delete firewall ip-src-route&quot;,</span>
-<span class="c1">#        &quot;delete firewall receive-redirects&quot;,</span>
-<span class="c1">#        &quot;delete firewall send-redirects&quot;,</span>
-<span class="c1">#        &quot;delete firewall config-trap&quot;,</span>
-<span class="c1">#        &quot;delete firewall state-policy&quot;,</span>
-<span class="c1">#        &quot;delete firewall syn-cookies&quot;,</span>
-<span class="c1">#        &quot;delete firewall broadcast-ping&quot;,</span>
-<span class="c1">#        &quot;delete firewall all-ping&quot;,</span>
-<span class="c1">#        &quot;delete firewall twa-hazards-protection&quot;</span>
+<span class="c1">#        &quot;delete firewall global-options source-validation&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options group&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options log-martians&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options ip-src-route&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options receive-redirects&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options send-redirects&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options config-trap&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options state-policy&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options syn-cookies&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options broadcast-ping&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options all-ping&quot;,</span>
+<span class="c1">#        &quot;delete firewall global-options twa-hazards-protection&quot;</span>
 <span class="c1">#    ]</span>
 <span class="c1">#</span>
 <span class="c1"># &quot;after&quot;: []</span>
@@ -1199,6 +1242,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># vyos@192# run show configuration commands | grep firewall</span>
 <span class="c1"># set  &#39;firewall&#39;</span>
 <span class="c1">#</span>
+
+
 <span class="c1">#</span>
 <span class="c1"># Using replaced</span>
 <span class="c1">#</span>
@@ -1206,25 +1251,25 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@vyos:~$ show configuration commands| grep firewall</span>
-<span class="c1"># set firewall all-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall broadcast-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options all-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options broadcast-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options ip-src-route &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options log-martians &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options receive-redirects &#39;disable&#39;</span>
+<span class="c1"># set firewall global-options send-redirects &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options source-validation &#39;strict&#39;</span>
+<span class="c1"># set firewall global-options state-policy established action &#39;accept&#39;</span>
+<span class="c1"># set firewall global-options state-policy established log &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options state-policy invalid action &#39;reject&#39;</span>
+<span class="c1"># set firewall global-options syn-cookies &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options twa-hazards-protection &#39;enable&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.1&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.3&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS address &#39;192.0.1.5&#39;</span>
 <span class="c1"># set firewall group address-group MGMT-HOSTS description &#39;This group has the Management hosts address list&#39;</span>
 <span class="c1"># set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;</span>
 <span class="c1"># set firewall group network-group MGMT network &#39;192.0.1.0/24&#39;</span>
-<span class="c1"># set firewall ip-src-route &#39;enable&#39;</span>
-<span class="c1"># set firewall log-martians &#39;enable&#39;</span>
-<span class="c1"># set firewall receive-redirects &#39;disable&#39;</span>
-<span class="c1"># set firewall send-redirects &#39;enable&#39;</span>
-<span class="c1"># set firewall source-validation &#39;strict&#39;</span>
-<span class="c1"># set firewall state-policy established action &#39;accept&#39;</span>
-<span class="c1"># set firewall state-policy established log &#39;enable&#39;</span>
-<span class="c1"># set firewall state-policy invalid action &#39;reject&#39;</span>
-<span class="c1"># set firewall syn-cookies &#39;enable&#39;</span>
-<span class="c1"># set firewall twa-hazards-protection &#39;enable&#39;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Replace firewall global attributes configuration.</span>
 <span class="w">  </span><span class="nt">vyos.vyos.vyos_firewall_global</span><span class="p">:</span>
@@ -1429,9 +1474,19 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@192# run show configuration commands | grep firewall</span>
-<span class="c1"># set firewall all-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall broadcast-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options all-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options broadcast-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options ip-src-route &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options log-martians &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options receive-redirects &#39;disable&#39;</span>
+<span class="c1"># set firewall global-options send-redirects &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options source-validation &#39;strict&#39;</span>
+<span class="c1"># set firewall global-options state-policy established action &#39;accept&#39;</span>
+<span class="c1"># set firewall global-options state-policy established log &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options state-policy invalid action &#39;reject&#39;</span>
+<span class="c1"># set firewall global-options syn-cookies &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options twa-hazards-protection &#39;enable&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS address &#39;192.0.3.1&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS address &#39;192.0.3.2&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS description &#39;Sales office hosts address list&#39;</span>
@@ -1441,27 +1496,29 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># set firewall group address-group SALES-HOSTS description &#39;Sales office hosts address list&#39;</span>
 <span class="c1"># set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;</span>
 <span class="c1"># set firewall group network-group MGMT network &#39;192.0.1.0/24&#39;</span>
-<span class="c1"># set firewall ip-src-route &#39;enable&#39;</span>
-<span class="c1"># set firewall log-martians &#39;enable&#39;</span>
-<span class="c1"># set firewall receive-redirects &#39;disable&#39;</span>
-<span class="c1"># set firewall send-redirects &#39;enable&#39;</span>
-<span class="c1"># set firewall source-validation &#39;strict&#39;</span>
-<span class="c1"># set firewall state-policy established action &#39;accept&#39;</span>
-<span class="c1"># set firewall state-policy established log &#39;enable&#39;</span>
-<span class="c1"># set firewall state-policy invalid action &#39;reject&#39;</span>
-<span class="c1"># set firewall syn-cookies &#39;enable&#39;</span>
-<span class="c1"># set firewall twa-hazards-protection &#39;enable&#39;</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
+
+
 <span class="c1"># Using gathered</span>
 <span class="c1">#</span>
 <span class="c1"># Before state:</span>
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@192# run show configuration commands | grep firewall</span>
-<span class="c1"># set firewall all-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall broadcast-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options all-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options broadcast-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options ip-src-route &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options log-martians &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options receive-redirects &#39;disable&#39;</span>
+<span class="c1"># set firewall global-options send-redirects &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options source-validation &#39;strict&#39;</span>
+<span class="c1"># set firewall global-options state-policy established action &#39;accept&#39;</span>
+<span class="c1"># set firewall global-options state-policy established log &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options state-policy invalid action &#39;reject&#39;</span>
+<span class="c1"># set firewall global-options syn-cookies &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options twa-hazards-protection &#39;enable&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS address &#39;192.0.3.1&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS address &#39;192.0.3.2&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS description &#39;Sales office hosts address list&#39;</span>
@@ -1471,17 +1528,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># set firewall group address-group SALES-HOSTS description &#39;Sales office hosts address list&#39;</span>
 <span class="c1"># set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;</span>
 <span class="c1"># set firewall group network-group MGMT network &#39;192.0.1.0/24&#39;</span>
-<span class="c1"># set firewall ip-src-route &#39;enable&#39;</span>
-<span class="c1"># set firewall log-martians &#39;enable&#39;</span>
-<span class="c1"># set firewall receive-redirects &#39;disable&#39;</span>
-<span class="c1"># set firewall send-redirects &#39;enable&#39;</span>
-<span class="c1"># set firewall source-validation &#39;strict&#39;</span>
-<span class="c1"># set firewall state-policy established action &#39;accept&#39;</span>
-<span class="c1"># set firewall state-policy established log &#39;enable&#39;</span>
-<span class="c1"># set firewall state-policy invalid action &#39;reject&#39;</span>
-<span class="c1"># set firewall syn-cookies &#39;enable&#39;</span>
-<span class="c1"># set firewall twa-hazards-protection &#39;enable&#39;</span>
-<span class="c1">#</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gather firewall global config with provided configurations</span>
 <span class="w">  </span><span class="nt">vyos.vyos.vyos_firewall_global</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gathered</span>
@@ -1571,9 +1618,19 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># -------------</span>
 <span class="c1">#</span>
 <span class="c1"># vyos@192# run show configuration commands | grep firewall</span>
-<span class="c1"># set firewall all-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall broadcast-ping &#39;enable&#39;</span>
-<span class="c1"># set firewall config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options all-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options broadcast-ping &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options config-trap &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options ip-src-route &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options log-martians &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options receive-redirects &#39;disable&#39;</span>
+<span class="c1"># set firewall global-options send-redirects &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options source-validation &#39;strict&#39;</span>
+<span class="c1"># set firewall global-options state-policy established action &#39;accept&#39;</span>
+<span class="c1"># set firewall global-options state-policy established log &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options state-policy invalid action &#39;reject&#39;</span>
+<span class="c1"># set firewall global-options syn-cookies &#39;enable&#39;</span>
+<span class="c1"># set firewall global-options twa-hazards-protection &#39;enable&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS address &#39;192.0.3.1&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS address &#39;192.0.3.2&#39;</span>
 <span class="c1"># set firewall group address-group ENG-HOSTS description &#39;Sales office hosts address list&#39;</span>
@@ -1583,16 +1640,6 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># set firewall group address-group SALES-HOSTS description &#39;Sales office hosts address list&#39;</span>
 <span class="c1"># set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;</span>
 <span class="c1"># set firewall group network-group MGMT network &#39;192.0.1.0/24&#39;</span>
-<span class="c1"># set firewall ip-src-route &#39;enable&#39;</span>
-<span class="c1"># set firewall log-martians &#39;enable&#39;</span>
-<span class="c1"># set firewall receive-redirects &#39;disable&#39;</span>
-<span class="c1"># set firewall send-redirects &#39;enable&#39;</span>
-<span class="c1"># set firewall source-validation &#39;strict&#39;</span>
-<span class="c1"># set firewall state-policy established action &#39;accept&#39;</span>
-<span class="c1"># set firewall state-policy established log &#39;enable&#39;</span>
-<span class="c1"># set firewall state-policy invalid action &#39;reject&#39;</span>
-<span class="c1"># set firewall syn-cookies &#39;enable&#39;</span>
-<span class="c1"># set firewall twa-hazards-protection &#39;enable&#39;</span>
 
 
 <span class="c1"># Using rendered</span>
@@ -1661,21 +1708,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#        &quot;set firewall group network-group MGMT network 192.0.1.0/24&quot;,</span>
 <span class="c1">#        &quot;set firewall group network-group MGMT description &#39;This group has the Management network addresses&#39;&quot;,</span>
 <span class="c1">#        &quot;set firewall group network-group MGMT&quot;,</span>
-<span class="c1">#        &quot;set firewall ip-src-route &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall receive-redirects &#39;disable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall send-redirects &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall config-trap &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall state-policy established action &#39;accept&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall state-policy established log &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall state-policy invalid action &#39;reject&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall broadcast-ping &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall all-ping &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall log-martians &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall twa-hazards-protection &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall syn-cookies &#39;enable&#39;&quot;,</span>
-<span class="c1">#        &quot;set firewall source-validation &#39;strict&#39;&quot;</span>
+<span class="c1">#        &quot;set firewall global-options ip-src-route &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options receive-redirects &#39;disable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options send-redirects &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options config-trap &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options state-policy established action &#39;accept&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options state-policy established log,</span>
+<span class="c1">#        &quot;set firewall global-options state-policy invalid action &#39;reject&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options broadcast-ping &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options all-ping &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options log-martians &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options twa-hazards-protection &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options syn-cookies &#39;enable&#39;&quot;,</span>
+<span class="c1">#        &quot;set firewall global-options source-validation &#39;strict&#39;&quot;</span>
 <span class="c1">#    ]</span>
-<span class="c1">#</span>
 <span class="c1">#</span>
 </pre></div>
 </div>
@@ -1692,20 +1738,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-after"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-return-after"><strong>after</strong></p>
-<a class="ansibleOptionLink" href="#return-after" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<a class="ansibleOptionLink" href="#return-after" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The resulting configuration model invocation.</p>
+<td><div class="ansible-option-cell"><p>The resulting configuration after module execution.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when changed</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format\n</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;This</span> <span class="pre">output</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">module</span> <span class="pre">argspec.\n&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-before"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-return-before"><strong>before</strong></p>
-<a class="ansibleOptionLink" href="#return-before" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<a class="ansibleOptionLink" href="#return-before" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The configuration prior to the model invocation.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;The</span> <span class="pre">configuration</span> <span class="pre">returned</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format\n</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">above.\n&quot;]</span></code></p>
+<td><div class="ansible-option-cell"><p>The configuration prior to the module execution.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">merged</span></code>, <code class="docutils literal notranslate"><span class="pre">replaced</span></code>, <code class="docutils literal notranslate"><span class="pre">overridden</span></code>, <code class="docutils literal notranslate"><span class="pre">deleted</span></code> or <code class="docutils literal notranslate"><span class="pre">purged</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;This</span> <span class="pre">output</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">module</span> <span class="pre">argspec.\n&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -1714,6 +1760,33 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>The set of commands pushed to the remote device.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;set</span> <span class="pre">firewall</span> <span class="pre">group</span> <span class="pre">address-group</span> <span class="pre">ENG-HOSTS&quot;,</span> <span class="pre">&quot;set</span> <span class="pre">firewall</span> <span class="pre">group</span> <span class="pre">address-group</span> <span class="pre">ENG-HOSTS</span> <span class="pre">address</span> <span class="pre">192.0.3.1&quot;]</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-gathered"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-return-gathered"><strong>gathered</strong></p>
+<a class="ansibleOptionLink" href="#return-gathered" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Facts about the network resource gathered from the remote device as structured data.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">gathered</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;This</span> <span class="pre">output</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">module</span> <span class="pre">argspec.\n&quot;]</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-parsed"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-return-parsed"><strong>parsed</strong></p>
+<a class="ansibleOptionLink" href="#return-parsed" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">parsed</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;This</span> <span class="pre">output</span> <span class="pre">will</span> <span class="pre">always</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">same</span> <span class="pre">format</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">module</span> <span class="pre">argspec.\n&quot;]</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-rendered"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-firewall-global-module-return-rendered"><strong>rendered</strong></p>
+<a class="ansibleOptionLink" href="#return-rendered" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The provided configuration in the task rendered in device-native format (offline).</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">rendered</span></code></p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;set</span> <span class="pre">firewall</span> <span class="pre">group</span> <span class="pre">address-group</span> <span class="pre">ENG-HOSTS&quot;,</span> <span class="pre">&quot;set</span> <span class="pre">firewall</span> <span class="pre">group</span> <span class="pre">address-group</span> <span class="pre">ENG-HOSTS</span> <span class="pre">address</span> <span class="pre">192.0.3.1&quot;]</span></code></p>
 </div></td>
 </tr>
@@ -1728,8 +1801,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <section id="collection-links">
 <h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
 <ul class="ansible-links">
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vyos.vyos/issues" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vyos.vyos" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://vyos.dev" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/vyos/vyos.vyos" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://vyos.dev/maniphest/task/edit/form/3/?projectPHIDs=PHID-PROJ-aryfih5l65cgcdmx4sqp" rel="noopener external" target="_blank">Report an issue</a></span></li>
+<li><span><a class="reference internal" href="index.html#communication-for-vyos-vyos"><span class="std std-ref">Communication</span></a></span></li>
 </ul>
 </section>
 </section>
@@ -1742,14 +1817,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="vyos_facts_module.html" class="btn btn-neutral float-left" title="vyos.vyos.vyos_facts module – Get facts about vyos devices." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="vyos_firewall_interfaces_module.html" class="btn btn-neutral float-right" title="vyos.vyos.vyos_firewall_interfaces module – FIREWALL interfaces resource module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="vyos_firewall_interfaces_module.html" class="btn btn-neutral float-right" title="vyos.vyos.vyos_firewall_interfaces module – Firewall interfaces resource module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

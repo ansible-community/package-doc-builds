@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>kubevirt.core.kubevirt_vm module – Create or delete KubeVirt VirtualMachines &mdash; Ansible Community Documentation</title>
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -223,6 +230,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -308,13 +316,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -329,11 +337,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -341,6 +355,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -368,7 +384,7 @@
 <h1>kubevirt.core.kubevirt_vm module – Create or delete KubeVirt VirtualMachines<a class="headerlink" href="#kubevirt-core-kubevirt-vm-module-create-or-delete-kubevirt-virtualmachines" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/kubevirt/core/">kubevirt.core collection</a> (version 2.1.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/kubevirt/core/">kubevirt.core collection</a> (version 2.2.3).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -550,6 +566,16 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-hidden_fields"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-hidden-fields"><strong>hidden_fields</strong></p>
+<a class="ansibleOptionLink" href="#parameter-hidden_fields" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in kubevirt.core 2.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Hide fields matching this option in the result.</p>
+<p>An example might be <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-hidden-fields"><span class="std std-ref"><span class="pre">hidden_fields=[metadata.managedFields]</span></span></a></code> or <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-hidden-fields"><span class="std std-ref"><span class="pre">hidden_fields=[metadata.annotations[kubemacpool.io/transaction-timestamp]]</span></span></a></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;metadata.annotations[kubemacpool.io/transaction-timestamp]&quot;,</span> <span class="pre">&quot;metadata.managedFields&quot;]</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-host"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-host"><strong>host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -557,7 +583,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Can also be specified via <a class="reference internal" href="../../environment_variables.html#envvar-K8S_AUTH_HOST"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">K8S_AUTH_HOST</span></code></a> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-impersonate_groups"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-impersonate-groups"><strong>impersonate_groups</strong></p>
 <a class="ansibleOptionLink" href="#parameter-impersonate_groups" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -565,7 +591,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Can also be specified via <code class="xref std std-envvar docutils literal notranslate"><span class="pre">K8S_AUTH_IMPERSONATE_GROUPS</span></code> environment variable, e.g. <code class="docutils literal notranslate"><span class="pre">Group1,Group2</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-impersonate_user"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-impersonate-user"><strong>impersonate_user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-impersonate_user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -573,7 +599,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Can also be specified via <code class="xref std std-envvar docutils literal notranslate"><span class="pre">K8S_AUTH_IMPERSONATE_USER</span></code> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-instancetype"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-instancetype"><strong>instancetype</strong></p>
 <a class="ansibleOptionLink" href="#parameter-instancetype" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -581,7 +607,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Only used when <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-state"><span class="std std-ref"><span class="pre">state=present</span></span></a></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-kubeconfig"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-kubeconfig"><strong>kubeconfig</strong></p>
 <a class="ansibleOptionLink" href="#parameter-kubeconfig" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
 </div></td>
@@ -591,14 +617,14 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>The kubernetes configuration can be provided as dictionary. This feature requires a python kubernetes client version &gt;= 17.17.0.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-labels"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-labels"><strong>labels</strong></p>
 <a class="ansibleOptionLink" href="#parameter-labels" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specify labels to set on the <code class="docutils literal notranslate"><span class="pre">VirtualMachine</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -607,14 +633,14 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Mutually exclusive with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-generate-name"><span class="std std-ref"><span class="pre">generate_name</span></span></a></strong></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-namespace"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-namespace"><strong>namespace</strong></p>
 <a class="ansibleOptionLink" href="#parameter-namespace" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specify the namespace of the <code class="docutils literal notranslate"><span class="pre">VirtualMachine</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-no_proxy"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-no-proxy"><strong>no_proxy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-no_proxy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -625,7 +651,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Example value is <code class="docutils literal notranslate"><span class="pre">localhost,.local,.example.com,127.0.0.1,127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -634,7 +660,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Please read the description of the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-username"><span class="std std-ref"><span class="pre">username</span></span></a></strong></code> option for a discussion of when this option is applicable.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-persist_config"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-persist-config"><strong>persist_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-persist_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -649,7 +675,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-preference"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-preference"><strong>preference</strong></p>
 <a class="ansibleOptionLink" href="#parameter-preference" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -657,7 +683,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Only used when <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-state"><span class="std std-ref"><span class="pre">state=present</span></span></a></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-proxy"><strong>proxy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -666,7 +692,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Please note that this module does not pick up typical proxy settings from the environment (e.g. <code class="xref std std-envvar docutils literal notranslate"><span class="pre">HTTP_PROXY</span></code>).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_headers"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-proxy-headers"><strong>proxy_headers</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_headers" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -674,7 +700,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Documentation can be found here <a class="reference external" href="https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html?highlight=proxy_headers#urllib3.util.make_headers">https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html?highlight=proxy_headers#urllib3.util.make_headers</a>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_headers/basic_auth"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-proxy-headers-basic-auth"><strong>basic_auth</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_headers/basic_auth" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -682,7 +708,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Can also be specified via <code class="xref std std-envvar docutils literal notranslate"><span class="pre">K8S_AUTH_PROXY_HEADERS_BASIC_AUTH</span></code> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_headers/proxy_basic_auth"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-proxy-headers-proxy-basic-auth"><strong>proxy_basic_auth</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_headers/proxy_basic_auth" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -690,7 +716,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Can also be specified via <code class="xref std std-envvar docutils literal notranslate"><span class="pre">K8S_AUTH_PROXY_HEADERS_PROXY_BASIC_AUTH</span></code> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proxy_headers/user_agent"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-proxy-headers-user-agent"><strong>user_agent</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proxy_headers/user_agent" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -698,7 +724,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Can also be specified via <code class="xref std std-envvar docutils literal notranslate"><span class="pre">K8S_AUTH_PROXY_HEADERS_USER_AGENT</span></code> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-run_strategy"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-run-strategy"><strong>run_strategy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-run_strategy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in kubevirt.core 2.0.0</em></p>
@@ -715,7 +741,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-running"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-running"><strong>running</strong></p>
 <a class="ansibleOptionLink" href="#parameter-running" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -729,7 +755,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-spec"><strong>spec</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -737,7 +763,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>See <a class="reference external" href="https://kubevirt.io/api-reference/main/definitions.html#_v1_virtualmachineinstancespec">https://kubevirt.io/api-reference/main/definitions.html#_v1_virtualmachineinstancespec</a></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -752,7 +778,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -760,7 +786,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p>Can also be specified via <a class="reference internal" href="../../environment_variables.html#envvar-K8S_AUTH_USERNAME"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">K8S_AUTH_USERNAME</span></code></a> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
 <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-verify-ssl"><span id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-validate-certs"></span><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</span></p>
@@ -775,7 +801,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-wait"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-wait"><strong>wait</strong></p>
 <a class="ansibleOptionLink" href="#parameter-wait" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -787,7 +813,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-wait_sleep"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-wait-sleep"><strong>wait_sleep</strong></p>
 <a class="ansibleOptionLink" href="#parameter-wait_sleep" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -796,7 +822,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">5</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-wait_timeout"></div><p class="ansible-option-title" id="ansible-collections-kubevirt-core-kubevirt-vm-module-parameter-wait-timeout"><strong>wait_timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-wait_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -983,7 +1009,7 @@ see <a class="reference internal" href="#ansible-collections-kubevirt-core-kubev
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

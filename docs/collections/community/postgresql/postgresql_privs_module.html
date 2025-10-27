@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.postgresql.postgresql_privs module – Grant or revoke privileges on PostgreSQL database objects &mdash; Ansible Community Documentation</title>
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -204,6 +211,7 @@
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../proxmox/index.html">Community.Proxmox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../proxysql/index.html">Community.Proxysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../rabbitmq/index.html">Community.Rabbitmq</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../routeros/index.html">Community.Routeros</a></li>
@@ -246,6 +254,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -331,13 +340,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -352,11 +361,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -364,6 +379,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -391,7 +408,7 @@
 <h1>community.postgresql.postgresql_privs module – Grant or revoke privileges on PostgreSQL database objects<a class="headerlink" href="#community-postgresql-postgresql-privs-module-grant-or-revoke-privileges-on-postgresql-database-objects" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/postgresql/">community.postgresql collection</a> (version 3.14.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/postgresql/">community.postgresql collection</a> (version 4.1.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -514,6 +531,17 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-login_port"></div>
+<div class="ansibleOptionAnchor" id="parameter-port"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-port"><span id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-login-port"></span><strong>login_port</strong></p>
+<a class="ansibleOptionLink" href="#parameter-login_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: port</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Database port to connect to.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">port</span></code> alias is deprecated and will be removed in the next major release. Use <code class="docutils literal notranslate"><span class="pre">login_port</span></code> instead.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">5432</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-login_unix_socket"></div>
 <div class="ansibleOptionAnchor" id="parameter-unix_socket"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-unix-socket"><span id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-login-unix-socket"></span><strong>login_unix_socket</strong></p>
 <a class="ansibleOptionLink" href="#parameter-login_unix_socket" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: unix_socket</span></p>
@@ -523,7 +551,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-login_user"></div>
 <div class="ansibleOptionAnchor" id="parameter-login"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-login-user"><span id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-login"></span><strong>login_user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-login_user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: login</span></p>
@@ -533,7 +561,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;postgres&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-objs"></div>
 <div class="ansibleOptionAnchor" id="parameter-obj"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-objs"><span id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-obj"></span><strong>objs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-objs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: obj</span></p>
@@ -547,27 +575,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p>If <em>type</em> is <code class="docutils literal notranslate"><span class="pre">function</span></code> or <code class="docutils literal notranslate"><span class="pre">procedure</span></code>, colons (“:”) in object names will be replaced with commas (needed to specify signatures, see examples).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-password"><strong>password</strong></p>
-<a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-cell"><p>The password to authenticate with.</p>
-<p>This option has been <strong>deprecated</strong> and will be removed in community.postgresql 4.0.0, use the <em>login_password</em> option instead.</p>
-<p>Mutually exclusive with <em>login_password</em>.</p>
-<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
-</div></td>
-</tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-port"></div>
-<div class="ansibleOptionAnchor" id="parameter-login_port"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-port"><span id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-login-port"></span><strong>port</strong></p>
-<a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: login_port</span></p>
-<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
-</div></td>
-<td><div class="ansible-option-cell"><p>Database port to connect to.</p>
-<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">5432</span></code></p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-privs"></div>
 <div class="ansibleOptionAnchor" id="parameter-priv"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-privs"><span id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-priv"></span><strong>privs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-privs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: priv</span></p>
@@ -576,7 +584,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <td><div class="ansible-option-cell"><p>Comma separated list of privileges to grant/revoke.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-roles"></div>
 <div class="ansibleOptionAnchor" id="parameter-role"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-roles"><span id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-role"></span><strong>roles</strong></p>
 <a class="ansibleOptionLink" href="#parameter-roles" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: role</span></p>
@@ -588,7 +596,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p><code class="docutils literal notranslate"><span class="pre">CURRENT_ROLE</span></code> implicit role is supported since collection version 3.1.0 and PostgreSQL 14.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-schema"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-schema"><strong>schema</strong></p>
 <a class="ansibleOptionLink" href="#parameter-schema" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -598,7 +606,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p>If not specified, uses <code class="docutils literal notranslate"><span class="pre">public</span></code>. Not to pass any schema, use <code class="docutils literal notranslate"><span class="pre">not-specified</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-session_role"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-session-role"><strong>session_role</strong></p>
 <a class="ansibleOptionLink" href="#parameter-session_role" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -607,7 +615,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p>Permissions checking for SQL commands is carried out as though the session_role were the one that had logged in originally.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ssl_cert"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-ssl-cert"><strong>ssl_cert</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ssl_cert" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 <p><em class="ansible-option-versionadded">added in community.postgresql 2.4.0</em></p>
@@ -615,7 +623,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <td><div class="ansible-option-cell"><p>Specifies the file name of the client SSL certificate.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ssl_key"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-ssl-key"><strong>ssl_key</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ssl_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 <p><em class="ansible-option-versionadded">added in community.postgresql 2.4.0</em></p>
@@ -623,7 +631,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <td><div class="ansible-option-cell"><p>Specifies the location for the secret key used for the client certificate.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ssl_mode"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-ssl-mode"><strong>ssl_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ssl_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -641,7 +649,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -653,7 +661,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-target_roles"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-target-roles"><strong>target_roles</strong></p>
 <a class="ansibleOptionLink" href="#parameter-target_roles" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -661,7 +669,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <p>Parameter <em>target_roles</em> is only available with <code class="docutils literal notranslate"><span class="pre">type=default_privs</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-trust_input"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-trust-input"><strong>trust_input</strong></p>
 <a class="ansibleOptionLink" href="#parameter-trust_input" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in community.postgresql 0.2.0</em></p>
@@ -675,7 +683,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-type"></div><p class="ansible-option-title" id="ansible-collections-community-postgresql-postgresql-privs-module-parameter-type"><strong>type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1068,7 +1076,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

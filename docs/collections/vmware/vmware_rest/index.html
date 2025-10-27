@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vmware.Vmware_Rest &mdash; Ansible Community Documentation</title>
@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Guidelines for VMware REST module development" href="docsite/dev_guide.html" />
-    <link rel="prev" title="vmware.vmware.vms inventory – Create an inventory containing VMware VMs" href="../vmware/vms_inventory.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="vmware.vmware.moid_from_path lookup – Look up MoID for vSphere objects based on the inventory path" href="../vmware/moid_from_path_lookup.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -215,6 +222,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -311,13 +319,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -332,11 +340,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -344,6 +358,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -369,7 +385,7 @@
              
   <section id="vmware-vmware-rest">
 <span id="plugins-in-vmware-vmware-rest"></span><h1>Vmware.Vmware_Rest<a class="headerlink" href="#vmware-vmware-rest" title="Link to this heading"></a></h1>
-<p>Collection version 4.7.0</p>
+<p>Collection version 4.9.0</p>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#description" id="id1">Description</a></p></li>
@@ -390,8 +406,7 @@
 </ul>
 <ul class="ansible-links">
 <li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vmware.vmware_rest" rel="noopener external" target="_blank">Homepage</a></span></li>
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vmware.vmware_rest.git" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vmware.vmware_rest" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
@@ -405,10 +420,10 @@
 </div>
 </section>
 <section id="plugin-index">
-<h2><a class="toc-backref" href="#id3" role="doc-backlink">Plugin Index</a><a class="headerlink" href="#plugin-index" title="Link to this heading"></a></h2>
+<span id="plugin-index-for-vmware-vmware-rest"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Plugin Index</a><a class="headerlink" href="#plugin-index" title="Link to this heading"></a></h2>
 <p>These are the plugins in the vmware.vmware_rest collection:</p>
 <section id="modules">
-<h3>Modules<a class="headerlink" href="#modules" title="Link to this heading"></a></h3>
+<span id="module-plugins-in-vmware-vmware-rest"></span><h3>Modules<a class="headerlink" href="#modules" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="appliance_access_consolecli_module.html#ansible-collections-vmware-vmware-rest-appliance-access-consolecli-module"><span class="std std-ref">appliance_access_consolecli module</span></a> – Set enabled state of the console-based controlled CLI (TTY1). <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
 <li><p><a class="reference internal" href="appliance_access_consolecli_info_module.html#ansible-collections-vmware-vmware-rest-appliance-access-consolecli-info-module"><span class="std std-ref">appliance_access_consolecli_info module</span></a> – Get enabled state of the console-based controlled CLI (TTY1). <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
@@ -549,16 +564,16 @@
 </div>
 </section>
 <section id="lookup-plugins">
-<h3>Lookup Plugins<a class="headerlink" href="#lookup-plugins" title="Link to this heading"></a></h3>
+<span id="lookup-plugins-in-vmware-vmware-rest"></span><h3>Lookup Plugins<a class="headerlink" href="#lookup-plugins" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="reference internal" href="cluster_moid_lookup.html#ansible-collections-vmware-vmware-rest-cluster-moid-lookup"><span class="std std-ref">cluster_moid lookup</span></a> – Look up MoID for vSphere cluster objects using vCenter REST API</p></li>
-<li><p><a class="reference internal" href="datacenter_moid_lookup.html#ansible-collections-vmware-vmware-rest-datacenter-moid-lookup"><span class="std std-ref">datacenter_moid lookup</span></a> – Look up MoID for vSphere datacenter objects using vCenter REST API</p></li>
-<li><p><a class="reference internal" href="datastore_moid_lookup.html#ansible-collections-vmware-vmware-rest-datastore-moid-lookup"><span class="std std-ref">datastore_moid lookup</span></a> – Look up MoID for vSphere datastore objects using vCenter REST API</p></li>
-<li><p><a class="reference internal" href="folder_moid_lookup.html#ansible-collections-vmware-vmware-rest-folder-moid-lookup"><span class="std std-ref">folder_moid lookup</span></a> – Look up MoID for vSphere folder objects using vCenter REST API</p></li>
-<li><p><a class="reference internal" href="host_moid_lookup.html#ansible-collections-vmware-vmware-rest-host-moid-lookup"><span class="std std-ref">host_moid lookup</span></a> – Look up MoID for vSphere host objects using vCenter REST API</p></li>
-<li><p><a class="reference internal" href="network_moid_lookup.html#ansible-collections-vmware-vmware-rest-network-moid-lookup"><span class="std std-ref">network_moid lookup</span></a> – Look up MoID for vSphere network objects using vCenter REST API</p></li>
-<li><p><a class="reference internal" href="resource_pool_moid_lookup.html#ansible-collections-vmware-vmware-rest-resource-pool-moid-lookup"><span class="std std-ref">resource_pool_moid lookup</span></a> – Look up MoID for vSphere resource pool objects using vCenter REST API</p></li>
-<li><p><a class="reference internal" href="vm_moid_lookup.html#ansible-collections-vmware-vmware-rest-vm-moid-lookup"><span class="std std-ref">vm_moid lookup</span></a> – Look up MoID for vSphere vm objects using vCenter REST API</p></li>
+<li><p><a class="reference internal" href="cluster_moid_lookup.html#ansible-collections-vmware-vmware-rest-cluster-moid-lookup"><span class="std std-ref">cluster_moid lookup</span></a> – Look up MoID for vSphere cluster objects using vCenter REST API <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
+<li><p><a class="reference internal" href="datacenter_moid_lookup.html#ansible-collections-vmware-vmware-rest-datacenter-moid-lookup"><span class="std std-ref">datacenter_moid lookup</span></a> – Look up MoID for vSphere datacenter objects using vCenter REST API <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
+<li><p><a class="reference internal" href="datastore_moid_lookup.html#ansible-collections-vmware-vmware-rest-datastore-moid-lookup"><span class="std std-ref">datastore_moid lookup</span></a> – Look up MoID for vSphere datastore objects using vCenter REST API <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
+<li><p><a class="reference internal" href="folder_moid_lookup.html#ansible-collections-vmware-vmware-rest-folder-moid-lookup"><span class="std std-ref">folder_moid lookup</span></a> – Look up MoID for vSphere folder objects using vCenter REST API <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
+<li><p><a class="reference internal" href="host_moid_lookup.html#ansible-collections-vmware-vmware-rest-host-moid-lookup"><span class="std std-ref">host_moid lookup</span></a> – Look up MoID for vSphere host objects using vCenter REST API <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
+<li><p><a class="reference internal" href="network_moid_lookup.html#ansible-collections-vmware-vmware-rest-network-moid-lookup"><span class="std std-ref">network_moid lookup</span></a> – Look up MoID for vSphere network objects using vCenter REST API <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
+<li><p><a class="reference internal" href="resource_pool_moid_lookup.html#ansible-collections-vmware-vmware-rest-resource-pool-moid-lookup"><span class="std std-ref">resource_pool_moid lookup</span></a> – Look up MoID for vSphere resource pool objects using vCenter REST API <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
+<li><p><a class="reference internal" href="vm_moid_lookup.html#ansible-collections-vmware-vmware-rest-vm-moid-lookup"><span class="std std-ref">vm_moid lookup</span></a> – Look up MoID for vSphere vm objects using vCenter REST API <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
@@ -576,7 +591,7 @@
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../vmware/vms_inventory.html" class="btn btn-neutral float-left" title="vmware.vmware.vms inventory – Create an inventory containing VMware VMs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../vmware/moid_from_path_lookup.html" class="btn btn-neutral float-left" title="vmware.vmware.moid_from_path lookup – Look up MoID for vSphere objects based on the inventory path" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="docsite/dev_guide.html" class="btn btn-neutral float-right" title="Guidelines for VMware REST module development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -584,7 +599,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

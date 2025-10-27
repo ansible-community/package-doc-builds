@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>netapp.ontap.na_ontap_volume module – NetApp ONTAP manage volumes. &mdash; Ansible Community Documentation</title>
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -224,6 +231,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -312,13 +320,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -333,11 +341,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -345,6 +359,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -372,7 +388,7 @@
 <h1>netapp.ontap.na_ontap_volume module – NetApp ONTAP manage volumes.<a class="headerlink" href="#netapp-ontap-na-ontap-volume-module-netapp-ontap-manage-volumes" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 22.14.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 23.1.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -403,7 +419,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <ul class="simple">
 <li><p>Ansible 2.9 or later - 2.12 or later is recommended.</p></li>
 <li><p>Python3 - 3.9 or later is recommended.</p></li>
-<li><p>When using ZAPI, netapp-lib 2018.11.13 or later (install using ‘pip install netapp-lib’), netapp-lib 2020.3.12 is strongly recommended as it provides better error reporting for connection issues.</p></li>
+<li><p>netapp-lib only when using ZAPI (install using ‘pip install netapp-lib’), Please note that netapp-lib is deprecated and no longer maintained. Proceed at your own risk.</p></li>
 <li><p>A physical or virtual clustered Data ONTAP system, the modules support Data ONTAP 9.1 and onward, REST support requires ONTAP 9.6 or later.</p></li>
 </ul>
 </section>
@@ -1398,16 +1414,97 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p><em class="ansible-option-versionadded">added in netapp.ontap 20.4.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>A dictionary for the auto delete options and values.</p>
-<p>Supported options include ‘state’, ‘commitment’, ‘trigger’, ‘target_free_space’, ‘delete_order’, ‘defer_delete’, ‘prefix’, ‘destroy_list’.</p>
 <p>All the above mentioned options except ‘destroy_list’ are supported in REST for ONTAP 9.13.1 or later with ONTAP collection version 22.8.0 or later.</p>
-<p>Option ‘state’ determines if the snapshot autodelete is currently enabled for the volume. Possible values are ‘on’ and ‘off’.</p>
-<p>Option ‘commitment’ determines the snapshots which snapshot autodelete is allowed to delete to get back space. Possible values are ‘try’, ‘disrupt’ and ‘destroy’.</p>
-<p>Option ‘trigger’ determines the condition which starts the automatic deletion of snapshots. Possible values are ‘volume’, ‘snap_reserve’ and DEPRECATED ‘space_reserve’.</p>
-<p>Option ‘target_free_space’ determines when snapshot autodelete should stop deleting snapshots. Depending on the trigger, snapshots are deleted till we reach the target free space percentage. Accepts int type.</p>
-<p>Option ‘delete_order’ determines if the oldest or newest snapshot is deleted first. Possible values are ‘newest_first’ and ‘oldest_first’.</p>
-<p>Option ‘defer_delete’ determines which kind of snapshots to delete in the end. Possible values are ‘scheduled’, ‘user_created’, ‘prefix’ and ‘none’.</p>
-<p>Option ‘prefix’ can be set to provide the prefix string for the ‘prefix’ value of the ‘defer_delete’ option. The prefix string length can be 15 char long.</p>
-<p>Option ‘destroy_list’ is a comma seperated list of services which can be destroyed if the snapshot backing that service is deleted. For 7-mode, the possible values for this option are a combination of ‘lun_clone’, ‘vol_clone’, ‘cifs_share’, ‘file_clone’ or ‘none’. For cluster-mode, the possible values for this option are a combination of ‘lun_clone,file_clone’ (for LUN clone and/or file clone), ‘lun_clone,sfsr’ (for LUN clone and/or sfsr), ‘vol_clone’, ‘cifs_share’, or ‘none’.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-snapshot_auto_delete/commitment"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-snapshot-auto-delete-commitment"><strong>commitment</strong></p>
+<a class="ansibleOptionLink" href="#parameter-snapshot_auto_delete/commitment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Determines the snapshots that the snapshot autodelete is allowed to delete to get back space.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;try&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;disrupt&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;destroy&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-snapshot_auto_delete/defer_delete"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-snapshot-auto-delete-defer-delete"><strong>defer_delete</strong></p>
+<a class="ansibleOptionLink" href="#parameter-snapshot_auto_delete/defer_delete" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Determines what kind of snapshot to delete in the end.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;scheduled&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;user_created&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;prefix&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-snapshot_auto_delete/delete_order"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-snapshot-auto-delete-delete-order"><strong>delete_order</strong></p>
+<a class="ansibleOptionLink" href="#parameter-snapshot_auto_delete/delete_order" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Determines if the oldest or newest snapshot is deleted first.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;newest_first&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;oldest_first&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-snapshot_auto_delete/destroy_list"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-snapshot-auto-delete-destroy-list"><strong>destroy_list</strong></p>
+<a class="ansibleOptionLink" href="#parameter-snapshot_auto_delete/destroy_list" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A comma seperated list of services which can be destroyed if the snapshot backing that service is deleted.</p>
+<p>For 7-mode, the possible values for this option are a combination of ‘lun_clone’, ‘vol_clone’, ‘cifs_share’, ‘file_clone’ or ‘none’.</p>
+<p>For cluster-mode, the possible values for this option are a combination of ‘lun_clone,file_clone’ (for LUN clone and/or file clone), ‘lun_clone,sfsr’ (for LUN clone and/or sfsr), ‘vol_clone’, ‘cifs_share’, or ‘none’.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-snapshot_auto_delete/prefix"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-snapshot-auto-delete-prefix"><strong>prefix</strong></p>
+<a class="ansibleOptionLink" href="#parameter-snapshot_auto_delete/prefix" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Can be set to provide the prefix string for the ‘prefix’ value of the ‘defer_delete’ option.</p>
+<p>The prefix string can be 15 characters long.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-snapshot_auto_delete/state"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-snapshot-auto-delete-state"><strong>state</strong></p>
+<a class="ansibleOptionLink" href="#parameter-snapshot_auto_delete/state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Determines if the snapshot autodelete is currently enabled for the volume.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;on&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;off&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-snapshot_auto_delete/target_free_space"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-snapshot-auto-delete-target-free-space"><strong>target_free_space</strong></p>
+<a class="ansibleOptionLink" href="#parameter-snapshot_auto_delete/target_free_space" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Determines when snapshot autodelete should stop deleting snapshots.</p>
+<p>Depending on the trigger, snapshots are deleted until the target free space percentage is reached.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-snapshot_auto_delete/trigger"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-snapshot-auto-delete-trigger"><strong>trigger</strong></p>
+<a class="ansibleOptionLink" href="#parameter-snapshot_auto_delete/trigger" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Determines the condition which starts the automatic deletion of snapshots.</p>
+<p>Note - <code class="docutils literal notranslate"><span class="pre">space_reserve</span></code> option is deprecated and may be removed in the future.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;volume&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;snap_reserve&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;space_reserve&quot;</span></code></p></li>
+</ul>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -1504,6 +1601,17 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-tiering_object_tags"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-tiering-object-tags"><strong>tiering_object_tags</strong></p>
+<a class="ansibleOptionLink" href="#parameter-tiering_object_tags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in netapp.ontap 23.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>This parameter specifies tags of a volume for objects stored on a FabricPool-enabled aggregate.</p>
+<p>Each tag is a key,value pair and should be in the format “key=value”.</p>
+<p>A maximum of 4 tags are allowed per volume.</p>
+<p>To remove all existing tiering object tags, specify an empty list as the parameter value.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-tiering_policy"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-tiering-policy"><strong>tiering_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-tiering_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 2.9.0</em></p>
@@ -1527,7 +1635,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-time_out"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-time-out"><strong>time_out</strong></p>
 <a class="ansibleOptionLink" href="#parameter-time_out" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 2.8.0</em></p>
@@ -1541,35 +1649,35 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">180</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-type"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-type"><strong>type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The volume type, either read-write (RW) or data-protection (DP).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-unix_permissions"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-unix-permissions"><strong>unix_permissions</strong></p>
 <a class="ansibleOptionLink" href="#parameter-unix_permissions" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 2.8.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Unix permission bits in octal or symbolic format.</p>
-<p>For example, 0 is equivalent to ————, 777 is equivalent to —rwxrwxrwx,both formats are accepted.</p>
+<p>For example, 0 is equivalent to ------------, 777 is equivalent to ---rwxrwxrwx,both formats are accepted.</p>
 <p>The valid octal value ranges between 0 and 777 inclusive.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_rest"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-use-rest"><strong>use_rest</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_rest" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Whether to use REST or ZAPI.</p>
-<p>always – will always use the REST API if the module supports REST. A warning is issued if the module does not support REST. An error is issued if a module option is not supported in REST.</p>
-<p>never – will always use ZAPI if the module supports ZAPI. An error may be issued if a REST option is not supported in ZAPI.</p>
-<p>auto – will try to use the REST API if the module supports REST and modules options are supported. Reverts to ZAPI otherwise.</p>
-<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code></p>
+<p>always -- will always use the REST API if the module supports REST. A warning is issued if the module does not support REST. An error is issued if a module option is not supported in REST.</p>
+<p>never -- will always use ZAPI if the module supports ZAPI. An error may be issued if a REST option is not supported in ZAPI.</p>
+<p>auto -- will try to use the REST API if the module supports REST and modules options are supported. Reverts to ZAPI otherwise.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;always&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-user_id"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-user-id"><strong>user_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-user_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 20.1.0</em></p>
@@ -1577,7 +1685,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <td><div class="ansible-option-cell"><p>The UNIX user ID for the volume. The default value is 0 (‘root’).</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div>
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-username"><span id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-user"></span><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: user</span></p>
@@ -1593,7 +1701,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>To use a certificate, the certificate must have been installed in the ONTAP cluster, and cert authentication must have been enabled.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1606,7 +1714,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vol_full_threshold_percent"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-vol-full-threshold-percent"><strong>vol_full_threshold_percent</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vol_full_threshold_percent" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 22.8.0</em></p>
@@ -1617,7 +1725,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Supported only with REST and requires ONTAP 9.9 or later.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vol_nearly_full_threshold_percent"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-vol-nearly-full-threshold-percent"><strong>vol_nearly_full_threshold_percent</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vol_nearly_full_threshold_percent" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 22.8.0</em></p>
@@ -1628,7 +1736,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p>Supported only with REST and requires ONTAP 9.9 or later.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-volume_security_style"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-volume-security-style"><strong>volume_security_style</strong></p>
 <a class="ansibleOptionLink" href="#parameter-volume_security_style" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1642,14 +1750,14 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vserver"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-vserver"><strong>vserver</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vserver" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the vserver to use.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vserver_dr_protection"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-vserver-dr-protection"><strong>vserver_dr_protection</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vserver_dr_protection" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 2.9.0</em></p>
@@ -1662,7 +1770,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-wait_for_completion"></div><p class="ansible-option-title" id="ansible-collections-netapp-ontap-na-ontap-volume-module-parameter-wait-for-completion"><strong>wait_for_completion</strong></p>
 <a class="ansibleOptionLink" href="#parameter-wait_for_completion" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in netapp.ontap 2.8.0</em></p>
@@ -1716,6 +1824,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <span class="w">    </span><span class="nt">space_slo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span>
 <span class="w">    </span><span class="nt">nvfail_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">    </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible created volume</span>
+<span class="w">    </span><span class="nt">tiering_object_tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;tag1=one&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tag2=two&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tag3=3&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tag4=4&#39;</span><span class="p p-Indicator">]</span>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -1814,12 +1923,12 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vol_auto_delete</span>
 <span class="w">    </span><span class="nt">snapshot_auto_delete</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;on&quot;</span>
-<span class="w">        </span><span class="nt">commitment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">try</span>
-<span class="w">        </span><span class="nt">defer_delete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduled</span>
-<span class="w">        </span><span class="nt">target_free_space</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
-<span class="w">        </span><span class="nt">destroy_list</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lun_clone,vol_clone</span>
-<span class="w">        </span><span class="nt">delete_order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">newest_first</span>
+<span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;on&quot;</span>
+<span class="w">      </span><span class="nt">commitment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">try</span>
+<span class="w">      </span><span class="nt">defer_delete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scheduled</span>
+<span class="w">      </span><span class="nt">target_free_space</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">      </span><span class="nt">destroy_list</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lun_clone,vol_clone</span>
+<span class="w">      </span><span class="nt">delete_order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">newest_first</span>
 <span class="w">    </span><span class="nt">aggregate_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">aggr</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">vserver</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vserver</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -1888,11 +1997,11 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <span class="w">    </span><span class="nt">efficiency_policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
 <span class="w">    </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testing</span>
 <span class="w">    </span><span class="nt">nas_application_template</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">nfs_access</span><span class="p">:</span><span class="w">   </span><span class="c1"># the mere presence of a suboption is enough to enable this new feature</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">access</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ro</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">access</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rw</span>
-<span class="w">            </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0.0.0/8</span>
-<span class="w">        </span><span class="nt">exclude_aggregates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aggr0</span>
+<span class="w">      </span><span class="nt">nfs_access</span><span class="p">:</span><span class="w">   </span><span class="c1"># the mere presence of a suboption is enough to enable this new feature</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">access</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ro</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">access</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rw</span>
+<span class="w">          </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0.0.0/8</span>
+<span class="w">      </span><span class="nt">exclude_aggregates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aggr0</span>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -1911,8 +2020,8 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <span class="w">    </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rw</span>
 <span class="w">    </span><span class="nt">snaplock</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enterprise</span>
-<span class="w">        </span><span class="nt">retention</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enterprise</span>
+<span class="w">      </span><span class="nt">retention</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="m">60</span> <span class="o">|</span> <span class="nf">netapp</span><span class="nv">.ontap.iso8601_duration_from_seconds</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create volume with snapshot-auto-delete options - REST</span>
@@ -1923,13 +2032,13 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
 <span class="w">    </span><span class="nt">size_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mb</span>
 <span class="w">    </span><span class="nt">snapshot_auto_delete</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;on&#39;</span>
-<span class="w">        </span><span class="nt">trigger</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">volume</span>
-<span class="w">        </span><span class="nt">delete_order</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oldest_first&quot;</span>
-<span class="w">        </span><span class="nt">defer_delete</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;user_created&quot;</span>
-<span class="w">        </span><span class="nt">commitment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;try&quot;</span>
-<span class="w">        </span><span class="nt">target_free_space</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
-<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_prefix&quot;</span>
+<span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;on&#39;</span>
+<span class="w">      </span><span class="nt">trigger</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">volume</span>
+<span class="w">      </span><span class="nt">delete_order</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;oldest_first&quot;</span>
+<span class="w">      </span><span class="nt">defer_delete</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;user_created&quot;</span>
+<span class="w">      </span><span class="nt">commitment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;try&quot;</span>
+<span class="w">      </span><span class="nt">target_free_space</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">      </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_prefix&quot;</span>
 <span class="w">    </span><span class="nt">wait_for_completion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Modify volume - REST</span>
@@ -1939,8 +2048,15 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <span class="w">    </span><span class="nt">aggregate_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">aggr</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">snapdir_access</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">    </span><span class="nt">snapshot_auto_delete</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;on&#39;</span>
-<span class="w">        </span><span class="nt">target_free_space</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span>
+<span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;on&#39;</span>
+<span class="w">      </span><span class="nt">target_free_space</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Modify volume tiering onject_tags - REST</span>
+<span class="w">  </span><span class="nt">netapp.ontap.na_ontap_volume</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_vol</span>
+<span class="w">    </span><span class="nt">aggregate_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">aggr</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">tiering_object_tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;tag1=one&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;tag2=two&#39;</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -1974,7 +2090,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

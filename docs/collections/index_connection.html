@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index of all Connection Plugins &mdash; Ansible Community Documentation</title>
@@ -101,6 +101,13 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
             selected="selected"
         >
@@ -178,15 +185,17 @@
 <li class="toctree-l2"><a class="reference internal" href="index_callback.html">Index of all Callback Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index_cliconf.html">Index of all Cliconf Plugins</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Index of all Connection Plugins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-aws">amazon.aws</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ansible-builtin">ansible.builtin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ansible-netcommon">ansible.netcommon</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#community-aws">community.aws</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-docker">community.docker</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-general">community.general</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-libvirt">community.libvirt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-okd">community.okd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#community-proxmox">community.proxmox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-vmware">community.vmware</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#containers-podman">containers.podman</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google-cloud">google.cloud</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#kubernetes-core">kubernetes.core</a></li>
 </ul>
 </li>
@@ -201,6 +210,7 @@
 <li class="toctree-l2"><a class="reference internal" href="index_strategy.html">Index of all Strategy Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index_test.html">Index of all Test Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index_vars.html">Index of all Vars Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deprecations.html">Index of all deprecated plugins</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
@@ -276,13 +286,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -297,11 +307,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -309,6 +325,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -334,6 +352,12 @@
              
   <section id="index-of-all-connection-plugins">
 <span id="list-of-connection-plugins"></span><h1>Index of all Connection Plugins<a class="headerlink" href="#index-of-all-connection-plugins" title="Link to this heading"></a></h1>
+<section id="amazon-aws">
+<h2>amazon.aws<a class="headerlink" href="#amazon-aws" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="amazon/aws/aws_ssm_connection.html#ansible-collections-amazon-aws-aws-ssm-connection"><span class="std std-ref">amazon.aws.aws_ssm</span></a> – connect to EC2 instances via AWS Systems Manager</p></li>
+</ul>
+</section>
 <section id="ansible-builtin">
 <h2>ansible.builtin<a class="headerlink" href="#ansible-builtin" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -355,12 +379,6 @@
 <li><p><a class="reference internal" href="ansible/netcommon/persistent_connection.html#ansible-collections-ansible-netcommon-persistent-connection"><span class="std std-ref">ansible.netcommon.persistent</span></a> – Use a persistent unix socket for connection</p></li>
 </ul>
 </section>
-<section id="community-aws">
-<h2>community.aws<a class="headerlink" href="#community-aws" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="community/aws/aws_ssm_connection.html#ansible-collections-community-aws-aws-ssm-connection"><span class="std std-ref">community.aws.aws_ssm</span></a> – connect to EC2 instances via AWS Systems Manager</p></li>
-</ul>
-</section>
 <section id="community-docker">
 <h2>community.docker<a class="headerlink" href="#community-docker" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -379,10 +397,9 @@
 <li><p><a class="reference internal" href="community/general/jail_connection.html#ansible-collections-community-general-jail-connection"><span class="std std-ref">community.general.jail</span></a> – Run tasks in jails</p></li>
 <li><p><a class="reference internal" href="community/general/lxc_connection.html#ansible-collections-community-general-lxc-connection"><span class="std std-ref">community.general.lxc</span></a> – Run tasks in LXC containers using lxc python library</p></li>
 <li><p><a class="reference internal" href="community/general/lxd_connection.html#ansible-collections-community-general-lxd-connection"><span class="std std-ref">community.general.lxd</span></a> – Run tasks in LXD instances using <code class="docutils literal notranslate"><span class="pre">lxc</span></code> CLI</p></li>
-<li><p><a class="reference internal" href="community/general/proxmox_pct_remote_connection.html#ansible-collections-community-general-proxmox-pct-remote-connection"><span class="std std-ref">community.general.proxmox_pct_remote</span></a> – Run tasks in Proxmox LXC container instances using pct CLI via SSH</p></li>
 <li><p><a class="reference internal" href="community/general/qubes_connection.html#ansible-collections-community-general-qubes-connection"><span class="std std-ref">community.general.qubes</span></a> – Interact with an existing QubesOS AppVM</p></li>
 <li><p><a class="reference internal" href="community/general/saltstack_connection.html#ansible-collections-community-general-saltstack-connection"><span class="std std-ref">community.general.saltstack</span></a> – Allow ansible to piggyback on salt minions</p></li>
-<li><p><a class="reference internal" href="community/general/wsl_connection.html#ansible-collections-community-general-wsl-connection"><span class="std std-ref">community.general.wsl</span></a> – Run tasks in WSL distribution using wsl.exe CLI via SSH</p></li>
+<li><p><a class="reference internal" href="community/general/wsl_connection.html#ansible-collections-community-general-wsl-connection"><span class="std std-ref">community.general.wsl</span></a> – Run tasks in WSL distribution using wsl.exe CLI using SSH</p></li>
 <li><p><a class="reference internal" href="community/general/zone_connection.html#ansible-collections-community-general-zone-connection"><span class="std std-ref">community.general.zone</span></a> – Run tasks in a zone instance</p></li>
 </ul>
 </section>
@@ -399,6 +416,12 @@
 <li><p><a class="reference internal" href="community/okd/oc_connection.html#ansible-collections-community-okd-oc-connection"><span class="std std-ref">community.okd.oc</span></a> – Execute tasks in pods running on OpenShift.</p></li>
 </ul>
 </section>
+<section id="community-proxmox">
+<h2>community.proxmox<a class="headerlink" href="#community-proxmox" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="community/proxmox/proxmox_pct_remote_connection.html#ansible-collections-community-proxmox-proxmox-pct-remote-connection"><span class="std std-ref">community.proxmox.proxmox_pct_remote</span></a> – Run tasks in Proxmox LXC container instances using pct CLI via SSH</p></li>
+</ul>
+</section>
 <section id="community-vmware">
 <h2>community.vmware<a class="headerlink" href="#community-vmware" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -410,6 +433,12 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="containers/podman/buildah_connection.html#ansible-collections-containers-podman-buildah-connection"><span class="std std-ref">containers.podman.buildah</span></a> – Interact with an existing buildah container</p></li>
 <li><p><a class="reference internal" href="containers/podman/podman_connection.html#ansible-collections-containers-podman-podman-connection"><span class="std std-ref">containers.podman.podman</span></a> – Interact with an existing podman container</p></li>
+</ul>
+</section>
+<section id="google-cloud">
+<h2>google.cloud<a class="headerlink" href="#google-cloud" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="google/cloud/iap_connection.html#ansible-collections-google-cloud-iap-connection"><span class="std std-ref">google.cloud.iap</span></a> –</p></li>
 </ul>
 </section>
 <section id="kubernetes-core">
@@ -434,7 +463,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

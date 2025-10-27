@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dellemc.openmanage.idrac_support_assist module – Run and Export iDRAC SupportAssist collection logs &mdash; Ansible Community Documentation</title>
@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="dellemc.openmanage.idrac_syslog module – Enable or disable the syslog on iDRAC" href="idrac_syslog_module.html" />
+    <link rel="next" title="dellemc.openmanage.idrac_system_erase module – Erase system and storage components of the server" href="idrac_system_erase_module.html" />
     <link rel="prev" title="dellemc.openmanage.idrac_storage_volume module – Configures the RAID configuration attributes" href="idrac_storage_volume_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -226,6 +233,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -314,13 +322,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -335,11 +343,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -347,6 +361,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -374,7 +390,7 @@
 <h1>dellemc.openmanage.idrac_support_assist module – Run and Export iDRAC SupportAssist collection logs<a class="headerlink" href="#dellemc-openmanage-idrac-support-assist-module-run-and-export-idrac-supportassist-collection-logs" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/dellemc/openmanage/">dellemc.openmanage collection</a> (version 9.11.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/dellemc/openmanage/">dellemc.openmanage collection</a> (version 10.0.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -594,8 +610,10 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-share_parameters/password"></div><p class="ansible-option-title" id="ansible-collections-dellemc-openmanage-idrac-support-assist-module-parameter-share-parameters-password"><strong>password</strong></p>
-<a class="ansibleOptionLink" href="#parameter-share_parameters/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="parameter-share_parameters/password"></div>
+<div class="ansibleOptionAnchor" id="parameter-share_parameters/share_password"></div><p class="ansible-option-title" id="ansible-collections-dellemc-openmanage-idrac-support-assist-module-parameter-share-parameters-share-password"><span id="ansible-collections-dellemc-openmanage-idrac-support-assist-module-parameter-share-parameters-password"></span><strong>password</strong></p>
+<a class="ansibleOptionLink" href="#parameter-share_parameters/password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: share_password</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Password of the network share.</p>
 <p><em>password</em> is required when <em>share_type</em> is <code class="docutils literal notranslate"><span class="pre">cifs</span></code>.</p>
@@ -698,8 +716,10 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-share_parameters/username"></div><p class="ansible-option-title" id="ansible-collections-dellemc-openmanage-idrac-support-assist-module-parameter-share-parameters-username"><strong>username</strong></p>
-<a class="ansibleOptionLink" href="#parameter-share_parameters/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="parameter-share_parameters/username"></div>
+<div class="ansibleOptionAnchor" id="parameter-share_parameters/share_username"></div><p class="ansible-option-title" id="ansible-collections-dellemc-openmanage-idrac-support-assist-module-parameter-share-parameters-username"><span id="ansible-collections-dellemc-openmanage-idrac-support-assist-module-parameter-share-parameters-share-username"></span><strong>username</strong></p>
+<a class="ansibleOptionLink" href="#parameter-share_parameters/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: share_username</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Username of the network share.</p>
 <p><em>username</em> is required when <em>share_type</em> is <code class="docutils literal notranslate"><span class="pre">cifs</span></code>.</p>
@@ -709,8 +729,7 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 <div class="ansibleOptionAnchor" id="parameter-share_parameters/workgroup"></div><p class="ansible-option-title" id="ansible-collections-dellemc-openmanage-idrac-support-assist-module-parameter-share-parameters-workgroup"><strong>workgroup</strong></p>
 <a class="ansibleOptionLink" href="#parameter-share_parameters/workgroup" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Workgroup of the network share.</p>
-<p><em>workgroup</em> is applicable only when <em>share_type</em> is <code class="docutils literal notranslate"><span class="pre">cifs</span></code>.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>-(deprecated) Workgroup of the network share. - <em>workgroup</em> is applicable only when <em>share_type</em> is <code class="docutils literal notranslate"><span class="pre">cifs</span></code>. - The argument is not supported by iDRAC9 and iDRAC10.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -789,9 +808,9 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Accept the EULA and run and export the SupportAssist Collection to local path</span>
 <span class="w">  </span><span class="nt">dellemc.openmanage.idrac_support_assist</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
+<span class="w">    </span><span class="nt">idrac_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
+<span class="w">    </span><span class="nt">idrac_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
+<span class="w">    </span><span class="nt">idrac_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
 <span class="w">    </span><span class="nt">accept_eula</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">ca_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/ca_file&quot;</span>
 <span class="w">    </span><span class="nt">data_collector</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;debug_logs&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;hardware_data&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;os_app_data&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;storage_logs&quot;</span><span class="p p-Indicator">]</span>
@@ -801,9 +820,9 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the SupportAssist Collection with with custom data_to_collect with filter_data</span>
 <span class="w">  </span><span class="nt">dellemc.openmanage.idrac_support_assist</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
+<span class="w">    </span><span class="nt">idrac_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
+<span class="w">    </span><span class="nt">idrac_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
+<span class="w">    </span><span class="nt">idrac_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
 <span class="w">    </span><span class="nt">ca_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/ca_file&quot;</span>
 <span class="w">    </span><span class="nt">export</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">    </span><span class="nt">filter_data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -811,50 +830,50 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run and export the SupportAssist Collection to HTTPS share</span>
 <span class="w">  </span><span class="nt">dellemc.openmanage.idrac_support_assist</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
+<span class="w">    </span><span class="nt">idrac_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
+<span class="w">    </span><span class="nt">idrac_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
+<span class="w">    </span><span class="nt">idrac_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
 <span class="w">    </span><span class="nt">ca_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/ca_file&quot;</span>
 <span class="w">    </span><span class="nt">data_collector</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;hardware_data&quot;</span><span class="p p-Indicator">]</span>
 <span class="w">    </span><span class="nt">share_parameters</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">share_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HTTPS&quot;</span>
+<span class="w">      </span><span class="nt">share_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span>
 <span class="w">      </span><span class="nt">ignore_certificate_warning</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;on&quot;</span>
 <span class="w">      </span><span class="nt">share_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/share_path/support_assist_collections&quot;</span>
 <span class="w">      </span><span class="nt">ip_address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.2&quot;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run and export the SupportAssist Collection to NFS share</span>
 <span class="w">  </span><span class="nt">dellemc.openmanage.idrac_support_assist</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
+<span class="w">    </span><span class="nt">idrac_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
+<span class="w">    </span><span class="nt">idrac_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
+<span class="w">    </span><span class="nt">idrac_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
 <span class="w">    </span><span class="nt">ca_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/ca_file&quot;</span>
 <span class="w">    </span><span class="nt">data_collector</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;debug_logs&quot;</span><span class="p p-Indicator">]</span>
 <span class="w">    </span><span class="nt">share_parameters</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">share_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NFS&quot;</span>
+<span class="w">      </span><span class="nt">share_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nfs&quot;</span>
 <span class="w">      </span><span class="nt">share_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nfsshare/support_assist_collections/&quot;</span>
 <span class="w">      </span><span class="nt">ip_address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.3&quot;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Export the last SupportAssist Collection to CIFS share</span>
 <span class="w">  </span><span class="nt">dellemc.openmanage.idrac_support_assist</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
+<span class="w">    </span><span class="nt">idrac_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
+<span class="w">    </span><span class="nt">idrac_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
+<span class="w">    </span><span class="nt">idrac_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
 <span class="w">    </span><span class="nt">ca_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/ca_file&quot;</span>
 <span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">    </span><span class="nt">share_parameters</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">share_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NFS&quot;</span>
+<span class="w">      </span><span class="nt">share_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nfs&quot;</span>
 <span class="w">      </span><span class="nt">share_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/cifsshare/support_assist_collections/&quot;</span>
 <span class="w">      </span><span class="nt">ip_address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.4&quot;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Export the last SupportAssist Collection to HTTPS share via proxy</span>
 <span class="w">  </span><span class="nt">dellemc.openmanage.idrac_support_assist</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
+<span class="w">    </span><span class="nt">idrac_ip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1&quot;</span>
+<span class="w">    </span><span class="nt">idrac_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;username&quot;</span>
+<span class="w">    </span><span class="nt">idrac_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;password&quot;</span>
 <span class="w">    </span><span class="nt">ca_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/ca_file&quot;</span>
 <span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">    </span><span class="nt">share_parameters</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">share_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HTTPS&quot;</span>
+<span class="w">      </span><span class="nt">share_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https&quot;</span>
 <span class="w">      </span><span class="nt">share_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/share_path/support_assist_collections&quot;</span>
 <span class="w">      </span><span class="nt">ignore_certificate_warning</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;on&quot;</span>
 <span class="w">      </span><span class="nt">ip_address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.2&quot;</span>
@@ -930,14 +949,14 @@ see <a class="reference internal" href="#ansible-collections-dellemc-openmanage-
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="idrac_storage_volume_module.html" class="btn btn-neutral float-left" title="dellemc.openmanage.idrac_storage_volume module – Configures the RAID configuration attributes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="idrac_syslog_module.html" class="btn btn-neutral float-right" title="dellemc.openmanage.idrac_syslog module – Enable or disable the syslog on iDRAC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="idrac_system_erase_module.html" class="btn btn-neutral float-right" title="dellemc.openmanage.idrac_system_erase module – Erase system and storage components of the server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

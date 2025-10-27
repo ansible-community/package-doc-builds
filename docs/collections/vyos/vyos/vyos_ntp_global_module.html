@@ -4,10 +4,10 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>vyos.vyos.vyos_ntp_global module – Manages ntp modules of Vyos network devices &mdash; Ansible Community Documentation</title>
+  <title>vyos.vyos.vyos_ntp_global module – NTP global resource module &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            
+        >
+            11
         </option>
         
         <option
@@ -215,6 +222,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -226,6 +234,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Vyos Namespace</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Vyos.Vyos</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#platform-vyos">Platform VyOS</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
 </ul>
 </li>
@@ -285,13 +295,10 @@
           <li class="breadcrumb-item"><a href="../../index.html">Collection Index</a></li>
           <li class="breadcrumb-item"><a href="../index.html">Collections in the Vyos Namespace</a></li>
           <li class="breadcrumb-item"><a href="index.html">Vyos.Vyos</a></li>
-      <li class="breadcrumb-item active">vyos.vyos.vyos_ntp_global module – Manages ntp modules of Vyos network devices</li>
+      <li class="breadcrumb-item active">vyos.vyos.vyos_ntp_global module – NTP global resource module</li>
   <li class="wy-breadcrumbs-aside">
-            <!-- Remove main index page as it is no longer editable -->
-            
-              <br>
-
-            
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/vyos/vyos.vyos/edit/main/plugins/modules/vyos_ntp_global.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
   </li>
   </ul>
   <hr/>
@@ -310,13 +317,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -331,11 +338,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -343,6 +356,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -366,18 +381,18 @@
   
            <div itemprop="articleBody">
              
-  <span class="target" id="ansible-collections-vyos-vyos-vyos-ntp-global-module"></span><section id="vyos-vyos-vyos-ntp-global-module-manages-ntp-modules-of-vyos-network-devices">
-<h1>vyos.vyos.vyos_ntp_global module – Manages ntp modules of Vyos network devices<a class="headerlink" href="#vyos-vyos-vyos-ntp-global-module-manages-ntp-modules-of-vyos-network-devices" title="Link to this heading"></a></h1>
+  <span class="target" id="ansible-collections-vyos-vyos-vyos-ntp-global-module"></span><section id="vyos-vyos-vyos-ntp-global-module-ntp-global-resource-module">
+<h1>vyos.vyos.vyos_ntp_global module – NTP global resource module<a class="headerlink" href="#vyos-vyos-vyos-ntp-global-module-ntp-global-resource-module" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vyos/vyos/">vyos.vyos collection</a> (version 5.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vyos/vyos/">vyos.vyos collection</a> (version 6.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
 <p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">vyos.vyos</span></code>.</p>
 <p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">vyos.vyos.vyos_ntp_global</span></code>.</p>
 </div>
-<p class="ansible-version-added">New in vyos.vyos 2.4.0</p>
+<p class="ansible-version-added">New in vyos.vyos 1.0.0</p>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
@@ -435,13 +450,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-config/servers/options" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>server options for NTP</p>
+<p>`pool` replaces `dynamic` in Vyos 1.3</p>
+<p>`preempt` is only available in Vyos 1.3 and earlier</p>
+<p>`nts` was added in Vyos 1.4</p>
+<p>`ptp` and `interleave` were added in Vyos 1.5</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;noselect&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;dynamic&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;noselect&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;pool&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;preempt&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;prefer&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;nts&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ptp&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;interleave&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -449,7 +471,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-config/servers/server"></div><p class="ansible-option-title" id="ansible-collections-vyos-vyos-vyos-ntp-global-module-parameter-config-servers-server"><strong>server</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/servers/server" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>server name for NTP</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>server name or address for NTP</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -487,8 +509,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>Tested against vyos 1.3</p></li>
+<li><p>Tested against VyOS 1.3.8, 1.4.2, the upcoming 1.5, and the rolling release of spring 2025</p></li>
 <li><p>This module works with connection <code class="docutils literal notranslate"><span class="pre">network_cli</span></code>.</p></li>
+<li><p>VyOS v.1.4+ uses chronyd, and path changes from `system` to `service`</p></li>
 </ul>
 </div>
 </section>
@@ -501,9 +524,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># # Before state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#   vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#     set system ntp server time1.vyos.net</span>
-<span class="c1">#     set system ntp server time2.vyos.net</span>
-<span class="c1">#     set system ntp server time3.vyos.net</span>
+<span class="c1">#     set service ntp server time1.vyos.net</span>
+<span class="c1">#     set service ntp server time2.vyos.net</span>
+<span class="c1">#     set service ntp server time3.vyos.net</span>
 <span class="c1">#   vyos@vyos:~$</span>
 
 <span class="c1"># # Task</span>
@@ -552,20 +575,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#    },</span>
 <span class="c1">#    &quot;changed&quot;: true,</span>
 <span class="c1">#    &quot;commands&quot;: [</span>
-<span class="c1">#        &quot;set system ntp allow-clients address 10.6.6.0/24&quot;,</span>
-<span class="c1">#        &quot;set system ntp listen-address 10.1.3.1&quot;,</span>
-<span class="c1">#        &quot;set system ntp server 203.0.113.0 prefer&quot;</span>
+<span class="c1">#        &quot;set service ntp allow-clients address 10.6.6.0/24&quot;,</span>
+<span class="c1">#        &quot;set service ntp listen-address 10.1.3.1&quot;,</span>
+<span class="c1">#        &quot;set service ntp server 203.0.113.0 prefer&quot;</span>
 <span class="c1">#    ]</span>
 
 <span class="c1"># After state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp allow-clients address &#39;10.6.6.0/24&#39;</span>
-<span class="c1">#        set system ntp listen-address &#39;10.1.3.1&#39;</span>
-<span class="c1">#        set system ntp server 203.0.113.0 prefer,</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp allow-clients address &#39;10.6.6.0/24&#39;</span>
+<span class="c1">#        set service ntp listen-address &#39;10.1.3.1&#39;</span>
+<span class="c1">#        set service ntp server 203.0.113.0 prefer,</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 
@@ -576,25 +599,25 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># # Before state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#    vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#    set system ntp allow-clients address &#39;10.4.9.0/24&#39;</span>
-<span class="c1">#    set system ntp allow-clients address &#39;10.4.7.0/24&#39;</span>
-<span class="c1">#    set system ntp allow-clients address &#39;10.1.2.0/24&#39;</span>
-<span class="c1">#    set system ntp allow-clients address &#39;10.2.3.0/24&#39;</span>
-<span class="c1">#    set system ntp listen-address &#39;10.1.9.16&#39;</span>
-<span class="c1">#    set system ntp listen-address &#39;10.5.3.2&#39;</span>
-<span class="c1">#    set system ntp listen-address &#39;10.7.9.21&#39;</span>
-<span class="c1">#    set system ntp listen-address &#39;10.8.9.4&#39;</span>
-<span class="c1">#    set system ntp listen-address &#39;10.4.5.1&#39;</span>
-<span class="c1">#    set system ntp server 10.3.6.5 noselect</span>
-<span class="c1">#    set system ntp server 10.3.6.5 dynamic</span>
-<span class="c1">#    set system ntp server 10.3.6.5 preempt</span>
-<span class="c1">#    set system ntp server 10.3.6.5 prefer</span>
-<span class="c1">#    set system ntp server server4 noselect</span>
-<span class="c1">#    set system ntp server server4 dynamic</span>
-<span class="c1">#    set system ntp server server5</span>
-<span class="c1">#    set system ntp server time1.vyos.net</span>
-<span class="c1">#    set system ntp server time2.vyos.net</span>
-<span class="c1">#    set system ntp server time3.vyos.net</span>
+<span class="c1">#    set service ntp allow-clients address &#39;10.4.9.0/24&#39;</span>
+<span class="c1">#    set service ntp allow-clients address &#39;10.4.7.0/24&#39;</span>
+<span class="c1">#    set service ntp allow-clients address &#39;10.1.2.0/24&#39;</span>
+<span class="c1">#    set service ntp allow-clients address &#39;10.2.3.0/24&#39;</span>
+<span class="c1">#    set service ntp listen-address &#39;10.1.9.16&#39;</span>
+<span class="c1">#    set service ntp listen-address &#39;10.5.3.2&#39;</span>
+<span class="c1">#    set service ntp listen-address &#39;10.7.9.21&#39;</span>
+<span class="c1">#    set service ntp listen-address &#39;10.8.9.4&#39;</span>
+<span class="c1">#    set service ntp listen-address &#39;10.4.5.1&#39;</span>
+<span class="c1">#    set service ntp server 10.3.6.5 noselect</span>
+<span class="c1">#    set service ntp server 10.3.6.5 dynamic</span>
+<span class="c1">#    set service ntp server 10.3.6.5 preempt</span>
+<span class="c1">#    set service ntp server 10.3.6.5 prefer</span>
+<span class="c1">#    set service ntp server server4 noselect</span>
+<span class="c1">#    set service ntp server server4 dynamic</span>
+<span class="c1">#    set service ntp server server5</span>
+<span class="c1">#    set service ntp server time1.vyos.net</span>
+<span class="c1">#    set service ntp server time2.vyos.net</span>
+<span class="c1">#    set service ntp server time3.vyos.net</span>
 <span class="c1">#    vyos@vyos:~$</span>
 
 <span class="c1"># # Task</span>
@@ -687,32 +710,32 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#    },</span>
 <span class="c1">#    &quot;changed&quot;: true,</span>
 <span class="c1">#    &quot;commands&quot;: [</span>
-<span class="c1">#        &quot;delete system ntp allow-clients address 10.4.7.0/24&quot;,</span>
-<span class="c1">#        &quot;delete system ntp allow-clients address 10.2.3.0/24&quot;,</span>
-<span class="c1">#        &quot;delete system ntp allow-clients address 10.1.2.0/24&quot;,</span>
-<span class="c1">#        &quot;delete system ntp allow-clients address 10.4.9.0/24&quot;,</span>
-<span class="c1">#        &quot;delete system ntp listen-address 10.7.9.21&quot;,</span>
-<span class="c1">#        &quot;delete system ntp listen-address 10.4.5.1&quot;,</span>
-<span class="c1">#        &quot;delete system ntp listen-address 10.5.3.2&quot;,</span>
-<span class="c1">#        &quot;delete system ntp listen-address 10.8.9.4&quot;,</span>
-<span class="c1">#        &quot;delete system ntp listen-address 10.1.9.16&quot;,</span>
-<span class="c1">#        &quot;delete system ntp server 10.3.6.5&quot;,</span>
-<span class="c1">#        &quot;delete system ntp server server4&quot;,</span>
-<span class="c1">#        &quot;delete system ntp server server5&quot;,</span>
-<span class="c1">#        &quot;set system ntp allow-clients address 10.6.6.0/24&quot;,</span>
-<span class="c1">#        &quot;set system ntp listen-address 10.1.3.1&quot;,</span>
-<span class="c1">#        &quot;set system ntp server 203.0.113.0 prefer&quot;</span>
+<span class="c1">#        &quot;delete service ntp allow-clients address 10.4.7.0/24&quot;,</span>
+<span class="c1">#        &quot;delete service ntp allow-clients address 10.2.3.0/24&quot;,</span>
+<span class="c1">#        &quot;delete service ntp allow-clients address 10.1.2.0/24&quot;,</span>
+<span class="c1">#        &quot;delete service ntp allow-clients address 10.4.9.0/24&quot;,</span>
+<span class="c1">#        &quot;delete service ntp listen-address 10.7.9.21&quot;,</span>
+<span class="c1">#        &quot;delete service ntp listen-address 10.4.5.1&quot;,</span>
+<span class="c1">#        &quot;delete service ntp listen-address 10.5.3.2&quot;,</span>
+<span class="c1">#        &quot;delete service ntp listen-address 10.8.9.4&quot;,</span>
+<span class="c1">#        &quot;delete service ntp listen-address 10.1.9.16&quot;,</span>
+<span class="c1">#        &quot;delete service ntp server 10.3.6.5&quot;,</span>
+<span class="c1">#        &quot;delete service ntp server server4&quot;,</span>
+<span class="c1">#        &quot;delete service ntp server server5&quot;,</span>
+<span class="c1">#        &quot;set service ntp allow-clients address 10.6.6.0/24&quot;,</span>
+<span class="c1">#        &quot;set service ntp listen-address 10.1.3.1&quot;,</span>
+<span class="c1">#        &quot;set service ntp server 203.0.113.0 prefer&quot;</span>
 <span class="c1">#    ]</span>
 
 <span class="c1"># After state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp allow-clients address &#39;10.6.6.0/24&#39;</span>
-<span class="c1">#        set system ntp listen-address &#39;10.1.3.1&#39;</span>
-<span class="c1">#        set system ntp server 203.0.113.0 prefer,</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp allow-clients address &#39;10.6.6.0/24&#39;</span>
+<span class="c1">#        set service ntp listen-address &#39;10.1.3.1&#39;</span>
+<span class="c1">#        set service ntp server 203.0.113.0 prefer,</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 <span class="c1"># # -------------------</span>
@@ -722,12 +745,12 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># # Before state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp allow-clients address &#39;10.6.6.0/24&#39;</span>
-<span class="c1">#        set system ntp listen-address &#39;10.1.3.1&#39;</span>
-<span class="c1">#        set system ntp server 203.0.113.0 prefer,</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp allow-clients address &#39;10.6.6.0/24&#39;</span>
+<span class="c1">#        set service ntp listen-address &#39;10.1.3.1&#39;</span>
+<span class="c1">#        set service ntp server 203.0.113.0 prefer,</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 <span class="c1"># Task</span>
@@ -818,31 +841,31 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#            },</span>
 <span class="c1">#            &quot;changed&quot;: true,</span>
 <span class="c1">#            &quot;commands&quot;: [</span>
-<span class="c1">#                &quot;delete system ntp allow-clients address 10.6.6.0/24&quot;,</span>
-<span class="c1">#                &quot;delete system ntp listen-address 10.1.3.1&quot;,</span>
-<span class="c1">#                &quot;delete system ntp server ser&quot;,</span>
-<span class="c1">#                &quot;set system ntp allow-clients address 10.3.3.0/24&quot;,</span>
-<span class="c1">#                &quot;set system ntp listen-address 10.7.8.1&quot;,</span>
-<span class="c1">#                &quot;set system ntp server server1 dynamic&quot;,</span>
-<span class="c1">#                &quot;set system ntp server server1 prefer&quot;,</span>
-<span class="c1">#                &quot;set system ntp server server2 noselect&quot;,</span>
-<span class="c1">#                &quot;set system ntp server server2 preempt&quot;,</span>
-<span class="c1">#                &quot;set system ntp server serv&quot;</span>
+<span class="c1">#                &quot;delete service ntp allow-clients address 10.6.6.0/24&quot;,</span>
+<span class="c1">#                &quot;delete service ntp listen-address 10.1.3.1&quot;,</span>
+<span class="c1">#                &quot;delete service ntp server ser&quot;,</span>
+<span class="c1">#                &quot;set service ntp allow-clients address 10.3.3.0/24&quot;,</span>
+<span class="c1">#                &quot;set service ntp listen-address 10.7.8.1&quot;,</span>
+<span class="c1">#                &quot;set service ntp server server1 dynamic&quot;,</span>
+<span class="c1">#                &quot;set service ntp server server1 prefer&quot;,</span>
+<span class="c1">#                &quot;set service ntp server server2 noselect&quot;,</span>
+<span class="c1">#                &quot;set service ntp server server2 preempt&quot;,</span>
+<span class="c1">#                &quot;set service ntp server serv&quot;</span>
 <span class="c1">#            ]</span>
 
 <span class="c1"># After state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp allow-clients address &#39;10.3.3.0/24&#39;</span>
-<span class="c1">#        set system ntp listen-address &#39;10.7.8.1&#39;</span>
-<span class="c1">#        set system ntp server serv</span>
-<span class="c1">#        set system ntp server server1 dynamic</span>
-<span class="c1">#        set system ntp server server1 prefer</span>
-<span class="c1">#        set system ntp server server2 noselect</span>
-<span class="c1">#        set system ntp server server2 preempt</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp allow-clients address &#39;10.3.3.0/24&#39;</span>
+<span class="c1">#        set service ntp listen-address &#39;10.7.8.1&#39;</span>
+<span class="c1">#        set service ntp server serv</span>
+<span class="c1">#        set service ntp server server1 dynamic</span>
+<span class="c1">#        set service ntp server server1 prefer</span>
+<span class="c1">#        set service ntp server server2 noselect</span>
+<span class="c1">#        set service ntp server server2 preempt</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 <span class="c1"># 4. Using gathered</span>
@@ -851,16 +874,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># # Before state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp allow-clients address &#39;10.3.3.0/24&#39;</span>
-<span class="c1">#        set system ntp listen-address &#39;10.7.8.1&#39;</span>
-<span class="c1">#        set system ntp server serv</span>
-<span class="c1">#        set system ntp server server1 dynamic</span>
-<span class="c1">#        set system ntp server server1 prefer</span>
-<span class="c1">#        set system ntp server server2 noselect</span>
-<span class="c1">#        set system ntp server server2 preempt</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp allow-clients address &#39;10.3.3.0/24&#39;</span>
+<span class="c1">#        set service ntp listen-address &#39;10.7.8.1&#39;</span>
+<span class="c1">#        set service ntp server serv</span>
+<span class="c1">#        set service ntp server server1 dynamic</span>
+<span class="c1">#        set service ntp server server1 prefer</span>
+<span class="c1">#        set service ntp server server2 noselect</span>
+<span class="c1">#        set service ntp server server2 preempt</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 <span class="c1"># Task</span>
@@ -911,16 +934,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># After state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp allow-clients address &#39;10.3.3.0/24&#39;</span>
-<span class="c1">#        set system ntp listen-address &#39;10.7.8.1&#39;</span>
-<span class="c1">#        set system ntp server serv</span>
-<span class="c1">#        set system ntp server server1 dynamic</span>
-<span class="c1">#        set system ntp server server1 prefer</span>
-<span class="c1">#        set system ntp server server2 noselect</span>
-<span class="c1">#        set system ntp server server2 preempt</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp allow-clients address &#39;10.3.3.0/24&#39;</span>
+<span class="c1">#        set service ntp listen-address &#39;10.7.8.1&#39;</span>
+<span class="c1">#        set service ntp server serv</span>
+<span class="c1">#        set service ntp server server1 dynamic</span>
+<span class="c1">#        set service ntp server server1 prefer</span>
+<span class="c1">#        set service ntp server server2 noselect</span>
+<span class="c1">#        set service ntp server server2 preempt</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 
@@ -931,16 +954,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># # Before state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp allow-clients address &#39;10.3.3.0/24&#39;</span>
-<span class="c1">#        set system ntp listen-address &#39;10.7.8.1&#39;</span>
-<span class="c1">#        set system ntp server serv</span>
-<span class="c1">#        set system ntp server server1 dynamic</span>
-<span class="c1">#        set system ntp server server1 prefer</span>
-<span class="c1">#        set system ntp server server2 noselect</span>
-<span class="c1">#        set system ntp server server2 preempt</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp allow-clients address &#39;10.3.3.0/24&#39;</span>
+<span class="c1">#        set service ntp listen-address &#39;10.7.8.1&#39;</span>
+<span class="c1">#        set service ntp server serv</span>
+<span class="c1">#        set service ntp server server1 dynamic</span>
+<span class="c1">#        set service ntp server server1 prefer</span>
+<span class="c1">#        set service ntp server server2 noselect</span>
+<span class="c1">#        set service ntp server server2 preempt</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 <span class="c1"># # Task</span>
@@ -1003,20 +1026,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#            },</span>
 <span class="c1">#            &quot;changed&quot;: true,</span>
 <span class="c1">#            &quot;commands&quot;: [</span>
-<span class="c1">#                &quot;delete system ntp allow-clients&quot;,</span>
-<span class="c1">#                &quot;delete system ntp listen-address&quot;,</span>
-<span class="c1">#                &quot;delete system ntp server serv&quot;,</span>
-<span class="c1">#                &quot;delete system ntp server server1&quot;,</span>
-<span class="c1">#                &quot;delete system ntp server server2&quot;</span>
+<span class="c1">#                &quot;delete service ntp allow-clients&quot;,</span>
+<span class="c1">#                &quot;delete service ntp listen-address&quot;,</span>
+<span class="c1">#                &quot;delete service ntp server serv&quot;,</span>
+<span class="c1">#                &quot;delete service ntp server server1&quot;,</span>
+<span class="c1">#                &quot;delete service ntp server server2&quot;</span>
 <span class="c1">#</span>
 <span class="c1">#            ]</span>
 
 <span class="c1"># After state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 
@@ -1027,9 +1050,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># # Before state:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#        vyos@vyos:~$ show configuration commands | grep ntp</span>
-<span class="c1">#        set system ntp server time1.vyos.net</span>
-<span class="c1">#        set system ntp server time2.vyos.net</span>
-<span class="c1">#        set system ntp server time3.vyos.net</span>
+<span class="c1">#        set service ntp server time1.vyos.net</span>
+<span class="c1">#        set service ntp server time2.vyos.net</span>
+<span class="c1">#        set service ntp server time3.vyos.net</span>
 <span class="c1">#        vyos@vyos:~$</span>
 
 <span class="c1"># Task</span>
@@ -1057,16 +1080,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># # Task output:</span>
 <span class="c1"># # -------------</span>
 <span class="c1">#           &quot;rendered&quot;: [</span>
-<span class="c1">#                &quot;set system ntp allow-clients address 10.7.7.0/24&quot;,</span>
-<span class="c1">#                &quot;set system ntp allow-clients address 10.8.8.0/24&quot;,</span>
-<span class="c1">#                &quot;set system ntp listen-address 10.7.9.1&quot;,</span>
-<span class="c1">#                &quot;set system ntp server server7&quot;,</span>
-<span class="c1">#                &quot;set system ntp server server45 noselect&quot;,</span>
-<span class="c1">#                &quot;set system ntp server server45 prefer&quot;,</span>
-<span class="c1">#                &quot;set system ntp server server45 pool&quot;,</span>
-<span class="c1">#                &quot;set system ntp server time1.vyos.net&quot;,</span>
-<span class="c1">#                &quot;set system ntp server time2.vyos.net&quot;,</span>
-<span class="c1">#                &quot;set system ntp server time3.vyos.net&quot;</span>
+<span class="c1">#                &quot;set service ntp allow-clients address 10.7.7.0/24&quot;,</span>
+<span class="c1">#                &quot;set service ntp allow-clients address 10.8.8.0/24&quot;,</span>
+<span class="c1">#                &quot;set service ntp listen-address 10.7.9.1&quot;,</span>
+<span class="c1">#                &quot;set service ntp server server7&quot;,</span>
+<span class="c1">#                &quot;set service ntp server server45 noselect&quot;,</span>
+<span class="c1">#                &quot;set service ntp server server45 prefer&quot;,</span>
+<span class="c1">#                &quot;set service ntp server server45 pool&quot;,</span>
+<span class="c1">#                &quot;set service ntp server time1.vyos.net&quot;,</span>
+<span class="c1">#                &quot;set service ntp server time2.vyos.net&quot;,</span>
+<span class="c1">#                &quot;set service ntp server time3.vyos.net&quot;</span>
 <span class="c1">#            ]</span>
 
 
@@ -1076,15 +1099,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <span class="c1"># # sample_config.cfg:</span>
 <span class="c1"># # -------------</span>
-<span class="c1">#           &quot;set system ntp allow-clients address 10.7.7.0/24&quot;,</span>
-<span class="c1">#           &quot;set system ntp listen-address 10.7.9.1&quot;,</span>
-<span class="c1">#           &quot;set system ntp server server45 noselect&quot;,</span>
-<span class="c1">#           &quot;set system ntp allow-clients addres 10.8.6.0/24&quot;,</span>
-<span class="c1">#           &quot;set system ntp listen-address 10.5.4.1&quot;,</span>
-<span class="c1">#           &quot;set system ntp server server45 dynamic&quot;,</span>
-<span class="c1">#           &quot;set system ntp server time1.vyos.net&quot;,</span>
-<span class="c1">#           &quot;set system ntp server time2.vyos.net&quot;,</span>
-<span class="c1">#           &quot;set system ntp server time3.vyos.net&quot;</span>
+<span class="c1">#           &quot;set service ntp allow-clients address 10.7.7.0/24&quot;,</span>
+<span class="c1">#           &quot;set service ntp listen-address 10.7.9.1&quot;,</span>
+<span class="c1">#           &quot;set service ntp server server45 noselect&quot;,</span>
+<span class="c1">#           &quot;set service ntp allow-clients addres 10.8.6.0/24&quot;,</span>
+<span class="c1">#           &quot;set service ntp listen-address 10.5.4.1&quot;,</span>
+<span class="c1">#           &quot;set service ntp server server45 dynamic&quot;,</span>
+<span class="c1">#           &quot;set service ntp server time1.vyos.net&quot;,</span>
+<span class="c1">#           &quot;set service ntp server time2.vyos.net&quot;,</span>
+<span class="c1">#           &quot;set service ntp server time3.vyos.net&quot;</span>
 
 <span class="c1"># Task:</span>
 <span class="c1"># -------------</span>
@@ -1203,8 +1226,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <section id="collection-links">
 <h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
 <ul class="ansible-links">
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vyos.vyos/issues" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/vyos.vyos" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://vyos.dev" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/vyos/vyos.vyos" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://vyos.dev/maniphest/task/edit/form/3/?projectPHIDs=PHID-PROJ-aryfih5l65cgcdmx4sqp" rel="noopener external" target="_blank">Report an issue</a></span></li>
+<li><span><a class="reference internal" href="index.html#communication-for-vyos-vyos"><span class="std std-ref">Communication</span></a></span></li>
 </ul>
 </section>
 </section>
@@ -1224,7 +1249,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 

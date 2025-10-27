@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.21.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index of all Inventory Plugins &mdash; Ansible Community Documentation</title>
@@ -101,6 +101,13 @@
         </option>
         
         <option
+            value="11"
+            
+        >
+            11
+        </option>
+        
+        <option
             value="devel"
             selected="selected"
         >
@@ -185,6 +192,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#ansible-builtin">ansible.builtin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#awx-awx">awx.awx</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#azure-azcollection">azure.azcollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cisco-aci">cisco.aci</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cisco-meraki">cisco.meraki</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cloudscale-ch-cloud">cloudscale_ch.cloud</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-aws">community.aws</a></li>
@@ -194,13 +202,14 @@
 <li class="toctree-l3"><a class="reference internal" href="#community-general">community.general</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-hrobot">community.hrobot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-libvirt">community.libvirt</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#community-okd">community.okd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#community-proxmox">community.proxmox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-vmware">community.vmware</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#community-zabbix">community.zabbix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#containers-podman">containers.podman</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dellemc-openmanage">dellemc.openmanage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google-cloud">google.cloud</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hetzner-hcloud">hetzner.hcloud</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#infoblox-nios-modules">infoblox.nios_modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kubernetes-core">kubernetes.core</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#kubevirt-core">kubevirt.core</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#microsoft-ad">microsoft.ad</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#netbox-netbox">netbox.netbox</a></li>
@@ -221,6 +230,7 @@
 <li class="toctree-l2"><a class="reference internal" href="index_strategy.html">Index of all Strategy Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index_test.html">Index of all Test Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index_vars.html">Index of all Vars Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deprecations.html">Index of all deprecated plugins</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
@@ -296,13 +306,13 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="font-size: 1.5rem;padding-bottom: 1.2rem;text-align: center;">' +
-        'Join AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a>!' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
@@ -317,11 +327,17 @@
       var msg = '<p>';
       if (startsWith(current_url_path, "/ansible-core/")) {
         msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
       } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
       } else if (startsWith(current_url_path, "/ansible/devel/")) {
@@ -329,6 +345,8 @@
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -384,7 +402,14 @@
 <section id="azure-azcollection">
 <h2>azure.azcollection<a class="headerlink" href="#azure-azcollection" title="Link to this heading"></a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="azure/azcollection/azure_kql_inventory.html#ansible-collections-azure-azcollection-azure-kql-inventory"><span class="std std-ref">azure.azcollection.azure_kql</span></a> – Azure Resource Manager inventory plugin using Graph QL</p></li>
 <li><p><a class="reference internal" href="azure/azcollection/azure_rm_inventory.html#ansible-collections-azure-azcollection-azure-rm-inventory"><span class="std std-ref">azure.azcollection.azure_rm</span></a> – Azure Resource Manager inventory plugin</p></li>
+</ul>
+</section>
+<section id="cisco-aci">
+<h2>cisco.aci<a class="headerlink" href="#cisco-aci" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="cisco/aci/aci_inventory_system_inventory.html#ansible-collections-cisco-aci-aci-inventory-system-inventory"><span class="std std-ref">cisco.aci.aci_inventory_system</span></a> – Cisco ACI inventory plugin</p></li>
 </ul>
 </section>
 <section id="cisco-meraki">
@@ -430,18 +455,16 @@
 <h2>community.general<a class="headerlink" href="#community-general" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="community/general/cobbler_inventory.html#ansible-collections-community-general-cobbler-inventory"><span class="std std-ref">community.general.cobbler</span></a> – Cobbler inventory source</p></li>
-<li><p><a class="reference internal" href="community/general/gitlab_runners_inventory.html#ansible-collections-community-general-gitlab-runners-inventory"><span class="std std-ref">community.general.gitlab_runners</span></a> – Ansible dynamic inventory plugin for GitLab runners.</p></li>
+<li><p><a class="reference internal" href="community/general/gitlab_runners_inventory.html#ansible-collections-community-general-gitlab-runners-inventory"><span class="std std-ref">community.general.gitlab_runners</span></a> – Ansible dynamic inventory plugin for GitLab runners</p></li>
 <li><p><a class="reference internal" href="community/general/icinga2_inventory.html#ansible-collections-community-general-icinga2-inventory"><span class="std std-ref">community.general.icinga2</span></a> – Icinga2 inventory source</p></li>
-<li><p><a class="reference internal" href="community/general/iocage_inventory.html#ansible-collections-community-general-iocage-inventory"><span class="std std-ref">community.general.iocage</span></a> – iocage inventory source</p></li>
-<li><p><a class="reference internal" href="community/general/linode_inventory.html#ansible-collections-community-general-linode-inventory"><span class="std std-ref">community.general.linode</span></a> – Ansible dynamic inventory plugin for Linode.</p></li>
+<li><p><a class="reference internal" href="community/general/iocage_inventory.html#ansible-collections-community-general-iocage-inventory"><span class="std std-ref">community.general.iocage</span></a> – <code class="docutils literal notranslate"><span class="pre">iocage</span></code> inventory source</p></li>
+<li><p><a class="reference internal" href="community/general/linode_inventory.html#ansible-collections-community-general-linode-inventory"><span class="std std-ref">community.general.linode</span></a> – Ansible dynamic inventory plugin for Linode</p></li>
 <li><p><a class="reference internal" href="community/general/lxd_inventory.html#ansible-collections-community-general-lxd-inventory"><span class="std std-ref">community.general.lxd</span></a> – Returns Ansible inventory from lxd host</p></li>
 <li><p><a class="reference internal" href="community/general/nmap_inventory.html#ansible-collections-community-general-nmap-inventory"><span class="std std-ref">community.general.nmap</span></a> – Uses nmap to find hosts to target</p></li>
 <li><p><a class="reference internal" href="community/general/online_inventory.html#ansible-collections-community-general-online-inventory"><span class="std std-ref">community.general.online</span></a> – Scaleway (previously Online SAS or Online.net) inventory source</p></li>
 <li><p><a class="reference internal" href="community/general/opennebula_inventory.html#ansible-collections-community-general-opennebula-inventory"><span class="std std-ref">community.general.opennebula</span></a> – OpenNebula inventory source</p></li>
-<li><p><a class="reference internal" href="community/general/proxmox_inventory.html#ansible-collections-community-general-proxmox-inventory"><span class="std std-ref">community.general.proxmox</span></a> – Proxmox inventory source</p></li>
 <li><p><a class="reference internal" href="community/general/scaleway_inventory.html#ansible-collections-community-general-scaleway-inventory"><span class="std std-ref">community.general.scaleway</span></a> – Scaleway inventory source</p></li>
-<li><p><a class="reference internal" href="community/general/stackpath_compute_inventory.html#ansible-collections-community-general-stackpath-compute-inventory"><span class="std std-ref">community.general.stackpath_compute</span></a> – StackPath Edge Computing inventory source <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
-<li><p><a class="reference internal" href="community/general/virtualbox_inventory.html#ansible-collections-community-general-virtualbox-inventory"><span class="std std-ref">community.general.virtualbox</span></a> – virtualbox inventory source</p></li>
+<li><p><a class="reference internal" href="community/general/virtualbox_inventory.html#ansible-collections-community-general-virtualbox-inventory"><span class="std std-ref">community.general.virtualbox</span></a> – Virtualbox inventory source</p></li>
 <li><p><a class="reference internal" href="community/general/xen_orchestra_inventory.html#ansible-collections-community-general-xen-orchestra-inventory"><span class="std std-ref">community.general.xen_orchestra</span></a> – Xen Orchestra inventory source</p></li>
 </ul>
 </section>
@@ -457,10 +480,10 @@
 <li><p><a class="reference internal" href="community/libvirt/libvirt_inventory.html#ansible-collections-community-libvirt-libvirt-inventory"><span class="std std-ref">community.libvirt.libvirt</span></a> – Libvirt inventory source</p></li>
 </ul>
 </section>
-<section id="community-okd">
-<h2>community.okd<a class="headerlink" href="#community-okd" title="Link to this heading"></a></h2>
+<section id="community-proxmox">
+<h2>community.proxmox<a class="headerlink" href="#community-proxmox" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="community/okd/openshift_inventory.html#ansible-collections-community-okd-openshift-inventory"><span class="std std-ref">community.okd.openshift</span></a> – OpenShift inventory source <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
+<li><p><a class="reference internal" href="community/proxmox/proxmox_inventory.html#ansible-collections-community-proxmox-proxmox-inventory"><span class="std std-ref">community.proxmox.proxmox</span></a> – Proxmox inventory source</p></li>
 </ul>
 </section>
 <section id="community-vmware">
@@ -476,10 +499,23 @@
 <li><p><a class="reference internal" href="community/zabbix/zabbix_inventory_inventory.html#ansible-collections-community-zabbix-zabbix-inventory-inventory"><span class="std std-ref">community.zabbix.zabbix_inventory</span></a> – Zabbix Inventory Plugin</p></li>
 </ul>
 </section>
+<section id="containers-podman">
+<h2>containers.podman<a class="headerlink" href="#containers-podman" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="containers/podman/buildah_containers_inventory.html#ansible-collections-containers-podman-buildah-containers-inventory"><span class="std std-ref">containers.podman.buildah_containers</span></a> – Inventory plugin that discovers Buildah working containers as hosts</p></li>
+<li><p><a class="reference internal" href="containers/podman/podman_containers_inventory.html#ansible-collections-containers-podman-podman-containers-inventory"><span class="std std-ref">containers.podman.podman_containers</span></a> – Inventory plugin that discovers Podman containers as hosts</p></li>
+</ul>
+</section>
 <section id="dellemc-openmanage">
 <h2>dellemc.openmanage<a class="headerlink" href="#dellemc-openmanage" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="dellemc/openmanage/ome_inventory_inventory.html#ansible-collections-dellemc-openmanage-ome-inventory-inventory"><span class="std std-ref">dellemc.openmanage.ome_inventory</span></a> – Group inventory plugin on OpenManage Enterprise.</p></li>
+</ul>
+</section>
+<section id="google-cloud">
+<h2>google.cloud<a class="headerlink" href="#google-cloud" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="google/cloud/gcp_compute_inventory.html#ansible-collections-google-cloud-gcp-compute-inventory"><span class="std std-ref">google.cloud.gcp_compute</span></a> – Google Cloud Compute Engine inventory source</p></li>
 </ul>
 </section>
 <section id="hetzner-hcloud">
@@ -492,12 +528,6 @@
 <h2>infoblox.nios_modules<a class="headerlink" href="#infoblox-nios-modules" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="infoblox/nios_modules/nios_inventory_inventory.html#ansible-collections-infoblox-nios-modules-nios-inventory-inventory"><span class="std std-ref">infoblox.nios_modules.nios_inventory</span></a> – Infoblox inventory plugin</p></li>
-</ul>
-</section>
-<section id="kubernetes-core">
-<h2>kubernetes.core<a class="headerlink" href="#kubernetes-core" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="kubernetes/core/k8s_inventory.html#ansible-collections-kubernetes-core-k8s-inventory"><span class="std std-ref">kubernetes.core.k8s</span></a> – Kubernetes (K8s) inventory source <strong class="ansible-deprecation-marker">DEPRECATED</strong></p></li>
 </ul>
 </section>
 <section id="kubevirt-core">
@@ -577,7 +607,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 06, 2025.
+      <span class="lastupdated">Last updated on Oct 27, 2025.
       </span></p>
   </div>
 
