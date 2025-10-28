@@ -394,7 +394,7 @@
 <h1>cisco.dnac.path_trace_workflow_manager module – Resource module for managing PathTrace settings in Cisco Catalyst Center<a class="headerlink" href="#cisco-dnac-path-trace-workflow-manager-module-resource-module-for-managing-pathtrace-settings-in-cisco-catalyst-center" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/dnac/">cisco.dnac collection</a> (version 6.40.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/dnac/">cisco.dnac collection</a> (version 6.41.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -479,11 +479,26 @@ both source_ip and dest_ip are required.</p>
 <div class="ansibleOptionAnchor" id="parameter-config/flow_analysis_id"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-path-trace-workflow-manager-module-parameter-config-flow-analysis-id"><strong>flow_analysis_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-config/flow_analysis_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The Flow Analysis ID for the path trace, used to delete an existing path trace
-when in the ‘deleted’ state. If not provided, the module will search and delete
-based on the following search parameters.
-When create a path trace, it returns a flow_analysis_id (the “id” from the “request”
-section), which should be shown in a register</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The Flow Analysis ID uniquely identifies a specific path trace operation in
+Cisco Catalyst Center. This UUID-format identifier serves multiple purposes
+across different operational states.
+**Creation Context:**
+When creating a new path trace, the API returns a flow_analysis_id in the
+response’s “request.id” field. This identifier should be captured using
+Ansible’s register functionality for subsequent operations.
+**Retrieval Operations:**
+- If provided, retrieves the specific path trace associated with this ID
+- If omitted, the module searches based on source_ip and dest_ip parameters
+- Provides precise identification when multiple traces exist between the same endpoints
+**Deletion Operations:**
+- When state is ‘deleted’, this ID enables targeted removal of specific traces
+- If not provided, the module searches for matching traces using source_ip/dest_ip
+- Essential for scenarios where multiple path traces exist with identical endpoints
+**Best Practices:**
+- Always capture flow_analysis_id when creating path traces using register
+- Use flow_analysis_id for precise trace management in automation workflows
+- Preferred over source_ip/dest_ip combination for unique trace identification
+**Format:** UUID string (For example, “99e067de-8776-40d2-9f6a-1e6ab2ef083c”)</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -1012,7 +1027,7 @@ it will remove the specified settings.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 27, 2025.
+      <span class="lastupdated">Last updated on Oct 28, 2025.
       </span></p>
   </div>
 
