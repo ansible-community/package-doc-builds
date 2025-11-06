@@ -384,7 +384,7 @@
 <h1>openstack.cloud.role_assignment module – Assign OpenStack identity groups and users to roles<a class="headerlink" href="#openstack-cloud-role-assignment-module-assign-openstack-identity-groups-and-users-to-roles" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/openstack/cloud/">openstack.cloud collection</a> (version 2.4.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/openstack/cloud/">openstack.cloud collection</a> (version 2.5.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -487,7 +487,7 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 <td><div class="ansible-option-cell"><p>Name or ID of the domain to scope the role association to.</p>
 <p>Valid only with keystone version 3.</p>
 <p>Required if <em>project</em> is not specified.</p>
-<p>When <em>project</em> is specified, then <em>domain</em> will not be used for scoping the role association, only for finding resources.</p>
+<p>When <em>project</em> is specified, then <em>domain</em> will not be used for scoping the role association, only for finding resources. Deprecated for finding resources, please use <em>group_domain</em>, <em>project_domain</em>, <em>role_domain</em>, or <em>user_domain</em>.</p>
 <p>When scoping the role association, <em>project</em> has precedence over <em>domain</em> and <em>domain</em> has precedence over <em>system</em>: When <em>project</em> is specified, then <em>domain</em> and <em>system</em> are not used for role association. When <em>domain</em> is specified, then <em>system</em> will not be used for role association.</p>
 </div></td>
 </tr>
@@ -498,9 +498,19 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 <td><div class="ansible-option-cell"><p>Name or ID for the group.</p>
 <p>Valid only with keystone version 3.</p>
 <p>If <em>group</em> is not specified, then <em>user</em> is required. Both may not be specified at the same time.</p>
+<p>You can supply <em>group_domain</em> or the deprecated usage of <em>domain</em> to find group resources.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-group_domain"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-group-domain"><strong>group_domain</strong></p>
+<a class="ansibleOptionLink" href="#parameter-group_domain" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name or ID for the domain.</p>
+<p>Valid only with keystone version 3.</p>
+<p>Only valid for finding group resources.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-interface"></div>
 <div class="ansibleOptionAnchor" id="parameter-endpoint_type"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-interface"><span id="ansible-collections-openstack-cloud-role-assignment-module-parameter-endpoint-type"></span><strong>interface</strong></p>
 <a class="ansibleOptionLink" href="#parameter-interface" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: endpoint_type</span></p>
@@ -515,14 +525,23 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-project"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-project"><strong>project</strong></p>
 <a class="ansibleOptionLink" href="#parameter-project" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name or ID of the project to scope the role association to.</p>
 <p>If you are using keystone version 2, then this value is required.</p>
-<p>When <em>project</em> is specified, then <em>domain</em> will not be used for scoping the role association, only for finding resources.</p>
+<p>When <em>project</em> is specified, then <em>domain</em> will not be used for scoping the role association, only for finding resources. Prefer <em>group_domain</em> over <em>domain</em>.</p>
 <p>When scoping the role association, <em>project</em> has precedence over <em>domain</em> and <em>domain</em> has precedence over <em>system</em>: When <em>project</em> is specified, then <em>domain</em> and <em>system</em> are not used for role association. When <em>domain</em> is specified, then <em>system</em> will not be used for role association.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-project_domain"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-project-domain"><strong>project_domain</strong></p>
+<a class="ansibleOptionLink" href="#parameter-project_domain" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name or ID for the domain.</p>
+<p>Valid only with keystone version 3.</p>
+<p>Only valid for finding project resources.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -540,6 +559,15 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-role_domain"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-role-domain"><strong>role_domain</strong></p>
+<a class="ansibleOptionLink" href="#parameter-role_domain" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name or ID for the domain.</p>
+<p>Valid only with keystone version 3.</p>
+<p>Only valid for finding role resources.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-sdk_log_level"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-sdk-log-level"><strong>sdk_log_level</strong></p>
 <a class="ansibleOptionLink" href="#parameter-sdk_log_level" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -551,14 +579,14 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-sdk_log_path"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-sdk-log-path"><strong>sdk_log_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-sdk_log_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Path to the logfile of the OpenStackSDK. If empty no log is written</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -570,7 +598,7 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-system"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-system"><strong>system</strong></p>
 <a class="ansibleOptionLink" href="#parameter-system" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -580,7 +608,7 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 <p>When scoping the role association, <em>project</em> has precedence over <em>domain</em> and <em>domain</em> has precedence over <em>system</em>: When <em>project</em> is specified, then <em>domain</em> and <em>system</em> are not used for role association. When <em>domain</em> is specified, then <em>system</em> will not be used for role association.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-timeout"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-timeout"><strong>timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -588,12 +616,21 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">180</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-user"><strong>user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name or ID for the user.</p>
 <p>If <em>user</em> is not specified, then <em>group</em> is required. Both may not be specified at the same time.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-user_domain"></div><p class="ansible-option-title" id="ansible-collections-openstack-cloud-role-assignment-module-parameter-user-domain"><strong>user_domain</strong></p>
+<a class="ansibleOptionLink" href="#parameter-user_domain" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name or ID for the domain.</p>
+<p>Valid only with keystone version 3.</p>
+<p>Only valid for finding user resources.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -663,7 +700,7 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 <section id="collection-links">
 <h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
 <ul class="ansible-links">
-<li><span><a aria-role="button" class="ansible-link reference external" href="https://storyboard.openstack.org/#!/project/openstack/ansible-collections-openstack" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://bugs.launchpad.net/ansible-collections-openstack" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
 <li><span><a aria-role="button" class="ansible-link reference external" href="https://opendev.org/openstack/ansible-collections-openstack" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
 </ul>
 </section>
@@ -684,7 +721,7 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rol
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 03, 2025.
+      <span class="lastupdated">Last updated on Nov 06, 2025.
       </span></p>
   </div>
 

@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="ravendb.ravendb.node module – Add a RavenDB node to an existing cluster" href="node_module.html" />
-    <link rel="prev" title="ravendb.ravendb.database module – Manage RavenDB databases" href="database_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="ravendb.ravendb.healthcheck module – Perform RavenDB node and cluster health checks" href="healthcheck_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -385,7 +385,7 @@
 <h1>ravendb.ravendb.index module – Manage RavenDB indexes<a class="headerlink" href="#ravendb-ravendb-index-module-manage-ravendb-indexes" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ravendb/ravendb/">ravendb.ravendb collection</a> (version 1.0.3).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ravendb/ravendb/">ravendb.ravendb collection</a> (version 1.0.4).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -410,9 +410,10 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>This module allows you to create, delete, pause, resume, enable, disable, or reset RavenDB indexes.</p></li>
+<li><p>Create, delete, update, or apply operational modes to RavenDB indexes.</p></li>
+<li><p>Supports both single-map and multi-map index definitions (with optional reduce).</p></li>
 <li><p>Supports check mode to simulate changes without applying them.</p></li>
-<li><p>Can create dynamic single-map and multi-map indexes based on a provided index definition.</p></li>
+<li><p>Can reconcile per-index configuration via <code class="docutils literal notranslate"><span class="pre">index_configuration</span></code>.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -465,18 +466,30 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 <div class="ansibleOptionAnchor" id="parameter-database_name"></div><p class="ansible-option-title" id="ansible-collections-ravendb-ravendb-index-module-parameter-database-name"><strong>database_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-database_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Name of the database where the index resides/should be reside.</p>
+<td><div class="ansible-option-cell"><p>Name of the database.</p>
+<p>Must be a valid name containing only letters, numbers, dashes, and underscores.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-index_definition"></div><p class="ansible-option-title" id="ansible-collections-ravendb-ravendb-index-module-parameter-index-definition"><strong>index_definition</strong></p>
-<a class="ansibleOptionLink" href="#parameter-index_definition" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+<div class="ansibleOptionAnchor" id="parameter-index_configuration"></div><p class="ansible-option-title" id="ansible-collections-ravendb-ravendb-index-module-parameter-index-configuration"><strong>index_configuration</strong></p>
+<a class="ansibleOptionLink" href="#parameter-index_configuration" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Dictionary defining the index (maps and optional reduce).</p>
-<p>Required when creating a new index.</p>
+<td><div class="ansible-option-cell"><p>Per-index configuration key/value pairs to reconcile.</p>
+<p>Keys and values are normalized to strings and compared against the current index definition’s configuration.</p>
+<p>If differences exist, the module updates the definition with the merged configuration.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-index_definition"></div><p class="ansible-option-title" id="ansible-collections-ravendb-ravendb-index-module-parameter-index-definition"><strong>index_definition</strong></p>
+<a class="ansibleOptionLink" href="#parameter-index_definition" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Dictionary defining the index (<code class="docutils literal notranslate"><span class="pre">map</span></code> list and optional <code class="docutils literal notranslate"><span class="pre">reduce</span></code> string).</p>
+<p>Required when creating a new index.</p>
+<p>When present for an existing index, differences are applied idempotently.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-index_name"></div><p class="ansible-option-title" id="ansible-collections-ravendb-ravendb-index-module-parameter-index-name"><strong>index_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-index_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -484,11 +497,12 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 <p>Must consist only of letters, numbers, dashes, and underscores.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mode"></div><p class="ansible-option-title" id="ansible-collections-ravendb-ravendb-index-module-parameter-mode"><strong>mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Operational mode to apply to an existing index.</p>
+<td><div class="ansible-option-cell"><p>Operational mode to apply to an existing index (one of enable/disable/pause/resume/reset).</p>
+<p>If the index does not exist and only <code class="docutils literal notranslate"><span class="pre">mode</span></code> is provided, the task fails with guidance to create it first.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;resumed&quot;</span></code></p></li>
@@ -499,13 +513,15 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-ravendb-ravendb-index-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Desired state of the index.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">present</span></code>, the index will be created if it does not exist.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">present</span></code>, the index will be created if it does not exist, and the definition/configuration will be reconciled.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">absent</span></code>, the index will be deleted if it exists.</p>
+<p>If omitted (<code class="docutils literal notranslate"><span class="pre">null</span></code>), the module operates in “reconcile” mode on existing indexes only (definition, configuration, and/or <code class="docutils literal notranslate"><span class="pre">mode</span></code>).</p>
+<p>If the index does not exist and only <code class="docutils literal notranslate"><span class="pre">mode</span></code> is provided, the task fails with guidance to use <code class="docutils literal notranslate"><span class="pre">state=present</span></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code></p></li>
@@ -513,12 +529,12 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-url"></div><p class="ansible-option-title" id="ansible-collections-ravendb-ravendb-index-module-parameter-url"><strong>url</strong></p>
 <a class="ansibleOptionLink" href="#parameter-url" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>URL of the RavenDB server.</p>
-<p>Must include the scheme (http or https), hostname and port.</p>
+<p>Must include the scheme (http or https), hostname, and port.</p>
 </div></td>
 </tr>
 </tbody>
@@ -608,12 +624,13 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 <span class="w">        </span><span class="no">}</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a RavenDB index</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Reconcile per-index configuration (idempotent)</span>
 <span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">:8080&quot;</span>
 <span class="w">    </span><span class="nt">database_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_database&quot;</span>
 <span class="w">    </span><span class="nt">index_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UsersByName&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+<span class="w">    </span><span class="nt">index_configuration</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">Indexing.MapBatchSize</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;128&quot;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disable a RavenDB index (cluster-wide)</span>
 <span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
@@ -623,35 +640,15 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 <span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disabled</span>
 <span class="w">    </span><span class="nt">cluster_wide</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable a RavenDB index</span>
-<span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">:8080&quot;</span>
-<span class="w">    </span><span class="nt">database_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_database&quot;</span>
-<span class="w">    </span><span class="nt">index_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Orders/ByCompany&quot;</span>
-<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enabled</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pause a RavenDB index</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pause a RavenDB index (check mode)</span>
 <span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">:8080&quot;</span>
 <span class="w">    </span><span class="nt">database_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_database&quot;</span>
 <span class="w">    </span><span class="nt">index_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Orders/ByCompany&quot;</span>
 <span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paused</span>
+<span class="w">  </span><span class="nt">check_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Resume a RavenDB index</span>
-<span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">:8080&quot;</span>
-<span class="w">    </span><span class="nt">database_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_database&quot;</span>
-<span class="w">    </span><span class="nt">index_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Orders/ByCompany&quot;</span>
-<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resumed</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Reset a RavenDB index</span>
-<span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">:8080&quot;</span>
-<span class="w">    </span><span class="nt">database_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_database&quot;</span>
-<span class="w">    </span><span class="nt">index_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Orders/ByCompany&quot;</span>
-<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reset</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update an existing RavenDB index definition</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update an existing RavenDB index definition (idempotent update)</span>
 <span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">:8080&quot;</span>
 <span class="w">    </span><span class="nt">database_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_database&quot;</span>
@@ -669,6 +666,24 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 <span class="w">          </span><span class="no">count = g.Sum(x =&gt; x.count)</span>
 <span class="w">        </span><span class="no">}</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a RavenDB index</span>
+<span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">:8080&quot;</span>
+<span class="w">    </span><span class="nt">database_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_database&quot;</span>
+<span class="w">    </span><span class="nt">index_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UsersByName&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create index with rolling deployment</span>
+<span class="w">  </span><span class="nt">ravendb.ravendb.index</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">:8080&quot;</span>
+<span class="w">    </span><span class="nt">database_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my_database&quot;</span>
+<span class="w">    </span><span class="nt">index_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Orders/ByCompany&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">index_definition</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">map</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;from</span><span class="nv"> </span><span class="s">o</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">docs.Orders</span><span class="nv"> </span><span class="s">select</span><span class="nv"> </span><span class="s">new</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">o.Company</span><span class="nv"> </span><span class="s">}&quot;</span>
+<span class="w">      </span><span class="nt">deployment_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rolling</span>
 </pre></div>
 </div>
 </section>
@@ -726,7 +741,7 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="database_module.html" class="btn btn-neutral float-left" title="ravendb.ravendb.database module – Manage RavenDB databases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="healthcheck_module.html" class="btn btn-neutral float-left" title="ravendb.ravendb.healthcheck module – Perform RavenDB node and cluster health checks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="node_module.html" class="btn btn-neutral float-right" title="ravendb.ravendb.node module – Add a RavenDB node to an existing cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -734,7 +749,7 @@ see <a class="reference internal" href="#ansible-collections-ravendb-ravendb-ind
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 03, 2025.
+      <span class="lastupdated">Last updated on Nov 06, 2025.
       </span></p>
   </div>
 
