@@ -16,7 +16,7 @@
 
   
     <link rel="shortcut icon" href="../../../_static/images/Ansible-Mark-RGB_Black.png"/>
-    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/collections/community/proxysql/proxysql_mysql_users_module.html"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/collections/community/proxysql/proxysql_mysql_users_module.html"/>
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=8ff10258"></script>
@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.proxysql.proxysql_query_rules module – Modifies query rules using the proxysql admin interface" href="proxysql_query_rules_module.html" />
-    <link rel="prev" title="community.proxysql.proxysql_manage_config module – Writes the proxysql configuration settings between layers" href="proxysql_manage_config_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="community.proxysql.proxysql_mysql_hostgroup_attributes module – Manages hostgroup attributes using the ProxySQL admin interface" href="proxysql_mysql_hostgroup_attributes_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -98,6 +98,13 @@
             
         >
             latest
+        </option>
+        
+        <option
+            value="11"
+            selected="selected"
+        >
+            11
         </option>
         
         <option
@@ -247,6 +254,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
@@ -335,17 +343,17 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /* var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
         '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
-                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
                      '</div>');
     }
     
@@ -354,16 +362,16 @@
 
       var important = false;
       var msg = '<p>';
-      if (startsWith(current_url_path, "/ansible-core/")) {
-        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
-      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/12/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
-      } else if (startsWith(current_url_path, "/ansible/devel/")) {
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
@@ -395,7 +403,7 @@
 <h1>community.proxysql.proxysql_mysql_users module – Adds or removes mysql users from proxysql admin interface<a class="headerlink" href="#community-proxysql-proxysql-mysql-users-module-adds-or-removes-mysql-users-from-proxysql-admin-interface" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxysql/">community.proxysql collection</a> (version 1.6.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxysql/">community.proxysql collection</a> (version 1.7.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -503,6 +511,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;mysql_native_password&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;caching_sha2_password&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -594,6 +603,14 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-salt"></div><p class="ansible-option-title" id="ansible-collections-community-proxysql-proxysql-mysql-users-module-parameter-salt"><strong>salt</strong></p>
+<a class="ansibleOptionLink" href="#parameter-salt" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.proxysql 1.7.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Salt used when <em>encryption_method</em> is set to <code class="docutils literal notranslate"><span class="pre">caching_sha2_password</span></code>. If omitted the <em>salt</em> is a randomly generated string and will change value in ProxySQL database on each execution.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-save_to_disk"></div><p class="ansible-option-title" id="ansible-collections-community-proxysql-proxysql-mysql-users-module-parameter-save-to-disk"><strong>save_to_disk</strong></p>
 <a class="ansibleOptionLink" href="#parameter-save_to_disk" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -605,7 +622,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-proxysql-proxysql-mysql-users-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -617,7 +634,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-transaction_persistent"></div><p class="ansible-option-title" id="ansible-collections-community-proxysql-proxysql-mysql-users-module-parameter-transaction-persistent"><strong>transaction_persistent</strong></p>
 <a class="ansibleOptionLink" href="#parameter-transaction_persistent" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -629,7 +646,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_ssl"></div><p class="ansible-option-title" id="ansible-collections-community-proxysql-proxysql-mysql-users-module-parameter-use-ssl"><strong>use_ssl</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_ssl" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -641,7 +658,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-community-proxysql-proxysql-mysql-users-module-parameter-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -675,6 +692,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
 <span class="w">    </span><span class="nt">login_user</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;admin&#39;</span>
 <span class="w">    </span><span class="nt">login_password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;admin&#39;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;productiondba&#39;</span>
+<span class="w">    </span><span class="nt">salt</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;secrets_of_20_chars_&#39;</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">load_to_runtime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 
@@ -733,7 +751,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="proxysql_manage_config_module.html" class="btn btn-neutral float-left" title="community.proxysql.proxysql_manage_config module – Writes the proxysql configuration settings between layers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="proxysql_mysql_hostgroup_attributes_module.html" class="btn btn-neutral float-left" title="community.proxysql.proxysql_mysql_hostgroup_attributes module – Manages hostgroup attributes using the ProxySQL admin interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="proxysql_query_rules_module.html" class="btn btn-neutral float-right" title="community.proxysql.proxysql_query_rules module – Modifies query rules using the proxysql admin interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -741,7 +759,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxysql-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 08, 2025.
+      <span class="lastupdated">Last updated on Nov 11, 2025.
       </span></p>
   </div>
 
