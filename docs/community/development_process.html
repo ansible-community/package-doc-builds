@@ -159,7 +159,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#macro-development-ansible-core-roadmaps-releases-and-projects">Macro development: <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> roadmaps, releases, and projects</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#micro-development-the-lifecycle-of-a-pr">Micro development: the lifecycle of a PR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#making-your-pr-merge-worthy">Making your PR merge-worthy</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#creating-changelog-fragments">Creating changelog fragments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#changelog-fragments">Changelog fragments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#testing-prs">Testing PRs</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#backporting-merged-prs-in-ansible-core">Backporting merged PRs in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a></li>
@@ -342,16 +343,17 @@
 <li><p><a class="reference internal" href="#micro-development-the-lifecycle-of-a-pr" id="id2">Micro development: the lifecycle of a PR</a></p></li>
 <li><p><a class="reference internal" href="#making-your-pr-merge-worthy" id="id3">Making your PR merge-worthy</a></p>
 <ul>
-<li><p><a class="reference internal" href="#creating-changelog-fragments" id="id4">Creating changelog fragments</a></p>
+<li><p><a class="reference internal" href="#changelog-fragments" id="id4">Changelog fragments</a></p>
 <ul>
 <li><p><a class="reference internal" href="#creating-a-changelog-fragment" id="id5">Creating a changelog fragment</a></p></li>
 <li><p><a class="reference internal" href="#changelog-fragment-entry-format" id="id6">Changelog fragment entry format</a></p></li>
 <li><p><a class="reference internal" href="#changelog-fragment-entry-format-for-new-playbooks" id="id7">Changelog fragment entry format for new playbooks</a></p></li>
 </ul>
 </li>
+<li><p><a class="reference internal" href="#testing-prs" id="id8">Testing PRs</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#backporting-merged-prs-in-ansible-core" id="id8">Backporting merged PRs in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a></p></li>
+<li><p><a class="reference internal" href="#backporting-merged-prs-in-ansible-core" id="id9">Backporting merged PRs in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a></p></li>
 </ul>
 </nav>
 <section id="macro-development-ansible-core-roadmaps-releases-and-projects">
@@ -383,8 +385,8 @@ Some collection repositories use <a class="reference external" href="https://git
 <section id="making-your-pr-merge-worthy">
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">Making your PR merge-worthy</a><a class="headerlink" href="#making-your-pr-merge-worthy" title="Link to this heading"></a></h2>
 <p>We do not merge every PR. Here are some tips for making your PR useful, attractive, and merge-worthy.</p>
-<section id="creating-changelog-fragments">
-<span id="community-changelogs"></span><h3><a class="toc-backref" href="#id4" role="doc-backlink">Creating changelog fragments</a><a class="headerlink" href="#creating-changelog-fragments" title="Link to this heading"></a></h3>
+<section id="changelog-fragments">
+<span id="community-changelogs"></span><h3><a class="toc-backref" href="#id4" role="doc-backlink">Changelog fragments</a><a class="headerlink" href="#changelog-fragments" title="Link to this heading"></a></h3>
 <p>Changelogs help users and developers keep up with changes to ansible-core and Ansible collections. Ansible and many collections build changelogs for each release from fragments. For ansible-core and collections using this model, you <strong>must</strong> add a changelog fragment to any PR that changes functionality or fixes a bug.</p>
 <p>You do not need a changelog fragment for PRs that:</p>
 <ul class="simple">
@@ -397,15 +399,15 @@ Some collection repositories use <a class="reference external" href="https://git
 </div>
 <p>More precisely:</p>
 <ul class="simple">
-<li><p>Every bugfix PR must have a changelog fragment. The only exception are fixes to a change that has not yet been included in a release.</p></li>
+<li><p>Every bugfix PR must have a changelog fragment. The only exceptions are fixes to changes that have not yet been included in a release.</p></li>
 <li><p>Every feature PR must have a changelog fragment.</p></li>
 <li><p>New modules and plugins (including jinja2 filter and test plugins) must have <code class="docutils literal notranslate"><span class="pre">version_added</span></code> entries set correctly in their documentation, and do not need a changelog fragment. The tooling detects new modules and plugins by their <code class="docutils literal notranslate"><span class="pre">version_added</span></code> values and announces them in the next release’s changelog automatically.</p></li>
 </ul>
 <p>We build short summary changelogs for minor releases as well as for major releases. If you backport a bugfix, include a changelog fragment with the backport PR.</p>
 <section id="creating-a-changelog-fragment">
 <span id="changelogs-how-to"></span><h4><a class="toc-backref" href="#id5" role="doc-backlink">Creating a changelog fragment</a><a class="headerlink" href="#creating-a-changelog-fragment" title="Link to this heading"></a></h4>
-<p>A basic changelog fragment is a <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file placed in the <code class="docutils literal notranslate"><span class="pre">changelogs/fragments/</span></code> directory.  Each file contains a yaml dict with keys like <code class="docutils literal notranslate"><span class="pre">bugfixes</span></code> or <code class="docutils literal notranslate"><span class="pre">major_changes</span></code> followed by a list of changelog entries of bugfixes or features.  Each changelog entry is rst embedded inside of the yaml file which means that certain constructs would need to be escaped so they can be interpreted by rst and not by yaml (or escaped for both yaml and rst if you prefer).  Each PR <strong>must</strong> use a new fragment file rather than adding to an existing one, so we can trace the change back to the PR that introduced it.</p>
-<p>PRs which add a new module or plugin do not necessarily need a changelog fragment. See the previous section <a class="reference internal" href="#community-changelogs"><span class="std std-ref">Creating changelog fragments</span></a>. Also see the next section <a class="reference internal" href="#changelogs-how-to-format"><span class="std std-ref">Changelog fragment entry format</span></a> for the precise format changelog fragments should have.</p>
+<p>A basic changelog fragment is a <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file placed in the <code class="docutils literal notranslate"><span class="pre">changelogs/fragments/</span></code> directory.  Each file contains a YAML dict with keys like <code class="docutils literal notranslate"><span class="pre">bugfixes</span></code> or <code class="docutils literal notranslate"><span class="pre">major_changes</span></code> followed by a list of changelog entries of bugfixes or features.  Each changelog entry is written in the <a class="reference external" href="https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html">RST</a> format and embedded in the YAML file. This means that certain constructs need to be escaped so that they can be interpreted by RST and not by YAML (or escaped for both YAML and RST if you prefer).  Each PR <strong>must</strong> use a new fragment file rather than adding to an existing one, so we can trace the change back to the PR that introduced it.</p>
+<p>PRs which add a new module or plugin do not necessarily need a changelog fragment. See the previous section <a class="reference internal" href="#community-changelogs"><span class="std std-ref">Changelog fragments</span></a>. Also see the next section <a class="reference internal" href="#changelogs-how-to-format"><span class="std std-ref">Changelog fragment entry format</span></a> for the precise format changelog fragments should have.</p>
 <p>To create a changelog entry, create a new file with a unique name in the <code class="docutils literal notranslate"><span class="pre">changelogs/fragments/</span></code> directory of the corresponding repository. The file name should include the PR number and a description of the change. It must end with the file extension <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yml</span></code>. For example: <code class="docutils literal notranslate"><span class="pre">40696-user-backup-shadow-file.yaml</span></code></p>
 <p>A single changelog fragment may contain multiple sections but most will only contain one section. The toplevel keys (bugfixes, major_changes, and so on) are defined in the <a class="reference external" href="https://github.com/ansible/ansible/blob/devel/changelogs/config.yaml">config file</a> for our <a class="reference external" href="https://github.com/ansible-community/antsibull-changelog/blob/main/docs/changelogs.rst">release note tool</a>. Here are the valid sections and a description of each:</p>
 <dl>
@@ -506,9 +508,16 @@ Some collection repositories use <a class="reference external" href="https://git
 </div>
 </section>
 </section>
+<section id="testing-prs">
+<span id="contribution-guide-testing-prs"></span><h3><a class="toc-backref" href="#id8" role="doc-backlink">Testing PRs</a><a class="headerlink" href="#testing-prs" title="Link to this heading"></a></h3>
+<p>Adding tests for your PR makes it a stronger candidate for being merged.</p>
+<p>For information on writing integration tests, see the docs page on <a class="reference internal" href="../dev_guide/testing_integration.html#testing-integration"><span class="std std-ref">Integration tests</span></a> and the existing integration tests at <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/test/integration/targets">test/integration</a>.</p>
+<p>For information on writing unit tests see the docs page on <a class="reference internal" href="../dev_guide/testing_units.html#testing-units"><span class="std std-ref">Unit tests</span></a> and the existing unit tests at <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/test/units">test/units</a>.</p>
+<p>If you are not sure how to proceed with writing tests, ask for clarification in any of our <a class="reference internal" href="communication.html#communication"><span class="std std-ref">community channels</span></a>.</p>
+</section>
 </section>
 <section id="backporting-merged-prs-in-ansible-core">
-<span id="backport-process"></span><h2><a class="toc-backref" href="#id8" role="doc-backlink">Backporting merged PRs in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a><a class="headerlink" href="#backporting-merged-prs-in-ansible-core" title="Link to this heading"></a></h2>
+<span id="backport-process"></span><h2><a class="toc-backref" href="#id9" role="doc-backlink">Backporting merged PRs in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code></a><a class="headerlink" href="#backporting-merged-prs-in-ansible-core" title="Link to this heading"></a></h2>
 <p>All <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> PRs must be merged to the <code class="docutils literal notranslate"><span class="pre">devel</span></code> branch first. After a pull request has been accepted and merged to the <code class="docutils literal notranslate"><span class="pre">devel</span></code> branch, the following instructions will help you create a pull request to backport the change to a previous stable branch.</p>
 <p>We do <strong>not</strong> backport features.</p>
 <div class="admonition note">
@@ -571,7 +580,7 @@ git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 10, 2025.
+      <span class="lastupdated">Last updated on Nov 11, 2025.
       </span></p>
   </div>
 
