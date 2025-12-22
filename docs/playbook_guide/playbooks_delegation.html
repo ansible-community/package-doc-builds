@@ -351,12 +351,16 @@ If the <code class="docutils literal notranslate"><span class="pre">connection</
 
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Take out of load balancer pool</span>
-<span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.builtin.command /usr/bin/take_out_of_pool {{ inventory_hostname }}</span>
+<span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.builtin.command</span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/take_out_of_pool {{ inventory_hostname }}</span>
 
 <span class="c1"># ...</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add back to load balancer pool</span>
-<span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.builtin.command /usr/bin/add_back_to_pool {{ inventory_hostname }}</span>
+<span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.builtin.command</span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/add_back_to_pool {{ inventory_hostname }}</span>
 </pre></div>
 </div>
 <p>You can use a local action to call ‘rsync’ to recursively copy files to the managed servers:</p>
@@ -365,7 +369,9 @@ If the <code class="docutils literal notranslate"><span class="pre">connection</
 
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Recursively copy files from management server to target</span>
-<span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.builtin.command rsync -a /path/to/files {{ inventory_hostname }}:/path/to/target/</span>
+<span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.builtin.command</span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rsync</span><span class="nv"> </span><span class="s">-a</span><span class="nv"> </span><span class="s">/path/to/files</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}:/path/to/target/&quot;</span>
 </pre></div>
 </div>
 <p>Note that you must have passphrase-less SSH keys or an ssh-agent configured for this to work, otherwise rsync asks for a passphrase.</p>
@@ -375,8 +381,8 @@ If the <code class="docutils literal notranslate"><span class="pre">connection</
 
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Send summary mail</span>
-<span class="w">      </span><span class="nt">local_action</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.general.mail</span>
+<span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.general.mail</span>
+<span class="w">      </span><span class="nt">args</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">subject</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Summary</span><span class="nv"> </span><span class="s">Mail&quot;</span>
 <span class="w">        </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">mail_recipient</span><span class="nv"> </span><span class="s">}}&quot;</span>
 <span class="w">        </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">mail_body</span><span class="nv"> </span><span class="s">}}&quot;</span>
@@ -477,7 +483,7 @@ host_vars/localhost.yml, for example. You can avoid this issue by using <code cl
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 15, 2025.
+      <span class="lastupdated">Last updated on Dec 22, 2025.
       </span></p>
   </div>
 
