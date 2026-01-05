@@ -334,7 +334,7 @@
 <h1>netapp.ontap.na_ontap_qtree module – NetApp ONTAP manage qtrees<a class="headerlink" href="#netapp-ontap-na-ontap-qtree-module-netapp-ontap-manage-qtrees" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 23.2.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 23.3.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -564,6 +564,8 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p><em class="ansible-option-versionadded">added in netapp.ontap 21.21.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The group set as owner of the qtree.</p>
+<p>Optional parameter. Only relevant for Unix and mixed security styles.</p>
+<p>Ignored when security_style is set to ‘ntfs’.</p>
 <p>Only supported with REST and ONTAP 9.9 or later.</p>
 </div></td>
 </tr>
@@ -575,6 +577,8 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <td><div class="ansible-option-cell"><p>File permissions bits of the qtree.</p>
 <p>Accepts either octal or string format.</p>
 <p>Examples 0777, 777 in octal and ---rwxrwxrwx, sstrwxrwxrwx, rwxrwxrwx in string format.</p>
+<p>Optional parameter. Only relevant for Unix and mixed security styles.</p>
+<p>Ignored when security_style is set to ‘ntfs’.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -583,6 +587,8 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <p><em class="ansible-option-versionadded">added in netapp.ontap 21.21.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The user set as owner of the qtree.</p>
+<p>Optional parameter. Only relevant for Unix and mixed security styles.</p>
+<p>Ignored when security_style is set to ‘ntfs’.</p>
 <p>Only supported with REST and ONTAP 9.9 or later.</p>
 </div></td>
 </tr>
@@ -717,6 +723,18 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create Qtree with NTFS security style.</span>
+<span class="w">  </span><span class="nt">netapp.ontap.na_ontap_qtree</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ntfsQTree</span>
+<span class="w">    </span><span class="nt">flexvol_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansibleVolume</span>
+<span class="w">    </span><span class="nt">security_style</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ntfs</span>
+<span class="w">    </span><span class="nt">vserver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansibleVServer</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="c1"># Note: unix_user, unix_group, and unix_permissions are not needed for NTFS security style</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delete Qtrees.</span>
 <span class="w">  </span><span class="nt">netapp.ontap.na_ontap_qtree</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
@@ -758,7 +776,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 29, 2025.
+      <span class="lastupdated">Last updated on Jan 05, 2026.
       </span></p>
   </div>
 

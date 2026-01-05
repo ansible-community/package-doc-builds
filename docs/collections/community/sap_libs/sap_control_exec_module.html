@@ -355,7 +355,7 @@
 <h1>community.sap_libs.sap_control_exec module – Ansible Module to execute SAPCONTROL<a class="headerlink" href="#community-sap-libs-sap-control-exec-module-ansible-module-to-execute-sapcontrol" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/sap_libs/">community.sap_libs collection</a> (version 1.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/sap_libs/">community.sap_libs collection</a> (version 1.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -377,6 +377,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Provides support for sapstartsrv formaly known as sapcontrol</p></li>
 <li><p>A complete information of all functions and the parameters can be found here <a class="reference external" href="https://www.sap.com/documents/2016/09/0a40e60d-8b7c-0010-82c7-eda71af511fa.html">https://www.sap.com/documents/2016/09/0a40e60d-8b7c-0010-82c7-eda71af511fa.html</a></p></li>
+<li><p>When hostname is ‘localhost’, sysnr is set and no username/password are provided, the module will attempt to use local Unix socket authentication (which works with ‘become’ privilege escalation).</p></li>
 </ul>
 <p>Aliases: sapcontrol</p>
 </section>
@@ -504,6 +505,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The port number of the sapstartsrv.</p>
+<p>If provided, the module will use always use http connection instead of local socket.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -546,14 +548,27 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GetProcessList</span>
 <span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50113</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ParameterValue</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ParameterValue with authentication</span>
 <span class="w">  </span><span class="nt">community.sap_libs.sap_control_exec</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.8.15</span>
 <span class="w">    </span><span class="nt">sysnr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;01&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hdbadm</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test1234#</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test1234</span>
 <span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ParameterValue</span>
 <span class="w">    </span><span class="nt">parameter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ztta</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GetVersionInfo using local Unix socket (requires become)</span>
+<span class="w">  </span><span class="nt">community.sap_libs.sap_control_exec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">sysnr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00&quot;</span>
+<span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GetVersionInfo</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GetProcessList using local Unix socket as SAP admin user</span>
+<span class="w">  </span><span class="nt">community.sap_libs.sap_control_exec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">sysnr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00&quot;</span>
+<span class="w">    </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GetProcessList</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">become_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">sap_sid</span> <span class="o">|</span> <span class="nf">lower</span> <span class="cp">}}</span><span class="s">adm&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -618,7 +633,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 29, 2025.
+      <span class="lastupdated">Last updated on Jan 05, 2026.
       </span></p>
   </div>
 

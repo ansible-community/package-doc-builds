@@ -353,7 +353,7 @@
 <h1>community.proxmox.proxmox_zone module – Manage Proxmox zone configurations.<a class="headerlink" href="#community-proxmox-proxmox-zone-module-manage-proxmox-zone-configurations" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxmox/">community.proxmox collection</a> (version 1.4.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxmox/">community.proxmox collection</a> (version 1.5.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -557,6 +557,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <a class="ansibleOptionLink" href="#parameter-fabric" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>SDN fabric to use as underlay for this VXLAN zone.</p>
+<p>Either <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-zone-module-parameter-fabric"><span class="std std-ref"><span class="pre">fabric</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-zone-module-parameter-peers"><span class="std std-ref"><span class="pre">peers</span></span></a></strong></code> is required for VXLAN zones.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -591,7 +592,9 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <div class="ansibleOptionAnchor" id="parameter-peers"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-zone-module-parameter-peers"><strong>peers</strong></p>
 <a class="ansibleOptionLink" href="#parameter-peers" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Peers address list.</p>
+<td><div class="ansible-option-cell"><p>Peers address list (comma-separated IP addresses).</p>
+<p>Either <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-zone-module-parameter-fabric"><span class="std std-ref"><span class="pre">fabric</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-zone-module-parameter-peers"><span class="std std-ref"><span class="pre">peers</span></span></a></strong></code> is required for VXLAN zones.</p>
+<p>Example: 192.168.0.1,192.168.0.2,192.168.0.3</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -765,6 +768,28 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">bridge</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vmbr0</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VXLAN zone with fabric</span>
+<span class="w">  </span><span class="nt">community.proxmox.proxmox_zone</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;root@pam&quot;</span>
+<span class="w">    </span><span class="nt">api_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vault.proxmox.root_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">pc.proxmox.api_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vxlan</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myvxlan</span>
+<span class="w">    </span><span class="nt">fabric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_fabric</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VXLAN zone with peers</span>
+<span class="w">  </span><span class="nt">community.proxmox.proxmox_zone</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;root@pam&quot;</span>
+<span class="w">    </span><span class="nt">api_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vault.proxmox.root_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">pc.proxmox.api_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vxlan</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myvxlan</span>
+<span class="w">    </span><span class="nt">peers</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.0.1,192.168.0.2,192.168.0.3&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a zone</span>
 <span class="w">  </span><span class="nt">community.proxmox.proxmox_zone</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;root@pam&quot;</span>
@@ -830,7 +855,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 29, 2025.
+      <span class="lastupdated">Last updated on Jan 05, 2026.
       </span></p>
   </div>
 

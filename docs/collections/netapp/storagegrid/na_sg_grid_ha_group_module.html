@@ -334,7 +334,7 @@
 <h1>netapp.storagegrid.na_sg_grid_ha_group module – Manage high availability (HA) group configuration on StorageGRID.<a class="headerlink" href="#netapp-storagegrid-na-sg-grid-ha-group-module-manage-high-availability-ha-group-configuration-on-storagegrid" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/storagegrid/">netapp.storagegrid collection</a> (version 21.15.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/storagegrid/">netapp.storagegrid collection</a> (version 21.16.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -391,7 +391,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-gateway_cidr"></div><p class="ansible-option-title" id="ansible-collections-netapp-storagegrid-na-sg-grid-ha-group-module-parameter-gateway-cidr"><strong>gateway_cidr</strong></p>
 <a class="ansibleOptionLink" href="#parameter-gateway_cidr" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>CIDR for the gateway IP and VIP subnet.</p>
+<td><div class="ansible-option-cell"><p>The <code class="docutils literal notranslate"><span class="pre">gateway_cidr</span></code> field specifies the gateway IP address and prefix length of the VIP subnet in CIDR notation. i.e. <code class="docutils literal notranslate"><span class="pre">IP_address/prefix_length</span></code>.</p>
+<p>This must match the subnet CIDR if any interface in the HA group already has an IP address configured.</p>
+<p>The IP address may be specified as the network address of the subnet, or as the gateway IP address within the subnet if clients will access the VIP address from a different subnet.</p>
+<p>For example <code class="docutils literal notranslate"><span class="pre">10.193.150.0/25</span></code> or <code class="docutils literal notranslate"><span class="pre">10.193.150.1/25</span></code>.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -476,7 +479,23 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create HA Group</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create HA Group (layer 2)</span>
+<span class="w">  </span><span class="nt">netapp.storagegrid.na_sg_grid_ha_group</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://&lt;storagegrid-endpoint-url&gt;&quot;</span>
+<span class="w">    </span><span class="nt">auth_token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;storagegrid-auth-token&quot;</span>
+<span class="w">    </span><span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Site1-HA-Group</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Site</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">HA</span><span class="nv"> </span><span class="s">Group&quot;</span>
+<span class="w">    </span><span class="nt">gateway_cidr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.50.0/24</span>
+<span class="w">    </span><span class="nt">virtual_ips</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.50.5</span>
+<span class="w">    </span><span class="nt">interfaces</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SITE1-ADM1</span>
+<span class="w">        </span><span class="nt">interface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth2</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SITE1-G1</span>
+<span class="w">        </span><span class="nt">interface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth2</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create HA Group (routable)</span>
 <span class="w">  </span><span class="nt">netapp.storagegrid.na_sg_grid_ha_group</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://&lt;storagegrid-endpoint-url&gt;&quot;</span>
 <span class="w">    </span><span class="nt">auth_token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;storagegrid-auth-token&quot;</span>
@@ -586,7 +605,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Dec 29, 2025.
+      <span class="lastupdated">Last updated on Jan 05, 2026.
       </span></p>
   </div>
 
