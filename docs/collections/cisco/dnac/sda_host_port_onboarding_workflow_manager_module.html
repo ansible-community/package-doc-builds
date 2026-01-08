@@ -72,6 +72,14 @@
           <a href="../../../index.html" class="icon icon-home">
             Ansible
           </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
   
               <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
@@ -332,7 +340,7 @@
 <h1>cisco.dnac.sda_host_port_onboarding_workflow_manager module – Manage host port onboarding in SD-Access Fabric in Cisco Catalyst Center.<a class="headerlink" href="#cisco-dnac-sda-host-port-onboarding-workflow-manager-module-manage-host-port-onboarding-in-sd-access-fabric-in-cisco-catalyst-center" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/dnac/">cisco.dnac collection</a> (version 6.42.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/dnac/">cisco.dnac collection</a> (version 6.43.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -838,6 +846,24 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-sda-host
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sda_fabric_port_channel_limit"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-sda-host-port-onboarding-workflow-manager-module-parameter-sda-fabric-port-channel-limit"><strong>sda_fabric_port_channel_limit</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sda_fabric_port_channel_limit" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>- Maximum number of port channels processed in a single API batch
+for add and update operations on SD-Access fabric devices.
+- When total port channels exceed this limit, operations are split
+into sequential batches of the specified size for processing.
+- Each batch completes successfully before the next batch starts,
+ensuring data consistency and better error isolation.
+- Sequential processing prevents API timeouts, reduces system load,
+and improves reliability for large port channel configurations.
+- Module provides detailed logging and status reporting for each
+batch, enabling progress tracking and issue identification.
+- Lower values (1-10) provide granular control but slower processing. - Higher values (11-20) improve speed but may cause API timeouts.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">20</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-sda-host-port-onboarding-workflow-manager-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -849,7 +875,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-sda-host
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_response_schema"></div><p class="ansible-option-title" id="ansible-collections-cisco-dnac-sda-host-port-onboarding-workflow-manager-module-parameter-validate-response-schema"><strong>validate_response_schema</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_response_schema" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1100,6 +1126,32 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-sda-host
 <span class="w">            </span><span class="nt">connected_device_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;TRUNK&quot;</span>
 <span class="w">            </span><span class="nt">native_vlan_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">            </span><span class="nt">allowed_vlan_ranges</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100-200&quot;</span>
+<span class="w">            </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LACP&quot;</span>
+<span class="w">            </span><span class="nt">port_channel_description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Management</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">data</span><span class="nv"> </span><span class="s">VLAN</span><span class="nv"> </span><span class="s">trunk&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure port channels with port channel limit</span>
+<span class="w">  </span><span class="nt">cisco.dnac.sda_host_port_onboarding_workflow_manager</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dnac_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">dnac_host</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">dnac_username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">dnac_username</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">dnac_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">dnac_password</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">dnac_verify</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">dnac_verify</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">dnac_port</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">dnac_port</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">dnac_version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">dnac_version</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">dnac_debug</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">dnac_debug</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">dnac_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">dnac_log_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span><span class="nv">dnac_log_level</span><span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">sda_fabric_port_channel_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">merged</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ip_address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;204.1.2.2&quot;</span>
+<span class="w">        </span><span class="nt">fabric_site_name_hierarchy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Global/USA/San</span><span class="nv"> </span><span class="s">Jose/BLDG23&quot;</span>
+<span class="w">        </span><span class="nt">port_channels</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">interface_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;TenGigabitEthernet1/0/37&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;TenGigabitEthernet1/0/38&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">            </span><span class="nt">connected_device_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;TRUNK&quot;</span>
+<span class="w">            </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LACP&quot;</span>
+<span class="w">            </span><span class="nt">port_channel_description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Trunk</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">channel</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">VLAN</span><span class="nv"> </span><span class="s">filtering&quot;</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">interface_names</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;TenGigabitEthernet1/0/45&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;TenGigabitEthernet1/0/46&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">            </span><span class="nt">connected_device_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;TRUNK&quot;</span>
 <span class="w">            </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LACP&quot;</span>
 <span class="w">            </span><span class="nt">port_channel_description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Management</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">data</span><span class="nv"> </span><span class="s">VLAN</span><span class="nv"> </span><span class="s">trunk&quot;</span>
 
@@ -1437,7 +1489,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-sda-host
 <section id="authors">
 <h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>Rugvedi Kapse (&#64;rukapse) Madhan Sankaranarayanan (&#64;madhansansel)</p></li>
+<li><p>Rugvedi Kapse (&#64;rukapse) Madhan Sankaranarayanan (&#64;madhansansel) Abhishek Maheshwari (&#64;abmahesh)</p></li>
 </ul>
 </section>
 <section id="collection-links">
@@ -1464,7 +1516,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-dnac-sda-host
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 24, 2025.
+      <span class="lastupdated">Last updated on Jan 08, 2026.
       </span></p>
   </div>
 

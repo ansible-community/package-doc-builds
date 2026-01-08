@@ -72,6 +72,14 @@
           <a href="../../../index.html" class="icon icon-home">
             Ansible
           </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
   
               <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
@@ -326,7 +334,7 @@
 <h1>netapp.ontap.na_ontap_firmware_upgrade module – NetApp ONTAP firmware upgrade for SP, shelf, ACP, and disk.<a class="headerlink" href="#netapp-ontap-na-ontap-firmware-upgrade-module-netapp-ontap-firmware-upgrade-for-sp-shelf-acp-and-disk" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 23.2.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/netapp/ontap/">netapp.ontap collection</a> (version 23.3.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -543,9 +551,10 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 <a class="ansibleOptionLink" href="#parameter-node" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Node on which the device is located.</p>
-<p>Not required if package_url is present and force_disruptive_update is False.</p>
-<p>If this option is not given, the firmware will be downloaded on all nodes in the cluster,</p>
-<p>and the resources will be updated in background on all nodes, except for service processor.</p>
+<p>With REST, this parameter is ignored when package_url is provided but it is used with ZAPI. not required if package_url is present and force_disruptive_update is False.</p>
+<p>With REST, if this option is not given, the firmware will be downloaded on all nodes in the cluster and the resources will be updated in background on all nodes, except for service processor.</p>
+<p>with ZAPI, this parameter is used to specify the target node for firmware download.</p>
+<p>with ZAPI, if not specified firmware will be downloaded on all nodes in the cluster (using ‘*’).</p>
 <p>For service processor, the upgrade will happen automatically when each node is rebooted.</p>
 </div></td>
 </tr>
@@ -754,10 +763,21 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id5" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Any firmware upgrade - REST</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Firmware upgrade using REST - node parameter ignored when using REST with package_url</span>
 <span class="w">  </span><span class="nt">netapp.ontap.na_ontap_firmware_upgrade</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">package_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">web_link</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1</span><span class="w">  </span><span class="c1"># This will be ignored when using REST with package_url</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Firmware upgrade using ZAPI - node parameter is used to target specific node</span>
+<span class="w">  </span><span class="nt">netapp.ontap.na_ontap_firmware_upgrade</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">package_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">web_link</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1</span><span class="w">  </span><span class="c1"># This will be used to target specific node with ZAPI</span>
+<span class="w">    </span><span class="nt">use_rest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">netapp_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -905,7 +925,7 @@ see <a class="reference internal" href="#ansible-collections-netapp-ontap-na-ont
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 24, 2025.
+      <span class="lastupdated">Last updated on Jan 08, 2026.
       </span></p>
   </div>
 

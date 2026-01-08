@@ -72,6 +72,14 @@
           <a href="../../../index.html" class="icon icon-home">
             Ansible
           </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
   
               <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
@@ -332,7 +340,7 @@
 <h1>cisco.intersight.intersight_san_connectivity_policy module – Manage SAN Connectivity Policies and vHBAs for Cisco Intersight<a class="headerlink" href="#cisco-intersight-intersight-san-connectivity-policy-module-manage-san-connectivity-policies-and-vhbas-for-cisco-intersight" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.8.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.12.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -352,7 +360,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Create, update, and delete SAN Connectivity Policies on Cisco Intersight.</p></li>
 <li><p>Manage individual vHBAs (virtual Host Bus Adapters) within SAN Connectivity policies.</p></li>
-<li><p>Supports Standalone, FIAttached, and UnifiedEdgeServer target platforms with different configuration options.</p></li>
+<li><p>Supports Standalone and FIAttached target platforms with different configuration options.</p></li>
+<li><p>Note SAN Connectivity policies are not supported on Unified Edge Servers.</p></li>
 <li><p>SAN Connectivity policies define storage connectivity settings for server profiles.</p></li>
 <li><p>For more information see <a class="reference external" href="https://intersight.com/apidocs/vnic/SanConnectivityPolicy/get/">Cisco Intersight</a>.</p></li>
 </ul>
@@ -477,12 +486,11 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>The platform type for which the SAN Connectivity policy is intended.</p>
 <p><code class="docutils literal notranslate"><span class="pre">standalone</span></code> for standalone servers.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fiattached</span></code> for fabric interconnect attached servers.</p>
-<p><code class="docutils literal notranslate"><span class="pre">unified</span></code> for unified edge servers.</p>
+<p>Note SAN Connectivity policies are not supported on unified edge servers.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;standalone&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;fiattached&quot;</span></code></p></li>
-<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;unified&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -599,7 +607,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The PCI Link used as transport for the virtual interface.</p>
 <p>PCI Link is only applicable for select Cisco UCS VIC 1300 models (UCSC-PCIE-C40Q-03, UCSB-MLOM-40G-03, UCSB-VIC-M83-8P) that support two PCI links.</p>
 <p>The value, if specified, for any other VIC model will be ignored.</p>
-<p>For Standalone and UnifiedEdgeServer, this is used directly.</p>
+<p>For Standalone, this is used directly.</p>
 <p>For FIAttached, required when pci_link_assignment_mode is Custom.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
@@ -663,7 +671,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>PCIe Slot where the VIC adapter is installed.</p>
 <p>Supported values are (1-15) and MLOM.</p>
-<p>Required for Standalone and UnifiedEdgeServer when vHBA state is present and auto_slot_id is false.</p>
+<p>Required for Standalone when vHBA state is present.</p>
 <p>Required for FIAttached when vHBA state is present and auto_slot_id is false.</p>
 </div></td>
 </tr>
@@ -708,7 +716,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-vhbas/uplink_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Adapter port on which the virtual interface will be created.</p>
-<p>Only applicable for Standalone and UnifiedEdgeServer platforms.</p>
+<p>Only applicable for Standalone platform.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">0</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -958,27 +966,6 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">        </span><span class="nt">fibre_channel_adapter_policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fc-adapter-policy&quot;</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a SAN Connectivity Policy for Unified Edge Server</span>
-<span class="w">  </span><span class="nt">cisco.intersight.intersight_san_connectivity_policy</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;unified-edge-san-policy&quot;</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SAN</span><span class="nv"> </span><span class="s">connectivity</span><span class="nv"> </span><span class="s">policy</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">unified</span><span class="nv"> </span><span class="s">edge</span><span class="nv"> </span><span class="s">servers&quot;</span>
-<span class="w">    </span><span class="nt">target_platform</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;unified&quot;</span>
-<span class="w">    </span><span class="nt">vhbas</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vhba-edge&quot;</span>
-<span class="w">        </span><span class="nt">vhba_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fc-initiator&quot;</span>
-<span class="w">        </span><span class="nt">slot_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span>
-<span class="w">        </span><span class="nt">pci_link</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">        </span><span class="nt">uplink_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">        </span><span class="nt">pci_order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">        </span><span class="nt">persistent_lun_bindings</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">        </span><span class="nt">fibre_channel_network_policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fc-network-policy&quot;</span>
-<span class="w">        </span><span class="nt">fibre_channel_qos_policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fc-qos-policy&quot;</span>
-<span class="w">        </span><span class="nt">fibre_channel_adapter_policy</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fc-adapter-policy&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update SAN connectivity policy - manage vHBA states</span>
 <span class="w">  </span><span class="nt">cisco.intersight.intersight_san_connectivity_policy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -1074,7 +1061,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 24, 2025.
+      <span class="lastupdated">Last updated on Jan 08, 2026.
       </span></p>
   </div>
 
