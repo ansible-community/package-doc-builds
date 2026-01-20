@@ -332,38 +332,39 @@ The complete list of porting guides can be found at <a class="reference internal
 </ul>
 </li>
 <li><p><a class="reference internal" href="#displaying-tracebacks" id="id36">Displaying tracebacks</a></p></li>
+<li><p><a class="reference internal" href="#displaying-warning-when-undefined-variables-in-vars-files" id="id37">Displaying warning when undefined variables in vars_files</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#plugin-api" id="id37">Plugin API</a></p>
+<li><p><a class="reference internal" href="#plugin-api" id="id38">Plugin API</a></p>
 <ul>
-<li><p><a class="reference internal" href="#deprecating-values" id="id38">Deprecating values</a></p></li>
-<li><p><a class="reference internal" href="#applying-template-trust-to-individual-values" id="id39">Applying template trust to individual values</a></p></li>
-<li><p><a class="reference internal" href="#applying-template-trust-in-inventory-and-vars-plugins" id="id40">Applying template trust in inventory and vars plugins</a></p></li>
-<li><p><a class="reference internal" href="#raising-exceptions" id="id41">Raising exceptions</a></p></li>
-<li><p><a class="reference internal" href="#overly-broad-exception-handling-in-jinja-plugins" id="id42">Overly-broad exception handling in Jinja plugins</a></p></li>
-<li><p><a class="reference internal" href="#ansible-custom-data-types" id="id43">Ansible custom data types</a></p></li>
-<li><p><a class="reference internal" href="#ansiblevaultencryptedunicode-replaced-by-encryptedstring" id="id44">AnsibleVaultEncryptedUnicode replaced by EncryptedString</a></p></li>
-<li><p><a class="reference internal" href="#no-implicit-conversion-of-non-string-dict-keys" id="id45">No implicit conversion of non-string dict keys</a></p></li>
+<li><p><a class="reference internal" href="#deprecating-values" id="id39">Deprecating values</a></p></li>
+<li><p><a class="reference internal" href="#applying-template-trust-to-individual-values" id="id40">Applying template trust to individual values</a></p></li>
+<li><p><a class="reference internal" href="#applying-template-trust-in-inventory-and-vars-plugins" id="id41">Applying template trust in inventory and vars plugins</a></p></li>
+<li><p><a class="reference internal" href="#raising-exceptions" id="id42">Raising exceptions</a></p></li>
+<li><p><a class="reference internal" href="#overly-broad-exception-handling-in-jinja-plugins" id="id43">Overly-broad exception handling in Jinja plugins</a></p></li>
+<li><p><a class="reference internal" href="#ansible-custom-data-types" id="id44">Ansible custom data types</a></p></li>
+<li><p><a class="reference internal" href="#ansiblevaultencryptedunicode-replaced-by-encryptedstring" id="id45">AnsibleVaultEncryptedUnicode replaced by EncryptedString</a></p></li>
+<li><p><a class="reference internal" href="#no-implicit-conversion-of-non-string-dict-keys" id="id46">No implicit conversion of non-string dict keys</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#command-line" id="id46">Command Line</a></p></li>
-<li><p><a class="reference internal" href="#deprecated" id="id47">Deprecated</a></p></li>
-<li><p><a class="reference internal" href="#modules" id="id48">Modules</a></p>
+<li><p><a class="reference internal" href="#command-line" id="id47">Command Line</a></p></li>
+<li><p><a class="reference internal" href="#deprecated" id="id48">Deprecated</a></p></li>
+<li><p><a class="reference internal" href="#modules" id="id49">Modules</a></p>
 <ul>
-<li><p><a class="reference internal" href="#modules-removed" id="id49">Modules removed</a></p></li>
-<li><p><a class="reference internal" href="#deprecation-notices" id="id50">Deprecation notices</a></p></li>
-<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id51">Noteworthy module changes</a></p></li>
+<li><p><a class="reference internal" href="#modules-removed" id="id50">Modules removed</a></p></li>
+<li><p><a class="reference internal" href="#deprecation-notices" id="id51">Deprecation notices</a></p></li>
+<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id52">Noteworthy module changes</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#plugins" id="id52">Plugins</a></p>
+<li><p><a class="reference internal" href="#plugins" id="id53">Plugins</a></p>
 <ul>
-<li><p><a class="reference internal" href="#noteworthy-plugin-changes" id="id53">Noteworthy plugin changes</a></p></li>
+<li><p><a class="reference internal" href="#noteworthy-plugin-changes" id="id54">Noteworthy plugin changes</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#porting-custom-scripts" id="id54">Porting custom scripts</a></p></li>
-<li><p><a class="reference internal" href="#networking" id="id55">Networking</a></p></li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id55">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#networking" id="id56">Networking</a></p></li>
 </ul>
 </li>
 </ul>
@@ -830,12 +831,35 @@ warnings, or deprecations (even in module code) using the <code class="docutils 
 </ul>
 <p>Multiple options can be combined by separating them with commas.</p>
 </section>
+<section id="displaying-warning-when-undefined-variables-in-vars-files">
+<h4><a class="toc-backref" href="#id37" role="doc-backlink">Displaying warning when undefined variables in vars_files</a><a class="headerlink" href="#displaying-warning-when-undefined-variables-in-vars-files" title="Link to this heading"></a></h4>
+<p>In previous versions of <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>, undefined variables used while specifying file paths in <code class="docutils literal notranslate"><span class="pre">vars_files</span></code> were silently ignored and did not trigger warning.
+This is now changed and a warning will be displayed when undefined variables are encountered while specifying file paths in <code class="docutils literal notranslate"><span class="pre">vars_files</span></code>.</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">vars_files</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_dir</span> <span class="cp">}}</span><span class="s">/vars_files/bar.yml&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span>PLAYBOOK: foo.yml ************************************************************************
+1 plays in foo.yml
+<span class="p">[</span><span class="k">WARNING</span><span class="p">]:</span> skipping vars_file item due to an undefined variable
+Origin: /examples/foo.yml:6:7
+
+4
+5   vars_files:
+6     - &quot;{{ inventory_dir }}/vars_files/bar.yml&quot;
+<span class="w"> </span>       ^ column 7
+</pre></div>
+</div>
+<p>In the preceding example, the warning is displayed because <code class="docutils literal notranslate"><span class="pre">inventory_dir</span></code> is a host-scoped variable that is evaluated at the task level, not at the play level where <code class="docutils literal notranslate"><span class="pre">vars_files</span></code> is processed.
+While <code class="docutils literal notranslate"><span class="pre">inventory_dir</span></code> does not work in <code class="docutils literal notranslate"><span class="pre">vars_files</span></code>, it can be used in task-level variables where the vars from <code class="docutils literal notranslate"><span class="pre">vars_files</span></code> are already available.</p>
+</section>
 </section>
 </section>
 <section id="plugin-api">
-<span id="id2"></span><h2><a class="toc-backref" href="#id37" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
+<span id="id2"></span><h2><a class="toc-backref" href="#id38" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
 <section id="deprecating-values">
-<h3><a class="toc-backref" href="#id38" role="doc-backlink">Deprecating values</a><a class="headerlink" href="#deprecating-values" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id39" role="doc-backlink">Deprecating values</a><a class="headerlink" href="#deprecating-values" title="Link to this heading"></a></h3>
 <p>Plugins and Python modules can tag returned values as deprecated with the new <code class="docutils literal notranslate"><span class="pre">deprecate_value</span></code> function from
 <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.datatag</span></code>.
 A description of the deprecated feature, optional help text, and removal timeframes can be attached to the value,
@@ -870,7 +894,7 @@ Use `color_code` instead.
 </div>
 </section>
 <section id="applying-template-trust-to-individual-values">
-<h3><a class="toc-backref" href="#id39" role="doc-backlink">Applying template trust to individual values</a><a class="headerlink" href="#applying-template-trust-to-individual-values" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id40" role="doc-backlink">Applying template trust to individual values</a><a class="headerlink" href="#applying-template-trust-to-individual-values" title="Link to this heading"></a></h3>
 <p>String values are no longer trusted to be rendered as templates by default. Strings loaded from playbooks, vars files,
 and other built-in trusted sources are usually marked trusted by default.
 Plugins that create new string instances with embedded templates must use the new <code class="docutils literal notranslate"><span class="pre">trust_as_template</span></code> function
@@ -882,7 +906,7 @@ to be rendered.</p>
 </div>
 </section>
 <section id="applying-template-trust-in-inventory-and-vars-plugins">
-<h3><a class="toc-backref" href="#id40" role="doc-backlink">Applying template trust in inventory and vars plugins</a><a class="headerlink" href="#applying-template-trust-in-inventory-and-vars-plugins" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id41" role="doc-backlink">Applying template trust in inventory and vars plugins</a><a class="headerlink" href="#applying-template-trust-in-inventory-and-vars-plugins" title="Link to this heading"></a></h3>
 <p>Inventory plugins can set group and host variables.
 In most cases, these variables are static values from external sources and do not require trust.
 Values that can contain templates will require explicit trust via <code class="docutils literal notranslate"><span class="pre">trust_as_template</span></code> to be allowed to render,
@@ -894,7 +918,7 @@ templates.</p>
 </div>
 </section>
 <section id="raising-exceptions">
-<h3><a class="toc-backref" href="#id41" role="doc-backlink">Raising exceptions</a><a class="headerlink" href="#raising-exceptions" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id42" role="doc-backlink">Raising exceptions</a><a class="headerlink" href="#raising-exceptions" title="Link to this heading"></a></h3>
 <p>When raising exceptions in an exception handler, be sure to use <code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">...</span> <span class="pre">from</span></code> as appropriate.
 This supersedes the use of the <code class="docutils literal notranslate"><span class="pre">AnsibleError</span></code> arg <code class="docutils literal notranslate"><span class="pre">orig_exc</span></code> to represent the cause.
 Specifying <code class="docutils literal notranslate"><span class="pre">orig_exc</span></code> as the cause is still permitted for backward compatibility.</p>
@@ -902,7 +926,7 @@ Specifying <code class="docutils literal notranslate"><span class="pre">orig_exc
 Additionally, if the two cause exceptions do not match, a warning will be issued.</p>
 </section>
 <section id="overly-broad-exception-handling-in-jinja-plugins">
-<h3><a class="toc-backref" href="#id42" role="doc-backlink">Overly-broad exception handling in Jinja plugins</a><a class="headerlink" href="#overly-broad-exception-handling-in-jinja-plugins" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id43" role="doc-backlink">Overly-broad exception handling in Jinja plugins</a><a class="headerlink" href="#overly-broad-exception-handling-in-jinja-plugins" title="Link to this heading"></a></h3>
 <p>Jinja plugins with overly broad exception handling, such as <code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">Exception</span></code>,
 may behave incorrectly when accessing the contents of variables which are containers (<code class="docutils literal notranslate"><span class="pre">dict</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>).
 This can occur when a templated value from a variable is undefined,
@@ -912,7 +936,7 @@ and do so around the smallest reasonable portion of code.
 Be especially careful to avoid broad exception handling around code which accesses the contents of container variables.</p>
 </section>
 <section id="ansible-custom-data-types">
-<h3><a class="toc-backref" href="#id43" role="doc-backlink">Ansible custom data types</a><a class="headerlink" href="#ansible-custom-data-types" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id44" role="doc-backlink">Ansible custom data types</a><a class="headerlink" href="#ansible-custom-data-types" title="Link to this heading"></a></h3>
 <p>Many variable objects in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> are represented by custom types.
 In previous versions these could be seen as types such as:</p>
 <ul class="simple">
@@ -930,7 +954,7 @@ Custom plugins that interact with such libraries may require changes to convert 
 </div>
 </section>
 <section id="ansiblevaultencryptedunicode-replaced-by-encryptedstring">
-<h3><a class="toc-backref" href="#id44" role="doc-backlink">AnsibleVaultEncryptedUnicode replaced by EncryptedString</a><a class="headerlink" href="#ansiblevaultencryptedunicode-replaced-by-encryptedstring" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id45" role="doc-backlink">AnsibleVaultEncryptedUnicode replaced by EncryptedString</a><a class="headerlink" href="#ansiblevaultencryptedunicode-replaced-by-encryptedstring" title="Link to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">AnsibleVaultEncryptedUnicode</span></code> type has been replaced by <code class="docutils literal notranslate"><span class="pre">EncryptedString</span></code>.</p>
 <p>Plugins which create <code class="docutils literal notranslate"><span class="pre">AnsibleVaultEncryptedUnicode</span></code> will now receive <code class="docutils literal notranslate"><span class="pre">EncryptedString</span></code> instances instead.
 This feature ensures backward compatibility with previous versions of <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.</p>
@@ -939,7 +963,7 @@ Values formerly represented by that type will now appear as a tagged <code class
 Special handling in plugins is no longer required to access the contents of these values.</p>
 </section>
 <section id="no-implicit-conversion-of-non-string-dict-keys">
-<h3><a class="toc-backref" href="#id45" role="doc-backlink">No implicit conversion of non-string dict keys</a><a class="headerlink" href="#no-implicit-conversion-of-non-string-dict-keys" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id46" role="doc-backlink">No implicit conversion of non-string dict keys</a><a class="headerlink" href="#no-implicit-conversion-of-non-string-dict-keys" title="Link to this heading"></a></h3>
 <p>In previous versions, <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> relied on Python’s <code class="docutils literal notranslate"><span class="pre">json.dumps</span></code> to implicitly convert <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code> and <code class="docutils literal notranslate"><span class="pre">None</span></code> dictionary keys to strings in various scenarios, including returning of module results.
 For example, a module was allowed to contain the following code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">oid</span> <span class="o">=</span> <span class="mi">123</span>
@@ -957,15 +981,15 @@ For example, a module was allowed to contain the following code:</p>
 </section>
 </section>
 <section id="command-line">
-<h2><a class="toc-backref" href="#id46" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id47" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="deprecated">
-<h2><a class="toc-backref" href="#id47" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id48" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="modules">
-<h2><a class="toc-backref" href="#id48" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id49" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>With the changes to the templating system it is no longer possible to use the <code class="docutils literal notranslate"><span class="pre">async_status</span></code> module’s <code class="docutils literal notranslate"><span class="pre">started</span></code> and <code class="docutils literal notranslate"><span class="pre">finished</span></code> integer properties as values in conditionals as booleans are required. It is recommended to use <code class="docutils literal notranslate"><span class="pre">started</span></code> and <code class="docutils literal notranslate"><span class="pre">finished</span></code> test plugins instead, for example:</p></li>
 </ul>
@@ -978,25 +1002,25 @@ For example, a module was allowed to contain the following code:</p>
 </pre></div>
 </div>
 <section id="modules-removed">
-<h3><a class="toc-backref" href="#id49" role="doc-backlink">Modules removed</a><a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id50" role="doc-backlink">Modules removed</a><a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
 <p>The following modules no longer exist:</p>
 <ul class="simple">
 <li><p>No notable changes</p></li>
 </ul>
 </section>
 <section id="deprecation-notices">
-<h3><a class="toc-backref" href="#id50" role="doc-backlink">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id51" role="doc-backlink">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
 <p>No notable changes</p>
 </section>
 <section id="noteworthy-module-changes">
-<h3><a class="toc-backref" href="#id51" role="doc-backlink">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id52" role="doc-backlink">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
 <p>No notable changes</p>
 </section>
 </section>
 <section id="plugins">
-<h2><a class="toc-backref" href="#id52" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id53" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
 <section id="noteworthy-plugin-changes">
-<h3><a class="toc-backref" href="#id53" role="doc-backlink">Noteworthy plugin changes</a><a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id54" role="doc-backlink">Noteworthy plugin changes</a><a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
 <ul>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">ssh</span></code> connection plugin now supports using <code class="docutils literal notranslate"><span class="pre">SSH_ASKPASS</span></code> to supply passwords
 for authentication as an alternative to the <code class="docutils literal notranslate"><span class="pre">sshpass</span></code> program. The default is to use
@@ -1058,11 +1082,11 @@ In 2.19, this assertion passes:</p>
 </section>
 </section>
 <section id="porting-custom-scripts">
-<h2><a class="toc-backref" href="#id54" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id55" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="networking">
-<h2><a class="toc-backref" href="#id55" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id56" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 </section>
@@ -1078,7 +1102,7 @@ In 2.19, this assertion passes:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 19, 2026.
+      <span class="lastupdated">Last updated on Jan 20, 2026.
       </span></p>
   </div>
 
