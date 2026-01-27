@@ -359,7 +359,7 @@
 <h1>community.general.nsupdate module – Manage DNS records<a class="headerlink" href="#community-general-nsupdate-module-manage-dns-records" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.2.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.3.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -389,6 +389,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>dnspython</p></li>
+<li><p>gssapi (when using GSS-TSIG authentication)</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -405,6 +406,8 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <a class="ansibleOptionLink" href="#parameter-key_algorithm" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specify key algorithm used by <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nsupdate-module-parameter-key-secret"><span class="std std-ref"><span class="pre">key_secret</span></span></a></strong></code>.</p>
+<p>Use <code class="ansible-value docutils literal notranslate"><span class="pre">gss-tsig</span></code> for GSS-TSIG authentication (requires the gssapi library and Kerberos credentials).</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">gss-tsig</span></code> was added in community.general 12.3.0.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;HMAC-MD5.SIG-ALG.REG.INT&quot;</span></code></p></li>
@@ -414,6 +417,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;hmac-sha256&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;hmac-sha384&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;hmac-sha512&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;gss-tsig&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -422,6 +426,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <a class="ansibleOptionLink" href="#parameter-key_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Use TSIG key name to authenticate against DNS <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nsupdate-module-parameter-server"><span class="std std-ref"><span class="pre">server</span></span></a></strong></code>.</p>
+<p>Not required when using <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-nsupdate-module-parameter-key-algorithm"><span class="std std-ref"><span class="pre">key_algorithm=gss-tsig</span></span></a></code>.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -429,6 +434,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <a class="ansibleOptionLink" href="#parameter-key_secret" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Use TSIG key secret, associated with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nsupdate-module-parameter-key-name"><span class="std std-ref"><span class="pre">key_name</span></span></a></strong></code>, to authenticate against <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nsupdate-module-parameter-server"><span class="std std-ref"><span class="pre">server</span></span></a></strong></code>.</p>
+<p>Not required when using <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-nsupdate-module-parameter-key-algorithm"><span class="std std-ref"><span class="pre">key_algorithm=gss-tsig</span></span></a></code>.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -462,7 +468,8 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <div class="ansibleOptionAnchor" id="parameter-server"></div><p class="ansible-option-title" id="ansible-collections-community-general-nsupdate-module-parameter-server"><strong>server</strong></p>
 <a class="ansibleOptionLink" href="#parameter-server" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Apply DNS modification on this server, specified by IPv4 or IPv6 address.</p>
+<td><div class="ansible-option-cell"><p>Apply DNS modification on this server, specified by IPv4/IPv6 address or FQDN.</p>
+<p>FQDNs are supported since community.general 12.3.0.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -588,6 +595,23 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <span class="w">    </span><span class="nt">record</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.1.168.192.in-addr.arpa.&quot;</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PTR&quot;</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use FQDN for server instead of IP address</span>
+<span class="w">  </span><span class="nt">community.general.nsupdate</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">key_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nsupdate&quot;</span>
+<span class="w">    </span><span class="nt">key_secret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;+bFQtBCta7j2vWkjPkAFtgA==&quot;</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ns1.example.org&quot;</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example.org&quot;</span>
+<span class="w">    </span><span class="nt">record</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ansible&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.1.1&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use GSS-TSIG authentication (requires Kerberos credentials)</span>
+<span class="w">  </span><span class="nt">community.general.nsupdate</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">key_algorithm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;gss-tsig&quot;</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ns1.example.org&quot;</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example.org&quot;</span>
+<span class="w">    </span><span class="nt">record</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ansible&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;192.168.1.1&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -700,7 +724,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 24, 2026.
+      <span class="lastupdated">Last updated on Jan 27, 2026.
       </span></p>
   </div>
 
