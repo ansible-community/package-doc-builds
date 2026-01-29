@@ -182,6 +182,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pcg/index.html">Collections in the Pcg Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
@@ -332,7 +333,7 @@
 <h1>infoblox.nios_modules.nios_dtc_lbdn module – Configure Infoblox NIOS DTC LBDN<a class="headerlink" href="#infoblox-nios-modules-nios-dtc-lbdn-module-configure-infoblox-nios-dtc-lbdn" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/infoblox/nios_modules/">infoblox.nios_modules collection</a> (version 1.8.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/infoblox/nios_modules/">infoblox.nios_modules collection</a> (version 1.9.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -375,10 +376,14 @@ see <a class="reference internal" href="#ansible-collections-infoblox-nios-modul
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-auth_zones"></div><p class="ansible-option-title" id="ansible-collections-infoblox-nios-modules-nios-dtc-lbdn-module-parameter-auth-zones"><strong>auth_zones</strong></p>
-<a class="ansibleOptionLink" href="#parameter-auth_zones" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<a class="ansibleOptionLink" href="#parameter-auth_zones" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=any</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>List of linked authoritative zones.</p>
-<p>When using <em>auth_zones</em>, you must specify at least one <em>patterns</em></p>
+<p>When using <em>auth_zones</em>, you must specify at least one <em>patterns</em>.</p>
+<p>Each zone can be specified as a string (FQDN) or as a dict with ‘fqdn’ and optional ‘view’ keys.</p>
+<p>When provided as a string, the first matching zone in any view will be used.</p>
+<p>When zones with the same name exist in different views, use the dict format to specify which view to use.</p>
+<p>Example [‘example.com’] or [{‘fqdn’: ‘example.com’, ‘view’: ‘custom’}]</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -644,6 +649,25 @@ see <a class="reference internal" href="#ansible-collections-infoblox-nios-modul
 <span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
 <span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure a DTC LBDN with zones from different views</span>
+<span class="w">  </span><span class="nt">infoblox.nios_modules.nios_dtc_lbdn</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">web.ansible.com</span>
+<span class="w">    </span><span class="nt">lb_method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ROUND_ROBIN</span>
+<span class="w">    </span><span class="nt">auth_zones</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.com</span><span class="w">                        </span><span class="c1"># First matching zone in any view</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;fqdn&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;test.com&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;view&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="p p-Indicator">}</span><span class="w">  </span><span class="c1"># Explicitly from default view</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;fqdn&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;demo.com&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;view&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;custom&quot;</span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># From custom view</span>
+<span class="w">    </span><span class="nt">patterns</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*.example.com&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*.test.com&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*.demo.com&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">provider</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">inventory_hostname_short</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a comment to a DTC LBDN</span>
 <span class="w">  </span><span class="nt">infoblox.nios_modules.nios_dtc_lbdn</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">web.ansible.com</span>
@@ -699,7 +723,7 @@ see <a class="reference internal" href="#ansible-collections-infoblox-nios-modul
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 19, 2026.
+      <span class="lastupdated">Last updated on Jan 29, 2026.
       </span></p>
   </div>
 

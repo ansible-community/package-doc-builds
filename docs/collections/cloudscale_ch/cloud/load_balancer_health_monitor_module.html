@@ -182,6 +182,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pcg/index.html">Collections in the Pcg Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
@@ -332,7 +333,7 @@
 <h1>cloudscale_ch.cloud.load_balancer_health_monitor module – Manages load balancers on the cloudscale.ch IaaS service<a class="headerlink" href="#cloudscale-ch-cloud-load-balancer-health-monitor-module-manages-load-balancers-on-the-cloudscale-ch-iaas-service" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cloudscale_ch/cloud/">cloudscale_ch.cloud collection</a> (version 2.5.2).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cloudscale_ch/cloud/">cloudscale_ch.cloud collection</a> (version 2.5.3).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -538,6 +539,25 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxx</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">load_balancer_health_monitor</span>
 
+<span class="c1"># Craete a udp health monitor for a udp pool</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a udp load balancer pool</span>
+<span class="w">  </span><span class="nt">cloudscale_ch.cloud.load_balancer_pool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;udp-pool&#39;</span>
+<span class="w">    </span><span class="nt">load_balancer</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3d41b118-f95c-4897-ad74-2260fea783fc&#39;</span>
+<span class="w">    </span><span class="nt">algorithm</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;round_robin&#39;</span>
+<span class="w">    </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;udp&#39;</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxx</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">udp_load_balancer_pool</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a udp load balancer health monitor (udp-connect)</span>
+<span class="w">  </span><span class="nt">cloudscale_ch.cloud.load_balancer_health_monitor</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pool</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">udp_load_balancer_pool.uuid</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;udp-connect&#39;</span>
+<span class="w">    </span><span class="nt">delay_s</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">    </span><span class="nt">timeout_s</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxx</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">udp_load_balancer_health_monitor</span>
+
 <span class="c1"># Get load balancer health monitor facts by UUID</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get facts of a load balancer health monitor by UUID</span>
 <span class="w">  </span><span class="nt">cloudscale_ch.cloud.load_balancer_health_monitor</span><span class="p">:</span>
@@ -711,7 +731,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 19, 2026.
+      <span class="lastupdated">Last updated on Jan 29, 2026.
       </span></p>
   </div>
 

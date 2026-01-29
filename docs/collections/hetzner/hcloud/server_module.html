@@ -183,6 +183,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pcg/index.html">Collections in the Pcg Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
@@ -330,7 +331,7 @@
 <h1>hetzner.hcloud.server module – Create and manage cloud servers on the Hetzner Cloud.<a class="headerlink" href="#hetzner-hcloud-server-module-create-and-manage-cloud-servers-on-the-hetzner-cloud" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hetzner/hcloud/">hetzner.hcloud collection</a> (version 6.3.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hetzner/hcloud/">hetzner.hcloud collection</a> (version 6.7.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -418,8 +419,9 @@ see <a class="reference internal" href="#ansible-collections-hetzner-hcloud-serv
 <div class="ansibleOptionAnchor" id="parameter-datacenter"></div><p class="ansible-option-title" id="ansible-collections-hetzner-hcloud-server-module-parameter-datacenter"><strong>datacenter</strong></p>
 <a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Hetzner Cloud Datacenter (name or ID) to create the server in.</p>
-<p>Required if no <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-hetzner-hcloud-server-module-parameter-location"><span class="std std-ref"><span class="pre">location</span></span></a></strong></code> is given and server does not exist.</p>
+<td><div class="ansible-option-cell"><p><strong>Deprecated:</strong> The <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-hetzner-hcloud-server-module-parameter-datacenter"><span class="std std-ref"><span class="pre">datacenter</span></span></a></strong></code> argument is deprecated and will be removed after 1 July 2026. Please use the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-hetzner-hcloud-server-module-parameter-location"><span class="std std-ref"><span class="pre">location</span></span></a></strong></code> argument instead. See <a class="reference external" href="https://docs.hetzner.cloud/changelog#2025-12-16-phasing-out-datacenters">https://docs.hetzner.cloud/changelog#2025-12-16-phasing-out-datacenters</a>.</p>
+<p>Hetzner Cloud Datacenter (name or ID) to create the server in.</p>
+<p>Required if no <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-hetzner-hcloud-server-module-parameter-location"><span class="std std-ref"><span class="pre">location</span></span></a></strong></code> is given and the server does not exist.</p>
 <p>Only used during the server creation.</p>
 </div></td>
 </tr>
@@ -538,7 +540,7 @@ see <a class="reference internal" href="#ansible-collections-hetzner-hcloud-serv
 <a class="ansibleOptionLink" href="#parameter-location" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Hetzner Cloud Location (name or ID) to create the server in.</p>
-<p>Required if no <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-hetzner-hcloud-server-module-parameter-datacenter"><span class="std std-ref"><span class="pre">datacenter</span></span></a></strong></code> is given and server does not exist.</p>
+<p>Required if the server does not exist.</p>
 <p>Only used during the server creation.</p>
 </div></td>
 </tr>
@@ -636,7 +638,8 @@ see <a class="reference internal" href="#ansible-collections-hetzner-hcloud-serv
 <a class="ansibleOptionLink" href="#parameter-user_data" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>User Data to be passed to the server on creation.</p>
-<p>Only used during the server creation.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cloud-init</span></code>, <code class="docutils literal notranslate"><span class="pre">ignition</span></code> or similar provisioning tools may retrieve user configuration from the Server’s <code class="docutils literal notranslate"><span class="pre">user_data</span></code>.</p>
+<p>Used during the server creation or server rebuild.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -677,6 +680,16 @@ see <a class="reference internal" href="#ansible-collections-hetzner-hcloud-serv
 <span class="w">    </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fsn1</span>
 <span class="w">    </span><span class="nt">ssh_keys</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">me@myorganisation</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a basic server with additional cloud-init data disabling SSH password authentication</span>
+<span class="w">  </span><span class="nt">hetzner.hcloud.server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-server</span>
+<span class="w">    </span><span class="nt">server_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpx22</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-22.04</span>
+<span class="w">    </span><span class="nt">user_data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">#cloud-config</span>
+<span class="w">      </span><span class="no">ssh_pwauth: false</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Resize an existing server</span>
@@ -755,7 +768,7 @@ see <a class="reference internal" href="#ansible-collections-hetzner-hcloud-serv
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hcloud_server"></div><p class="ansible-option-title" id="ansible-collections-hetzner-hcloud-server-module-return-hcloud-server"><strong>hcloud_server</strong></p>
-<a class="ansibleOptionLink" href="#return-hcloud_server" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">complex</span></p>
+<a class="ansibleOptionLink" href="#return-hcloud_server" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The server instance</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> Always</p>
@@ -783,7 +796,10 @@ see <a class="reference internal" href="#ansible-collections-hetzner-hcloud-serv
 <div class="ansibleOptionAnchor" id="return-hcloud_server/datacenter"></div><p class="ansible-option-title" id="ansible-collections-hetzner-hcloud-server-module-return-hcloud-server-datacenter"><strong>datacenter</strong></p>
 <a class="ansibleOptionLink" href="#return-hcloud_server/datacenter" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the datacenter of the server</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the datacenter of the server.
+<strong>Deprecated:</strong> The <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-hetzner-hcloud-server-module-return-hcloud-server-datacenter"><span class="std std-ref"><span class="pre">hcloud_server.datacenter</span></span></a></code> value is deprecated and will be removed
+after 1 July 2026. Please use the <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-hetzner-hcloud-server-module-return-hcloud-server-location"><span class="std std-ref"><span class="pre">hcloud_server.location</span></span></a></code> value instead.
+See <a class="reference external" href="https://docs.hetzner.cloud/changelog#2025-12-16-phasing-out-datacenters">https://docs.hetzner.cloud/changelog#2025-12-16-phasing-out-datacenters</a>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;fsn1-dc14&quot;</span></code></p>
 </div></td>
@@ -959,7 +975,7 @@ see <a class="reference internal" href="#ansible-collections-hetzner-hcloud-serv
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 19, 2026.
+      <span class="lastupdated">Last updated on Jan 29, 2026.
       </span></p>
   </div>
 
