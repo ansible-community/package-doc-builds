@@ -446,6 +446,7 @@ the same module name.</p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Whether to generate a SSH key for the user in question.</p>
 <p>This will <strong>not</strong> overwrite an existing SSH key unless used with <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-ansible-builtin-user-module-parameter-force"><span class="std std-ref"><span class="pre">force=yes</span></span></a></code>.</p>
+<p>Requires <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code> from OpenSSH.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -499,6 +500,7 @@ the same module name.</p>
 <p>This is useful in environments that use centralized authentication when you want to manipulate the local users (in other words, it uses <code class="docutils literal notranslate"><span class="pre">luseradd</span></code> instead of <code class="docutils literal notranslate"><span class="pre">useradd</span></code>).</p>
 <p>This will check <code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code> for an existing account before invoking commands. If the local account database exists somewhere other than <code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code>, this setting will not work properly.</p>
 <p>This requires that the above commands as well as <code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code> must exist on the target host, otherwise it will be a fatal error.</p>
+<p>Not supported on distributions using BusyBox.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -539,6 +541,7 @@ the same module name.</p>
 <a class="ansibleOptionLink" href="#parameter-non_unique" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Optionally when used with the <code class="docutils literal notranslate"><span class="pre">-u</span></code> option, this option allows to change the user ID to a non-unique value.</p>
+<p>Not supported on distributions using BusyBox.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -841,6 +844,7 @@ the same module name.</p>
 <li><p>On SunOS platforms, the shadow file is backed up automatically since this module edits it directly. On other platforms, the shadow file is backed up by the underlying tools used by this module.</p></li>
 <li><p>On macOS, this module uses <code class="docutils literal notranslate"><span class="pre">dscl</span></code> to create, modify, and delete accounts. <code class="docutils literal notranslate"><span class="pre">dseditgroup</span></code> is used to modify group membership. Accounts are hidden from the login window by modifying <code class="docutils literal notranslate"><span class="pre">/Library/Preferences/com.apple.loginwindow.plist</span></code>.</p></li>
 <li><p>On FreeBSD, this module uses <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">useradd</span></code> and <code class="docutils literal notranslate"><span class="pre">chpass</span></code> to create, <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">usermod</span></code> and <code class="docutils literal notranslate"><span class="pre">chpass</span></code> to modify, <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">userdel</span></code> remove, <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">lock</span></code> to lock, and <code class="docutils literal notranslate"><span class="pre">pw</span> <span class="pre">unlock</span></code> to unlock accounts.</p></li>
+<li><p>On distributions using BusyBox, this module uses <code class="docutils literal notranslate"><span class="pre">adduser</span></code>, <code class="docutils literal notranslate"><span class="pre">chpasswd</span></code>, <code class="docutils literal notranslate"><span class="pre">deluser</span></code>, and <code class="docutils literal notranslate"><span class="pre">delgroup</span></code>. The <code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code> file is modified directly by this module and is backed up before modification.</p></li>
 <li><p>On all other platforms, this module uses <code class="docutils literal notranslate"><span class="pre">useradd</span></code> to create, <code class="docutils literal notranslate"><span class="pre">usermod</span></code> to modify, and <code class="docutils literal notranslate"><span class="pre">userdel</span></code> to remove accounts.</p></li>
 </ul>
 </div>
@@ -1140,7 +1144,7 @@ the same module name.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 05, 2026.
+      <span class="lastupdated">Last updated on Feb 06, 2026.
       </span></p>
   </div>
 
