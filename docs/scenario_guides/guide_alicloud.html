@@ -1,31 +1,33 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../">
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alibaba Cloud Compute Services Guide &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=b54c304f" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../_static/css/rtd-ethical-ads.css?v=289b023e" />
 
   
     <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.png"/>
-    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/scenario_guides/guide_alicloud.html"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/scenario_guides/guide_alicloud.html"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=cfabbc46"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CloudStack Cloud Guide" href="guide_cloudstack.html" />
+    <link rel="prev" title="Legacy Public Cloud Guides" href="cloud_guides.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -97,7 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -115,6 +117,8 @@
 <p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cloud_guides.html">Legacy Public Cloud Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network_guides.html">Network Technology Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="virt_guides.html">Virtualization and Containerization Guides</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
 <ul>
@@ -154,7 +158,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
 </ul>
-
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
 
         </div>
       </div>
@@ -170,6 +182,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="cloud_guides.html">Legacy Public Cloud Guides</a></li>
       <li class="breadcrumb-item active">Alibaba Cloud Compute Services Guide</li>
   <li class="wy-breadcrumbs-aside">
             <!-- Remove main index page as it is no longer editable -->
@@ -181,86 +194,124 @@
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-  <script>
-    function startsWith(str, needle) {
-      return str.slice(0, needle.length) == needle
-    }
-    function startsWithOneOf(str, needles) {
-      return needles.some(function (needle) {
-        return startsWith(str, needle);
-      });
-    }
-    var banner = '';
-      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
-      var extra_banner = '';
-    
-      /* var extra_banner =
-      '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
-        'Slides for those who attended AnsibleFest at <a href="https://www.redhat.com/en/summit?sc_cid=RHCTG1250000442936">Red Hat Summit</a> will be available soon.' +
-        '</p>' +
-      '</div>';
-    */
-    // Create a banner if we're not on the official docs site
-    if (location.host == "docs.testing.ansible.com") {
-      document.write('<div id="testing_banner_id" class="admonition important">' +
-                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
-                     '</div>');
-    }
-    
-      // Create a banner
-      current_url_path = window.location.pathname;
 
-      var important = false;
-      var msg = '<p>';
-      if (startsWith(current_url_path, "/projects/ansible-core/")) {
-        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
-        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
-      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
-        /* temp extra banner to advertise something */
-        banner += extra_banner;
-
-        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
-
-      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
-        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
-      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
-        /* temp extra banner to advertise something */
-        banner += extra_banner;
-
-        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
-        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
-      } else {
-        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
-        /* temp extra banner to advertise something - this is for testing*/
-        banner += extra_banner;
-
-      }
-      msg += '</p>';
-
-      banner += '<div id="banner_id" class="admonition ';
-      banner += important ? 'important' : 'caution';
-      banner += '">';
-      banner += important ? '<br>' : '';
-      banner += msg;
-      banner += important ? '<br>' : '';
-      banner += '</div>';
-      document.write(banner);
-    
-  </script>
+<div id='banner' class='Admonition caution'>
+  <p>You are reading an unmaintained version of the Ansible community documentation. Unmaintained Ansible versions can contain security vulnerabilities (CVEs). Please upgrade to a maintained version. See <a href="/ansible/latest/">the latest Ansible documentation</a>. Note that this statement does not apply to Red Hat Ansible Automation Platform subscriptions. See the <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Ansible Automation Platform Life Cycle</a>.</p>
+</div>
 
 
   
            <div itemprop="articleBody">
              
   <section id="alibaba-cloud-compute-services-guide">
-<h1>Alibaba Cloud Compute Services Guide<a class="headerlink" href="#alibaba-cloud-compute-services-guide" title="Link to this heading"></a></h1>
-<p id="alicloud-intro">The content on this page has moved to <a class="reference internal" href="../collections/community/general/docsite/guide_alicloud.html#ansible-collections-community-general-docsite-guide-alicloud"><span class="std std-ref">Alibaba Cloud Compute Services Guide</span></a>.</p>
+<h1>Alibaba Cloud Compute Services Guide<a class="headerlink" href="#alibaba-cloud-compute-services-guide" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<span id="alicloud-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>Ansible contains several modules for controlling and managing Alibaba Cloud Compute Services (Alicloud).  This guide
+explains how to use the Alicloud Ansible modules together.</p>
+<p>All Alicloud modules require <code class="docutils literal notranslate"><span class="pre">footmark</span></code> - install it on your control machine with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">footmark</span></code>.</p>
+<p>Cloud modules, including Alicloud modules, execute on your local machine (the control machine) with <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">local</span></code>, rather than on remote machines defined in your hosts.</p>
+<p>Normally, you’ll use the following pattern for plays that provision Alicloud resources:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+</section>
+<section id="authentication">
+<span id="alicloud-authentication"></span><h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this heading"></a></h2>
+<p>You can specify your Alicloud authentication credentials (access key and secret key) by passing them as
+environment variables or by storing them in a vars file.</p>
+<p>To pass authentication credentials as environment variables:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ALICLOUD_ACCESS_KEY</span><span class="o">=</span><span class="s1">&#39;Alicloud123&#39;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ALICLOUD_SECRET_KEY</span><span class="o">=</span><span class="s1">&#39;AlicloudSecret123&#39;</span>
+</pre></div>
+</div>
+<p>To store authentication credentials in a vars_files, encrypt them with <a class="reference internal" href="../vault_guide/vault.html#vault"><span class="std std-ref">Ansible Vault</span></a> to keep them secure, then list them:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">alicloud_access_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;--REMOVED--&quot;</span>
+<span class="nt">alicloud_secret_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;--REMOVED--&quot;</span>
+</pre></div>
+</div>
+<p>Note that if you store your credentials in a vars_files, you need to refer to them in each Alicloud module. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ali_instance</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">alicloud_access_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{alicloud_access_key}}&quot;</span>
+<span class="w">    </span><span class="nt">alicloud_secret_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{alicloud_secret_key}}&quot;</span>
+<span class="w">    </span><span class="nt">image_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="provisioning">
+<span id="alicloud-provisioning"></span><h2>Provisioning<a class="headerlink" href="#provisioning" title="Permalink to this heading"></a></h2>
+<p>Alicloud modules create Alicloud ECS instances, disks, virtual private clouds, virtual switches, security groups and other resources.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">count</span></code> parameter to control the number of resources you create or terminate. For example, if you want exactly 5 instances tagged <code class="docutils literal notranslate"><span class="pre">NewECS</span></code>,
+set the <code class="docutils literal notranslate"><span class="pre">count</span></code> of instances to 5 and the <code class="docutils literal notranslate"><span class="pre">count_tag</span></code> to <code class="docutils literal notranslate"><span class="pre">NewECS</span></code>, as shown in the last task of the example playbook below.
+If there are no instances with the tag <code class="docutils literal notranslate"><span class="pre">NewECS</span></code>, the task creates 5 new instances. If there are 2 instances with that tag, the task
+creates 3 more. If there are 8 instances with that tag, the task terminates 3 of those instances.</p>
+<p>If you do not specify a <code class="docutils literal notranslate"><span class="pre">count_tag</span></code>, the task creates the number of instances you specify in <code class="docutils literal notranslate"><span class="pre">count</span></code> with the <code class="docutils literal notranslate"><span class="pre">instance_name</span></code> you provide.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># alicloud_setup.yml</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create VPC</span>
+<span class="w">      </span><span class="nt">ali_vpc</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cidr_block</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">cidr_block</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">        </span><span class="nt">vpc_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">new_vpc</span>
+<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">created_vpc</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create VSwitch</span>
+<span class="w">      </span><span class="nt">ali_vswitch</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">alicloud_zone</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">alicloud_zone</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">        </span><span class="nt">cidr_block</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">vsw_cidr</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">        </span><span class="nt">vswitch_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">new_vswitch</span>
+<span class="w">        </span><span class="nt">vpc_id</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">created_vpc.vpc.id</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">created_vsw</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create security group</span>
+<span class="w">      </span><span class="nt">ali_security_group</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">new_group</span>
+<span class="w">        </span><span class="nt">vpc_id</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">created_vpc.vpc.id</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">        </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">proto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp</span>
+<span class="w">            </span><span class="nt">port_range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">22/22</span>
+<span class="w">            </span><span class="nt">cidr_ip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0/0</span>
+<span class="w">            </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">        </span><span class="nt">rules_egress</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">proto</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp</span>
+<span class="w">            </span><span class="nt">port_range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80/80</span>
+<span class="w">            </span><span class="nt">cidr_ip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.54/32</span>
+<span class="w">            </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">created_group</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a set of instances</span>
+<span class="w">      </span><span class="nt">ali_instance</span><span class="p">:</span>
+<span class="w">         </span><span class="nt">security_groups</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">created_group.group_id</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">         </span><span class="nt">instance_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ecs.n4.small</span>
+<span class="w">         </span><span class="nt">image_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">ami_id</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">         </span><span class="nt">instance_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My-new-instance&quot;</span>
+<span class="w">         </span><span class="nt">instance_tags</span><span class="p">:</span>
+<span class="w">             </span><span class="nt">Name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NewECS</span>
+<span class="w">             </span><span class="nt">Version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.1</span>
+<span class="w">         </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">         </span><span class="nt">count_tag</span><span class="p">:</span>
+<span class="w">             </span><span class="nt">Name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NewECS</span>
+<span class="w">         </span><span class="nt">allocate_public_ip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">         </span><span class="nt">max_bandwidth_out</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="w">         </span><span class="nt">vswitch_id</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">created_vsw.vswitch.id}}&#39;</span>
+<span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_instance</span>
+</pre></div>
+</div>
+<p>In the example playbook above, data about the vpc, vswitch, group, and instances created by this playbook
+are saved in the variables defined by the “register” keyword in each task.</p>
+<p>Each Alicloud module offers a variety of parameter options. Not all options are demonstrated in the above example.
+See each individual module for further details and examples.</p>
+</section>
 </section>
 
 
@@ -268,13 +319,16 @@
           </div>
           
 
-<footer>
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cloud_guides.html" class="btn btn-neutral float-left" title="Legacy Public Cloud Guides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guide_cloudstack.html" class="btn btn-neutral float-right" title="CloudStack Cloud Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jan 08, 2026.
+      <span class="lastupdated">Last updated on Feb 09, 2026.
       </span></p>
   </div>
 
