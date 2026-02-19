@@ -482,6 +482,10 @@ To facilitate this, the example below uses a few helper functions:</p>
     <span class="n">cache_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cache_key</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_cache_key</span></code> is a helper method that retrieves a unique key for the plugin name and the <code class="docutils literal notranslate"><span class="pre">path</span></code> parameter. Inventory plugins that generate multiple unique cache entries should not use this helper method because it is designed to get one key per inventory source. In general we recommend that plugin developers refactor to avoid multiple cache entries for inventory sources.</p>
+</div>
 <p>Now that you’ve enabled caching, loaded the correct plugin, and retrieved a unique cache key, you can set up the flow of data between the cache and your inventory using the <code class="docutils literal notranslate"><span class="pre">cache</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">parse</span></code> method. This value comes from the inventory manager and indicates whether the inventory is being refreshed (such as by the <code class="docutils literal notranslate"><span class="pre">--flush-cache</span></code> or the meta task <code class="docutils literal notranslate"><span class="pre">refresh_inventory</span></code>). Although the cache shouldn’t be used to populate the inventory when being refreshed, the cache should be updated with the new inventory if the user has enabled caching. You can use <code class="docutils literal notranslate"><span class="pre">self._cache</span></code> like a dictionary. The following pattern allows refreshing the inventory to work in conjunction with caching.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="nb">super</span><span class="p">(</span><span class="n">InventoryModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
@@ -719,7 +723,7 @@ A skeleton example of this JSON object is:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 18, 2026.
+      <span class="lastupdated">Last updated on Feb 19, 2026.
       </span></p>
   </div>
 
