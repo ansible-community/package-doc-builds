@@ -1,26 +1,26 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installing Ansible &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=b54c304f" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../_static/css/rtd-ethical-ads.css?v=289b023e" />
 
   
     <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.png"/>
-    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/installation_guide/intro_installation.html"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=cfabbc46"></script>
+      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
@@ -135,7 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -153,8 +153,6 @@
 <p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
 <ul>
@@ -194,15 +192,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
 </ul>
-<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
-<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
-<div id="sideBanner">
-  <br/>
-  <a href="https://www.ansible.com/docs-left?utm_source=docs">
-    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
-  </a>
-  <br/><br/><br/>
-</div>
+
 
         </div>
       </div>
@@ -230,17 +220,85 @@
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
 
-<div id='banner' class='Admonition caution'>
-  <p>You are reading an unmaintained version of the Ansible community documentation. Unmaintained Ansible versions can contain security vulnerabilities (CVEs). Please upgrade to a maintained version. See <a href="/ansible/latest/">the latest Ansible documentation</a>. Note that this statement does not apply to Red Hat Ansible Automation Platform subscriptions. See the <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Ansible Automation Platform Life Cycle</a>.</p>
-</div>
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
 
 
   
            <div itemprop="articleBody">
              
   <section id="installing-ansible">
-<span id="intro-installation-guide"></span><span id="installation-guide"></span><h1>Installing Ansible<a class="headerlink" href="#installing-ansible" title="Permalink to this heading"></a></h1>
+<span id="intro-installation-guide"></span><span id="installation-guide"></span><h1>Installing Ansible<a class="headerlink" href="#installing-ansible" title="Link to this heading"></a></h1>
 <p>Ansible is an agentless automation tool that you install on a single host (referred to as the control node).</p>
 <p>From the control node, Ansible can manage an entire fleet of machines and other devices (referred to as managed nodes) remotely with SSH, Powershell remoting, and numerous other transports, all from a simple command-line interface with no databases or daemons required.</p>
 <nav class="contents local" id="contents">
@@ -287,11 +345,11 @@
 </ul>
 </nav>
 <section id="control-node-requirements">
-<span id="id1"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Control node requirements</a><a class="headerlink" href="#control-node-requirements" title="Permalink to this heading"></a></h2>
+<span id="id1"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Control node requirements</a><a class="headerlink" href="#control-node-requirements" title="Link to this heading"></a></h2>
 <p>For your <em>control</em> node (the machine that runs Ansible), you can use nearly any UNIX-like machine with Python installed. This includes Red Hat, Debian, Ubuntu, macOS, BSDs, and Windows under a <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/about">Windows Subsystem for Linux (WSL) distribution</a>. Windows without WSL is not natively supported as a control node; see <a class="reference external" href="http://blog.rolpdog.com/2020/03/why-no-ansible-controller-for-windows.html">Matt Davis’ blog post</a> for more information.</p>
 </section>
 <section id="managed-node-requirements">
-<span id="id2"></span><h2><a class="toc-backref" href="#id8" role="doc-backlink">Managed node requirements</a><a class="headerlink" href="#managed-node-requirements" title="Permalink to this heading"></a></h2>
+<span id="id2"></span><h2><a class="toc-backref" href="#id8" role="doc-backlink">Managed node requirements</a><a class="headerlink" href="#managed-node-requirements" title="Link to this heading"></a></h2>
 <p>The <em>managed</em> node (the machine that Ansible is managing) does not require Ansible to be installed, but requires Python to run Ansible-generated Python code.
 The managed node also needs a user account that can connect through SSH to the node with an interactive POSIX shell.</p>
 <div class="admonition note">
@@ -300,11 +358,11 @@ The managed node also needs a user account that can connect through SSH to the n
 </div>
 </section>
 <section id="node-requirement-summary">
-<span id="node-requirements-summary"></span><h2><a class="toc-backref" href="#id9" role="doc-backlink">Node requirement summary</a><a class="headerlink" href="#node-requirement-summary" title="Permalink to this heading"></a></h2>
+<span id="node-requirements-summary"></span><h2><a class="toc-backref" href="#id9" role="doc-backlink">Node requirement summary</a><a class="headerlink" href="#node-requirement-summary" title="Link to this heading"></a></h2>
 <p>You can find details about control and managed node requirements, including Python versions, for each Ansible version in the <a class="reference internal" href="../reference_appendices/release_and_maintenance.html#support-life"><span class="std std-ref">ansible-core control node Python support</span></a> and <a class="reference internal" href="../reference_appendices/release_and_maintenance.html#ansible-core-support-matrix"><span class="std std-ref">ansible-core support matrix</span></a> sections.</p>
 </section>
 <section id="selecting-an-ansible-package-and-version-to-install">
-<span id="what-version"></span><span id="getting-ansible"></span><h2><a class="toc-backref" href="#id10" role="doc-backlink">Selecting an Ansible package and version to install</a><a class="headerlink" href="#selecting-an-ansible-package-and-version-to-install" title="Permalink to this heading"></a></h2>
+<span id="what-version"></span><span id="getting-ansible"></span><h2><a class="toc-backref" href="#id10" role="doc-backlink">Selecting an Ansible package and version to install</a><a class="headerlink" href="#selecting-an-ansible-package-and-version-to-install" title="Link to this heading"></a></h2>
 <p>Ansible’s community packages are distributed in two ways:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>: a minimalist language and runtime package containing a set of <a class="reference internal" href="../collections/ansible/builtin/index.html#plugins-in-ansible-builtin"><span class="std std-ref">built-in modules and plugins</span></a>.</p></li>
@@ -316,11 +374,11 @@ The following instructions use <code class="docutils literal notranslate"><span 
 <p>See the <a class="reference internal" href="../reference_appendices/release_and_maintenance.html#ansible-changelogs"><span class="std std-ref">Ansible package release status table</span></a> for the <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> version included in the package.</p>
 </section>
 <section id="installing-and-upgrading-ansible-with-pipx">
-<h2><a class="toc-backref" href="#id11" role="doc-backlink">Installing and upgrading Ansible with pipx</a><a class="headerlink" href="#installing-and-upgrading-ansible-with-pipx" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Installing and upgrading Ansible with pipx</a><a class="headerlink" href="#installing-and-upgrading-ansible-with-pipx" title="Link to this heading"></a></h2>
 <p>On some systems, it may not be possible to install Ansible with <code class="docutils literal notranslate"><span class="pre">pip</span></code>, due to decisions made by the operating system developers. In such cases, <code class="docutils literal notranslate"><span class="pre">pipx</span></code> is a widely available alternative.</p>
-<p>These instructions will not go over the steps to install <code class="docutils literal notranslate"><span class="pre">pipx</span></code>; if those instructions are needed, please continue to the <a class="reference external" href="https://pypa.github.io/pipx/installation/">pipx installation instructions</a> for more information.</p>
+<p>These instructions will not go over the steps to install <code class="docutils literal notranslate"><span class="pre">pipx</span></code>; if those instructions are needed, please continue to the <a class="reference external" href="https://pipx.pypa.io/stable/#install-pipx">pipx installation instructions</a> for more information.</p>
 <section id="pipx-install">
-<span id="id3"></span><h3><a class="toc-backref" href="#id12" role="doc-backlink">Installing Ansible</a><a class="headerlink" href="#pipx-install" title="Permalink to this heading"></a></h3>
+<span id="id3"></span><h3><a class="toc-backref" href="#id12" role="doc-backlink">Installing Ansible</a><a class="headerlink" href="#pipx-install" title="Link to this heading"></a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">pipx</span></code> in your environment to install the full Ansible package:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pipx<span class="w"> </span>install<span class="w"> </span>--include-deps<span class="w"> </span>ansible
 </pre></div>
@@ -335,14 +393,14 @@ The following instructions use <code class="docutils literal notranslate"><span 
 </div>
 </section>
 <section id="upgrading-ansible">
-<span id="pipx-upgrade"></span><h3><a class="toc-backref" href="#id13" role="doc-backlink">Upgrading Ansible</a><a class="headerlink" href="#upgrading-ansible" title="Permalink to this heading"></a></h3>
+<span id="pipx-upgrade"></span><h3><a class="toc-backref" href="#id13" role="doc-backlink">Upgrading Ansible</a><a class="headerlink" href="#upgrading-ansible" title="Link to this heading"></a></h3>
 <p>To upgrade an existing Ansible installation to the latest released version:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pipx<span class="w"> </span>upgrade<span class="w"> </span>--include-injected<span class="w"> </span>ansible
 </pre></div>
 </div>
 </section>
 <section id="installing-extra-python-dependencies">
-<span id="pipx-inject"></span><h3><a class="toc-backref" href="#id14" role="doc-backlink">Installing Extra Python Dependencies</a><a class="headerlink" href="#installing-extra-python-dependencies" title="Permalink to this heading"></a></h3>
+<span id="pipx-inject"></span><h3><a class="toc-backref" href="#id14" role="doc-backlink">Installing Extra Python Dependencies</a><a class="headerlink" href="#installing-extra-python-dependencies" title="Link to this heading"></a></h3>
 <p>To install additional python dependencies that may be needed, with the example of installing the <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code> python package as described below:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pipx<span class="w"> </span>inject<span class="w"> </span>ansible<span class="w"> </span>argcomplete
 </pre></div>
@@ -358,14 +416,14 @@ The following instructions use <code class="docutils literal notranslate"><span 
 </section>
 </section>
 <section id="installing-and-upgrading-ansible-with-pip">
-<h2><a class="toc-backref" href="#id15" role="doc-backlink">Installing and upgrading Ansible with pip</a><a class="headerlink" href="#installing-and-upgrading-ansible-with-pip" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Installing and upgrading Ansible with pip</a><a class="headerlink" href="#installing-and-upgrading-ansible-with-pip" title="Link to this heading"></a></h2>
 <section id="locating-python">
-<h3><a class="toc-backref" href="#id16" role="doc-backlink">Locating Python</a><a class="headerlink" href="#locating-python" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Locating Python</a><a class="headerlink" href="#locating-python" title="Link to this heading"></a></h3>
 <p>Locate and remember the path to the Python interpreter you wish to use to run Ansible. The following instructions refer to this Python  as <code class="docutils literal notranslate"><span class="pre">python3</span></code>.
 For example, if you have determined that you want the Python at <code class="docutils literal notranslate"><span class="pre">/usr/bin/python3.9</span></code> to be the one that you will install Ansible under, specify that instead of <code class="docutils literal notranslate"><span class="pre">python3</span></code>.</p>
 </section>
 <section id="ensuring-pip-is-available">
-<h3><a class="toc-backref" href="#id17" role="doc-backlink">Ensuring <code class="docutils literal notranslate"><span class="pre">pip</span></code> is available</a><a class="headerlink" href="#ensuring-pip-is-available" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Ensuring <code class="docutils literal notranslate"><span class="pre">pip</span></code> is available</a><a class="headerlink" href="#ensuring-pip-is-available" title="Link to this heading"></a></h3>
 <p>To verify whether <code class="docutils literal notranslate"><span class="pre">pip</span></code> is already installed for your preferred Python:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>-V
 </pre></div>
@@ -385,7 +443,7 @@ This may mean installing an additional OS package (for example, <code class="doc
 <p>You may need to perform some additional configuration before you are able to run Ansible. See the Python documentation on <a class="reference external" href="https://packaging.python.org/tutorials/installing-packages/#installing-to-the-user-site">installing to the user site</a> for more information.</p>
 </section>
 <section id="pip-install">
-<span id="id4"></span><h3><a class="toc-backref" href="#id18" role="doc-backlink">Installing Ansible</a><a class="headerlink" href="#pip-install" title="Permalink to this heading"></a></h3>
+<span id="id4"></span><h3><a class="toc-backref" href="#id18" role="doc-backlink">Installing Ansible</a><a class="headerlink" href="#pip-install" title="Link to this heading"></a></h3>
 <p>Use <code class="docutils literal notranslate"><span class="pre">pip</span></code> in your selected Python environment to install the full Ansible package for the current user:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>ansible
 </pre></div>
@@ -400,7 +458,7 @@ This may mean installing an additional OS package (for example, <code class="doc
 </div>
 </section>
 <section id="pip-upgrade">
-<span id="id5"></span><h3><a class="toc-backref" href="#id19" role="doc-backlink">Upgrading Ansible</a><a class="headerlink" href="#pip-upgrade" title="Permalink to this heading"></a></h3>
+<span id="id5"></span><h3><a class="toc-backref" href="#id19" role="doc-backlink">Upgrading Ansible</a><a class="headerlink" href="#pip-upgrade" title="Link to this heading"></a></h3>
 <p>To upgrade an existing Ansible installation in this Python environment to the latest released version, simply add <code class="docutils literal notranslate"><span class="pre">--upgrade</span></code> to the command above:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>--user<span class="w"> </span>ansible
 </pre></div>
@@ -408,12 +466,12 @@ This may mean installing an additional OS package (for example, <code class="doc
 </section>
 </section>
 <section id="installing-ansible-to-containers">
-<h2><a class="toc-backref" href="#id20" role="doc-backlink">Installing Ansible to containers</a><a class="headerlink" href="#installing-ansible-to-containers" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id20" role="doc-backlink">Installing Ansible to containers</a><a class="headerlink" href="#installing-ansible-to-containers" title="Link to this heading"></a></h2>
 <p>Instead of installing Ansible content manually, you can simply build an execution environment container image or use one of the available community images as your control node.
 See <a class="reference internal" href="../getting_started_ee/index.html#getting-started-ee-index"><span class="std std-ref">Getting started with Execution Environments</span></a> for details.</p>
 </section>
 <section id="installing-for-development">
-<span id="development-install"></span><h2><a class="toc-backref" href="#id21" role="doc-backlink">Installing for development</a><a class="headerlink" href="#installing-for-development" title="Permalink to this heading"></a></h2>
+<span id="development-install"></span><h2><a class="toc-backref" href="#id21" role="doc-backlink">Installing for development</a><a class="headerlink" href="#installing-for-development" title="Link to this heading"></a></h2>
 <p>If you are testing new features, fixing bugs, or otherwise working with the development team on changes to the core code, you can install and run the source from GitHub.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -422,7 +480,7 @@ See <a class="reference internal" href="../getting_started_ee/index.html#getting
 <p>For more information on getting involved in the Ansible project, see the <a class="reference internal" href="../community/index.html#ansible-community-guide"><span class="std std-ref">Ansible Community Guide</span></a>.</p>
 <p>For more information on creating Ansible modules and Collections, see the <a class="reference internal" href="../dev_guide/index.html#developer-guide"><span class="std std-ref">Developer Guide</span></a>.</p>
 <section id="installing-devel-from-github-with-pip">
-<span id="from-pip-devel"></span><h3><a class="toc-backref" href="#id22" role="doc-backlink">Installing <code class="docutils literal notranslate"><span class="pre">devel</span></code> from GitHub with <code class="docutils literal notranslate"><span class="pre">pip</span></code></a><a class="headerlink" href="#installing-devel-from-github-with-pip" title="Permalink to this heading"></a></h3>
+<span id="from-pip-devel"></span><h3><a class="toc-backref" href="#id22" role="doc-backlink">Installing <code class="docutils literal notranslate"><span class="pre">devel</span></code> from GitHub with <code class="docutils literal notranslate"><span class="pre">pip</span></code></a><a class="headerlink" href="#installing-devel-from-github-with-pip" title="Link to this heading"></a></h3>
 <p>You can install the <code class="docutils literal notranslate"><span class="pre">devel</span></code> branch of <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> directly from GitHub with <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>https://github.com/ansible/ansible/archive/devel.tar.gz
 </pre></div>
@@ -430,7 +488,7 @@ See <a class="reference internal" href="../getting_started_ee/index.html#getting
 <p>You can replace <code class="docutils literal notranslate"><span class="pre">devel</span></code> in the URL mentioned above, with any other branch or tag on GitHub to install older versions of Ansible, tagged alpha or beta versions, and release candidates.</p>
 </section>
 <section id="running-the-devel-branch-from-a-clone">
-<span id="from-source"></span><h3><a class="toc-backref" href="#id23" role="doc-backlink">Running the <code class="docutils literal notranslate"><span class="pre">devel</span></code> branch from a clone</a><a class="headerlink" href="#running-the-devel-branch-from-a-clone" title="Permalink to this heading"></a></h3>
+<span id="from-source"></span><h3><a class="toc-backref" href="#id23" role="doc-backlink">Running the <code class="docutils literal notranslate"><span class="pre">devel</span></code> branch from a clone</a><a class="headerlink" href="#running-the-devel-branch-from-a-clone" title="Link to this heading"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> is easy to run from source. You do not need <code class="docutils literal notranslate"><span class="pre">root</span></code> permissions to use it and there is no software to actually install. No daemons or database setup are required.</p>
 <ol class="arabic">
 <li><p>Clone the <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> repository</p>
@@ -473,7 +531,7 @@ See <a class="reference internal" href="../getting_started_ee/index.html#getting
 </section>
 </section>
 <section id="confirming-your-installation">
-<span id="shell-completion"></span><h2><a class="toc-backref" href="#id24" role="doc-backlink">Confirming your installation</a><a class="headerlink" href="#confirming-your-installation" title="Permalink to this heading"></a></h2>
+<span id="shell-completion"></span><h2><a class="toc-backref" href="#id24" role="doc-backlink">Confirming your installation</a><a class="headerlink" href="#confirming-your-installation" title="Link to this heading"></a></h2>
 <p>You can test that Ansible is installed correctly by checking the version:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible<span class="w"> </span>--version
 </pre></div>
@@ -485,11 +543,11 @@ See <a class="reference internal" href="../getting_started_ee/index.html#getting
 </div>
 </section>
 <section id="adding-ansible-command-shell-completion">
-<h2><a class="toc-backref" href="#id25" role="doc-backlink">Adding Ansible command shell completion</a><a class="headerlink" href="#adding-ansible-command-shell-completion" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id25" role="doc-backlink">Adding Ansible command shell completion</a><a class="headerlink" href="#adding-ansible-command-shell-completion" title="Link to this heading"></a></h2>
 <p>You can add shell completion of the Ansible command line utilities by installing an optional dependency called <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code>. It supports bash, and has limited support for zsh and tcsh.</p>
 <p>For more information about installation and configuration, see the <a class="reference external" href="https://kislyuk.github.io/argcomplete/">argcomplete documentation</a>.</p>
 <section id="installing-argcomplete">
-<h3><a class="toc-backref" href="#id26" role="doc-backlink">Installing <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code></a><a class="headerlink" href="#installing-argcomplete" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Installing <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code></a><a class="headerlink" href="#installing-argcomplete" title="Link to this heading"></a></h3>
 <p>If you chose the <code class="docutils literal notranslate"><span class="pre">pipx</span></code> installation instructions:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pipx<span class="w"> </span>inject<span class="w"> </span>--include-apps<span class="w"> </span>ansible<span class="w"> </span>argcomplete
 </pre></div>
@@ -500,10 +558,10 @@ See <a class="reference internal" href="../getting_started_ee/index.html#getting
 </div>
 </section>
 <section id="configuring-argcomplete">
-<h3><a class="toc-backref" href="#id27" role="doc-backlink">Configuring <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code></a><a class="headerlink" href="#configuring-argcomplete" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Configuring <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code></a><a class="headerlink" href="#configuring-argcomplete" title="Link to this heading"></a></h3>
 <p>There are 2 ways to configure <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code> to allow shell completion of the Ansible command line utilities: globally or per command.</p>
 <section id="global-configuration">
-<h4><a class="toc-backref" href="#id28" role="doc-backlink">Global configuration</a><a class="headerlink" href="#global-configuration" title="Permalink to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id28" role="doc-backlink">Global configuration</a><a class="headerlink" href="#global-configuration" title="Link to this heading"></a></h4>
 <p>Global completion requires bash 4.2.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>activate-global-python-argcomplete<span class="w"> </span>--user
 </pre></div>
@@ -511,7 +569,7 @@ See <a class="reference internal" href="../getting_started_ee/index.html#getting
 <p>This will write a bash completion file to a user location. Use <code class="docutils literal notranslate"><span class="pre">--dest</span></code> to change the location or <code class="docutils literal notranslate"><span class="pre">sudo</span></code> to set up the completion globally.</p>
 </section>
 <section id="per-command-configuration">
-<h4><a class="toc-backref" href="#id29" role="doc-backlink">Per command configuration</a><a class="headerlink" href="#per-command-configuration" title="Permalink to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id29" role="doc-backlink">Per command configuration</a><a class="headerlink" href="#per-command-configuration" title="Link to this heading"></a></h4>
 <p>If you do not have bash 4.2, you must register each script independently.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">eval</span><span class="w"> </span><span class="k">$(</span>register-python-argcomplete<span class="w"> </span>ansible<span class="k">)</span>
 <span class="gp">$ </span><span class="nb">eval</span><span class="w"> </span><span class="k">$(</span>register-python-argcomplete<span class="w"> </span>ansible-config<span class="k">)</span>
@@ -527,7 +585,7 @@ See <a class="reference internal" href="../getting_started_ee/index.html#getting
 <p>You should place the above commands into your shell’s profile file such as <code class="docutils literal notranslate"><span class="pre">~/.profile</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.bash_profile</span></code>.</p>
 </section>
 <section id="using-argcomplete-with-zsh-or-tcsh">
-<h4><a class="toc-backref" href="#id30" role="doc-backlink">Using <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code> with zsh or tcsh</a><a class="headerlink" href="#using-argcomplete-with-zsh-or-tcsh" title="Permalink to this heading"></a></h4>
+<h4><a class="toc-backref" href="#id30" role="doc-backlink">Using <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code> with zsh or tcsh</a><a class="headerlink" href="#using-argcomplete-with-zsh-or-tcsh" title="Link to this heading"></a></h4>
 <p>See the <a class="reference external" href="https://kislyuk.github.io/argcomplete/">argcomplete documentation</a>.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -563,7 +621,7 @@ See <a class="reference internal" href="../getting_started_ee/index.html#getting
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 25, 2026.
+      <span class="lastupdated">Last updated on Mar 02, 2026.
       </span></p>
   </div>
 

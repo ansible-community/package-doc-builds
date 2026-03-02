@@ -1,26 +1,26 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>How Network Automation is Different &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=41de9001" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/ansible.css?v=c5b67dd2" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/ansible.css?v=b54c304f" />
       <link rel="stylesheet" type="text/css" href="../../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/rtd-ethical-ads.css?v=289b023e" />
 
   
     <link rel="shortcut icon" href="../../_static/images/Ansible-Mark-RGB_Black.png"/>
-    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/network/getting_started/network_differences.html"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/network/getting_started/network_differences.html"/>
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=cfabbc46"></script>
+      <script src="../../_static/documentation_options.js?v=c7b8e248"></script>
       <script src="../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -99,7 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -117,8 +117,6 @@
 <p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/network_guides.html">Network Technology Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
 <ul class="current">
@@ -177,15 +175,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
 </ul>
-<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
-<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
-<div id="sideBanner">
-  <br/>
-  <a href="https://www.ansible.com/docs-left?utm_source=docs">
-    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
-  </a>
-  <br/><br/><br/>
-</div>
+
 
         </div>
       </div>
@@ -213,17 +203,85 @@
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
 
-<div id='banner' class='Admonition caution'>
-  <p>You are reading an unmaintained version of the Ansible community documentation. Unmaintained Ansible versions can contain security vulnerabilities (CVEs). Please upgrade to a maintained version. See <a href="/ansible/latest/">the latest Ansible documentation</a>. Note that this statement does not apply to Red Hat Ansible Automation Platform subscriptions. See the <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Ansible Automation Platform Life Cycle</a>.</p>
-</div>
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
 
 
   
            <div itemprop="articleBody">
              
   <section id="how-network-automation-is-different">
-<h1>How Network Automation is Different<a class="headerlink" href="#how-network-automation-is-different" title="Permalink to this heading"></a></h1>
+<h1>How Network Automation is Different<a class="headerlink" href="#how-network-automation-is-different" title="Link to this heading"></a></h1>
 <p>Network automation uses the basic Ansible concepts, but there are important differences in how the network modules work. This introduction prepares you to understand the exercises in this guide.</p>
 <nav class="contents local" id="contents">
 <ul class="simple">
@@ -238,13 +296,13 @@
 </ul>
 </nav>
 <section id="execution-on-the-control-node">
-<h2><a class="toc-backref" href="#id1" role="doc-backlink">Execution on the control node</a><a class="headerlink" href="#execution-on-the-control-node" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Execution on the control node</a><a class="headerlink" href="#execution-on-the-control-node" title="Link to this heading"></a></h2>
 <p>Unlike most Ansible modules, network modules do not run on the managed nodes. From a user’s point of view, network modules work like any other modules. They work with ad hoc commands, playbooks, and roles. Behind the scenes, however, network modules use a different methodology than the other (Linux/Unix and Windows) modules use. Ansible is written and executed in Python. Because the majority of network devices can not run Python, the Ansible network modules are executed on the Ansible control node, where <code class="docutils literal notranslate"><span class="pre">ansible</span></code> or <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> runs.</p>
 <p>Network modules also use the control node as a destination for backup files, for those modules that offer a <code class="docutils literal notranslate"><span class="pre">backup</span></code> option. With Linux/Unix modules, where a configuration file already exists on the managed node(s), the backup file gets written by default in the same directory as the new, changed file. Network modules do not update configuration files on the managed nodes, because network configuration is not written in files. Network modules write backup files on the control node, usually in the <cite>backup</cite> directory under the playbook root directory.</p>
 <p>When using the connection plugins (for example, <code class="docutils literal notranslate"><span class="pre">ansible.netcommon.network_cli</span></code>) for network modules, Unix/Linux modules such as <code class="docutils literal notranslate"><span class="pre">ansible.builtin.file</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible.builtin.copy</span></code> also run on the control node.</p>
 </section>
 <section id="multiple-communication-protocols">
-<h2><a class="toc-backref" href="#id2" role="doc-backlink">Multiple communication protocols</a><a class="headerlink" href="#multiple-communication-protocols" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Multiple communication protocols</a><a class="headerlink" href="#multiple-communication-protocols" title="Link to this heading"></a></h2>
 <p>Because network modules execute on the control node instead of on the managed nodes, they can support multiple communication protocols. The communication protocol (XML over SSH, CLI over SSH, API over HTTPS) selected for each network module depends on the platform and the purpose of the module. Some network modules support only one protocol; some offer a choice. The most common protocol is CLI over SSH. You set the communication protocol with the <code class="docutils literal notranslate"><span class="pre">ansible_connection</span></code> variable:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -290,7 +348,7 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">ansible_connection:</span> <span class="pre">local</span></code> has been deprecated. Please use one of the persistent connection types listed above instead. With persistent connections, you can define the hosts and credentials only once, rather than in every task. You also need to set the <code class="docutils literal notranslate"><span class="pre">network_os</span></code> variable for the specific network platform you are communicating with. For more details on using each connection type on various platforms, see the <a class="reference internal" href="../user_guide/platform_index.html#platform-options"><span class="std std-ref">platform-specific</span></a> pages.</p>
 </section>
 <section id="collections-organized-by-network-platform">
-<h2><a class="toc-backref" href="#id3" role="doc-backlink">Collections organized by network platform</a><a class="headerlink" href="#collections-organized-by-network-platform" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Collections organized by network platform</a><a class="headerlink" href="#collections-organized-by-network-platform" title="Link to this heading"></a></h2>
 <p>A network platform is a set of network devices with a common operating system that can be managed by an Ansible collection, for example:</p>
 <ul class="simple">
 <li><p>Arista: <a class="reference external" href="https://galaxy.ansible.com/arista/eos">arista.eos</a></p></li>
@@ -301,10 +359,10 @@
 <p>All modules within a network platform share certain requirements. Some network platforms have specific differences - see the <a class="reference internal" href="../user_guide/platform_index.html#platform-options"><span class="std std-ref">platform-specific</span></a> documentation for details.</p>
 </section>
 <section id="privilege-escalation-enable-mode-become-and-authorize">
-<span id="privilege-escalation"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Privilege Escalation: <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode, <code class="docutils literal notranslate"><span class="pre">become</span></code>, and <code class="docutils literal notranslate"><span class="pre">authorize</span></code></a><a class="headerlink" href="#privilege-escalation-enable-mode-become-and-authorize" title="Permalink to this heading"></a></h2>
+<span id="privilege-escalation"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Privilege Escalation: <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode, <code class="docutils literal notranslate"><span class="pre">become</span></code>, and <code class="docutils literal notranslate"><span class="pre">authorize</span></code></a><a class="headerlink" href="#privilege-escalation-enable-mode-become-and-authorize" title="Link to this heading"></a></h2>
 <p>Several network platforms support privilege escalation, where certain tasks must be done by a privileged user. On network devices this is called the <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode (the equivalent of <code class="docutils literal notranslate"><span class="pre">sudo</span></code> in *nix administration). Ansible network modules offer privilege escalation for those network devices that support it. For details of which platforms support <code class="docutils literal notranslate"><span class="pre">enable</span></code> mode, with examples of how to use it, see the <a class="reference internal" href="../user_guide/platform_index.html#platform-options"><span class="std std-ref">platform-specific</span></a> documentation.</p>
 <section id="using-become-for-privilege-escalation">
-<h3><a class="toc-backref" href="#id5" role="doc-backlink">Using <code class="docutils literal notranslate"><span class="pre">become</span></code> for privilege escalation</a><a class="headerlink" href="#using-become-for-privilege-escalation" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Using <code class="docutils literal notranslate"><span class="pre">become</span></code> for privilege escalation</a><a class="headerlink" href="#using-become-for-privilege-escalation" title="Link to this heading"></a></h3>
 <p>Use the top-level Ansible parameter <code class="docutils literal notranslate"><span class="pre">become:</span> <span class="pre">true</span></code> with <code class="docutils literal notranslate"><span class="pre">become_method:</span> <span class="pre">enable</span></code> to run a task, play, or playbook with escalated privileges on any network platform that supports privilege escalation. You must use either <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">network_cli</span></code> or <code class="docutils literal notranslate"><span class="pre">connection:</span> <span class="pre">httpapi</span></code> with <code class="docutils literal notranslate"><span class="pre">become:</span> <span class="pre">true</span></code> with <code class="docutils literal notranslate"><span class="pre">become_method:</span> <span class="pre">enable</span></code>. If you are using <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> to connect Ansible to your network devices, a <code class="docutils literal notranslate"><span class="pre">group_vars</span></code> file would look like:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ansible_connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.netcommon.network_cli</span>
 <span class="nt">ansible_network_os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cisco.ios.ios</span>
@@ -331,7 +389,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 25, 2026.
+      <span class="lastupdated">Last updated on Mar 02, 2026.
       </span></p>
   </div>
 

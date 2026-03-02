@@ -1,33 +1,33 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Playbook Example: Continuous Delivery and Rolling Upgrades &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=b54c304f" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../_static/css/rtd-ethical-ads.css?v=289b023e" />
 
   
     <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.png"/>
-    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/playbook_guide/guide_rolling_upgrade.html"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/playbook_guide/guide_rolling_upgrade.html"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=cfabbc46"></script>
+      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Executing playbooks" href="playbooks_execution.html" />
-    <link rel="prev" title="Discovering variables: facts and magic variables" href="playbooks_vars_facts.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="Play Argument Validation" href="playbooks_variables_validation.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -117,8 +117,11 @@
 <li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using variables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html">Play Argument Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html#specification-format">Specification Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html#sample-specification">Sample Specification</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Playbook Example: Continuous Delivery and Rolling Upgrades</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#what-is-continuous-delivery">What is continuous delivery?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#site-deployment">Site deployment</a></li>
@@ -139,7 +142,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -157,8 +160,6 @@
 <p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
 <ul>
@@ -198,15 +199,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
 </ul>
-<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
-<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
-<div id="sideBanner">
-  <br/>
-  <a href="https://www.ansible.com/docs-left?utm_source=docs">
-    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
-  </a>
-  <br/><br/><br/>
-</div>
+
 
         </div>
       </div>
@@ -235,17 +228,85 @@
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
 
-<div id='banner' class='Admonition caution'>
-  <p>You are reading an unmaintained version of the Ansible community documentation. Unmaintained Ansible versions can contain security vulnerabilities (CVEs). Please upgrade to a maintained version. See <a href="/ansible/latest/">the latest Ansible documentation</a>. Note that this statement does not apply to Red Hat Ansible Automation Platform subscriptions. See the <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Ansible Automation Platform Life Cycle</a>.</p>
-</div>
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
 
 
   
            <div itemprop="articleBody">
              
   <section id="playbook-example-continuous-delivery-and-rolling-upgrades">
-<h1>Playbook Example: Continuous Delivery and Rolling Upgrades<a class="headerlink" href="#playbook-example-continuous-delivery-and-rolling-upgrades" title="Permalink to this heading"></a></h1>
+<h1>Playbook Example: Continuous Delivery and Rolling Upgrades<a class="headerlink" href="#playbook-example-continuous-delivery-and-rolling-upgrades" title="Link to this heading"></a></h1>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#what-is-continuous-delivery" id="id1">What is continuous delivery?</a></p></li>
@@ -258,7 +319,7 @@
 </ul>
 </nav>
 <section id="what-is-continuous-delivery">
-<span id="lamp-introduction"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">What is continuous delivery?</a><a class="headerlink" href="#what-is-continuous-delivery" title="Permalink to this heading"></a></h2>
+<span id="lamp-introduction"></span><h2><a class="toc-backref" href="#id1" role="doc-backlink">What is continuous delivery?</a><a class="headerlink" href="#what-is-continuous-delivery" title="Link to this heading"></a></h2>
 <p>Continuous delivery (CD) means frequently delivering updates to your software application.</p>
 <p>The idea is that by updating more often, you do not have to wait for a specific timed period, and your organization
 gets better at the process of responding to change.</p>
@@ -273,7 +334,7 @@ rolling upgrades of the web application stack.</p>
 example for that information. Instead, we’re going to take a close look at every part of the playbook and describe what it does.</p>
 </section>
 <section id="site-deployment">
-<span id="lamp-deployment"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Site deployment</a><a class="headerlink" href="#site-deployment" title="Permalink to this heading"></a></h2>
+<span id="lamp-deployment"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Site deployment</a><a class="headerlink" href="#site-deployment" title="Link to this heading"></a></h2>
 <p>Let’s start with <code class="docutils literal notranslate"><span class="pre">site.yml</span></code>. This is our site-wide deployment playbook. It can be used to initially deploy the site, as well
 as push updates to all of the servers:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
@@ -327,7 +388,7 @@ Along with the roles for Nagios monitoring, the database, and the web applicatio
 sample web application and the Nagios hosts.</p>
 </section>
 <section id="reusable-content-roles">
-<span id="lamp-roles"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Reusable content: roles</a><a class="headerlink" href="#reusable-content-roles" title="Permalink to this heading"></a></h2>
+<span id="lamp-roles"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Reusable content: roles</a><a class="headerlink" href="#reusable-content-roles" title="Link to this heading"></a></h2>
 <p>By now you should have a bit of understanding about roles and how they work in Ansible. Roles are a way to organize
 content: tasks, handlers, templates, and files, into reusable components.</p>
 <p>This example has six roles: <code class="docutils literal notranslate"><span class="pre">common</span></code>, <code class="docutils literal notranslate"><span class="pre">base-apache</span></code>, <code class="docutils literal notranslate"><span class="pre">db</span></code>, <code class="docutils literal notranslate"><span class="pre">haproxy</span></code>, <code class="docutils literal notranslate"><span class="pre">nagios</span></code>, and <code class="docutils literal notranslate"><span class="pre">web</span></code>. How you organize
@@ -337,7 +398,7 @@ all systems, and then a series of application-specific roles that install and co
 You can read more about roles in the <a class="reference internal" href="playbooks_reuse_roles.html#playbooks-reuse-roles"><span class="std std-ref">Roles</span></a> section.</p>
 </section>
 <section id="configuration-group-variables">
-<span id="lamp-group-variables"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Configuration: group variables</a><a class="headerlink" href="#configuration-group-variables" title="Permalink to this heading"></a></h2>
+<span id="lamp-group-variables"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Configuration: group variables</a><a class="headerlink" href="#configuration-group-variables" title="Link to this heading"></a></h2>
 <p>Group variables are variables that are applied to groups of servers. They can be used in templates and in
 playbooks to customize behavior and to provide easily-changed settings and parameters. They are stored in
 a directory called <code class="docutils literal notranslate"><span class="pre">group_vars</span></code> in the same location as your inventory.
@@ -408,10 +469,10 @@ exists in the inventory group <code class="docutils literal notranslate"><span c
 <p>This loops over all of the hosts in the group called <code class="docutils literal notranslate"><span class="pre">monitoring</span></code>, and adds an ACCEPT line for
 each monitoring hosts’ default IPv4 address to the current machine’s iptables configuration, so that Nagios can monitor those hosts.</p>
 <p>You can learn a lot more about Jinja2 and its capabilities <a class="reference external" href="https://jinja.palletsprojects.com/">here</a>, and you
-can read more about Ansible variables in general in the <a class="reference internal" href="playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a> section.</p>
+can read more about Ansible variables in general in the <a class="reference internal" href="playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using variables</span></a> section.</p>
 </section>
 <section id="the-rolling-upgrade">
-<span id="lamp-rolling-upgrade"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">The rolling upgrade</a><a class="headerlink" href="#the-rolling-upgrade" title="Permalink to this heading"></a></h2>
+<span id="lamp-rolling-upgrade"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">The rolling upgrade</a><a class="headerlink" href="#the-rolling-upgrade" title="Link to this heading"></a></h2>
 <p>Now you have a fully-deployed site with web servers, a load balancer, and monitoring. How do you update it? This is where Ansible’s
 orchestration features come into play. While some applications use the term ‘orchestration’ to mean basic ordering or command-blasting, Ansible
 refers to orchestration as ‘conducting machines like an orchestra’, and has a pretty sophisticated engine for it.</p>
@@ -481,12 +542,12 @@ This has some consequences on play behavior. For example, if all hosts in a batc
 <p>Again, if you were using a Netscaler or F5 or Elastic Load Balancer, you would just substitute in the appropriate modules instead.</p>
 </section>
 <section id="managing-other-load-balancers">
-<span id="lamp-end-notes"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Managing other load balancers</a><a class="headerlink" href="#managing-other-load-balancers" title="Permalink to this heading"></a></h2>
-<p>In this example, we use the simple HAProxy load balancer to front-end the web servers. It is easy to configure and easy to manage. As we have mentioned, Ansible has support for a variety of other load balancers like Citrix NetScaler, F5 BigIP, Amazon Elastic Load Balancers, and more. See the <a class="reference external" href="https://docs.ansible.com/projects/ansible/2.9/user_guide/modules.html#working-with-modules" title="(in Ansible v2.9)"><span>Working With Modules</span></a> documentation for more information.</p>
+<span id="lamp-end-notes"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Managing other load balancers</a><a class="headerlink" href="#managing-other-load-balancers" title="Link to this heading"></a></h2>
+<p>In this example, we use the simple HAProxy load balancer to front-end the web servers. It is easy to configure and easy to manage. As we have mentioned, Ansible has support for a variety of other load balancers like Citrix NetScaler, F5 BigIP, Amazon Elastic Load Balancers, and more.</p>
 <p>For other load balancers, you may need to send shell commands to them (like we do for HAProxy above), or call an API, if your load balancer exposes one. For the load balancers for which Ansible has modules, you may want to run them as a <code class="docutils literal notranslate"><span class="pre">local_action</span></code> if they contact an API. You can read more about local actions in the <a class="reference internal" href="playbooks_delegation.html#playbooks-delegation"><span class="std std-ref">Controlling where tasks run: delegation and local actions</span></a> section.  Should you develop anything interesting for some hardware where there is not a module, it might make for a good contribution!</p>
 </section>
 <section id="continuous-delivery-end-to-end">
-<span id="lamp-end-to-end"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Continuous delivery end-to-end</a><a class="headerlink" href="#continuous-delivery-end-to-end" title="Permalink to this heading"></a></h2>
+<span id="lamp-end-to-end"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Continuous delivery end-to-end</a><a class="headerlink" href="#continuous-delivery-end-to-end" title="Link to this heading"></a></h2>
 <p>Now that you have an automated way to deploy updates to your application, how do you tie it all together? A lot of organizations use a continuous integration tool like <a class="reference external" href="https://jenkins.io/">Jenkins</a> or <a class="reference external" href="https://www.atlassian.com/software/bamboo">Atlassian Bamboo</a> to tie the development, test, release, and deploy steps together. You may also want to use a tool like <a class="reference external" href="https://www.gerritcodereview.com/">Gerrit</a> to add a code review step to commits to either the application code itself, or to your Ansible playbooks, or both.</p>
 <p>Depending on your environment, you might be deploying continuously to a test environment, running an integration test battery against that environment, and then deploying automatically into production.  Or you could keep it simple and just use the rolling-update for on-demand deployment into test or production specifically.  This is all up to you.</p>
 <p>For integration with Continuous Integration systems, you can easily trigger playbook runs using the <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> command line tool, or, if you’re using AWX, the <code class="docutils literal notranslate"><span class="pre">tower-cli</span></code> command or the built-in REST API.  (The tower-cli command ‘joblaunch’ will spawn a remote job over the REST API and is pretty slick).</p>
@@ -498,7 +559,7 @@ This has some consequences on play behavior. For example, if all hosts in a batc
 </dd>
 <dt><a class="reference internal" href="playbooks_reuse_roles.html#playbooks-reuse-roles"><span class="std std-ref">Roles</span></a></dt><dd><p>An introduction to playbook roles</p>
 </dd>
-<dt><a class="reference internal" href="playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using Variables</span></a></dt><dd><p>An introduction to Ansible variables</p>
+<dt><a class="reference internal" href="playbooks_variables.html#playbooks-variables"><span class="std std-ref">Using variables</span></a></dt><dd><p>An introduction to Ansible variables</p>
 </dd>
 <dt><a class="reference external" href="https://www.ansible.com/use-cases/continuous-delivery">Ansible.com: Continuous Delivery</a></dt><dd><p>An introduction to Continuous Delivery with Ansible</p>
 </dd>
@@ -513,7 +574,7 @@ This has some consequences on play behavior. For example, if all hosts in a batc
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="playbooks_vars_facts.html" class="btn btn-neutral float-left" title="Discovering variables: facts and magic variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbooks_variables_validation.html" class="btn btn-neutral float-left" title="Play Argument Validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="playbooks_execution.html" class="btn btn-neutral float-right" title="Executing playbooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -521,7 +582,7 @@ This has some consequences on play behavior. For example, if all hosts in a batc
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 25, 2026.
+      <span class="lastupdated">Last updated on Mar 02, 2026.
       </span></p>
   </div>
 

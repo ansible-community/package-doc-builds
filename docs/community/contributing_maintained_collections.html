@@ -1,26 +1,26 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contributing to Ansible-maintained Collections &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=b54c304f" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../_static/css/rtd-ethical-ads.css?v=289b023e" />
 
   
     <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.png"/>
-    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/community/contributing_maintained_collections.html"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/community/contributing_maintained_collections.html"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=cfabbc46"></script>
+      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
@@ -99,7 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -136,8 +136,6 @@
 <p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
 <ul>
@@ -177,15 +175,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
 </ul>
-<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
-<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
-<div id="sideBanner">
-  <br/>
-  <a href="https://www.ansible.com/docs-left?utm_source=docs">
-    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
-  </a>
-  <br/><br/><br/>
-</div>
+
 
         </div>
       </div>
@@ -213,17 +203,85 @@
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
 
-<div id='banner' class='Admonition caution'>
-  <p>You are reading an unmaintained version of the Ansible community documentation. Unmaintained Ansible versions can contain security vulnerabilities (CVEs). Please upgrade to a maintained version. See <a href="/ansible/latest/">the latest Ansible documentation</a>. Note that this statement does not apply to Red Hat Ansible Automation Platform subscriptions. See the <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Ansible Automation Platform Life Cycle</a>.</p>
-</div>
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
 
 
   
            <div itemprop="articleBody">
              
   <section id="contributing-to-ansible-maintained-collections">
-<span id="contributing-maintained-collections"></span><h1>Contributing to Ansible-maintained Collections<a class="headerlink" href="#contributing-to-ansible-maintained-collections" title="Permalink to this heading"></a></h1>
+<span id="contributing-maintained-collections"></span><h1>Contributing to Ansible-maintained Collections<a class="headerlink" href="#contributing-to-ansible-maintained-collections" title="Link to this heading"></a></h1>
 <p>The Ansible team welcomes community contributions to the collections maintained by Red Hat Ansible Engineering. This section describes how you can open issues and create PRs with the required testing before your PR can be merged.</p>
 <nav class="contents local" id="contents">
 <ul class="simple">
@@ -233,7 +291,7 @@
 </ul>
 </nav>
 <section id="ansible-maintained-collections">
-<h2><a class="toc-backref" href="#id1" role="doc-backlink">Ansible-maintained collections</a><a class="headerlink" href="#ansible-maintained-collections" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Ansible-maintained collections</a><a class="headerlink" href="#ansible-maintained-collections" title="Link to this heading"></a></h2>
 <p>The following table shows:</p>
 <ul class="simple">
 <li><p><strong>Ansible-maintained collection</strong> -  Click the link to the collection on Galaxy, then click the <code class="docutils literal notranslate"><span class="pre">repo</span></code> button in Galaxy to find the GitHub repository for this collection.</p></li>
@@ -288,7 +346,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/collections/amazon/aws/docsite/dev_guidelines.html">AWS guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/collections/amazon/aws/docsite/dev_guidelines.html">AWS guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/ansible/netcommon">ansible.netcommon***</a></td>
@@ -299,7 +357,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/ansible/posix">ansible.posix</a></td>
@@ -310,7 +368,7 @@
      <td></td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/latest/dev_guide/index.html">Developer guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/latest/dev_guide/index.html">Developer guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/ansible/windows">ansible.windows</a></td>
@@ -321,7 +379,7 @@
      <td>✓</td>
      <td>Azure Pipelines and Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/dev_guide/developing_modules_general_windows.html#developing-modules-general-windows">Windows guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/dev_guide/developing_modules_general_windows.html#developing-modules-general-windows">Windows guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/arista/eos">arista.eos</a></td>
@@ -332,7 +390,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/cisco/asa">cisco.asa</a></td>
@@ -343,7 +401,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/latest/dev_guide/index.html">Developer guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/latest/dev_guide/index.html">Developer guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/cisco/ios">cisco.ios</a></td>
@@ -354,7 +412,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/cisco/iosxr">cisco.iosxr</a></td>
@@ -365,7 +423,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/cisco/nxos">cisco.nxos</a></td>
@@ -376,7 +434,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/ibm/qradar">ibm.qradar</a></td>
@@ -387,7 +445,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/latest/dev_guide/index.html">Developer guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/latest/dev_guide/index.html">Developer guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/junipernetworks/junos">junipernetworks.junos</a></td>
@@ -398,7 +456,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/kubernetes/core">kubernetes.core</a></td>
@@ -430,7 +488,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
    </tr>
    <tr>
      <td><a href="https://github.com/ansible-collections/splunk.es">splunk.es</a></td>
@@ -441,7 +499,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/latest/dev_guide/index.html">Developer guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/latest/dev_guide/index.html">Developer guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/vyos/vyos">vyos.vyos</a></td>
@@ -452,7 +510,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/network/dev_guide/index.html">Network guide</a></td>
    </tr>
    <tr>
      <td><a href="https://galaxy.ansible.com/vmware/vmware_rest">vmware.vmware_rest</a></td>
@@ -463,7 +521,7 @@
      <td>✓</td>
      <td>Zuul</td>
      <td>✓</td>
-     <td><a href="https://docs.ansible.com/ansible/devel/collections/vmware/vmware_rest/docsite/dev_guide.html">VMware REST guide</a></td>
+     <td><a href="https://docs.ansible.com/projects/ansible/devel/collections/vmware/vmware_rest/docsite/dev_guide.html">VMware REST guide</a></td>
    </tr>
 
  </table><div class="admonition note">
@@ -475,7 +533,7 @@
 </div>
 </section>
 <section id="deciding-where-your-contribution-belongs">
-<span id="which-collection"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Deciding where your contribution belongs</a><a class="headerlink" href="#deciding-where-your-contribution-belongs" title="Permalink to this heading"></a></h2>
+<span id="which-collection"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Deciding where your contribution belongs</a><a class="headerlink" href="#deciding-where-your-contribution-belongs" title="Link to this heading"></a></h2>
 <p>We welcome contributions to Ansible-maintained collections. Because these collections are part of a downstream-supported Red Hat product, the criteria for contribution, testing, and release may be higher than other community collections. The related community collections (such as <code class="docutils literal notranslate"><span class="pre">community.general</span></code> and <code class="docutils literal notranslate"><span class="pre">community.network</span></code>) have less stringent requirements and are a great place for new functionality that may become part of the Ansible-maintained collection in a future release.</p>
 <p>The following scenarios use the <code class="docutils literal notranslate"><span class="pre">arista.eos</span></code> to help explain when to contribute to the Ansible-maintained collection, and when to propose your change or idea to the related community collection:</p>
 <ol class="arabic">
@@ -494,7 +552,7 @@
 <p>Most new content should go into either a related community collection or your own collection first so that is well established in the community before you can propose adding it to the  <code class="docutils literal notranslate"><span class="pre">arista</span></code> namespace, where inclusion and maintenance criteria are much higher.</p>
 </section>
 <section id="requirements-to-merge-your-pr">
-<span id="ansible-collection-merge-requirements"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Requirements to merge your PR</a><a class="headerlink" href="#requirements-to-merge-your-pr" title="Permalink to this heading"></a></h2>
+<span id="ansible-collection-merge-requirements"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Requirements to merge your PR</a><a class="headerlink" href="#requirements-to-merge-your-pr" title="Link to this heading"></a></h2>
 <p>Your PR must meet the following requirements before it can merge into an Ansible-maintained collection:</p>
 <ol class="arabic simple">
 <li><p>The PR is in the intended scope of the collection. Communicate with the appropriate Ansible sponsor listed in the <a class="reference internal" href="#ansible-collection-table"><span class="std std-ref">Ansible-maintained collection table</span></a> for help.</p></li>
@@ -522,7 +580,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 25, 2026.
+      <span class="lastupdated">Last updated on Mar 02, 2026.
       </span></p>
   </div>
 

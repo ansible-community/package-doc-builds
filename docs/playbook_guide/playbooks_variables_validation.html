@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Play Argument Validation &mdash; Ansible Community Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=b54c304f" />
+      <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/rtd-ethical-ads.css?v=289b023e" />
+
+  
+    <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.png"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables_validation.html"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Playbook Example: Continuous Delivery and Rolling Upgrades" href="guide_rolling_upgrade.html" />
+    <link rel="prev" title="Discovering variables: facts and magic variables" href="playbooks_vars_facts.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+    <li><a href="https://forum.ansible.com/" target="_blank">Ansible community forum</a></li>
+    <li><a href="https://docs.ansible.com/" target="_blank">Documentation</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Community Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ansible
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started_ee/index.html">Getting started with Execution Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../inventory_guide/index.html">Building Ansible inventories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_guide/index.html">Using Ansible command line tools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Using Ansible playbooks</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="playbooks_intro.html">Ansible playbooks</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="playbooks.html">Working with playbooks</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="playbooks_templating.html">Templating (Jinja2)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_filters.html">Using filters to manipulate data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_tests.html">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_lookups.html">Lookups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_python_version.html">Python3 in templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_templating_now.html">The now function: get the current time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_templating_undef.html">The undef function: add hint for undefined variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_loops.html">Loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_delegation.html">Controlling where tasks run: delegation and local actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_conditionals.html">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_blocks.html">Blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_handlers.html">Handlers: running operations on change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_error_handling.html">Error handling in playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html">Setting the remote environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_environment.html#working-with-language-specific-version-managers">Working with language-specific version managers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse.html">Reusing Ansible artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_reuse_roles.html">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_module_defaults.html">Module defaults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_prompts.html">Interactive input: prompts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_variables.html">Using variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_vars_facts.html">Discovering variables: facts and magic variables</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Play Argument Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#specification-format">Specification Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sample-specification">Sample Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide_rolling_upgrade.html">Playbook Example: Continuous Delivery and Rolling Upgrades</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks_execution.html">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced playbook syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complex_data_manipulation.html">Manipulating data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Using Ansible playbooks</a></li>
+          <li class="breadcrumb-item"><a href="playbooks.html">Working with playbooks</a></li>
+      <li class="breadcrumb-item active">Play Argument Validation</li>
+  <li class="wy-breadcrumbs-aside">
+            <!-- Remove main index page as it is no longer editable -->
+            
+              <a href="https://github.com/ansible/ansible-documentation/edit/devel/docs/docsite/rst/playbook_guide/playbooks_variables_validation.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="play-argument-validation">
+<span id="id1"></span><h1>Play Argument Validation<a class="headerlink" href="#play-argument-validation" title="Link to this heading"></a></h1>
+<p>Beginning in version 2.20, you can enable argument validation using the play keyword <code class="docutils literal notranslate"><span class="pre">validate_argspec</span></code>. This adds a <a class="reference internal" href="../collections/ansible/builtin/validate_argument_spec_module.html#ansible-collections-ansible-builtin-validate-argument-spec-module"><span class="std std-ref">validate_argument_spec</span></a> task following play-level fact gathering. This feature is tech preview.</p>
+<p>Play argument validation has two main parts:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">validate_argspec</span></code> keyword.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">.meta.yml</span></code> file that defines argument specifications.</p></li>
+</ul>
+<p>To enable play argument validation you:</p>
+<ol class="arabic simple">
+<li><p>Define the argument specification identifier by setting a value for the <code class="docutils literal notranslate"><span class="pre">validate_argspec</span></code> keyword. You can set the value to <code class="docutils literal notranslate"><span class="pre">True</span></code> to use the play <code class="docutils literal notranslate"><span class="pre">name</span></code> or you can set the value to a string.</p></li>
+<li><p>Provide a valid argument specification in a <code class="docutils literal notranslate"><span class="pre">&lt;playbook_name&gt;.meta.yml</span></code> file in the same directory as the playbook.</p></li>
+</ol>
+<p>The following example provides a valid, empty argument specification named <code class="docutils literal notranslate"><span class="pre">setup</span> <span class="pre">webserver</span></code> for the playbook <code class="docutils literal notranslate"><span class="pre">create_webserver.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># create_webserver.meta.yml</span>
+<span class="nt">argument_specs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">setup webserver</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+<p>In the following playbook, both plays validate the play arguments against the <code class="docutils literal notranslate"><span class="pre">setup</span> <span class="pre">webserver</span></code> arguments:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># create_webserver.yml</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup webserver</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">validate_argspec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">validate_argspec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup webserver</span>
+</pre></div>
+</div>
+</section>
+<section id="specification-format">
+<h1>Specification Format<a class="headerlink" href="#specification-format" title="Link to this heading"></a></h1>
+<p>The play argument specification must be defined in a top-level <code class="docutils literal notranslate"><span class="pre">argument_specs</span></code> block within the playbook’s <code class="docutils literal notranslate"><span class="pre">.meta.yml</span></code> file. All fields are lowercase.</p>
+<dl class="field-list">
+<dt class="field-odd">argument-spec-name<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>The name of the play or argument specification.</p></li>
+</ul>
+<dl class="field-list">
+<dt class="field-odd">description<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>A description of the play that may contain multiple lines.</p></li>
+<li><p>This can be a single string or a list of strings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">options<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>This section defines the dictionary of play arguments.</p></li>
+<li><p>For each play option (argument), you may include:</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">option-name<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>The name of the option/argument (required).</p></li>
+</ul>
+</dd>
+<dt class="field-even">description<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>Detailed explanation of what this option does. It should be written in full sentences.</p></li>
+<li><p>This can be a single string or a list of strings.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">type<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>The data type of the option. See <a class="reference internal" href="../dev_guide/developing_program_flow_modules.html#argument-spec"><span class="std std-ref">Argument spec</span></a> for allowed values for <code class="docutils literal notranslate"><span class="pre">type</span></code>. The default is <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p></li>
+<li><p>If an option is of type <code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">elements</span></code> should be specified.</p></li>
+</ul>
+</dd>
+<dt class="field-even">required<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>Only needed if <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
+<li><p>If missing, the option is not required.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">choices<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>List of option values.</p></li>
+<li><p>Should be absent if empty.</p></li>
+</ul>
+</dd>
+<dt class="field-even">elements<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p>Specifies the data type for list elements when the type is <code class="docutils literal notranslate"><span class="pre">list</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">options<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>If this option takes a dict or list of dicts, you can define the structure here.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="sample-specification">
+<h1>Sample Specification<a class="headerlink" href="#sample-specification" title="Link to this heading"></a></h1>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># create_webservers.meta.yml</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up basic HTTPS-enabled webserver to serve content from a specified document root.</span>
+<span class="nt">argument_specs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">setup webserver</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">document_root</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Path to the directory containing static web content to be served.</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Port number on which the webserver listens for incoming HTTPS connections.</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">When unspecified, the port is 443.</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">      </span><span class="nt">ssl_cert_path</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Path to the SSL certificate.</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">      </span><span class="nt">ssl_key_path</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Path to the private key corresponding to the SSL certificate.</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="playbooks_vars_facts.html" class="btn btn-neutral float-left" title="Discovering variables: facts and magic variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="guide_rolling_upgrade.html" class="btn btn-neutral float-right" title="Playbook Example: Continuous Delivery and Rolling Upgrades" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Mar 02, 2026.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

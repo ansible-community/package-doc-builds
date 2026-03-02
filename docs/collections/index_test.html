@@ -1,27 +1,27 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.16.3" name="antsibull-docs" />
+<meta content="2.23.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index of all Test Plugins &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=c5b67dd2" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=b54c304f" />
       <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../_static/css/rtd-ethical-ads.css?v=289b023e" />
 
   
     <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.png"/>
-    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/collections/index_test.html"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/collections/index_test.html"/>
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=cfabbc46"></script>
+      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
@@ -100,7 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -118,8 +118,6 @@
 <p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/network_guides.html">Network Technology Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/virt_guides.html">Virtualization and Containerization Guides</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
 <ul>
@@ -158,6 +156,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="index_vars.html">Index of all Vars Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deprecations.html">Index of all deprecated collections and plugins</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
@@ -183,15 +182,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
 </ul>
-<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
-<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
-<div id="sideBanner">
-  <br/>
-  <a href="https://www.ansible.com/docs-left?utm_source=docs">
-    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
-  </a>
-  <br/><br/><br/>
-</div>
+
 
         </div>
       </div>
@@ -220,56 +211,159 @@
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
 
-<div id='banner' class='Admonition caution'>
-  <p>You are reading an unmaintained version of the Ansible community documentation. Unmaintained Ansible versions can contain security vulnerabilities (CVEs). Please upgrade to a maintained version. See <a href="/ansible/latest/">the latest Ansible documentation</a>. Note that this statement does not apply to Red Hat Ansible Automation Platform subscriptions. See the <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Ansible Automation Platform Life Cycle</a>.</p>
-</div>
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
 
 
   
            <div itemprop="articleBody">
              
   <section id="index-of-all-test-plugins">
-<span id="list-of-test-plugins"></span><h1>Index of all Test Plugins<a class="headerlink" href="#index-of-all-test-plugins" title="Permalink to this heading"></a></h1>
+<span id="list-of-test-plugins"></span><h1>Index of all Test Plugins<a class="headerlink" href="#index-of-all-test-plugins" title="Link to this heading"></a></h1>
 <section id="ansible-builtin">
-<h2>ansible.builtin<a class="headerlink" href="#ansible-builtin" title="Permalink to this heading"></a></h2>
+<h2>ansible.builtin<a class="headerlink" href="#ansible-builtin" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="ansible/builtin/abs_test.html#ansible-collections-ansible-builtin-abs-test"><span class="std std-ref">ansible.builtin.abs</span></a> – is the path absolute</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/all_test.html#ansible-collections-ansible-builtin-all-test"><span class="std std-ref">ansible.builtin.all</span></a> – are all conditions in a list true</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/any_test.html#ansible-collections-ansible-builtin-any-test"><span class="std std-ref">ansible.builtin.any</span></a> – is any condition in a list true</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/boolean_test.html#ansible-collections-ansible-builtin-boolean-test"><span class="std std-ref">ansible.builtin.boolean</span></a> – Return true if the object is a boolean value.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/callable_test.html#ansible-collections-ansible-builtin-callable-test"><span class="std std-ref">ansible.builtin.callable</span></a> – Return whether the object is callable.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/changed_test.html#ansible-collections-ansible-builtin-changed-test"><span class="std std-ref">ansible.builtin.changed</span></a> – did the task require changes</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/contains_test.html#ansible-collections-ansible-builtin-contains-test"><span class="std std-ref">ansible.builtin.contains</span></a> – does the list contain this element</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/defined_test.html#ansible-collections-ansible-builtin-defined-test"><span class="std std-ref">ansible.builtin.defined</span></a> – Return true if the variable is defined.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/directory_test.html#ansible-collections-ansible-builtin-directory-test"><span class="std std-ref">ansible.builtin.directory</span></a> – does the path resolve to an existing directory</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/divisibleby_test.html#ansible-collections-ansible-builtin-divisibleby-test"><span class="std std-ref">ansible.builtin.divisibleby</span></a> – Check if a variable is divisible by a number.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/eq_test.html#ansible-collections-ansible-builtin-eq-test"><span class="std std-ref">ansible.builtin.eq</span></a> – Same as a == b.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/equalto_test.html#ansible-collections-ansible-builtin-equalto-test"><span class="std std-ref">ansible.builtin.equalto</span></a> – Same as a == b.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/escaped_test.html#ansible-collections-ansible-builtin-escaped-test"><span class="std std-ref">ansible.builtin.escaped</span></a> – Check if the value is escaped.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/even_test.html#ansible-collections-ansible-builtin-even-test"><span class="std std-ref">ansible.builtin.even</span></a> – Return true if the variable is even.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/exists_test.html#ansible-collections-ansible-builtin-exists-test"><span class="std std-ref">ansible.builtin.exists</span></a> – does the path exist, follow symlinks</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/failed_test.html#ansible-collections-ansible-builtin-failed-test"><span class="std std-ref">ansible.builtin.failed</span></a> – did the task fail</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/false_test.html#ansible-collections-ansible-builtin-false-test"><span class="std std-ref">ansible.builtin.false</span></a> – Return true if the object is False.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/falsy_test.html#ansible-collections-ansible-builtin-falsy-test"><span class="std std-ref">ansible.builtin.falsy</span></a> – Pythonic false</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/file_test.html#ansible-collections-ansible-builtin-file-test"><span class="std std-ref">ansible.builtin.file</span></a> – does the path resolve to an existing file</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/filter_test.html#ansible-collections-ansible-builtin-filter-test"><span class="std std-ref">ansible.builtin.filter</span></a> – Check if a filter exists by name.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/finished_test.html#ansible-collections-ansible-builtin-finished-test"><span class="std std-ref">ansible.builtin.finished</span></a> – Did async task finish</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/float_test.html#ansible-collections-ansible-builtin-float-test"><span class="std std-ref">ansible.builtin.float</span></a> – Return true if the object is a float.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/ge_test.html#ansible-collections-ansible-builtin-ge-test"><span class="std std-ref">ansible.builtin.ge</span></a> – Same as a &gt;= b.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/greaterthan_test.html#ansible-collections-ansible-builtin-greaterthan-test"><span class="std std-ref">ansible.builtin.greaterthan</span></a> – Same as a &gt; b.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/gt_test.html#ansible-collections-ansible-builtin-gt-test"><span class="std std-ref">ansible.builtin.gt</span></a> – Same as a &gt; b.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/in_test.html#ansible-collections-ansible-builtin-in-test"><span class="std std-ref">ansible.builtin.in</span></a> – Check if value is in seq.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/integer_test.html#ansible-collections-ansible-builtin-integer-test"><span class="std std-ref">ansible.builtin.integer</span></a> – Return true if the object is an integer.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/iterable_test.html#ansible-collections-ansible-builtin-iterable-test"><span class="std std-ref">ansible.builtin.iterable</span></a> – Check if it’s possible to iterate over an object.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/le_test.html#ansible-collections-ansible-builtin-le-test"><span class="std std-ref">ansible.builtin.le</span></a> – Same as a &lt;= b.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/lessthan_test.html#ansible-collections-ansible-builtin-lessthan-test"><span class="std std-ref">ansible.builtin.lessthan</span></a> – Same as a &lt; b.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/link_test.html#ansible-collections-ansible-builtin-link-test"><span class="std std-ref">ansible.builtin.link</span></a> – does the path reference existing symbolic link</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/link_exists_test.html#ansible-collections-ansible-builtin-link-exists-test"><span class="std std-ref">ansible.builtin.link_exists</span></a> – does the path exist, no follow</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/lower_test.html#ansible-collections-ansible-builtin-lower-test"><span class="std std-ref">ansible.builtin.lower</span></a> – Return true if the variable is lowercased.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/lt_test.html#ansible-collections-ansible-builtin-lt-test"><span class="std std-ref">ansible.builtin.lt</span></a> – Same as a &lt; b.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/mapping_test.html#ansible-collections-ansible-builtin-mapping-test"><span class="std std-ref">ansible.builtin.mapping</span></a> – Return true if the object is a mapping.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/match_test.html#ansible-collections-ansible-builtin-match-test"><span class="std std-ref">ansible.builtin.match</span></a> – Does string match regular expression from the start</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/mount_test.html#ansible-collections-ansible-builtin-mount-test"><span class="std std-ref">ansible.builtin.mount</span></a> – does the path resolve to mount point</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/nan_test.html#ansible-collections-ansible-builtin-nan-test"><span class="std std-ref">ansible.builtin.nan</span></a> – is this not a number (NaN)</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/ne_test.html#ansible-collections-ansible-builtin-ne-test"><span class="std std-ref">ansible.builtin.ne</span></a> – Same as a .</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/none_test.html#ansible-collections-ansible-builtin-none-test"><span class="std std-ref">ansible.builtin.none</span></a> – Return true if the variable is none.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/number_test.html#ansible-collections-ansible-builtin-number-test"><span class="std std-ref">ansible.builtin.number</span></a> – Return true if the variable is a number.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/odd_test.html#ansible-collections-ansible-builtin-odd-test"><span class="std std-ref">ansible.builtin.odd</span></a> – Return true if the variable is odd.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/reachable_test.html#ansible-collections-ansible-builtin-reachable-test"><span class="std std-ref">ansible.builtin.reachable</span></a> – Task did not end due to unreachable host</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/regex_test.html#ansible-collections-ansible-builtin-regex-test"><span class="std std-ref">ansible.builtin.regex</span></a> – Does string match regular expression from the start</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/same_file_test.html#ansible-collections-ansible-builtin-same-file-test"><span class="std std-ref">ansible.builtin.same_file</span></a> – compares two paths to see if they resolve to the same filesystem object</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/sameas_test.html#ansible-collections-ansible-builtin-sameas-test"><span class="std std-ref">ansible.builtin.sameas</span></a> – Check if an object points to the same memory address than another object.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/search_test.html#ansible-collections-ansible-builtin-search-test"><span class="std std-ref">ansible.builtin.search</span></a> – Does string match a regular expression</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/sequence_test.html#ansible-collections-ansible-builtin-sequence-test"><span class="std std-ref">ansible.builtin.sequence</span></a> – Return true if the variable is a sequence.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/skipped_test.html#ansible-collections-ansible-builtin-skipped-test"><span class="std std-ref">ansible.builtin.skipped</span></a> – Was task skipped</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/started_test.html#ansible-collections-ansible-builtin-started-test"><span class="std std-ref">ansible.builtin.started</span></a> – Was async task started</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/string_test.html#ansible-collections-ansible-builtin-string-test"><span class="std std-ref">ansible.builtin.string</span></a> – Return true if the object is a string.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/subset_test.html#ansible-collections-ansible-builtin-subset-test"><span class="std std-ref">ansible.builtin.subset</span></a> – is the list a subset of this other list</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/success_test.html#ansible-collections-ansible-builtin-success-test"><span class="std std-ref">ansible.builtin.success</span></a> – check task success</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/superset_test.html#ansible-collections-ansible-builtin-superset-test"><span class="std std-ref">ansible.builtin.superset</span></a> – is the list a superset of this other list</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/test_test.html#ansible-collections-ansible-builtin-test-test"><span class="std std-ref">ansible.builtin.test</span></a> – Check if a test exists by name.</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/timedout_test.html#ansible-collections-ansible-builtin-timedout-test"><span class="std std-ref">ansible.builtin.timedout</span></a> – did the task time out</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/true_test.html#ansible-collections-ansible-builtin-true-test"><span class="std std-ref">ansible.builtin.true</span></a> – Return true if the object is True.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/truthy_test.html#ansible-collections-ansible-builtin-truthy-test"><span class="std std-ref">ansible.builtin.truthy</span></a> – Pythonic true</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/undefined_test.html#ansible-collections-ansible-builtin-undefined-test"><span class="std std-ref">ansible.builtin.undefined</span></a> – Like :func:`defined` but the other way round.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/unreachable_test.html#ansible-collections-ansible-builtin-unreachable-test"><span class="std std-ref">ansible.builtin.unreachable</span></a> – Did task end due to the host was unreachable</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/upper_test.html#ansible-collections-ansible-builtin-upper-test"><span class="std std-ref">ansible.builtin.upper</span></a> – Return true if the variable is uppercased.</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/uri_test.html#ansible-collections-ansible-builtin-uri-test"><span class="std std-ref">ansible.builtin.uri</span></a> – is the string a valid URI</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/url_test.html#ansible-collections-ansible-builtin-url-test"><span class="std std-ref">ansible.builtin.url</span></a> – is the string a valid URL</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/urn_test.html#ansible-collections-ansible-builtin-urn-test"><span class="std std-ref">ansible.builtin.urn</span></a> – is the string a valid URN</p></li>
-<li><p><a class="reference internal" href="ansible/builtin/vault_encrypted_test.html#ansible-collections-ansible-builtin-vault-encrypted-test"><span class="std std-ref">ansible.builtin.vault_encrypted</span></a> – Is this an encrypted vault</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/vault_encrypted_test.html#ansible-collections-ansible-builtin-vault-encrypted-test"><span class="std std-ref">ansible.builtin.vault_encrypted</span></a> – Is this an encrypted vault string</p></li>
+<li><p><a class="reference internal" href="ansible/builtin/vaulted_file_test.html#ansible-collections-ansible-builtin-vaulted-file-test"><span class="std std-ref">ansible.builtin.vaulted_file</span></a> – Is this file an encrypted vault</p></li>
 <li><p><a class="reference internal" href="ansible/builtin/version_test.html#ansible-collections-ansible-builtin-version-test"><span class="std std-ref">ansible.builtin.version</span></a> – compare version strings</p></li>
 </ul>
 </section>
 <section id="ansible-utils">
-<h2>ansible.utils<a class="headerlink" href="#ansible-utils" title="Permalink to this heading"></a></h2>
+<h2>ansible.utils<a class="headerlink" href="#ansible-utils" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="ansible/utils/in_any_network_test.html#ansible-collections-ansible-utils-in-any-network-test"><span class="std std-ref">ansible.utils.in_any_network</span></a> – Test if an IP or network falls in any network</p></li>
 <li><p><a class="reference internal" href="ansible/utils/in_network_test.html#ansible-collections-ansible-utils-in-network-test"><span class="std std-ref">ansible.utils.in_network</span></a> – Test if IP address falls in the network</p></li>
@@ -299,14 +393,15 @@
 </ul>
 </section>
 <section id="community-general">
-<h2>community.general<a class="headerlink" href="#community-general" title="Permalink to this heading"></a></h2>
+<h2>community.general<a class="headerlink" href="#community-general" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="community/general/a_module_test.html#ansible-collections-community-general-a-module-test"><span class="std std-ref">community.general.a_module</span></a> – Test whether a given string refers to an existing module or action plugin</p></li>
+<li><p><a class="reference internal" href="community/general/ansible_type_test.html#ansible-collections-community-general-ansible-type-test"><span class="std std-ref">community.general.ansible_type</span></a> – Validate input type</p></li>
 <li><p><a class="reference internal" href="community/general/fqdn_valid_test.html#ansible-collections-community-general-fqdn-valid-test"><span class="std std-ref">community.general.fqdn_valid</span></a> – Validates fully-qualified domain names against RFC 1123</p></li>
 </ul>
 </section>
 <section id="ovirt-ovirt">
-<h2>ovirt.ovirt<a class="headerlink" href="#ovirt-ovirt" title="Permalink to this heading"></a></h2>
+<h2>ovirt.ovirt<a class="headerlink" href="#ovirt-ovirt" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="ovirt/ovirt/proxied_test.html#ansible-collections-ovirt-ovirt-proxied-test"><span class="std std-ref">ovirt.ovirt.proxied</span></a> –</p></li>
 </ul>
@@ -327,7 +422,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Feb 25, 2026.
+      <span class="lastupdated">Last updated on Mar 02, 2026.
       </span></p>
   </div>
 
