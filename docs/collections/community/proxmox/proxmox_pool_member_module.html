@@ -4,19 +4,19 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.23.0" name="antsibull-docs" />
+<meta content="2.16.3" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.proxmox.proxmox_pool_member module – Add or delete members from Proxmox VE cluster pools &mdash; Ansible Community Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=b54c304f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=c5b67dd2" />
       <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd-ethical-ads.css?v=289b023e" />
 
   
     <link rel="shortcut icon" href="../../../_static/images/Ansible-Mark-RGB_Black.png"/>
-    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/collections/community/proxmox/proxmox_pool_member_module.html"/>
+    <link rel="canonical" href="https://docs.ansible.com/ansible/latest/collections/community/proxmox/proxmox_pool_member_module.html"/>
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=c7b8e248"></script>
@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="community.proxmox.proxmox_sendkey module – Send key presses to a Proxmox VM console" href="proxmox_sendkey_module.html" />
+    <link rel="next" title="community.proxmox.proxmox_role module – Role management for Proxmox VE cluster" href="proxmox_role_module.html" />
     <link rel="prev" title="community.proxmox.proxmox_pool module – Pool management for Proxmox VE cluster" href="proxmox_pool_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -71,7 +71,46 @@
           
           <a href="../../../index.html" class="icon icon-home">
             Ansible
-          </a>
+          </a><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    <form class="version-dropdown" method="get">
+      <script>
+        function switchVersionTo(slug) {
+          var current_url_path = window.location.pathname;
+          var url_version = current_url_path.search("/devel/") > -1
+            ? "/devel/"
+            : "/latest/";
+          var new_version_url = current_url_path.replace(url_version, "/" + slug + "/");
+          window.location.replace(new_version_url);
+        }
+      </script>
+      <label class="sr-only" for="version-list">Select version:</label>
+      <select
+          class="version-list"
+          id="version-list"
+          onchange="switchVersionTo(this.value);"
+      >
+        
+        <option
+            value="latest"
+            
+        >
+            latest
+        </option>
+        
+        <option
+            value="devel"
+            selected="selected"
+        >
+            devel
+        </option>
+        
+      </select>
+    </form>
+  
+</div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <label class="sr-only" for="q">Search docs:</label>
@@ -100,7 +139,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../collections_guide/index.html">Using Ansible collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows and BSD</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tips_tricks/index.html">Ansible tips and tricks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
@@ -246,7 +285,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
 </ul>
-
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+<!-- changeable widget links to tower - do not change as image controlled by Ansible-->
+<div id="sideBanner">
+  <br/>
+  <a href="https://www.ansible.com/docs-left?utm_source=docs">
+    <img style="border-width:0px;" src="https://cdn2.hubspot.net/hubfs/330046/docs-graphics/ASB-docs-left-rail.png" />
+  </a>
+  <br/><br/><br/>
+</div>
 
         </div>
       </div>
@@ -286,18 +333,21 @@
     var banner = '';
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
-    
+    /*
       var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
-        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
-        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '<p style="font-size: 1.5rem;text-align: center;">' +
+        'Take the <a href="https://www.surveymonkey.com/r/P9Q2SNG">Ansible Project Survey 2024</a>!' +
         '</p>' +
+        '<p style="padding-bottom: 1.2rem;text-align: center">' +
+          'We want to hear from you! Help us gain insights into the state of the Ansible ecosystem.' +
+          '</p>' +
       '</div>';
-    
+    */
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
       document.write('<div id="testing_banner_id" class="admonition important">' +
-                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/ansible/latest/">official documentation website</a>.</p> <p></p>' +
                      '</div>');
     }
     
@@ -306,28 +356,20 @@
 
       var important = false;
       var msg = '<p>';
-      if (startsWith(current_url_path, "/projects/ansible-core/")) {
-        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
-        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
-      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+      if (startsWith(current_url_path, "/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="/ansible/latest">the latest documentation</a>.';
+      } else if (startsWithOneOf(current_url_path, ["/ansible/latest/", "/ansible/11/"])) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
-
-      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+      } else if (startsWith(current_url_path, "/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
-      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+      } else if (startsWith(current_url_path, "/ansible/devel/")) {
         /* temp extra banner to advertise something */
         banner += extra_banner;
 
         msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
-        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
       } else {
         msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
         /* temp extra banner to advertise something - this is for testing*/
@@ -355,7 +397,7 @@
 <h1>community.proxmox.proxmox_pool_member module – Add or delete members from Proxmox VE cluster pools<a class="headerlink" href="#community-proxmox-proxmox-pool-member-module-add-or-delete-members-from-proxmox-ve-cluster-pools" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxmox/">community.proxmox collection</a> (version 1.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxmox/">community.proxmox collection</a> (version 1.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -422,6 +464,14 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-api_timeout"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-pool-member-module-parameter-api-timeout"><strong>api_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-api_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Time limit for requests towards the Proxmox VE API.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">5</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_token_id"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-pool-member-module-parameter-api-token-id"><strong>api_token_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_token_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -429,7 +479,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_TOKEN_ID"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_TOKEN_ID</span></code></a> environment variable if not specified.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_token_secret"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-pool-member-module-parameter-api-token-secret"><strong>api_token_secret</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_token_secret" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -437,12 +487,20 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_TOKEN_SECRET"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_TOKEN_SECRET</span></code></a> environment variable if not specified.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_user"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-pool-member-module-parameter-api-user"><strong>api_user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specify the user to authenticate with.</p>
 <p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_USER</span></code></a> environment variable if not specified.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ca_path"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-pool-member-module-parameter-ca-path"><strong>ca_path</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ca_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Path to a local certificate, which will be used to verify TLS connections.</p>
+<p>Ignored if <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-pool-member-module-parameter-validate-certs"><span class="std std-ref"><span class="pre">validate_certs=false</span></span></a></code>.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -491,12 +549,12 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-pool-member-module-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>If <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code>, SSL certificates will not be validated.</p>
-<p>This should only be used on personally controlled sites using self-signed certificates.</p>
+<td><div class="ansible-option-cell"><p>Validate the TLS certificates used for the connection to the Proxmox VE API.</p>
+<p>Currently defaults to <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> and changes default to <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> with community.proxmox 2.0.0.</p>
 <p>Uses the <code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_VALIDATE_CERTS</span></code> environment variable if not specified.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
@@ -645,14 +703,14 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="proxmox_pool_module.html" class="btn btn-neutral float-left" title="community.proxmox.proxmox_pool module – Pool management for Proxmox VE cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="proxmox_sendkey_module.html" class="btn btn-neutral float-right" title="community.proxmox.proxmox_sendkey module – Send key presses to a Proxmox VM console" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="proxmox_role_module.html" class="btn btn-neutral float-right" title="community.proxmox.proxmox_role module – Role management for Proxmox VE cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 02, 2026.
+      <span class="lastupdated">Last updated on Mar 11, 2026.
       </span></p>
   </div>
 
