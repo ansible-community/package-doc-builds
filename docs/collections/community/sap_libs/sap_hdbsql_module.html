@@ -357,7 +357,7 @@
 <h1>community.sap_libs.sap_hdbsql module – Ansible Module to execute SQL on SAP HANA<a class="headerlink" href="#community-sap-libs-sap-hdbsql-module-ansible-module-to-execute-sql-on-sap-hana" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/sap_libs/">community.sap_libs collection</a> (version 1.6.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/sap_libs/">community.sap_libs collection</a> (version 1.7.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -459,6 +459,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-properties"></div><p class="ansible-option-title" id="ansible-collections-community-sap-libs-sap-hdbsql-module-parameter-properties"><strong>properties</strong></p>
+<a class="ansibleOptionLink" href="#parameter-properties" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Sets SQLDBC connect options e.g. sqlMode=SAPR3</p>
+<p>Must be a string or list containing strings.</p>
+<p>See SAP HANA documentation for list of available options.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-query"></div><p class="ansible-option-title" id="ansible-collections-community-sap-libs-sap-hdbsql-module-parameter-query"><strong>query</strong></p>
 <a class="ansibleOptionLink" href="#parameter-query" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -466,14 +475,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Must be a string or list containing strings. Please note that if you supply a string, it will be split by commas (<code class="docutils literal notranslate"><span class="pre">,</span></code>) to a list. It is better to supply a one-element list instead to avoid mangled input.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-sid"></div><p class="ansible-option-title" id="ansible-collections-community-sap-libs-sap-hdbsql-module-parameter-sid"><strong>sid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-sid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The system ID.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-community-sap-libs-sap-hdbsql-module-parameter-user"><strong>user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -481,7 +490,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;SYSTEM&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-userstore"></div><p class="ansible-option-title" id="ansible-collections-community-sap-libs-sap-hdbsql-module-parameter-userstore"><strong>userstore</strong></p>
 <a class="ansibleOptionLink" href="#parameter-userstore" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -501,7 +510,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>Does not support <code class="docutils literal notranslate"><span class="pre">check_mode</span></code>. Always reports that the state has changed even if no changes have been made.</p></li>
+<li><p>Does not support <code class="docutils literal notranslate"><span class="pre">check_mode</span></code>.</p></li>
+<li><p>If filepath is used, changed is true. If query is used, changed is true if it is not a SELECT.</p></li>
+<li><p>Avoid using login shell flags (like ‘become_flags’ with value of ‘-i’) when become_user is a SAP admin.</p></li>
+<li><p>If a login shell is required, manually reset the environment in the task using the environment keyword.</p></li>
 </ul>
 </div>
 </section>
@@ -564,6 +576,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">select user_name from users</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">select * from users</span>
 <span class="w">    </span><span class="nt">autocommit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run query with SQLDBC connect options</span>
+<span class="w">  </span><span class="nt">community.sap_libs.sap_hdbsql</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">sid</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hdb&quot;</span>
+<span class="w">    </span><span class="nt">instance</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;01&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Test123&quot;</span>
+<span class="w">    </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">select user_name from users</span>
+<span class="w">    </span><span class="nt">properties</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;sqlMode=SAPR3&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;sslHostNameInCertificate=hana.example.com&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -618,7 +640,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 13, 2026.
+      <span class="lastupdated">Last updated on Mar 14, 2026.
       </span></p>
   </div>
 
