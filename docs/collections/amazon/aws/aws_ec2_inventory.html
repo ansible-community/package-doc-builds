@@ -335,7 +335,7 @@
 <h1>amazon.aws.aws_ec2 inventory – EC2 inventory source<a class="headerlink" href="#amazon-aws-aws-ec2-inventory-ec2-inventory-source" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/amazon/aws/">amazon.aws collection</a> (version 11.1.0).</p>
+<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/amazon/aws/">amazon.aws collection</a> (version 11.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -862,8 +862,8 @@ see <a class="reference internal" href="#ansible-collections-amazon-aws-aws-ec2-
 <a class="ansibleOptionLink" href="#parameter-use_contrib_script_compatible_ec2_tag_keys" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in amazon.aws 1.5.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Expose the host tags with ec2_tag_TAGNAME keys like the old ec2.py inventory script.</p>
-<p>The use of this feature is discouraged and we advise to migrate to the new ``tags`` structure.</p>
+<td><div class="ansible-option-cell"><p>Expose the host tags with <code class="docutils literal notranslate"><span class="pre">ec2_tag_TAGNAME</span></code> keys like the old <code class="docutils literal notranslate"><span class="pre">ec2.py</span></code> inventory script.</p>
+<p>The use of this feature is deprecated and will be removed in a release after 2026-12-01. Use the <code class="docutils literal notranslate"><span class="pre">ec2_tags</span></code> structure instead (e.g. use <code class="docutils literal notranslate"><span class="pre">ec2_tags.TAGNAME</span></code> rather than <code class="docutils literal notranslate"><span class="pre">ec2_tag_TAGNAME</span></code>).</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -875,9 +875,10 @@ see <a class="reference internal" href="#ansible-collections-amazon-aws-aws-ec2-
 <div class="ansibleOptionAnchor" id="parameter-use_contrib_script_compatible_sanitization"></div><p class="ansible-option-title" id="ansible-collections-amazon-aws-aws-ec2-inventory-parameter-use-contrib-script-compatible-sanitization"><strong>use_contrib_script_compatible_sanitization</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_contrib_script_compatible_sanitization" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>By default this plugin is using a general group name sanitization to create safe and usable group names for use in Ansible. This option allows you to override that, in efforts to allow migration from the old inventory script and matches the sanitization of groups when the script’s ``replace_dash_in_groups`` option is set to ``False``. To replicate behavior of ``replace_dash_in_groups = True`` with constructed groups, you will need to replace hyphens with underscores via the regex_replace filter for those entries.</p>
+<td><div class="ansible-option-cell"><p>By default this plugin is using a general group name sanitization to create safe and usable group names for use in Ansible. This option allows you to override that, in efforts to allow migration from the old <code class="docutils literal notranslate"><span class="pre">ec2.py</span></code> inventory script and matches the sanitization of groups when the script’s ``replace_dash_in_groups`` option is set to ``False``. To replicate behavior of ``replace_dash_in_groups = True`` with constructed groups, you will need to replace hyphens with underscores via the regex_replace filter for those entries.</p>
 <p>For this to work you should also turn off the TRANSFORM_INVALID_GROUP_CHARS setting, otherwise the core engine will just use the standard sanitization on top.</p>
 <p>This is not the default as such names break certain functionality as not all characters are valid Python identifiers which group names end up being used as.</p>
+<p>The use of this feature is deprecated and will be removed in a release after 2026-12-01. Use Ansible’s default group name sanitization instead.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -938,6 +939,10 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p>If no credentials are provided and the control node has an associated IAM instance profile then the role will be used for authentication.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tags</span></code> host variable is deprecated and will be removed in a release after 2026-12-01. Use <code class="docutils literal notranslate"><span class="pre">ec2_tags</span></code> instead to avoid conflicts with Ansible reserved variable names.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ec2_tags</span></code> host variable was added in version 11.2.0.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">use_contrib_script_compatible_ec2_tag_keys</span></code> option is deprecated and will be removed in a release after 2026-12-01. Use the <code class="docutils literal notranslate"><span class="pre">ec2_tags</span></code> structure instead (e.g. use <code class="docutils literal notranslate"><span class="pre">ec2_tags.TAGNAME</span></code> rather than <code class="docutils literal notranslate"><span class="pre">ec2_tag_TAGNAME</span></code>).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">use_contrib_script_compatible_sanitization</span></code> option is deprecated and will be removed in a release after 2026-12-01. Use Ansible’s default group name sanitization instead.</p></li>
 <li><p>Inventories are not finalized at this stage, so the auto populated <code class="docutils literal notranslate"><span class="pre">all</span></code> and <code class="docutils literal notranslate"><span class="pre">ungrouped</span></code> groups will only reflect what previous inventory sources explicitly added to them.</p></li>
 <li><p>Runtime ‘magic variables’ are not available during inventory construction. For example, <code class="docutils literal notranslate"><span class="pre">groups</span></code> and <code class="docutils literal notranslate"><span class="pre">hostvars</span></code> do not exist yet.</p></li>
 <li><p><strong>Caution:</strong> For modules, environment variables and configuration files are read from the Ansible ‘host’ context and not the ‘controller’ context. As such, files may need to be explicitly copied to the ‘host’. For lookup and connection plugins, environment variables and configuration files are read from the Ansible ‘controller’ context and not the ‘host’ context.</p></li>
@@ -1008,7 +1013,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 <span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;architecture&#39;</span>
 <span class="w">  </span><span class="c1"># Add hosts to tag_Name_Value groups for each Name/Value tag pair</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tag</span>
-<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tags</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ec2_tags</span>
 <span class="w">  </span><span class="c1"># Add hosts to e.g. instance_type_z3_tiny</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instance_type</span>
 <span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instance_type</span>
@@ -1016,13 +1021,13 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;security_groups|json_query(&quot;[].group_id&quot;)&#39;</span>
 <span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;security_groups&#39;</span>
 <span class="w">  </span><span class="c1"># Create a group for each value of the Application tag</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tags.Application</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ec2_tags.Application</span>
 <span class="w">    </span><span class="nt">separator</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
 <span class="w">  </span><span class="c1"># Create a group per region e.g. aws_region_us_east_2</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">placement.region</span>
 <span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws_region</span>
 <span class="w">  </span><span class="c1"># Create a group (or groups) based on the value of a custom tag &quot;Role&quot; and add them to a metagroup called &quot;project&quot;</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tags[&#39;Role&#39;]</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ec2_tags[&#39;Role&#39;]</span>
 <span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
 <span class="w">    </span><span class="nt">parent_group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;project&quot;</span>
 <span class="c1"># Set individual variables with compose</span>
@@ -1060,7 +1065,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 <span class="w">  </span><span class="nt">instance-state-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">running</span>
 <span class="nt">keyed_groups</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tag</span>
-<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tags</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ec2_tags</span>
 <span class="nt">compose</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">ansible_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">public_dns_name</span>
 <span class="nt">groups</span><span class="p">:</span>
@@ -1138,7 +1143,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 17, 2026.
+      <span class="lastupdated">Last updated on Mar 18, 2026.
       </span></p>
   </div>
 
