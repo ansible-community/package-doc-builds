@@ -399,11 +399,11 @@ fooservers.yml
 For example, you can place platform-specific tasks in separate files and refer to them in the <code class="docutils literal notranslate"><span class="pre">tasks/main.yml</span></code> file:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># roles/example/tasks/main.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install the correct web server for RHEL</span>
-<span class="w">  </span><span class="nt">import_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redhat.yml</span>
+<span class="w">  </span><span class="nt">ansible.builtin.import_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redhat.yml</span>
 <span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;]|lower == &#39;redhat&#39;</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install the correct web server for Debian</span>
-<span class="w">  </span><span class="nt">import_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debian.yml</span>
+<span class="w">  </span><span class="nt">ansible.builtin.import_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debian.yml</span>
 <span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;]|lower == &#39;debian&#39;</span>
 
 <span class="c1"># roles/example/tasks/redhat.yml</span>
@@ -421,7 +421,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 </div>
 <p>Or call those tasks directly when loading the role, which bypasses the <code class="docutils literal notranslate"><span class="pre">main.yml</span></code> files:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">include apt tasks</span>
-<span class="w">  </span><span class="nt">include_role</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ansible.builtin.include_role</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">package_manager_bootstrap</span>
 <span class="w">      </span><span class="nt">tasks_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apt.yml</span>
 <span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;] == &#39;Debian&#39;</span>
@@ -543,7 +543,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;this</span><span class="nv"> </span><span class="s">task</span><span class="nv"> </span><span class="s">runs</span><span class="nv"> </span><span class="s">before</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">role&quot;</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Include the example role</span>
-<span class="w">      </span><span class="nt">include_role</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">ansible.builtin.include_role</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
@@ -556,7 +556,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Include the foo_app_instance role</span>
-<span class="w">      </span><span class="nt">include_role</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">ansible.builtin.include_role</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo_app_instance</span>
 <span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/opt/a&#39;</span>
@@ -571,7 +571,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Include the some_role role</span>
-<span class="w">      </span><span class="nt">include_role</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">ansible.builtin.include_role</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some_role</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ansible_facts[&#39;os_family&#39;]</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;RedHat&#39;&quot;</span>
 </pre></div>
@@ -588,7 +588,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;before</span><span class="nv"> </span><span class="s">we</span><span class="nv"> </span><span class="s">run</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">role&quot;</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Import the example role</span>
-<span class="w">      </span><span class="nt">import_role</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">ansible.builtin.import_role</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
@@ -601,7 +601,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Import the foo_app_instance role</span>
-<span class="w">      </span><span class="nt">import_role</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">ansible.builtin.import_role</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo_app_instance</span>
 <span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/opt/a&#39;</span>
@@ -1082,7 +1082,7 @@ Alongside the ‘tasks’ and ‘handlers’ structure of a role, add a director
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Mar 30, 2026.
+      <span class="lastupdated">Last updated on Mar 31, 2026.
       </span></p>
   </div>
 
