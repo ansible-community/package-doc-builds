@@ -1593,8 +1593,9 @@ Environment variables used by the ansible-core configuration are documented in <
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-ANSIBLE_HOST_KEY_AUTO_ADD">
 <span class="sig-name descname"><span class="pre">ANSIBLE_HOST_KEY_AUTO_ADD</span></span><a class="headerlink" href="#envvar-ANSIBLE_HOST_KEY_AUTO_ADD" title="Link to this definition"></a></dt>
-<dd><p>By default, Ansible will prompt the user before adding SSH keys to the known hosts file. Since persistent connections such as network_cli run in background processes, the user will never be prompted. By enabling this option, unknown host keys will automatically be added to the known hosts file.</p>
-<p>Be sure to fully understand the security implications of enabling this option on production systems as it could create a security vulnerability.</p>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, unknown host keys are automatically added to the user known_hosts file and saved on connection close, so the first connection to a new host works without manual intervention (e.g. no need to run ssh-keyscan or set config).</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">false</span></code>, Ansible would prompt before adding; since network_cli uses persistent connections (background processes), the user cannot respond, so connection fails for new hosts unless the key is already in known_hosts.</p>
+<p>Set to <code class="docutils literal notranslate"><span class="pre">false</span></code> if you need to avoid automatically trusting new host keys (e.g. on production systems where you manage known_hosts separately).</p>
 <p><em>Used by:</em>
 <a class="reference internal" href="ansible/netcommon/network_cli_connection.html#ansible-collections-ansible-netcommon-network-cli-connection"><span class="std std-ref">ansible.netcommon.network_cli connection plugin</span></a></p>
 </dd></dl>
@@ -2366,7 +2367,7 @@ Environment variables used by the ansible-core configuration are documented in <
 <span class="sig-name descname"><span class="pre">ANSIBLE_NETWORK_CLI_SSH_TYPE</span></span><a class="headerlink" href="#envvar-ANSIBLE_NETWORK_CLI_SSH_TYPE" title="Link to this definition"></a></dt>
 <dd><p>The python package that will be used by the <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> connection plugin to create a SSH connection to remote host.</p>
 <p><em>libssh</em> will use the ansible-pylibssh package, which needs to be installed in order to work.</p>
-<p><em>paramiko</em> will instead use the paramiko package to manage the SSH connection.</p>
+<p><em>paramiko</em> will instead use the paramiko package to manage the SSH connection. This option is deprecated and will be removed in a release after 2028-02-01. Migrate to <em>libssh</em> by installing the ansible-pylibssh package.</p>
 <p><em>auto</em> will use ansible-pylibssh if that package is installed, otherwise will fallback to paramiko.</p>
 <p><em>Used by:</em>
 <a class="reference internal" href="ansible/netcommon/network_cli_connection.html#ansible-collections-ansible-netcommon-network-cli-connection"><span class="std std-ref">ansible.netcommon.network_cli connection plugin</span></a></p>
@@ -6033,7 +6034,7 @@ Environment variables used by the ansible-core configuration are documented in <
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 13, 2026.
+      <span class="lastupdated">Last updated on Apr 14, 2026.
       </span></p>
   </div>
 
