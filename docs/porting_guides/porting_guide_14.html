@@ -1,0 +1,823 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansible 14 Porting Guide &mdash; Ansible Community Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=b54c304f" />
+      <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/rtd-ethical-ads.css?v=289b023e" />
+
+  
+    <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.png"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/porting_guides/porting_guide_14.html"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ansible 13 Porting Guide" href="porting_guide_13.html" />
+    <link rel="prev" title="Ansible Porting Guides" href="porting_guides.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+    <li><a href="https://forum.ansible.com/" target="_blank">Ansible community forum</a></li>
+    <li><a href="https://docs.ansible.com/" target="_blank">Documentation</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Community Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ansible
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started_ee/index.html">Getting started with Execution Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="porting_guides.html">Ansible Porting Guides</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible 14 Porting Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v14-0-0a2">Porting Guide for v14.0.0a2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#deprecated-features">Deprecated Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v14-0-0a1">Porting Guide for v14.0.0a1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#added-collections">Added Collections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#known-issues">Known Issues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#major-changes">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#removed-collections">Removed Collections</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#removed-features">Removed Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Deprecated Features</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_13.html">Ansible 13 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_12.html">Ansible 12 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_11.html">Ansible 11 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_10.html">Ansible 10 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_9.html">Ansible 9 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_8.html">Ansible 8 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_7.html">Ansible 7 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_6.html">Ansible 6 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_5.html">Ansible 5 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_4.html">Ansible 4 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_3.html">Ansible 3 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.10.html">Ansible 2.10 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.9.html">Ansible 2.9 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.8.html">Ansible 2.8 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.7.html">Ansible 2.7 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.6.html">Ansible 2.6 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.5.html">Ansible 2.5 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.4.html">Ansible 2.4 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.3.html">Ansible 2.3 Porting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_guide_2.0.html">Ansible 2.0 Porting Guide</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../inventory_guide/index.html">Building Ansible inventories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_guide/index.html">Using Ansible command line tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook_guide/index.html">Using Ansible playbooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="porting_guides.html">Ansible Porting Guides</a></li>
+      <li class="breadcrumb-item active">Ansible 14 Porting Guide</li>
+  <li class="wy-breadcrumbs-aside">
+            <!-- Remove main index page as it is no longer editable -->
+            
+              <a href="https://github.com/ansible/ansible-documentation/edit/devel/docs/docsite/rst/porting_guides/porting_guide_14.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="ansible-14-porting-guide">
+<span id="porting-14-guide"></span><h1><a class="toc-backref" href="#id14" role="doc-backlink">Ansible 14 Porting Guide</a><a class="headerlink" href="#ansible-14-porting-guide" title="Link to this heading"></a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ansible-14-porting-guide" id="id14">Ansible 14 Porting Guide</a></p>
+<ul>
+<li><p><a class="reference internal" href="#porting-guide-for-v14-0-0a2" id="id15">Porting Guide for v14.0.0a2</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v14-0-0a1" id="id16">Porting Guide for v14.0.0a1</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>Ansible 14 is based on Ansible-core 2.21.</p>
+<p>We suggest you read this page along with the <a class="reference external" href="https://github.com/ansible-community/ansible-build-data/blob/main/14/CHANGELOG-v14.md">Ansible 14 Changelog</a> to understand what updates you may need to make.</p>
+<section id="porting-guide-for-v14-0-0a2">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Porting Guide for v14.0.0a2</a><a class="headerlink" href="#porting-guide-for-v14-0-0a2" title="Link to this heading"></a></h2>
+<section id="deprecated-features">
+<h3>Deprecated Features<a class="headerlink" href="#deprecated-features" title="Link to this heading"></a></h3>
+<section id="ansible-netcommon">
+<h4>ansible.netcommon<a class="headerlink" href="#ansible-netcommon" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>network_cli - The in-collection paramiko support (used when ssh_type is paramiko) is a compatibility layer for environments where ansible-core’s paramiko connection is no longer available. This layer is deprecated and will be removed in a release after 2028-02-01. Migrate to ssh_type=libssh by installing the ansible-pylibssh package.</p></li>
+</ul>
+</section>
+<section id="community-routeros">
+<h4>community.routeros<a class="headerlink" href="#community-routeros" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>api_modify - all existing <code class="docutils literal notranslate"><span class="pre">numbers</span></code> fields are deprecated for writing and support for them will be removed in community.routeros 4.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/460">https://github.com/ansible-collections/community.routeros/pull/460</a>).</p></li>
+<li><p>api_modify - in <code class="docutils literal notranslate"><span class="pre">routing</span> <span class="pre">bfd</span> <span class="pre">configuration</span></code>, the fields <code class="docutils literal notranslate"><span class="pre">copy-from</span></code> and <code class="docutils literal notranslate"><span class="pre">place-before</span></code> are deprecated for writing and support for them will be removed in community.routeros 4.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/460">https://github.com/ansible-collections/community.routeros/pull/460</a>).</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="porting-guide-for-v14-0-0a1">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">Porting Guide for v14.0.0a1</a><a class="headerlink" href="#porting-guide-for-v14-0-0a1" title="Link to this heading"></a></h2>
+<section id="added-collections">
+<h3>Added Collections<a class="headerlink" href="#added-collections" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>community.clickhouse (version 2.1.0)</p></li>
+<li><p>graphiant.naas (version 26.3.0)</p></li>
+<li><p>pcg.alpaca_operator (version 2.2.0)</p></li>
+</ul>
+</section>
+<section id="known-issues">
+<h3>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading"></a></h3>
+<section id="community-docker">
+<h4>community.docker<a class="headerlink" href="#community-docker" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>docker_image, docker_image_export - idempotency for archiving images depends on whether the image IDs used by the image storage backend correspond to the IDs used in the tarball’s <code class="docutils literal notranslate"><span class="pre">manifest.json</span></code> files. The new default backend in Docker 29 apparently uses image IDs that no longer correspond, whence idempotency no longer works (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1199">https://github.com/ansible-collections/community.docker/pull/1199</a>).</p></li>
+</ul>
+</section>
+<section id="id1">
+<h4>community.routeros<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>api_modify - to create or modify entries in the <code class="docutils literal notranslate"><span class="pre">container</span></code> path, you need librouteros 4.0.0 or newer due to a bug preventing older versions from setting or modifying properties named <code class="docutils literal notranslate"><span class="pre">cmd</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/issues/442">https://github.com/ansible-collections/community.routeros/issues/442</a>).</p></li>
+</ul>
+</section>
+<section id="dellemc-openmanage">
+<h4>dellemc.openmanage<a class="headerlink" href="#dellemc-openmanage" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Formal qualification of module ome_smart_fabric_info for Ansible Core version 2.19 is still pending.</p></li>
+<li><p>idrac_diagnostics - This module does not support export of diagnostics file to HTTP and HTTPS share via SOCKS proxy.</p></li>
+<li><p>idrac_license - Due to API limitation, proxy parameters are ignored during the import operation.</p></li>
+<li><p>idrac_license - The module will give different error messages for iDRAC9 and iDRAC10 when user imports license with invalid share name.</p></li>
+<li><p>idrac_os_deployment - The module continues to return a 200 response and marks the job as completed, even when an outdated date is supplied in the Expose duration.</p></li>
+<li><p>idrac_redfish_storage_controller - PatrolReadRatePercent attribute cannot be set in iDRAC10.</p></li>
+<li><p>idrac_server_config_profile - When attempting to revert iDRAC settings using a previously exported SCP file, the import operation will complete with errors if a new user was created after the export (Instead of restoring the system to its previous state, including the removal of newly added users).</p></li>
+<li><p>ome_smart_fabric_uplink - The module supported by OpenManage Enterprise Modular, however it does not allow the creation of multiple uplinks of the same name. If an uplink is created using the same name as an existing uplink, then the existing uplink is modified.</p></li>
+<li><p>redfish_storage_volume - Encryption type and block_io_size bytes will be read only property in iDRAC9 and iDRAC10 and hence the module ignores these parameters.</p></li>
+</ul>
+</section>
+</section>
+<section id="breaking-changes">
+<h3>Breaking Changes<a class="headerlink" href="#breaking-changes" title="Link to this heading"></a></h3>
+<section id="ansible-core">
+<h4>Ansible-core<a class="headerlink" href="#ansible-core" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>psrp - Changed the default of <code class="docutils literal notranslate"><span class="pre">negotiate_service</span></code> used to build the Kerberos Service Principal Name from <code class="docutils literal notranslate"><span class="pre">WSMAN</span></code> to <code class="docutils literal notranslate"><span class="pre">host</span></code>. This aligns the defaults to how the native PowerShell PSRemoting client works on Windows and ensures that Kerberos can be used by more Windows targets by default. No deprecation period is used for this change as <code class="docutils literal notranslate"><span class="pre">host</span></code> is a builtin SPN to Windows and should improve compatibility out of the box. To go back to the old behaviour for any reason, set <code class="docutils literal notranslate"><span class="pre">ansible_psrp_negotiate_service=WSMAN</span></code> in the host vars.</p></li>
+</ul>
+</section>
+<section id="community-aws">
+<h4>community.aws<a class="headerlink" href="#community-aws" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>community.aws collection - Due to the AWS SDKs announcing the end of support for Python less than 3.8 (<a class="reference external" href="https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/">https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/</a>), support for Python less than 3.8 by this collection has been deprecated and will be removed in release 10.0.0. (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2304">https://github.com/ansible-collections/community.aws/pull/2304</a>).</p></li>
+</ul>
+</section>
+<section id="community-mysql">
+<h4>community.mysql<a class="headerlink" href="#community-mysql" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Update imports from ansible.module_utils.six to use their python3 equivalent. This change will make this collection incompatible for managed hosts on python2.7.</p></li>
+</ul>
+</section>
+<section id="dellemc-enterprise-sonic">
+<h4>dellemc.enterprise_sonic<a class="headerlink" href="#dellemc-enterprise-sonic" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>sonic_qos_wred - Add support for yellow and red colors (<a class="reference external" href="https://github.com/ansible-collections/dellemc.enterprise_sonic/pull/574">https://github.com/ansible-collections/dellemc.enterprise_sonic/pull/574</a>).</p></li>
+</ul>
+</section>
+<section id="splunk-es">
+<h4>splunk.es<a class="headerlink" href="#splunk-es" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Removed deprecated modules that were scheduled for removal on 2024-09-01</p></li>
+<li><p>adaptive_response_notable_event - Use splunk.es.splunk_adaptive_response_notable_events instead</p></li>
+<li><p>correlation_search - Use splunk.es.splunk_correlation_searches instead</p></li>
+<li><p>data_input_monitor - Use splunk.es.splunk_data_inputs_monitor instead</p></li>
+<li><p>data_input_network - Use splunk.es.splunk_data_inputs_network instead</p></li>
+</ul>
+</section>
+</section>
+<section id="major-changes">
+<h3>Major Changes<a class="headerlink" href="#major-changes" title="Link to this heading"></a></h3>
+<section id="id2">
+<h4>Ansible-core<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">install</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install|download</span></code> - collections that declare a <code class="docutils literal notranslate"><span class="pre">requires_ansible</span></code> version that is not compatible with the running ansible-core version are now excluded from installation and download by default. In previous versions, ansible-galaxy would install such collections even if doing so resulted in an error at load time. To restore the previous behavior, set <code class="docutils literal notranslate"><span class="pre">COLLECTIONS_ON_ANSIBLE_VERSION_MISMATCH</span></code> to <code class="docutils literal notranslate"><span class="pre">ignore</span></code> in your configuration. (<a class="reference external" href="https://github.com/ansible/ansible/issues/78539">https://github.com/ansible/ansible/issues/78539</a>)</p></li>
+<li><p>action plugins - Actions can directly register variables at several precedence layers using the <code class="docutils literal notranslate"><span class="pre">register_host_variables</span></code> method on <code class="docutils literal notranslate"><span class="pre">ActionBase</span></code>. Previously, variable registration could only be simulated by user action plugins by returning <code class="docutils literal notranslate"><span class="pre">ansible_facts</span></code> with insecure fact injection.</p></li>
+<li><p>register projections - The <code class="docutils literal notranslate"><span class="pre">register</span></code> task keyword allows mapping multiple variable names to Jinja expressions to transform task results and other variables. The mapping form can replace many usages of <code class="docutils literal notranslate"><span class="pre">set_fact</span></code> and allows order-independent chained access to other variable expressions within the same task.</p></li>
+<li><p>task implicit object - A new <code class="docutils literal notranslate"><span class="pre">_task</span></code> implicit object is available for use in <code class="docutils literal notranslate"><span class="pre">register</span></code> and task conditional expressions (e.g., <code class="docutils literal notranslate"><span class="pre">failed_when</span></code>). The result of the current task can be accessed via the <code class="docutils literal notranslate"><span class="pre">_task.result</span></code> property, without the use of <code class="docutils literal notranslate"><span class="pre">register</span></code>. Under a loop, <code class="docutils literal notranslate"><span class="pre">_task.result</span></code> is the most recently completed result and <code class="docutils literal notranslate"><span class="pre">_task.loop_result</span></code> provides access to accumulated loop results. The <code class="docutils literal notranslate"><span class="pre">_task.polymorphic_result</span></code> property provides compatibility with classic name-only <code class="docutils literal notranslate"><span class="pre">register</span></code> in loops. The value is the result of the most recent loop iteration, then becomes the final list loop result once the loop is complete.</p></li>
+</ul>
+</section>
+<section id="amazon-aws">
+<h4>amazon.aws<a class="headerlink" href="#amazon-aws" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>amazon.aws collection - <code class="docutils literal notranslate"><span class="pre">awscli</span></code> version has been bumped to 1.34.0 (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2774">https://github.com/ansible-collections/amazon.aws/pull/2774</a>).</p></li>
+<li><p>amazon.aws collection - <code class="docutils literal notranslate"><span class="pre">botocore</span></code> and <code class="docutils literal notranslate"><span class="pre">boto3</span></code> versions have been bumped to 1.35.0 (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2774">https://github.com/ansible-collections/amazon.aws/pull/2774</a>).</p></li>
+<li><p>ec2_security_group - Support for passing nested lists of strings to <code class="docutils literal notranslate"><span class="pre">rules.cidr_ip</span></code> and <code class="docutils literal notranslate"><span class="pre">rules.cidr_ipv6</span></code> have been removed (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/issues/2777">https://github.com/ansible-collections/amazon.aws/issues/2777</a>).</p></li>
+<li><p>iam_user - Support for <code class="docutils literal notranslate"><span class="pre">iam_user</span></code> return key has been removed; only <code class="docutils literal notranslate"><span class="pre">user</span></code> is now returned (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/issues/2777">https://github.com/ansible-collections/amazon.aws/issues/2777</a>).</p></li>
+<li><p>lambda_info - Support for <code class="docutils literal notranslate"><span class="pre">function</span></code> has been removed (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/issues/2777">https://github.com/ansible-collections/amazon.aws/issues/2777</a>).</p></li>
+<li><p>route53_info - Support for CamelCased lists (<code class="docutils literal notranslate"><span class="pre">ResourceRecordSets</span></code>, <code class="docutils literal notranslate"><span class="pre">HostedZones</span></code>, <code class="docutils literal notranslate"><span class="pre">HealthChecks</span></code>, <code class="docutils literal notranslate"><span class="pre">CheckerIpRanges</span></code>, <code class="docutils literal notranslate"><span class="pre">DelegationSets</span></code>, <code class="docutils literal notranslate"><span class="pre">HealthCheck</span></code>) have been removed (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/issues/2777">https://github.com/ansible-collections/amazon.aws/issues/2777</a>).</p></li>
+<li><p>s3_object - Support for <code class="docutils literal notranslate"><span class="pre">list</span></code> mode has been removed; use <code class="docutils literal notranslate"><span class="pre">s3_object_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/issues/2777">https://github.com/ansible-collections/amazon.aws/issues/2777</a>).</p></li>
+<li><p>s3_object - Support for passing the leading <code class="docutils literal notranslate"><span class="pre">/</span></code> has been removed (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/issues/2777">https://github.com/ansible-collections/amazon.aws/issues/2777</a>).</p></li>
+<li><p>s3_object_info - Support for passing <code class="docutils literal notranslate"><span class="pre">dualstack</span></code> and <code class="docutils literal notranslate"><span class="pre">endpoint_url</span></code> at the same time has been removed (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/issues/2777">https://github.com/ansible-collections/amazon.aws/issues/2777</a>).</p></li>
+</ul>
+</section>
+<section id="chocolatey-chocolatey">
+<h4>chocolatey.chocolatey<a class="headerlink" href="#chocolatey-chocolatey" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>win_chocolatey - add option to ignore pinned status of pinned packages</p></li>
+</ul>
+</section>
+<section id="id3">
+<h4>community.aws<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>community.aws collection - <code class="docutils literal notranslate"><span class="pre">awscli</span></code> version has been bumped to 1.34.0 (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2375">https://github.com/ansible-collections/community.aws/pull/2375</a>).</p></li>
+<li><p>community.aws collection - <code class="docutils literal notranslate"><span class="pre">botocore</span></code> and <code class="docutils literal notranslate"><span class="pre">boto3</span></code> versions have been bumped to 1.35.0 (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2375">https://github.com/ansible-collections/community.aws/pull/2375</a>).</p></li>
+</ul>
+</section>
+<section id="community-proxmox">
+<h4>community.proxmox<a class="headerlink" href="#community-proxmox" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>proxmox - Add ca_path option to specify a ca-certificate for tls validation (<a class="reference external" href="https://github.com/ansible-collections/community.proxmox/pull/256">https://github.com/ansible-collections/community.proxmox/pull/256</a>).</p></li>
+</ul>
+</section>
+<section id="id4">
+<h4>community.routeros<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>api_info, api_modify - multiple parameters can no longer be disabled for the``tool netwatch`` path (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/433">https://github.com/ansible-collections/community.routeros/pull/433</a>).</p></li>
+<li><p>api_info, api_modify - parameter <code class="docutils literal notranslate"><span class="pre">name-format</span></code> can no longer be disabled for the <code class="docutils literal notranslate"><span class="pre">interface</span> <span class="pre">wifi</span> <span class="pre">provisioning</span></code> path (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/433">https://github.com/ansible-collections/community.routeros/pull/433</a>).</p></li>
+<li><p>api_info, api_modify - parameter <code class="docutils literal notranslate"><span class="pre">script</span></code> can no longer be disabled for the <code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">dhcp-client</span></code> path (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/433">https://github.com/ansible-collections/community.routeros/pull/433</a>).</p></li>
+</ul>
+</section>
+<section id="community-vmware">
+<h4>community.vmware<a class="headerlink" href="#community-vmware" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Bump required <code class="docutils literal notranslate"><span class="pre">vmware.vmware</span></code> collection version to 2.5.0 (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2503">https://github.com/ansible-collections/community.vmware/pull/2503</a>).</p></li>
+</ul>
+</section>
+<section id="containers-podman">
+<h4>containers.podman<a class="headerlink" href="#containers-podman" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Add podman Quadlet modules</p></li>
+<li><p>Rewrite podman and buildah connections</p></li>
+</ul>
+</section>
+<section id="fortinet-fortios">
+<h4>fortinet.fortios<a class="headerlink" href="#fortinet-fortios" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Supported new versions 7.6.5 and 7.6.6.</p></li>
+<li><p>Updated the Q&amp;A for using the default_group feature in modules.</p></li>
+</ul>
+</section>
+<section id="kaytus-ksmanage">
+<h4>kaytus.ksmanage<a class="headerlink" href="#kaytus-ksmanage" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Add new modules upload_ssl,ssl_info,generate_ssl. (<a class="reference external" href="https://github.com/ieisystem/kaytus.ksmanage/pull/34">https://github.com/ieisystem/kaytus.ksmanage/pull/34</a>).</p></li>
+<li><p>Change the name of the used SDK. (<a class="reference external" href="https://github.com/ieisystem/kaytus.ksmanage/pull/37">https://github.com/ieisystem/kaytus.ksmanage/pull/37</a>).</p></li>
+<li><p>Modify the URL address path when the owner is changed. (<a class="reference external" href="https://github.com/ieisystem/kaytus.ksmanage/pull/38">https://github.com/ieisystem/kaytus.ksmanage/pull/38</a>).</p></li>
+<li><p>The edit_m6_log_setting.py module has added the ‘server_status’ attribute; The edit_network_bond.py module modifies the attribute descriptions; The edit_snmp.py and edit_snmp_trap.py module modifies the allowable value ranges for the auth_protocol and priv_protocol attributes. (<a class="reference external" href="https://github.com/ieisystem/kaytus.ksmanage/pull/33">https://github.com/ieisystem/kaytus.ksmanage/pull/33</a>).</p></li>
+</ul>
+</section>
+<section id="netapp-ontap">
+<h4>netapp.ontap<a class="headerlink" href="#netapp-ontap" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>na_ontap_autoupdate_config - REST only support for managing configurations for automatic updates, requires ONTAP 9.10.1 or later.</p></li>
+<li><p>na_ontap_cg - REST only support for managing consistency groups, requires ONTAP 9.10.1 or later.</p></li>
+<li><p>na_ontap_cifs - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cifs_acl - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cifs_local_group - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cifs_local_group_member - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cifs_local_user - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cifs_local_user_set_password - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cifs_privileges - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cifs_server - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cifs_unix_symlink_mapping - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_cluster_peer - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_igroup - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_igroup_initiator - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_interface - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_lun - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_lun_copy - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_lun_map - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_lun_map_reporting_nodes - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_s3_buckets - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_s3_groups - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_s3_policies - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_s3_services - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_s3_users - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_snapmirror - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_snapshot - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_svm - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_volume_autosize - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_volume_clone - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_vserver_peer - AWS Lambda support added to the module.</p></li>
+</ul>
+</section>
+<section id="id5">
+<h4>splunk.es<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Bumped the minimum supported Ansible version to <code class="docutils literal notranslate"><span class="pre">&gt;=2.17.0</span></code> (Ansible 2.15/2.16 are EoL).</p></li>
+</ul>
+</section>
+<section id="vmware-vmware">
+<h4>vmware.vmware<a class="headerlink" href="#vmware-vmware" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">ansible.module_utils._text</span></code> (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware/issues/268">https://github.com/ansible-collections/vmware.vmware/issues/268</a>).</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.common._collections_compat</span></code> (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware/issues/271">https://github.com/ansible-collections/vmware.vmware/issues/271</a>).</p></li>
+</ul>
+</section>
+</section>
+<section id="removed-collections">
+<h3>Removed Collections<a class="headerlink" href="#removed-collections" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>awx.awx (previously included version: 24.6.1)</p></li>
+<li><p>cisco.dnac (previously included version: 6.41.0)</p></li>
+<li><p>junipernetworks.junos (previously included version: 11.0.0)</p></li>
+</ul>
+<p>You can still install a removed collection manually with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">&lt;name-of-collection&gt;</span></code>.</p>
+</section>
+<section id="removed-features">
+<h3>Removed Features<a class="headerlink" href="#removed-features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The awx.awx collection has been removed from Ansible 14.
+The collection is undergoing a heavy <a class="reference external" href="https://forum.ansible.com/t/7404">refactoring</a> and currently does not align with the standards for the community package.
+See <a class="reference external" href="https://forum.ansible.com/t/44706">the removal discussion</a> for details.
+Users can still install this collection with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">awx.awx</span></code>.</p></li>
+<li><p>The deprecated <code class="docutils literal notranslate"><span class="pre">cisco.dnac</span></code> collection has been removed (<a class="reference external" href="https://forum.ansible.com/t/45609">https://forum.ansible.com/t/45609</a>).</p></li>
+<li><p>The deprecated <code class="docutils literal notranslate"><span class="pre">junipernetworks.junos</span></code> collection has been removed (<a class="reference external" href="https://forum.ansible.com/t/44869">https://forum.ansible.com/t/44869</a>).</p></li>
+</ul>
+<section id="id6">
+<h4>Ansible-core<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Removed ‘required’ option from get_bin_path API (<a class="reference external" href="https://github.com/ansible/ansible/issues/85998">https://github.com/ansible/ansible/issues/85998</a>).</p></li>
+<li><p>Removed deprecated <code class="docutils literal notranslate"><span class="pre">ansible.builtin.paramiko</span></code> connection plugin (<a class="reference external" href="https://github.com/ansible/ansible/issues/86002">https://github.com/ansible/ansible/issues/86002</a>). Setting the <code class="docutils literal notranslate"><span class="pre">connection</span></code> keyword to <code class="docutils literal notranslate"><span class="pre">persistent</span></code> or <code class="docutils literal notranslate"><span class="pre">smart</span></code> no longer attempts to use <code class="docutils literal notranslate"><span class="pre">paramiko</span></code>.</p></li>
+<li><p>Removed deprecated <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.compat.paramiko</span></code> (<a class="reference external" href="https://github.com/ansible/ansible/issues/86001">https://github.com/ansible/ansible/issues/86001</a>).</p></li>
+<li><p>Removed deprecated <code class="docutils literal notranslate"><span class="pre">handle_stats_and_callbacks</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">StrategyBase._load_included_file</span></code> method. (<a class="reference external" href="https://github.com/ansible/ansible/issues/86003">https://github.com/ansible/ansible/issues/86003</a>)</p></li>
+<li><p>Removed deprecated ability to import <code class="docutils literal notranslate"><span class="pre">datetime</span></code>, <code class="docutils literal notranslate"><span class="pre">signal</span></code>, <code class="docutils literal notranslate"><span class="pre">types</span></code>, <code class="docutils literal notranslate"><span class="pre">chain</span></code>, <code class="docutils literal notranslate"><span class="pre">repeat</span></code>, <code class="docutils literal notranslate"><span class="pre">map</span></code> and <code class="docutils literal notranslate"><span class="pre">shlex_quote</span></code> from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic</span></code>.</p></li>
+<li><p>compat.datetime - removed deprecated datetime compat APIs (<a class="reference external" href="https://github.com/ansible/ansible/issues/86000">https://github.com/ansible/ansible/issues/86000</a>).</p></li>
+<li><p>git - removed deprecated alias gpg_whitelist (<a class="reference external" href="https://github.com/ansible/ansible/issues/86004">https://github.com/ansible/ansible/issues/86004</a>).</p></li>
+<li><p>interpreter_discovery - removed auto_legacy and auto_legacy_slient options (<a class="reference external" href="https://github.com/ansible/ansible/issues/85995">https://github.com/ansible/ansible/issues/85995</a>).</p></li>
+<li><p>module_utils - Remove previously deprecated <code class="docutils literal notranslate"><span class="pre">safe_eval</span></code> function (#85996) (#85999)</p></li>
+</ul>
+</section>
+<section id="id7">
+<h4>splunk.es<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>adaptive_response_notable_event module has been removed. Use splunk.es.splunk_adaptive_response_notable_events resource module instead.</p></li>
+<li><p>correlation_search module has been removed. Use splunk.es.splunk_correlation_searches resource module instead.</p></li>
+<li><p>correlation_search_info module has been removed. Use splunk.es.splunk_correlation_search_info instead.</p></li>
+<li><p>data_input_monitor module has been removed. Use splunk.es.splunk_data_inputs_monitor resource module instead.</p></li>
+<li><p>data_input_network module has been removed. Use splunk.es.splunk_data_inputs_network resource module instead.</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h3>Deprecated Features<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">netapp.cloudmanager</span></code> collection is considered unmaintained and will be removed from Ansible 15 if no one starts maintaining it again before Ansible 15.
+See <a class="reference external" href="https://docs.ansible.com/projects/ansible/devel/community/collection_contributors/collection_package_removal.html#unmaintained-collections">Collections Removal Process for unmaintained collections</a> for more details, including for how this can be cancelled (<a class="reference external" href="https://forum.ansible.com/t/44891">https://forum.ansible.com/t/44891</a>).
+After removal, users can still install this collection with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">netapp.cloudmanager</span></code>.</p></li>
+</ul>
+<section id="id9">
+<h4>Ansible-core<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">get_all_subclasses()</span></code> function from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic</span></code> is deprecated and will be removed in ansible-core 2.24. Use <code class="docutils literal notranslate"><span class="pre">get_all_subclasses()</span></code> from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.common._utils</span></code> instead.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">get_platfrom()</span></code> function from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic</span></code> is deprecated and will be removed in ansible-core 2.24. Use <code class="docutils literal notranslate"><span class="pre">platform.system()</span></code> from the Python standard library instead.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">load_platform_subclass()</span></code> function from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic</span></code> is deprecated and will be removed in ansible-core 2.24. Use <code class="docutils literal notranslate"><span class="pre">get_platform_subclass()</span></code> from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.common.sys_info</span></code> instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PluginLoader</span></code> - Deprecate unused <code class="docutils literal notranslate"><span class="pre">aliases</span></code> attribute. Plugins in a collection should define aliases in the <code class="docutils literal notranslate"><span class="pre">meta/runtime.yml</span></code> file using the <code class="docutils literal notranslate"><span class="pre">redirect</span></code> field instead.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ansible.module_utils.six</span></code> - The <code class="docutils literal notranslate"><span class="pre">six</span></code> compatibility library provided at <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.six</span></code> is deprecated, and planned for removal in ansible-core 2.24</p></li>
+<li><p>apt_key - deprecate in favor of deb822_repository.</p></li>
+<li><p>apt_repository - deprecate in favor of deb822_repository.</p></li>
+<li><p>connection plugins - Added a soft deprecation on the connection attributes <code class="docutils literal notranslate"><span class="pre">has_native_async</span></code> and <code class="docutils literal notranslate"><span class="pre">always_pipeline_modules</span></code>. Connection plugins that wish to apply custom behaviour around pipelining should instead override the method <code class="docutils literal notranslate"><span class="pre">is_pipelining_enabled(self,</span> <span class="pre">wrap_async=False)</span></code> added in Ansible 2.19. For backwards compatibility no runtime deprecation warning is emitted but will be in the future.</p></li>
+</ul>
+</section>
+<section id="id10">
+<h4>amazon.aws<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>aws_ec2 - the <code class="docutils literal notranslate"><span class="pre">tags</span></code> host variable has been deprecated to avoid conflicts with Ansible reserved variable names and will be removed in a release after 2026-12-01. Use <code class="docutils literal notranslate"><span class="pre">ec2_tags</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2847">https://github.com/ansible-collections/amazon.aws/pull/2847</a>).</p></li>
+<li><p>aws_ec2 - the <code class="docutils literal notranslate"><span class="pre">use_contrib_script_compatible_ec2_tag_keys</span></code> option has been deprecated and will be removed in a release after 2026-12-01. Use the <code class="docutils literal notranslate"><span class="pre">ec2_tags</span></code> structure instead. (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2854">https://github.com/ansible-collections/amazon.aws/pull/2854</a>)</p></li>
+<li><p>aws_ec2 - the <code class="docutils literal notranslate"><span class="pre">use_contrib_script_compatible_sanitization</span></code> option has been deprecated and will be removed in a release after 2026-12-01. Use Ansible’s default group name sanitization instead. (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2854">https://github.com/ansible-collections/amazon.aws/pull/2854</a>)</p></li>
+<li><p>aws_rds - the <code class="docutils literal notranslate"><span class="pre">tags</span></code> host variable has been deprecated to avoid conflicts with Ansible reserved variable names and will be removed in a release after 2026-12-01. Use <code class="docutils literal notranslate"><span class="pre">rds_tags</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2847">https://github.com/ansible-collections/amazon.aws/pull/2847</a>).</p></li>
+<li><p>ec2_vpc_dhcp_option - the <code class="docutils literal notranslate"><span class="pre">dhcp_config</span></code> return value has been deprecated and will be removed in a release after 2026-12-01. Use <code class="docutils literal notranslate"><span class="pre">dhcp_options</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2772">https://github.com/ansible-collections/amazon.aws/pull/2772</a>).</p></li>
+<li><p>ec2_vpc_dhcp_option_info - the <code class="docutils literal notranslate"><span class="pre">dhcp_config</span></code> return value has been deprecated and will be removed in a release after 2026-12-01. Use <code class="docutils literal notranslate"><span class="pre">dhcp_options</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2772">https://github.com/ansible-collections/amazon.aws/pull/2772</a>).</p></li>
+<li><p>route53 - the <code class="docutils literal notranslate"><span class="pre">region</span></code> parameter for latency-based routing has been deprecated and will be removed in a release after 2027-06-01. The <code class="docutils literal notranslate"><span class="pre">routing_region</span></code> parameter behaves exactly as <code class="docutils literal notranslate"><span class="pre">region</span></code> behaves today and should be used instead (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/issues/2893">https://github.com/ansible-collections/amazon.aws/issues/2893</a>).</p></li>
+<li><p>route53 - the <code class="docutils literal notranslate"><span class="pre">values</span></code> key in the <code class="docutils literal notranslate"><span class="pre">resource_record_sets</span></code> return value has been deprecated in favor of <code class="docutils literal notranslate"><span class="pre">record_values</span></code> for Jinja2 compatibility. The <code class="docutils literal notranslate"><span class="pre">values</span></code> key will be removed in a release after 2026-12-01 (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2772">https://github.com/ansible-collections/amazon.aws/pull/2772</a>).</p></li>
+</ul>
+</section>
+<section id="id11">
+<h4>community.aws<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_acm_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">acm_certificate_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.acm_certificate_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_acm</span></code> for the <code class="docutils literal notranslate"><span class="pre">acm_certificate</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.acm_certificate</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_api_gateway_domain</span></code> for the <code class="docutils literal notranslate"><span class="pre">api_gateway_domain</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.api_gateway_domain</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_api_gateway</span></code> for the <code class="docutils literal notranslate"><span class="pre">api_gateway</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.api_gateway</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_application_scaling_policy</span></code> for the <code class="docutils literal notranslate"><span class="pre">application_autoscaling_policy</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.application_autoscaling_policy</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_batch_compute_environment</span></code> for the <code class="docutils literal notranslate"><span class="pre">batch_compute_environment</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.batch_compute_environment</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_batch_job_definition</span></code> for the <code class="docutils literal notranslate"><span class="pre">batch_job_definition</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.batch_job_definition</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_batch_job_queue</span></code> for the <code class="docutils literal notranslate"><span class="pre">batch_job_queue</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.batch_job_queue</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_codebuild</span></code> for the <code class="docutils literal notranslate"><span class="pre">codebuild_project</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.codebuild_project</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_codecommit</span></code> for the <code class="docutils literal notranslate"><span class="pre">codecommit_repository</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.codecommit_repository</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_codepipeline</span></code> for the <code class="docutils literal notranslate"><span class="pre">codepipeline</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.codepipeline</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_config_aggregation_authorization</span></code> for the <code class="docutils literal notranslate"><span class="pre">config_aggregation_authorization</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.config_aggregation_authorization</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_config_aggregator</span></code> for the <code class="docutils literal notranslate"><span class="pre">config_aggregator</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.config_aggregator</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_config_delivery_channel</span></code> for the <code class="docutils literal notranslate"><span class="pre">config_delivery_channel</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.config_delivery_channel</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_config_recorder</span></code> for the <code class="docutils literal notranslate"><span class="pre">config_recorder</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.config_recorder</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_config_rule</span></code> for the <code class="docutils literal notranslate"><span class="pre">config_rule</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.config_rule</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_direct_connect_confirm_connection</span></code> for the <code class="docutils literal notranslate"><span class="pre">directconnect_confirm_connection</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.directconnect_confirm_connection</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_direct_connect_connection</span></code> for the <code class="docutils literal notranslate"><span class="pre">directconnect_connection</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.directconnect_connection</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_direct_connect_gateway</span></code> for the <code class="docutils literal notranslate"><span class="pre">directconnect_gateway</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.directconnect_gateway</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_direct_connect_link_aggregation_group</span></code> for the <code class="docutils literal notranslate"><span class="pre">directconnect_link_aggregation_group</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.directconnect_link_aggregation_group</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_direct_connect_virtual_interface</span></code> for the <code class="docutils literal notranslate"><span class="pre">directconnect_virtual_interface</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.directconnect_virtual_interface</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_eks_cluster</span></code> for the <code class="docutils literal notranslate"><span class="pre">eks_cluster</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.eks_cluster</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_elasticbeanstalk_app</span></code> for the <code class="docutils literal notranslate"><span class="pre">elasticbeanstalk_app</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.elasticbeanstalk_app</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_glue_connection</span></code> for the <code class="docutils literal notranslate"><span class="pre">glue_connection</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.glue_connection</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_glue_crawler</span></code> for the <code class="docutils literal notranslate"><span class="pre">glue_crawler</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.glue_crawler</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_glue_job</span></code> for the <code class="docutils literal notranslate"><span class="pre">glue_job</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.glue_job</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_inspector_target</span></code> for the <code class="docutils literal notranslate"><span class="pre">inspector_target</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.inspector_target</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_kms_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">kms_key_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.kms_key_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_kms</span></code> for the <code class="docutils literal notranslate"><span class="pre">kms_key</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.kms_key</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_msk_cluster</span></code> for the <code class="docutils literal notranslate"><span class="pre">msk_cluster</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.msk_cluster</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_msk_config</span></code> for the <code class="docutils literal notranslate"><span class="pre">msk_config</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.msk_config</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_s3_bucket_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">s3_bucket_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.s3_bucket_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_s3_cors</span></code> for the <code class="docutils literal notranslate"><span class="pre">s3_cors</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.s3_cors</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_secret</span></code> for the <code class="docutils literal notranslate"><span class="pre">secretsmanager_secret</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.secretsmanager_secret</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_ses_identity_policy</span></code> for the <code class="docutils literal notranslate"><span class="pre">ses_identity_policy</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.ses_identity_policy</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_ses_identity</span></code> for the <code class="docutils literal notranslate"><span class="pre">ses_identity</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.ses_identity</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_ses_rule_set</span></code> for the <code class="docutils literal notranslate"><span class="pre">ses_rule_set</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.ses_rule_set</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_sgw_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">storagegateway_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.storagegateway_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_ssm_parameter_store</span></code> for the <code class="docutils literal notranslate"><span class="pre">ssm_parameter</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.ssm_parameter</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_step_functions_state_machine_execution</span></code> for the <code class="docutils literal notranslate"><span class="pre">stepfunctions_state_machine_execution</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.stepfunctions_state_machine_execution</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_step_functions_state_machine</span></code> for the <code class="docutils literal notranslate"><span class="pre">stepfunctions_state_machine</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.stepfunctions_state_machine</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_waf_condition</span></code> for the <code class="docutils literal notranslate"><span class="pre">waf_condition</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.waf_condition</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_waf_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">waf_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.waf_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_waf_rule</span></code> for the <code class="docutils literal notranslate"><span class="pre">waf_rule</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.waf_rule</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_waf_web_acl</span></code> for the <code class="docutils literal notranslate"><span class="pre">waf_web_acl</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.waf_web_acl</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">cloudfront_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">cloudfront_distribution_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.cloudfront_distribution_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">cloudtrail</span></code> for the <code class="docutils literal notranslate"><span class="pre">cloudtrail</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.cloudtrail</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_asg_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_group_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.autoscaling_group_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_asg_instance_refresh_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_instance_refresh_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.autoscaling_instance_refresh_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_asg_instance_refresh</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_instance_refresh</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.autoscaling_instance_refresh</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_asg_lifecycle_hook</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_lifecycle_hook</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.autoscaling_lifecycle_hook</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_asg_scheduled_action</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_scheduled_action</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.autoscaling_scheduled_action</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_asg</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_group</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.autoscaling_group</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_lc_find</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_launch_config_find</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.autoscaling_launch_config_find</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_lc_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_launch_config_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.autoscaling_launch_config_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_lc</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_launch_config</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.autoscaling_launch_config</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_metric_alarm</span></code> for the <code class="docutils literal notranslate"><span class="pre">cloudwatch_metric_alarm</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.cloudwatch_metric_alarm</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">ec2_scaling_policy</span></code> for the <code class="docutils literal notranslate"><span class="pre">autoscaling_policy</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.autoscaling_policy</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>The alias <code class="docutils literal notranslate"><span class="pre">execute_lambda</span></code> for the <code class="docutils literal notranslate"><span class="pre">lambda_execute</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">amazon.aws.lambda_execute</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">active_trusted_signers</span></code> has been deprecated and will be removed in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">aliases</span></code> has been deprecated and will be removed in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">cache_behaviors.items.allowed_methods.cached_methods</span></code> has been deprecated and will be removed in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">cache_behaviors.items.allowed_methods</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">cache_behaviors.items.forwarded_values.cookies.whitelisted_names</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">cache_behaviors.items.forwarded_values.headers</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">cache_behaviors.items.forwarded_values.query_string_cache_keys</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">cache_behaviors.items.lambda_function_associations</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">cache_behaviors</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">custom_error_responses</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">default_cache_behavior.allowed_methods.cached_methods</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">default_cache_behavior.allowed_methods</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">default_cache_behavior.forwarded_values.cookies.whitelisted_names</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">default_cache_behavior.forwarded_values.headers</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">default_cache_behavior.forwarded_values.query_string_cache_keys</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">default_cache_behavior.lambda_function_associations</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">origins.items.custom_origin_config.origin_ssl_protocols</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">origins</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_distribution - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">restrictions.geo_restriction</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_invalidation - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">invalidation.invalidation_batch.paths</span></code> has been deprecated and will be remove in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>cloudfront_invalidation - The <code class="docutils literal notranslate"><span class="pre">items</span></code> return value in <code class="docutils literal notranslate"><span class="pre">invalidation.invalidation_batch.paths</span></code> has been deprecated and will be removed in a release after 2026-12-15. Use <code class="docutils literal notranslate"><span class="pre">elements</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2354">https://github.com/ansible-collections/community.aws/pull/2354</a>).</p></li>
+<li><p>waf_condition - The module has been deprecated as Amazon has retired the <code class="docutils literal notranslate"><span class="pre">WAF</span> <span class="pre">Classic</span></code> service. Please use the <code class="docutils literal notranslate"><span class="pre">AWS</span> <span class="pre">WAF</span> <span class="pre">(WAFv2)</span></code> service and modules instead. The module will be removed in version 12.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2389">https://github.com/ansible-collections/community.aws/pull/2389</a>).</p></li>
+<li><p>waf_info - The module has been deprecated as Amazon has retired the <code class="docutils literal notranslate"><span class="pre">WAF</span> <span class="pre">Classic</span></code> service. Please use the <code class="docutils literal notranslate"><span class="pre">AWS</span> <span class="pre">WAF</span> <span class="pre">(WAFv2)</span></code> service and modules instead. The module will be removed in version 12.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2389">https://github.com/ansible-collections/community.aws/pull/2389</a>).</p></li>
+<li><p>waf_rule - The module has been deprecated as Amazon has retired the <code class="docutils literal notranslate"><span class="pre">WAF</span> <span class="pre">Classic</span></code> service. Please use the <code class="docutils literal notranslate"><span class="pre">AWS</span> <span class="pre">WAF</span> <span class="pre">(WAFv2)</span></code> service and modules instead. The module will be removed in version 12.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2389">https://github.com/ansible-collections/community.aws/pull/2389</a>).</p></li>
+<li><p>waf_web_acl - The module has been deprecated as Amazon has retired the <code class="docutils literal notranslate"><span class="pre">WAF</span> <span class="pre">Classic</span></code> service. Please use the <code class="docutils literal notranslate"><span class="pre">AWS</span> <span class="pre">WAF</span> <span class="pre">(WAFv2)</span></code> service and modules instead. The module will be removed in version 12.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2389">https://github.com/ansible-collections/community.aws/pull/2389</a>).</p></li>
+</ul>
+</section>
+<section id="community-general">
+<h4>community.general<a class="headerlink" href="#community-general" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>All module utils, plugin utils, and doc fragments will be made <strong>private</strong> in community.general 13.0.0. This means that they will no longer be part of the public API of the collection, and can have breaking changes even in bugfix releases. If you depend on importing code from the module or plugin utils, or use one of the doc fragments, please <a class="reference external" href="https://github.com/ansible-collections/community.general/issues/11312">comment in the issue to discuss this</a>. Note that this does not affect any use of community.general in task files, roles, or playbooks (<a class="reference external" href="https://github.com/ansible-collections/community.general/issues/11312">https://github.com/ansible-collections/community.general/issues/11312</a>, <a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11320">https://github.com/ansible-collections/community.general/pull/11320</a>).</p></li>
+<li><p>aix_devices - module is superseded by equivalent in <code class="docutils literal notranslate"><span class="pre">ibm.power_aix</span></code> collection. It will be removed from community.general 15.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/issues/11290">https://github.com/ansible-collections/community.general/issues/11290</a>, <a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11540">https://github.com/ansible-collections/community.general/pull/11540</a>).</p></li>
+<li><p>aix_filesystem - module is superseded by equivalent in <code class="docutils literal notranslate"><span class="pre">ibm.power_aix</span></code> collection. It will be removed from community.general 15.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/issues/11290">https://github.com/ansible-collections/community.general/issues/11290</a>, <a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11540">https://github.com/ansible-collections/community.general/pull/11540</a>).</p></li>
+<li><p>aix_inittab - module is superseded by equivalent in <code class="docutils literal notranslate"><span class="pre">ibm.power_aix</span></code> collection. It will be removed from community.general 15.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/issues/11290">https://github.com/ansible-collections/community.general/issues/11290</a>, <a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11540">https://github.com/ansible-collections/community.general/pull/11540</a>).</p></li>
+<li><p>aix_lvg - module is superseded by equivalent in <code class="docutils literal notranslate"><span class="pre">ibm.power_aix</span></code> collection. It will be removed from community.general 15.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/issues/11290">https://github.com/ansible-collections/community.general/issues/11290</a>, <a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11540">https://github.com/ansible-collections/community.general/pull/11540</a>).</p></li>
+<li><p>aix_lvol - module is superseded by equivalent in <code class="docutils literal notranslate"><span class="pre">ibm.power_aix</span></code> collection. It will be removed from community.general 15.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/issues/11290">https://github.com/ansible-collections/community.general/issues/11290</a>, <a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11540">https://github.com/ansible-collections/community.general/pull/11540</a>).</p></li>
+<li><p>cloud module utils - this module utils is not used by community.general and will thus be removed from community.general 13.0.0. If you are using it from another collection, please copy it over (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11205">https://github.com/ansible-collections/community.general/pull/11205</a>).</p></li>
+<li><p>database module utils - this module utils is not used by community.general and will thus be removed from community.general 13.0.0. If you are using it from another collection, please copy it over (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11205">https://github.com/ansible-collections/community.general/pull/11205</a>).</p></li>
+<li><p>dconf - deprecate fallback mechanism when <code class="docutils literal notranslate"><span class="pre">gi.repository</span></code> is not available; fallback will be removed in community.general 15.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11088">https://github.com/ansible-collections/community.general/pull/11088</a>).</p></li>
+<li><p>known_hosts module utils - this module utils is not used by community.general and will thus be removed from community.general 13.0.0. If you are using it from another collection, please copy it over (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11205">https://github.com/ansible-collections/community.general/pull/11205</a>).</p></li>
+<li><p>layman - ClearLinux was made EOL in July 2025.; the module will be removed from community.general 15.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11087">https://github.com/ansible-collections/community.general/pull/11087</a>).</p></li>
+<li><p>layman - Gentoo deprecated <code class="docutils literal notranslate"><span class="pre">layman</span></code> in mid-2023; the module will be removed from community.general 14.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11070">https://github.com/ansible-collections/community.general/pull/11070</a>).</p></li>
+<li><p>monit - support for Monit version 5.18 or older is deprecated and will be removed in community.general 14.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11254">https://github.com/ansible-collections/community.general/pull/11254</a>).</p></li>
+<li><p>puppet - the <code class="docutils literal notranslate"><span class="pre">timeout</span></code> parameter is deprecated and will be removed in community.general 14.0.0. (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11658">https://github.com/ansible-collections/community.general/pull/11658</a>).</p></li>
+<li><p>pushbullet - module relies on Python package supporting Python 3.2 only; the module will be removed from community.general 13.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11224">https://github.com/ansible-collections/community.general/pull/11224</a>).</p></li>
+<li><p>saslprep module utils - this module utils is not used by community.general and will thus be removed from community.general 13.0.0. If you are using it from another collection, please copy it over (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11205">https://github.com/ansible-collections/community.general/pull/11205</a>).</p></li>
+<li><p>spotinst_aws_elastigroup - module relies on Python package supporting Python 2.7 only; the module will be removed from community.general 13.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11069">https://github.com/ansible-collections/community.general/pull/11069</a>).</p></li>
+</ul>
+</section>
+<section id="id12">
+<h4>community.proxmox<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>proxmox - Certificate verification default changes from <code class="docutils literal notranslate"><span class="pre">false</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> with version 2.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.proxmox/pull/256">https://github.com/ansible-collections/community.proxmox/pull/256</a>).</p></li>
+</ul>
+</section>
+<section id="id13">
+<h4>community.routeros<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>api_find_and_modify - the current defaults for <code class="docutils literal notranslate"><span class="pre">ignore_dynamic</span></code> and <code class="docutils literal notranslate"><span class="pre">ignore_builtin</span></code> (both <code class="docutils literal notranslate"><span class="pre">false</span></code>) have been deprecated and will change to <code class="docutils literal notranslate"><span class="pre">true</span></code> in community.routeros 4.0.0. To avoid deprecation messages, please set the value explicitly to <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>, if you have not already done so. We recommend to set them to <code class="docutils literal notranslate"><span class="pre">true</span></code>, unless you have a good reason to set them to <code class="docutils literal notranslate"><span class="pre">false</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/399">https://github.com/ansible-collections/community.routeros/pull/399</a>).</p></li>
+</ul>
+</section>
+<section id="hetzner-hcloud">
+<h4>hetzner.hcloud<a class="headerlink" href="#hetzner-hcloud" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>hcloud inventory - The <code class="docutils literal notranslate"><span class="pre">hcloud_datacenter</span></code> host variable is deprecated and will be removed after 1 July 2026. Please use the <code class="docutils literal notranslate"><span class="pre">hcloud_location</span></code> host variable instead.</p></li>
+<li><p>network_info - The <code class="docutils literal notranslate"><span class="pre">hcloud_network_info[].servers[].datacenter</span></code> return value is deprecated and will be removed after 1 July 2026. Please use the <code class="docutils literal notranslate"><span class="pre">hcloud_network_info[].servers[].location</span></code> return value instead.</p></li>
+<li><p>primary_ip - The <code class="docutils literal notranslate"><span class="pre">datacenter</span></code> argument is deprecated and will be removed after 1 July 2026. Please use the <code class="docutils literal notranslate"><span class="pre">location</span></code> argument instead.</p></li>
+<li><p>primary_ip - The <code class="docutils literal notranslate"><span class="pre">hcloud_primary_ip.datacenter</span></code> return value is deprecated and will be removed after 1 July 2026. Please use the <code class="docutils literal notranslate"><span class="pre">hcloud_primary_ip.location</span></code> return value instead.</p></li>
+<li><p>primary_ip_info - The <code class="docutils literal notranslate"><span class="pre">hcloud_primary_ip_info[].datacenter</span></code> return value is deprecated and will be removed after 1 July 2026. Please use the <code class="docutils literal notranslate"><span class="pre">hcloud_primary_ip_info[].location</span></code> return value instead.</p></li>
+<li><p>server - The <code class="docutils literal notranslate"><span class="pre">datacenter</span></code> argument is deprecated and will be removed after 1 July 2026. Please use the <code class="docutils literal notranslate"><span class="pre">location</span></code> argument instead.</p></li>
+<li><p>server - The <code class="docutils literal notranslate"><span class="pre">hcloud_server.datacenter</span></code> return value is deprecated and will be removed after 1 July 2026. Please use the <code class="docutils literal notranslate"><span class="pre">hcloud_server.location</span></code> return value instead.</p></li>
+<li><p>server_info - The <code class="docutils literal notranslate"><span class="pre">hcloud_server_info[].datacenter</span></code> return value is deprecated and will be removed after 1 July 2026. Please use the <code class="docutils literal notranslate"><span class="pre">hcloud_server_info[].location</span></code> return value instead.</p></li>
+</ul>
+</section>
+<section id="kubernetes-core">
+<h4>kubernetes.core<a class="headerlink" href="#kubernetes-core" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>helm - the <code class="docutils literal notranslate"><span class="pre">status.values</span></code> return value has been deprecated and will be removed in a release after 2027-01-08. Use <code class="docutils literal notranslate"><span class="pre">status.release_values</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/kubernetes.core/pull/1056">https://github.com/ansible-collections/kubernetes.core/pull/1056</a>).</p></li>
+<li><p>helm_info - the <code class="docutils literal notranslate"><span class="pre">status.values</span></code> return value has been deprecated and will be removed in a release after 2027-01-08. Use <code class="docutils literal notranslate"><span class="pre">status.release_values</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/kubernetes.core/pull/1056">https://github.com/ansible-collections/kubernetes.core/pull/1056</a>).</p></li>
+</ul>
+</section>
+<section id="vmware-vmware-rest">
+<h4>vmware.vmware_rest<a class="headerlink" href="#vmware-vmware-rest" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Deprecate modules that have been moved to the new vmware.vmware collection. Includes vcenter_vm_guest_customization, vcenter_vm_hardware_adapter_sata, vcenter_vm_hardware_adapter_scsi, vcenter_vm_hardware_cdrom, vcenter_vm_hardware_cpu, vcenter_vm_hardware_disk, vcenter_vm_hardware_ethernet, vcenter_vm_hardware_memory, vcenter_vm</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="porting_guides.html" class="btn btn-neutral float-left" title="Ansible Porting Guides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="porting_guide_13.html" class="btn btn-neutral float-right" title="Ansible 13 Porting Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Apr 17, 2026.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>
