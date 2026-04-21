@@ -91,14 +91,43 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="porting_guides.html">Ansible Porting Guides</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible 14 Porting Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#playbook">Playbook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#engine">Engine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plugin-api">Plugin API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-line">Command Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deprecated">Deprecated</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#modules-removed">Modules removed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deprecation-notices">Deprecation notices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#noteworthy-module-changes">Noteworthy module changes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#plugins">Plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#noteworthy-plugin-changes">Noteworthy plugin changes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-custom-scripts">Porting custom scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#networking">Networking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v14-0-0a3">Porting Guide for v14.0.0a3</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#major-changes">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#removed-features">Removed Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deprecated-features">Deprecated Features</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v14-0-0a2">Porting Guide for v14.0.0a2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id10">Deprecated Features</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v14-0-0a1">Porting Guide for v14.0.0a1</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#added-collections">Added Collections</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#known-issues">Known Issues</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#major-changes">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">Major Changes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#removed-collections">Removed Collections</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#removed-features">Removed Features</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#deprecated-features">Deprecated Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">Removed Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id24">Deprecated Features</a></li>
 </ul>
 </li>
 </ul>
@@ -297,21 +326,192 @@
            <div itemprop="articleBody">
              
   <section id="ansible-14-porting-guide">
-<span id="porting-14-guide"></span><h1><a class="toc-backref" href="#id12" role="doc-backlink">Ansible 14 Porting Guide</a><a class="headerlink" href="#ansible-14-porting-guide" title="Link to this heading"></a></h1>
+<span id="porting-14-guide"></span><h1><a class="toc-backref" href="#id30" role="doc-backlink">Ansible 14 Porting Guide</a><a class="headerlink" href="#ansible-14-porting-guide" title="Link to this heading"></a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#ansible-14-porting-guide" id="id12">Ansible 14 Porting Guide</a></p>
+<li><p><a class="reference internal" href="#ansible-14-porting-guide" id="id30">Ansible 14 Porting Guide</a></p>
 <ul>
-<li><p><a class="reference internal" href="#porting-guide-for-v14-0-0a1" id="id13">Porting Guide for v14.0.0a1</a></p></li>
+<li><p><a class="reference internal" href="#introduction" id="id31">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#playbook" id="id32">Playbook</a></p></li>
+<li><p><a class="reference internal" href="#engine" id="id33">Engine</a></p></li>
+<li><p><a class="reference internal" href="#plugin-api" id="id34">Plugin API</a></p></li>
+<li><p><a class="reference internal" href="#command-line" id="id35">Command Line</a></p></li>
+<li><p><a class="reference internal" href="#deprecated" id="id36">Deprecated</a></p></li>
+<li><p><a class="reference internal" href="#modules" id="id37">Modules</a></p></li>
+<li><p><a class="reference internal" href="#plugins" id="id38">Plugins</a></p></li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id39">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#networking" id="id40">Networking</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v14-0-0a3" id="id41">Porting Guide for v14.0.0a3</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v14-0-0a2" id="id42">Porting Guide for v14.0.0a2</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v14-0-0a1" id="id43">Porting Guide for v14.0.0a1</a></p></li>
 </ul>
 </li>
 </ul>
 </nav>
 <p>Ansible 14 is based on Ansible-core 2.21.</p>
 <p>We suggest you read this page along with the <a class="reference external" href="https://github.com/ansible-community/ansible-build-data/blob/main/14/CHANGELOG-v14.md">Ansible 14 Changelog</a> to understand what updates you may need to make.</p>
+<section id="introduction">
+<span id="id1"></span><h2><a class="toc-backref" href="#id31" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>No notable changes</p>
+</section>
+<section id="playbook">
+<span id="id2"></span><h2><a class="toc-backref" href="#id32" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
+<p>No notable changes</p>
+</section>
+<section id="engine">
+<span id="id3"></span><h2><a class="toc-backref" href="#id33" role="doc-backlink">Engine</a><a class="headerlink" href="#engine" title="Link to this heading"></a></h2>
+<p>No notable changes</p>
+</section>
+<section id="plugin-api">
+<span id="id4"></span><h2><a class="toc-backref" href="#id34" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
+</section>
+<section id="command-line">
+<span id="id5"></span><h2><a class="toc-backref" href="#id35" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
+<p>No notable changes</p>
+</section>
+<section id="deprecated">
+<span id="id6"></span><h2><a class="toc-backref" href="#id36" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
+<p>No notable changes</p>
+</section>
+<section id="modules">
+<span id="id7"></span><h2><a class="toc-backref" href="#id37" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<section id="modules-removed">
+<h3>Modules removed<a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
+<p>The following modules no longer exist:</p>
+<ul class="simple">
+<li><p>No notable changes</p></li>
+</ul>
+</section>
+<section id="deprecation-notices">
+<h3>Deprecation notices<a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
+<p>No notable changes</p>
+</section>
+<section id="noteworthy-module-changes">
+<h3>Noteworthy module changes<a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
+<p>No notable changes</p>
+</section>
+</section>
+<section id="plugins">
+<h2><a class="toc-backref" href="#id38" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
+<section id="noteworthy-plugin-changes">
+<h3>Noteworthy plugin changes<a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
+<p>No notable changes</p>
+</section>
+</section>
+<section id="porting-custom-scripts">
+<h2><a class="toc-backref" href="#id39" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
+<p>No notable changes</p>
+</section>
+<section id="networking">
+<h2><a class="toc-backref" href="#id40" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
+<p>No notable changes</p>
+</section>
+<section id="porting-guide-for-v14-0-0a3">
+<h2><a class="toc-backref" href="#id41" role="doc-backlink">Porting Guide for v14.0.0a3</a><a class="headerlink" href="#porting-guide-for-v14-0-0a3" title="Link to this heading"></a></h2>
+<section id="breaking-changes">
+<h3>Breaking Changes<a class="headerlink" href="#breaking-changes" title="Link to this heading"></a></h3>
+<section id="hitachivantara-vspone-block">
+<h4>hitachivantara.vspone_block<a class="headerlink" href="#hitachivantara-vspone-block" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Renamed the following input and output parameters in the “hv_gad” module - “mu_number” to “mirror_unit_number”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_hg” module - “nick_name” to “nickname”, “ports” to “port_ids”, “port” to “port_id”, “should_delete_all_ldevs” to “should_delete_all_volumes”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_hg_facts” module - “nick_name” to “nickname”, “ports” to “port_ids”, “port” to “port_id”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_hur” module - “mirror_unit_id” to “mirror_unit_number”, “primary_journal_pool” to “primary_journal_id”, “secondary_journal_pool” to “secondary_journal_id”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_iscsi_target” module - “nick_name” to “nickname”, “ports” to “port_ids”, “port” to “port_id”, “should_delete_all_ldevs” to “should_delete_all_volumes”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_iscsi_target_facts” module - “nick_name” to “nickname”, “ports” to “port_ids”, “port” to “port_id”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_ldev” module - “parity_group” to “parity_group_id”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_resource_group” module - “start_ldev” to “begin_ldev_id”, “end_ldev” to “end_ldev_id”, “parity_groups” to “parity_group_ids”, “ports” to “port_ids”, “port” to “port_id”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_resource_group_facts” module - “ports” to “port_ids”, “port” to “port_id”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_sds_block_compute_port” module - “nick_name” to “nickname”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_sds_block_journal” module - “mirror_unit” to “mirror_unit_number”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_sds_block_remote_iscsi_port” module - “remote_ip_address” to “remote_storage_port_ip_address”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_shadow_image_pair” module - “pvol_mu_number” to “mirror_unit_number” , “copy_pace_track_size” to “copy_pace”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_snapshot” module - “mirror_unit_id” to “mirror_unit_number”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_snapshot_group” module - “mirror_unit_id” to “mirror_unit_number”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_storage_port” module - “ports” to “port_ids”, “port” to “port_id”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_storage_port_facts” module - “ports” to “port_ids”, “port” to “port_id”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_vsp_one_server” module - “nick_name” to “nickname”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_vsp_one_server_facts” module - “nick_name” to “nickname”.</p></li>
+<li><p>Renamed the following input and output parameters in the “hv_vsp_one_server_hba_facts” module - “nick_name” to “nickname”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_gad” module - “primary_volume_storage_id” to “primary_volume_storage_serial_number”, “secondary_volume_storage_id” to “secondary_volume_storage_serial_number”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_gad_facts” module - “primary_volume_storage_id” to “primary_volume_storage_serial_number”, “secondary_volume_storage_id” to “secondary_volume_storage_serial_number”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_hur” module - “pvol_status” to “primary_volume_status”, “svol_status” to “secondary_volume_status”, “storage_serial_number” to “primary_volume_storage_serial_number”, “secondary_storage_serial” to “secondary_volume_storage_serial_number”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_hur_facts” module - “mirror_unit_id” to “mirror_unit_number”, “primary_journal_pool” to “primary_journal_id”, “secondary_journal_pool” to “secondary_journal_id”, “pvol_status” to “primary_volume_status”, “svol_status” to “secondary_volume_status”, “primary_storage_serial” to “primary_volume_storage_serial_number”, “secondary_storage_serial” to “secondary_volume_storage_serial_number”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_ldev_facts” module - “parity_group” to “parity_group_id”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_resource_group_facts” module - “start_ldev” to “begin_ldev_id”, “end_ldev” to “end_ldev_id”, “parity_groups” to “parity_group_ids”, “ports” to “port_ids”, “port” to “port_id”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_shadow_image_pair_facts” module - “mirror_unit_id” to “mirror_unit_number”, “pvol_host_groups” to “primary_volume_host_groups”, “pvol_iscsi_targets” to “primary_volume_iscsi_targets”, “pvol_nvm_subsystem_name” to “primary_volume_nvm_subsystem_name”, “svol_host_groups” to “secondary_volume_host_groups”, “svol_iscsi_targets” to “secondary_volume_iscsi_targets”, “svol_nvm_subsystem_name” to “secondary_volume_nvm_subsystem_name”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_snapshot_facts” module - “mirror_unit_id” to “mirror_unit_number”, “pvol_host_groups” to “primary_volume_host_groups”, “pvol_iscsi_targets” to “primary_volume_iscsi_targets”, “pvol_nvm_subsystem_name” to “primary_volume_nvm_subsystem_name”, “svol_host_groups” to “secondary_volume_host_groups”, “svol_iscsi_targets” to “secondary_volume_iscsi_targets”, “svol_nvm_subsystem_name” to “secondary_volume_nvm_subsystem_name”, “pvol_processing_status” to “primary_volume_processing_status”, “svol_processing_status” to “secondary_volume_processing_status”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_snapshot_group_facts” module - “mirror_unit_id” to “mirror_unit_number”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_truecopy” module - “pvol_status” to “primary_volume_status”, “svol_status” to “secondary_volume_status”, “storage_serial_number” to “primary_volume_storage_serial_number”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_truecopy_facts” module - “pvol_status” to “primary_volume_status”, “svol_status” to “secondary_volume_status”, “storage_serial_number” to “primary_volume_storage_serial_number”.</p></li>
+<li><p>Renamed the following output parameters in the “hv_vsp_one_volume_facts” module - “start_volume_id” to “begin_volume_id”.</p></li>
+</ul>
+</section>
+</section>
+<section id="major-changes">
+<h3>Major Changes<a class="headerlink" href="#major-changes" title="Link to this heading"></a></h3>
+<section id="fortinet-fortios">
+<h4>fortinet.fortios<a class="headerlink" href="#fortinet-fortios" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Added a generic <cite>headers</cite> parameter to <cite>fortios_json_generic</cite> to support admin-password confirmation headers and future custom request headers.</p></li>
+<li><p>Updated FAQ to illustrate the use of <cite>headers</cite> in <cite>fortios_json_generic</cite> module.</p></li>
+<li><p>Updated deprecated import of to_text from ansible.module_utils._text to the supported implementation.</p></li>
+</ul>
+</section>
+<section id="splunk-es">
+<h4>splunk.es<a class="headerlink" href="#splunk-es" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Remove dependency on the <code class="docutils literal notranslate"><span class="pre">ansible.netcommon</span></code> collection. Utility functions (<code class="docutils literal notranslate"><span class="pre">remove_empties</span></code>, <code class="docutils literal notranslate"><span class="pre">dict_diff</span></code>, <code class="docutils literal notranslate"><span class="pre">dict_merge</span></code>) are now bundled locally, and the httpapi plugin inherits directly from ansible-core’s <code class="docutils literal notranslate"><span class="pre">HttpApiBase</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="removed-features">
+<h3>Removed Features<a class="headerlink" href="#removed-features" title="Link to this heading"></a></h3>
+<section id="id8">
+<h4>hitachivantara.vspone_block<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Removed playbooks “ddp_pool.yml” and “ddp_pool_facts.yml”.</p></li>
+</ul>
+</section>
+</section>
+<section id="deprecated-features">
+<h3>Deprecated Features<a class="headerlink" href="#deprecated-features" title="Link to this heading"></a></h3>
+<section id="ansible-core">
+<h4>Ansible-core<a class="headerlink" href="#ansible-core" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>task result - Inferred task failure from a non-zero <code class="docutils literal notranslate"><span class="pre">rc</span></code> key and absence of a <code class="docutils literal notranslate"><span class="pre">failed</span></code> key will be deprecated in Ansible Core 2.22. Actions and modules must explicitly communicate failure by setting the <code class="docutils literal notranslate"><span class="pre">failed</span></code> key, using APIs that do so, or raising an unhandled exception. In future releases, the <code class="docutils literal notranslate"><span class="pre">rc</span></code> key will receive no special handling during task result processing.</p></li>
+</ul>
+</section>
+<section id="id9">
+<h4>hitachivantara.vspone_block<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>The old parameter names renamed in this release are retained as aliases for backward compatibility but will be removed in the next major release. Affected parameters across modules are - “start_ldev”, “end_ldev”, “parity_groups”, “ports”, “port” (hv_resource_group, hv_resource_group_facts), “ports”, “port” (hv_storage_port, hv_storage_port_facts), “mirror_unit” (hv_sds_block_journal), “nick_name”, “should_delete_all_ldevs” (hv_hg, hv_iscsi_target), “nick_name” (hv_hg_facts, hv_iscsi_target_facts, hv_sds_block_compute_port, hv_vsp_one_server, hv_vsp_one_server_facts, hv_vsp_one_server_hba_facts), “parity_group” (hv_ldev, hv_ldev_facts), “remote_ip_address” (hv_sds_block_remote_iscsi_port), “start_volume_id” (hv_vsp_one_volume_facts), “mirror_unit_id”, “primary_journal_pool”, “secondary_journal_pool” (hv_hur), “mirror_unit_id”, “pvol_status”, “svol_status”, “primary_storage_serial”, “secondary_storage_serial”, “primary_journal_pool”, “secondary_journal_pool” (hv_hur_facts), “mu_number” (hv_gad), “pvol_status”, “svol_status”, “storage_serial_number” (hv_truecopy, hv_truecopy_facts, hv_hur), “secondary_storage_serial” (hv_hur), “primary_volume_storage_id”, “secondary_volume_storage_id” (hv_gad, hv_gad_facts), “mirror_unit_id” (hv_snapshot, hv_snapshot_group, hv_snapshot_facts, hv_snapshot_group_facts), “pvol_host_groups”, “pvol_iscsi_targets”, “pvol_nvm_subsystem_name”, “svol_host_groups”, “svol_iscsi_targets”, “svol_nvm_subsystem_name”, “pvol_processing_status”, “svol_processing_status” (hv_snapshot_facts), “pvol_mu_number”, “copy_pace_track_size” (hv_shadow_image_pair), “mirror_unit_id”, “pvol_host_groups”, “pvol_iscsi_targets”, “pvol_nvm_subsystem_name”, “svol_host_groups”, “svol_iscsi_targets”, “svol_nvm_subsystem_name” (hv_shadow_image_pair_facts).</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="porting-guide-for-v14-0-0a2">
+<h2><a class="toc-backref" href="#id42" role="doc-backlink">Porting Guide for v14.0.0a2</a><a class="headerlink" href="#porting-guide-for-v14-0-0a2" title="Link to this heading"></a></h2>
+<section id="id10">
+<h3>Deprecated Features<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<section id="ansible-netcommon">
+<h4>ansible.netcommon<a class="headerlink" href="#ansible-netcommon" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>network_cli - The in-collection paramiko support (used when ssh_type is paramiko) is a compatibility layer for environments where ansible-core’s paramiko connection is no longer available. This layer is deprecated and will be removed in a release after 2028-02-01. Migrate to ssh_type=libssh by installing the ansible-pylibssh package.</p></li>
+</ul>
+</section>
+<section id="community-routeros">
+<h4>community.routeros<a class="headerlink" href="#community-routeros" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>api_modify - all existing <code class="docutils literal notranslate"><span class="pre">numbers</span></code> fields are deprecated for writing and support for them will be removed in community.routeros 4.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/460">https://github.com/ansible-collections/community.routeros/pull/460</a>).</p></li>
+<li><p>api_modify - in <code class="docutils literal notranslate"><span class="pre">routing</span> <span class="pre">bfd</span> <span class="pre">configuration</span></code>, the fields <code class="docutils literal notranslate"><span class="pre">copy-from</span></code> and <code class="docutils literal notranslate"><span class="pre">place-before</span></code> are deprecated for writing and support for them will be removed in community.routeros 4.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/460">https://github.com/ansible-collections/community.routeros/pull/460</a>).</p></li>
+</ul>
+</section>
+</section>
+</section>
 <section id="porting-guide-for-v14-0-0a1">
-<h2><a class="toc-backref" href="#id13" role="doc-backlink">Porting Guide for v14.0.0a1</a><a class="headerlink" href="#porting-guide-for-v14-0-0a1" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id43" role="doc-backlink">Porting Guide for v14.0.0a1</a><a class="headerlink" href="#porting-guide-for-v14-0-0a1" title="Link to this heading"></a></h2>
 <section id="added-collections">
 <h3>Added Collections<a class="headerlink" href="#added-collections" title="Link to this heading"></a></h3>
 <ul class="simple">
@@ -328,8 +528,8 @@
 <li><p>docker_image, docker_image_export - idempotency for archiving images depends on whether the image IDs used by the image storage backend correspond to the IDs used in the tarball’s <code class="docutils literal notranslate"><span class="pre">manifest.json</span></code> files. The new default backend in Docker 29 apparently uses image IDs that no longer correspond, whence idempotency no longer works (<a class="reference external" href="https://github.com/ansible-collections/community.docker/pull/1199">https://github.com/ansible-collections/community.docker/pull/1199</a>).</p></li>
 </ul>
 </section>
-<section id="community-routeros">
-<h4>community.routeros<a class="headerlink" href="#community-routeros" title="Link to this heading"></a></h4>
+<section id="id11">
+<h4>community.routeros<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>api_modify - to create or modify entries in the <code class="docutils literal notranslate"><span class="pre">container</span></code> path, you need librouteros 4.0.0 or newer due to a bug preventing older versions from setting or modifying properties named <code class="docutils literal notranslate"><span class="pre">cmd</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/issues/442">https://github.com/ansible-collections/community.routeros/issues/442</a>).</p></li>
 </ul>
@@ -349,10 +549,10 @@
 </ul>
 </section>
 </section>
-<section id="breaking-changes">
-<h3>Breaking Changes<a class="headerlink" href="#breaking-changes" title="Link to this heading"></a></h3>
-<section id="ansible-core">
-<h4>Ansible-core<a class="headerlink" href="#ansible-core" title="Link to this heading"></a></h4>
+<section id="id12">
+<h3>Breaking Changes<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<section id="id13">
+<h4>Ansible-core<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>psrp - Changed the default of <code class="docutils literal notranslate"><span class="pre">negotiate_service</span></code> used to build the Kerberos Service Principal Name from <code class="docutils literal notranslate"><span class="pre">WSMAN</span></code> to <code class="docutils literal notranslate"><span class="pre">host</span></code>. This aligns the defaults to how the native PowerShell PSRemoting client works on Windows and ensures that Kerberos can be used by more Windows targets by default. No deprecation period is used for this change as <code class="docutils literal notranslate"><span class="pre">host</span></code> is a builtin SPN to Windows and should improve compatibility out of the box. To go back to the old behaviour for any reason, set <code class="docutils literal notranslate"><span class="pre">ansible_psrp_negotiate_service=WSMAN</span></code> in the host vars.</p></li>
 </ul>
@@ -375,8 +575,8 @@
 <li><p>sonic_qos_wred - Add support for yellow and red colors (<a class="reference external" href="https://github.com/ansible-collections/dellemc.enterprise_sonic/pull/574">https://github.com/ansible-collections/dellemc.enterprise_sonic/pull/574</a>).</p></li>
 </ul>
 </section>
-<section id="splunk-es">
-<h4>splunk.es<a class="headerlink" href="#splunk-es" title="Link to this heading"></a></h4>
+<section id="id14">
+<h4>splunk.es<a class="headerlink" href="#id14" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Removed deprecated modules that were scheduled for removal on 2024-09-01</p></li>
 <li><p>adaptive_response_notable_event - Use splunk.es.splunk_adaptive_response_notable_events instead</p></li>
@@ -386,10 +586,10 @@
 </ul>
 </section>
 </section>
-<section id="major-changes">
-<h3>Major Changes<a class="headerlink" href="#major-changes" title="Link to this heading"></a></h3>
-<section id="id1">
-<h4>Ansible-core<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<section id="id15">
+<h3>Major Changes<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<section id="id16">
+<h4>Ansible-core<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">install</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install|download</span></code> - collections that declare a <code class="docutils literal notranslate"><span class="pre">requires_ansible</span></code> version that is not compatible with the running ansible-core version are now excluded from installation and download by default. In previous versions, ansible-galaxy would install such collections even if doing so resulted in an error at load time. To restore the previous behavior, set <code class="docutils literal notranslate"><span class="pre">COLLECTIONS_ON_ANSIBLE_VERSION_MISMATCH</span></code> to <code class="docutils literal notranslate"><span class="pre">ignore</span></code> in your configuration. (<a class="reference external" href="https://github.com/ansible/ansible/issues/78539">https://github.com/ansible/ansible/issues/78539</a>)</p></li>
 <li><p>action plugins - Actions can directly register variables at several precedence layers using the <code class="docutils literal notranslate"><span class="pre">register_host_variables</span></code> method on <code class="docutils literal notranslate"><span class="pre">ActionBase</span></code>. Previously, variable registration could only be simulated by user action plugins by returning <code class="docutils literal notranslate"><span class="pre">ansible_facts</span></code> with insecure fact injection.</p></li>
@@ -417,8 +617,8 @@
 <li><p>win_chocolatey - add option to ignore pinned status of pinned packages</p></li>
 </ul>
 </section>
-<section id="id2">
-<h4>community.aws<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<section id="id17">
+<h4>community.aws<a class="headerlink" href="#id17" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>community.aws collection - <code class="docutils literal notranslate"><span class="pre">awscli</span></code> version has been bumped to 1.34.0 (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2375">https://github.com/ansible-collections/community.aws/pull/2375</a>).</p></li>
 <li><p>community.aws collection - <code class="docutils literal notranslate"><span class="pre">botocore</span></code> and <code class="docutils literal notranslate"><span class="pre">boto3</span></code> versions have been bumped to 1.35.0 (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2375">https://github.com/ansible-collections/community.aws/pull/2375</a>).</p></li>
@@ -430,8 +630,8 @@
 <li><p>proxmox - Add ca_path option to specify a ca-certificate for tls validation (<a class="reference external" href="https://github.com/ansible-collections/community.proxmox/pull/256">https://github.com/ansible-collections/community.proxmox/pull/256</a>).</p></li>
 </ul>
 </section>
-<section id="id3">
-<h4>community.routeros<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<section id="id18">
+<h4>community.routeros<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>api_info, api_modify - multiple parameters can no longer be disabled for the``tool netwatch`` path (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/433">https://github.com/ansible-collections/community.routeros/pull/433</a>).</p></li>
 <li><p>api_info, api_modify - parameter <code class="docutils literal notranslate"><span class="pre">name-format</span></code> can no longer be disabled for the <code class="docutils literal notranslate"><span class="pre">interface</span> <span class="pre">wifi</span> <span class="pre">provisioning</span></code> path (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/433">https://github.com/ansible-collections/community.routeros/pull/433</a>).</p></li>
@@ -451,8 +651,8 @@
 <li><p>Rewrite podman and buildah connections</p></li>
 </ul>
 </section>
-<section id="fortinet-fortios">
-<h4>fortinet.fortios<a class="headerlink" href="#fortinet-fortios" title="Link to this heading"></a></h4>
+<section id="id19">
+<h4>fortinet.fortios<a class="headerlink" href="#id19" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Supported new versions 7.6.5 and 7.6.6.</p></li>
 <li><p>Updated the Q&amp;A for using the default_group feature in modules.</p></li>
@@ -502,8 +702,8 @@
 <li><p>na_ontap_vserver_peer - AWS Lambda support added to the module.</p></li>
 </ul>
 </section>
-<section id="id4">
-<h4>splunk.es<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<section id="id20">
+<h4>splunk.es<a class="headerlink" href="#id20" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Bumped the minimum supported Ansible version to <code class="docutils literal notranslate"><span class="pre">&gt;=2.17.0</span></code> (Ansible 2.15/2.16 are EoL).</p></li>
 </ul>
@@ -525,8 +725,8 @@
 </ul>
 <p>You can still install a removed collection manually with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">&lt;name-of-collection&gt;</span></code>.</p>
 </section>
-<section id="removed-features">
-<h3>Removed Features<a class="headerlink" href="#removed-features" title="Link to this heading"></a></h3>
+<section id="id21">
+<h3>Removed Features<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>The awx.awx collection has been removed from Ansible 14.
 The collection is undergoing a heavy <a class="reference external" href="https://forum.ansible.com/t/7404">refactoring</a> and currently does not align with the standards for the community package.
@@ -535,8 +735,8 @@ Users can still install this collection with <code class="docutils literal notra
 <li><p>The deprecated <code class="docutils literal notranslate"><span class="pre">cisco.dnac</span></code> collection has been removed (<a class="reference external" href="https://forum.ansible.com/t/45609">https://forum.ansible.com/t/45609</a>).</p></li>
 <li><p>The deprecated <code class="docutils literal notranslate"><span class="pre">junipernetworks.junos</span></code> collection has been removed (<a class="reference external" href="https://forum.ansible.com/t/44869">https://forum.ansible.com/t/44869</a>).</p></li>
 </ul>
-<section id="id5">
-<h4>Ansible-core<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<section id="id22">
+<h4>Ansible-core<a class="headerlink" href="#id22" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Removed ‘required’ option from get_bin_path API (<a class="reference external" href="https://github.com/ansible/ansible/issues/85998">https://github.com/ansible/ansible/issues/85998</a>).</p></li>
 <li><p>Removed deprecated <code class="docutils literal notranslate"><span class="pre">ansible.builtin.paramiko</span></code> connection plugin (<a class="reference external" href="https://github.com/ansible/ansible/issues/86002">https://github.com/ansible/ansible/issues/86002</a>). Setting the <code class="docutils literal notranslate"><span class="pre">connection</span></code> keyword to <code class="docutils literal notranslate"><span class="pre">persistent</span></code> or <code class="docutils literal notranslate"><span class="pre">smart</span></code> no longer attempts to use <code class="docutils literal notranslate"><span class="pre">paramiko</span></code>.</p></li>
@@ -549,8 +749,8 @@ Users can still install this collection with <code class="docutils literal notra
 <li><p>module_utils - Remove previously deprecated <code class="docutils literal notranslate"><span class="pre">safe_eval</span></code> function (#85996) (#85999)</p></li>
 </ul>
 </section>
-<section id="id6">
-<h4>splunk.es<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<section id="id23">
+<h4>splunk.es<a class="headerlink" href="#id23" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>adaptive_response_notable_event module has been removed. Use splunk.es.splunk_adaptive_response_notable_events resource module instead.</p></li>
 <li><p>correlation_search module has been removed. Use splunk.es.splunk_correlation_searches resource module instead.</p></li>
@@ -560,15 +760,15 @@ Users can still install this collection with <code class="docutils literal notra
 </ul>
 </section>
 </section>
-<section id="deprecated-features">
-<h3>Deprecated Features<a class="headerlink" href="#deprecated-features" title="Link to this heading"></a></h3>
+<section id="id24">
+<h3>Deprecated Features<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">netapp.cloudmanager</span></code> collection is considered unmaintained and will be removed from Ansible 15 if no one starts maintaining it again before Ansible 15.
 See <a class="reference external" href="https://docs.ansible.com/projects/ansible/devel/community/collection_contributors/collection_package_removal.html#unmaintained-collections">Collections Removal Process for unmaintained collections</a> for more details, including for how this can be cancelled (<a class="reference external" href="https://forum.ansible.com/t/44891">https://forum.ansible.com/t/44891</a>).
 After removal, users can still install this collection with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">netapp.cloudmanager</span></code>.</p></li>
 </ul>
-<section id="id7">
-<h4>Ansible-core<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<section id="id25">
+<h4>Ansible-core<a class="headerlink" href="#id25" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">get_all_subclasses()</span></code> function from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic</span></code> is deprecated and will be removed in ansible-core 2.24. Use <code class="docutils literal notranslate"><span class="pre">get_all_subclasses()</span></code> from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.common._utils</span></code> instead.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">get_platfrom()</span></code> function from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic</span></code> is deprecated and will be removed in ansible-core 2.24. Use <code class="docutils literal notranslate"><span class="pre">platform.system()</span></code> from the Python standard library instead.</p></li>
@@ -580,8 +780,8 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>connection plugins - Added a soft deprecation on the connection attributes <code class="docutils literal notranslate"><span class="pre">has_native_async</span></code> and <code class="docutils literal notranslate"><span class="pre">always_pipeline_modules</span></code>. Connection plugins that wish to apply custom behaviour around pipelining should instead override the method <code class="docutils literal notranslate"><span class="pre">is_pipelining_enabled(self,</span> <span class="pre">wrap_async=False)</span></code> added in Ansible 2.19. For backwards compatibility no runtime deprecation warning is emitted but will be in the future.</p></li>
 </ul>
 </section>
-<section id="id8">
-<h4>amazon.aws<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<section id="id26">
+<h4>amazon.aws<a class="headerlink" href="#id26" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>aws_ec2 - the <code class="docutils literal notranslate"><span class="pre">tags</span></code> host variable has been deprecated to avoid conflicts with Ansible reserved variable names and will be removed in a release after 2026-12-01. Use <code class="docutils literal notranslate"><span class="pre">ec2_tags</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2847">https://github.com/ansible-collections/amazon.aws/pull/2847</a>).</p></li>
 <li><p>aws_ec2 - the <code class="docutils literal notranslate"><span class="pre">use_contrib_script_compatible_ec2_tag_keys</span></code> option has been deprecated and will be removed in a release after 2026-12-01. Use the <code class="docutils literal notranslate"><span class="pre">ec2_tags</span></code> structure instead. (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2854">https://github.com/ansible-collections/amazon.aws/pull/2854</a>)</p></li>
@@ -593,8 +793,8 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>route53 - the <code class="docutils literal notranslate"><span class="pre">values</span></code> key in the <code class="docutils literal notranslate"><span class="pre">resource_record_sets</span></code> return value has been deprecated in favor of <code class="docutils literal notranslate"><span class="pre">record_values</span></code> for Jinja2 compatibility. The <code class="docutils literal notranslate"><span class="pre">values</span></code> key will be removed in a release after 2026-12-01 (<a class="reference external" href="https://github.com/ansible-collections/amazon.aws/pull/2772">https://github.com/ansible-collections/amazon.aws/pull/2772</a>).</p></li>
 </ul>
 </section>
-<section id="id9">
-<h4>community.aws<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<section id="id27">
+<h4>community.aws<a class="headerlink" href="#id27" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_acm_info</span></code> for the <code class="docutils literal notranslate"><span class="pre">acm_certificate_info</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.acm_certificate_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
 <li><p>The alias <code class="docutils literal notranslate"><span class="pre">aws_acm</span></code> for the <code class="docutils literal notranslate"><span class="pre">acm_certificate</span></code> module has been deprecated. Please use <code class="docutils literal notranslate"><span class="pre">community.aws.acm_certificate</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.aws/pull/2387">https://github.com/ansible-collections/community.aws/pull/2387</a>).</p></li>
@@ -704,14 +904,14 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>spotinst_aws_elastigroup - module relies on Python package supporting Python 2.7 only; the module will be removed from community.general 13.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/11069">https://github.com/ansible-collections/community.general/pull/11069</a>).</p></li>
 </ul>
 </section>
-<section id="id10">
-<h4>community.proxmox<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<section id="id28">
+<h4>community.proxmox<a class="headerlink" href="#id28" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>proxmox - Certificate verification default changes from <code class="docutils literal notranslate"><span class="pre">false</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> with version 2.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.proxmox/pull/256">https://github.com/ansible-collections/community.proxmox/pull/256</a>).</p></li>
 </ul>
 </section>
-<section id="id11">
-<h4>community.routeros<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<section id="id29">
+<h4>community.routeros<a class="headerlink" href="#id29" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>api_find_and_modify - the current defaults for <code class="docutils literal notranslate"><span class="pre">ignore_dynamic</span></code> and <code class="docutils literal notranslate"><span class="pre">ignore_builtin</span></code> (both <code class="docutils literal notranslate"><span class="pre">false</span></code>) have been deprecated and will change to <code class="docutils literal notranslate"><span class="pre">true</span></code> in community.routeros 4.0.0. To avoid deprecation messages, please set the value explicitly to <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>, if you have not already done so. We recommend to set them to <code class="docutils literal notranslate"><span class="pre">true</span></code>, unless you have a good reason to set them to <code class="docutils literal notranslate"><span class="pre">false</span></code> (<a class="reference external" href="https://github.com/ansible-collections/community.routeros/pull/399">https://github.com/ansible-collections/community.routeros/pull/399</a>).</p></li>
 </ul>
@@ -760,7 +960,7 @@ After removal, users can still install this collection with <code class="docutil
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 14, 2026.
+      <span class="lastupdated">Last updated on Apr 21, 2026.
       </span></p>
   </div>
 
