@@ -342,7 +342,7 @@
 <h1>cisco.intersight.intersight_local_user_policy module – Local User Policy configuration for Cisco Intersight<a class="headerlink" href="#cisco-intersight-intersight-local-user-policy-module-local-user-policy-configuration-for-cisco-intersight" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.16.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.18.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -474,6 +474,18 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-local_users/account_types"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-local-user-policy-module-parameter-local-users-account-types"><strong>account_types</strong></p>
+<a class="ansibleOptionLink" href="#parameter-local_users/account_types" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=any</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>List of account types to assign to the user.</p>
+<p>Supported values are <code class="docutils literal notranslate"><span class="pre">IPMI</span></code> and <code class="docutils literal notranslate"><span class="pre">Local</span></code>.</p>
+<p>For backward compatibility, dictionary entries with <code class="docutils literal notranslate"><span class="pre">ObjectType</span></code> are still accepted.</p>
+<p>When provided, the module maps these values to the corresponding Intersight API object types and does not set any separate</p>
+<p>account-type toggle field.</p>
+<p>Use this to request IPMI or combined local plus IPMI account access while keeping the endpoint role type at <code class="docutils literal notranslate"><span class="pre">IMC</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-local_users/enable"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-local-user-policy-module-parameter-local-users-enable"><strong>enable</strong></p>
 <a class="ansibleOptionLink" href="#parameter-local_users/enable" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -482,6 +494,21 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-local_users/endpoint_role_type"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-local-user-policy-module-parameter-local-users-endpoint-role-type"><strong>endpoint_role_type</strong></p>
+<a class="ansibleOptionLink" href="#parameter-local_users/endpoint_role_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The type of endpoint role to assign to the user.</p>
+<p>IMC is the supported server management role type for local user roles.</p>
+<p>IPMI access should be expressed through <code class="docutils literal notranslate"><span class="pre">account_types</span></code> such as <code class="docutils literal notranslate"><span class="pre">IPMI</span></code>.</p>
+<p>Supplying <code class="docutils literal notranslate"><span class="pre">IPMI</span></code> here is rejected by the Intersight API for <code class="docutils literal notranslate"><span class="pre">iam.EndPointUserRole</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;IMC&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;IPMI&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -510,6 +537,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-local_users/username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the user created on the endpoint.</p>
+<p>Cisco Intersight currently limits endpoint usernames to 16 characters.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -617,6 +645,33 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">        </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readonly</span>
 <span class="w">        </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vault_reader_password</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure Local User policy with IPMI user</span>
+<span class="w">  </span><span class="nt">intersight_local_user_policy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ipmi-admin</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User with IPMI account type</span>
+<span class="w">    </span><span class="nt">local_users</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ipmi-user</span>
+<span class="w">        </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">        </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vault_ipmi_password</span>
+<span class="w">        </span><span class="nt">account_types</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPMI</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure Local User policy with local and IPMI access</span>
+<span class="w">  </span><span class="nt">intersight_local_user_policy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local-ipmi-admin</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User with local and IPMI account types</span>
+<span class="w">    </span><span class="nt">local_users</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local-ipmi</span>
+<span class="w">        </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">        </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vault_local_ipmi_password</span>
+<span class="w">        </span><span class="nt">account_types</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Local</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPMI</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete Local User policy</span>
 <span class="w">  </span><span class="nt">intersight_local_user_policy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -677,7 +732,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 20, 2026.
+      <span class="lastupdated">Last updated on Apr 21, 2026.
       </span></p>
   </div>
 

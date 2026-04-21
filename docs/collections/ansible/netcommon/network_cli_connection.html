@@ -338,7 +338,7 @@
 <h1>ansible.netcommon.network_cli connection – Use network_cli to run command on network appliances<a class="headerlink" href="#ansible-netcommon-network-cli-connection-use-network-cli-to-run-command-on-network-appliances" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This connection plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/netcommon/">ansible.netcommon collection</a> (version 8.4.0).</p>
+<p>This connection plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/netcommon/">ansible.netcommon collection</a> (version 8.5.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -455,18 +455,19 @@ see <a class="reference internal" href="#ansible-collections-ansible-netcommon-n
 <div class="ansibleOptionAnchor" id="parameter-host_key_auto_add"></div><p class="ansible-option-title" id="ansible-collections-ansible-netcommon-network-cli-connection-parameter-host-key-auto-add"><strong>host_key_auto_add</strong></p>
 <a class="ansibleOptionLink" href="#parameter-host_key_auto_add" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>By default, Ansible will prompt the user before adding SSH keys to the known hosts file. Since persistent connections such as network_cli run in background processes, the user will never be prompted. By enabling this option, unknown host keys will automatically be added to the known hosts file.</p>
-<p>Be sure to fully understand the security implications of enabling this option on production systems as it could create a security vulnerability.</p>
+<td><div class="ansible-option-cell"><p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, unknown host keys are automatically added to the user known_hosts file and saved on connection close, so the first connection to a new host works without manual intervention (e.g. no need to run ssh-keyscan or set config).</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">false</span></code>, Ansible would prompt before adding; since network_cli uses persistent connections (background processes), the user cannot respond, so connection fails for new hosts unless the key is already in known_hosts.</p>
+<p>Set to <code class="docutils literal notranslate"><span class="pre">false</span></code> if you need to avoid automatically trusting new host keys (e.g. on production systems where you manage known_hosts separately).</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
-<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 <p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
 <ul>
 <li><p>INI entry:</p>
 <div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[paramiko_connection]</span>
-<span class="na">host_key_auto_add</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+<span class="na">host_key_auto_add</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
 </pre></div>
 </div>
 </li>
@@ -731,7 +732,7 @@ see <a class="reference internal" href="#ansible-collections-ansible-netcommon-n
 </div></td>
 <td><div class="ansible-option-cell"><p>The python package that will be used by the <code class="docutils literal notranslate"><span class="pre">network_cli</span></code> connection plugin to create a SSH connection to remote host.</p>
 <p><em>libssh</em> will use the ansible-pylibssh package, which needs to be installed in order to work.</p>
-<p><em>paramiko</em> will instead use the paramiko package to manage the SSH connection.</p>
+<p><em>paramiko</em> will instead use the paramiko package to manage the SSH connection. This option is deprecated and will be removed in a release after 2028-02-01. Migrate to <em>libssh</em> by installing the ansible-pylibssh package.</p>
 <p><em>auto</em> will use ansible-pylibssh if that package is installed, otherwise will fallback to paramiko.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
@@ -886,7 +887,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 20, 2026.
+      <span class="lastupdated">Last updated on Apr 21, 2026.
       </span></p>
   </div>
 
