@@ -155,6 +155,7 @@
 <li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#changelog">Changelog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#guides">Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#deployment-guides">Deployment Guides</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#technology-guides">Technology Guides</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#developer-guides">Developer Guides</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
@@ -360,7 +361,7 @@
 <h1>community.general.etcd3 lookup – Get key values from etcd3 server<a class="headerlink" href="#community-general-etcd3-lookup-get-key-values-from-etcd3-server" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This lookup plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.5.0).</p>
+<p>This lookup plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -432,6 +433,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <a class="ansibleOptionLink" href="#parameter-ca_cert" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Etcd3 CA authority.</p>
+<p>Required to enable TLS when connecting to an HTTPS etcd3 endpoint.</p>
 <p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
 <ul class="simple">
 <li><p>Environment variable: <span class="target" id="index-0"></span><a class="reference internal" href="../../environment_variables.html#envvar-ETCDCTL_CACERT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ETCDCTL_CACERT</span></code></a></p></li>
@@ -467,6 +469,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <td><div class="ansible-option-cell"><p>Counterpart of <a class="reference internal" href="../../environment_variables.html#envvar-ETCDCTL_ENDPOINTS"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">ETCDCTL_ENDPOINTS</span></code></a> environment variable. Specify the etcd3 connection with an URL form, for example <code class="ansible-value docutils literal notranslate"><span class="pre">https://hostname:2379</span></code>, or <code class="ansible-value docutils literal notranslate"><span class="pre">&lt;host&gt;:&lt;port&gt;</span></code> form.</p>
 <p>The <code class="ansible-value docutils literal notranslate"><span class="pre">host</span></code> part is overwritten by <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-host"><span class="std std-ref"><span class="pre">host</span></span></a></strong></code> option, if defined.</p>
 <p>The <code class="ansible-value docutils literal notranslate"><span class="pre">port</span></code> part is overwritten by <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-port"><span class="std std-ref"><span class="pre">port</span></span></a></strong></code> option, if defined.</p>
+<p>Note that specifying <code class="ansible-value docutils literal notranslate"><span class="pre">https://</span></code> in the endpoint URL does not by itself enable TLS. To connect to an HTTPS etcd3 endpoint, you must provide <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-ca-cert"><span class="std std-ref"><span class="pre">ca_cert</span></span></a></strong></code> (and optionally <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-cert-cert"><span class="std std-ref"><span class="pre">cert_cert</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-cert-key"><span class="std std-ref"><span class="pre">cert_key</span></span></a></strong></code>).</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;127.0.0.1:2379&quot;</span></code></p>
 <p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
 <ul class="simple">
@@ -480,6 +483,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 </div></td>
 <td><div class="ansible-option-cell"><p>Etcd3 listening client host.</p>
 <p>Takes precedence over <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-endpoints"><span class="std std-ref"><span class="pre">endpoints</span></span></a></strong></code>.</p>
+<p>Must be a bare hostname or IP address without a URL scheme. If a <code class="ansible-value docutils literal notranslate"><span class="pre">https://</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">http://</span></code> prefix is present, it will be stripped automatically.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -546,8 +550,9 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <ul class="simple">
 <li><p>When keyword and positional parameters are used together, positional parameters must be listed before keyword parameters:
 <code class="docutils literal notranslate"><span class="pre">lookup('community.general.etcd3',</span> <span class="pre">term1,</span> <span class="pre">term2,</span> <span class="pre">key1=value1,</span> <span class="pre">key2=value2)</span></code> and <code class="docutils literal notranslate"><span class="pre">query('community.general.etcd3',</span> <span class="pre">term1,</span> <span class="pre">term2,</span> <span class="pre">key1=value1,</span> <span class="pre">key2=value2)</span></code></p></li>
-<li><p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-host"><span class="std std-ref"><span class="pre">host</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-port"><span class="std std-ref"><span class="pre">port</span></span></a></strong></code> options take precedence over (endpoints) option.</p></li>
+<li><p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-host"><span class="std std-ref"><span class="pre">host</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-port"><span class="std std-ref"><span class="pre">port</span></span></a></strong></code> options take precedence over <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-endpoints"><span class="std std-ref"><span class="pre">endpoints</span></span></a></strong></code> option.</p></li>
 <li><p>The recommended way to connect to etcd3 server is using <code class="xref std std-envvar docutils literal notranslate"><span class="pre">ETCDCTL_ENDPOINT</span></code> environment variable and keep <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-endpoints"><span class="std std-ref"><span class="pre">endpoints</span></span></a></strong></code>, <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-host"><span class="std std-ref"><span class="pre">host</span></span></a></strong></code>, and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-port"><span class="std std-ref"><span class="pre">port</span></span></a></strong></code> unused.</p></li>
+<li><p>To connect to an HTTPS etcd3 endpoint, the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-ca-cert"><span class="std std-ref"><span class="pre">ca_cert</span></span></a></strong></code> option must be provided. Merely specifying <code class="ansible-value docutils literal notranslate"><span class="pre">https://</span></code> in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-etcd3-lookup-parameter-endpoints"><span class="std std-ref"><span class="pre">endpoints</span></span></a></strong></code> is not sufficient to enable TLS.</p></li>
 </ul>
 </div>
 </section>
@@ -580,6 +585,10 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;connect</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">etcd3</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">client</span><span class="nv"> </span><span class="s">certificate&quot;</span>
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;community.general.etcd3&#39;</span><span class="o">,</span> <span class="s1">&#39;foo/bar&#39;</span><span class="o">,</span> <span class="nv">cert_cert</span><span class="o">=</span><span class="s1">&#39;/etc/ssl/etcd/client.pem&#39;</span><span class="o">,</span> <span class="nv">cert_key</span><span class="o">=</span><span class="s1">&#39;/etc/ssl/etcd/client.key&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;connect</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">etcd3</span><span class="nv"> </span><span class="s">over</span><span class="nv"> </span><span class="s">HTTPS&quot;</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;community.general.etcd3&#39;</span><span class="o">,</span> <span class="s1">&#39;foo/bar&#39;</span><span class="o">,</span> <span class="nv">endpoints</span><span class="o">=</span><span class="s1">&#39;https://etcd.example.com:2379&#39;</span><span class="o">,</span> <span class="nv">ca_cert</span><span class="o">=</span><span class="s1">&#39;/etc/ssl/etcd/ca.pem&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -652,7 +661,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 20, 2026.
+      <span class="lastupdated">Last updated on Apr 21, 2026.
       </span></p>
   </div>
 
