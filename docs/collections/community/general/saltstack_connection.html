@@ -361,23 +361,80 @@
 <h1>community.general.saltstack connection – Allow ansible to piggyback on salt minions<a class="headerlink" href="#community-general-saltstack-connection-allow-ansible-to-piggyback-on-salt-minions" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This connection plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.6.0).</p>
+<p>This connection plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.6.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
-<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.general</span></code>.</p>
+<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.general</span></code>.
+You need further requirements to be able to use this connection plugin,
+see <a class="reference internal" href="#ansible-collections-community-general-saltstack-connection-requirements"><span class="std std-ref">Requirements</span></a> for details.</p>
 <p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.general.saltstack</span></code>.</p>
 </div>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>This allows you to use existing Saltstack infrastructure to connect to targets.</p></li>
+<li><p>Run commands or put/fetch files to Salt minions by using the local Salt master as transport.</p></li>
+<li><p>Ansible must run directly on the Salt master; this plugin uses <code class="docutils literal notranslate"><span class="pre">salt.client.LocalClient</span></code> and does not support connecting to a remote Salt master.</p></li>
 </ul>
+</section>
+<section id="requirements">
+<span id="ansible-collections-community-general-saltstack-connection-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>The below requirements are needed on the local controller node that executes this connection.</p>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">salt</span></code> Python package must be installed on the Salt master (the Ansible controller)</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-remote_addr"></div><p class="ansible-option-title" id="ansible-collections-community-general-saltstack-connection-parameter-remote-addr"><strong>remote_addr</strong></p>
+<a class="ansibleOptionLink" href="#parameter-remote_addr" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The Salt minion ID to target.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;inventory_hostname&quot;</span></code></p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: inventory_hostname</p></li>
+<li><p>Variable: ansible_host</p></li>
+</ul>
+</div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Configuration entries listed above for each entry type (Ansible variable, environment variable, and so on) have a low to high priority order.
+For example, a variable that is lower in the list will override a variable that is higher up.
+The entry types are also ordered by precedence from low to high priority order.
+For example, an ansible.cfg entry (further up in the list) is overwritten by an Ansible variable (further down in the list).</p>
+</div>
+</section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Ansible must be run from the Salt master host; the plugin cannot reach a remote Salt master.</p></li>
+<li><p>The inventory hostname (or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-saltstack-connection-parameter-remote-addr"><span class="std std-ref"><span class="pre">remote_addr</span></span></a></strong></code>) is treated as the Salt minion ID, not as a DNS name or IP address.</p></li>
+<li><p>The Salt master and its minion keys must already be configured and accepted before using this connection plugin.</p></li>
+<li><p>File transfer via <a class="reference internal" href="#ansible-collections-community-general-saltstack-connection"><span class="std std-ref">community.general.saltstack</span></a> uses <code class="docutils literal notranslate"><span class="pre">hashutil.base64_decodefile</span></code> (put) and <code class="docutils literal notranslate"><span class="pre">cp.get_file_str</span></code> (fetch); these Salt execution modules must be available on the targeted minions.</p></li>
+</ul>
+</div>
 <section id="authors">
 <h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
 <ul class="simple">
@@ -412,7 +469,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 17, 2026.
+      <span class="lastupdated">Last updated on May 18, 2026.
       </span></p>
   </div>
 
