@@ -361,7 +361,7 @@
 <h1>community.general.nmap inventory – Uses nmap to find hosts to target<a class="headerlink" href="#community-general-nmap-inventory-uses-nmap-to-find-hosts-to-target" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.6.1).</p>
+<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -742,6 +742,36 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-set_name_variable"></div><p class="ansible-option-title" id="ansible-collections-community-general-nmap-inventory-parameter-set-name-variable"><strong>set_name_variable</strong></p>
+<a class="ansibleOptionLink" href="#parameter-set_name_variable" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 13.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set the <code class="docutils literal notranslate"><span class="pre">name</span></code> variable for each host.</p>
+<p>When <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code>, sets the <code class="docutils literal notranslate"><span class="pre">name</span></code> variable which may trigger a warning about using a reserved name.</p>
+<p>Set to <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> to avoid the warning when <code class="docutils literal notranslate"><span class="pre">name</span></code> is not needed as a variable.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-skip_host_discovery"></div><p class="ansible-option-title" id="ansible-collections-community-general-nmap-inventory-parameter-skip-host-discovery"><strong>skip_host_discovery</strong></p>
+<a class="ansibleOptionLink" href="#parameter-skip_host_discovery" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 13.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Skip nmap host discovery phase and treat all hosts as online (<code class="docutils literal notranslate"><span class="pre">-Pn</span></code>).</p>
+<p>Useful when scanning remote hosts over VPN or through firewalls where nmap’s default discovery probes (TCP SYN to ports 80/443) are blocked but the target port is open.</p>
+<p>When <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> (default), nmap performs host discovery before port scanning, which may send packets to ports 80 and 443 regardless of the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmap-inventory-parameter-port"><span class="std std-ref"><span class="pre">port</span></span></a></strong></code> setting.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-strict"></div><p class="ansible-option-title" id="ansible-collections-community-general-nmap-inventory-parameter-strict"><strong>strict</strong></p>
 <a class="ansibleOptionLink" href="#parameter-strict" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -862,6 +892,12 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">22, 443</span>
 <span class="nt">groups</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">web_servers</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ports</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">selectattr(&#39;port&#39;,</span><span class="nv"> </span><span class="s">&#39;equalto&#39;,</span><span class="nv"> </span><span class="s">&#39;443&#39;)&quot;</span>
+
+<span class="nn">---</span>
+<span class="c1"># an nmap scan without setting the &#39;name&#39; variable to avoid warnings</span>
+<span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.general.nmap</span>
+<span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/24</span>
+<span class="nt">set_name_variable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -898,7 +934,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 18, 2026.
+      <span class="lastupdated">Last updated on May 19, 2026.
       </span></p>
   </div>
 

@@ -1584,22 +1584,6 @@ Environment variables used by the ansible-core configuration are documented in <
 </dd></dl>
 
 <dl class="std envvar">
-<dt class="sig sig-object std" id="envvar-ANSIBLE_HIERA_BIN">
-<span class="sig-name descname"><span class="pre">ANSIBLE_HIERA_BIN</span></span><a class="headerlink" href="#envvar-ANSIBLE_HIERA_BIN" title="Link to this definition"></a></dt>
-<dd><p>Binary file to execute Hiera.</p>
-<p><em>Used by:</em>
-<a class="reference internal" href="community/general/hiera_lookup.html#ansible-collections-community-general-hiera-lookup"><span class="std std-ref">community.general.hiera lookup plugin</span></a></p>
-</dd></dl>
-
-<dl class="std envvar">
-<dt class="sig sig-object std" id="envvar-ANSIBLE_HIERA_CFG">
-<span class="sig-name descname"><span class="pre">ANSIBLE_HIERA_CFG</span></span><a class="headerlink" href="#envvar-ANSIBLE_HIERA_CFG" title="Link to this definition"></a></dt>
-<dd><p>File that describes the hierarchy of Hiera.</p>
-<p><em>Used by:</em>
-<a class="reference internal" href="community/general/hiera_lookup.html#ansible-collections-community-general-hiera-lookup"><span class="std std-ref">community.general.hiera lookup plugin</span></a></p>
-</dd></dl>
-
-<dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-ANSIBLE_HOST_KEY_AUTO_ADD">
 <span class="sig-name descname"><span class="pre">ANSIBLE_HOST_KEY_AUTO_ADD</span></span><a class="headerlink" href="#envvar-ANSIBLE_HOST_KEY_AUTO_ADD" title="Link to this definition"></a></dt>
 <dd><p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, unknown host keys are automatically added to the user known_hosts file and saved on connection close, so the first connection to a new host works without manual intervention (e.g. no need to run ssh-keyscan or set config).</p>
@@ -2679,6 +2663,9 @@ Environment variables used by the ansible-core configuration are documented in <
 <dt class="sig sig-object std" id="envvar-ANSIBLE_PFEXEC_WRAP_EXECUTION">
 <span class="sig-name descname"><span class="pre">ANSIBLE_PFEXEC_WRAP_EXECUTION</span></span><a class="headerlink" href="#envvar-ANSIBLE_PFEXEC_WRAP_EXECUTION" title="Link to this definition"></a></dt>
 <dd><p>Toggle to wrap the command <code class="docutils literal notranslate"><span class="pre">pfexec</span></code> calls in <code class="docutils literal notranslate"><span class="pre">shell</span> <span class="pre">-c</span></code> or not.</p>
+<p>Unlike <code class="docutils literal notranslate"><span class="pre">sudo</span></code>, <code class="docutils literal notranslate"><span class="pre">pfexec</span></code> does not interpret shell constructs internally, so commands containing shell operators must be wrapped in a shell invocation.</p>
+<p>The current default of <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> only works in very limited cases (for example with <a class="reference internal" href="ansible/builtin/raw_module.html#ansible-collections-ansible-builtin-raw-module"><span class="std std-ref">ansible.builtin.raw</span></a>).</p>
+<p>The current default is <strong>deprecated</strong> and will change to <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> in community.general 14.0.0. To avoid the deprecation message, you can explicitly set this option to a value.</p>
 <p><em>Used by:</em>
 <a class="reference internal" href="community/general/pfexec_become.html#ansible-collections-community-general-pfexec-become"><span class="std std-ref">community.general.pfexec become plugin</span></a></p>
 </dd></dl>
@@ -5464,7 +5451,6 @@ Environment variables used by the ansible-core configuration are documented in <
 <dt class="sig sig-object std" id="envvar-OP_SERVICE_ACCOUNT_TOKEN">
 <span class="sig-name descname"><span class="pre">OP_SERVICE_ACCOUNT_TOKEN</span></span><a class="headerlink" href="#envvar-OP_SERVICE_ACCOUNT_TOKEN" title="Link to this definition"></a></dt>
 <dd><p>The access key for a service account.</p>
-<p>Only works with 1Password CLI version 2 or later.</p>
 <p><em>Used by:</em>
 <a class="reference internal" href="community/general/onepassword_lookup.html#ansible-collections-community-general-onepassword-lookup"><span class="std std-ref">community.general.onepassword lookup plugin</span></a>,
 <a class="reference internal" href="community/general/onepassword_doc_lookup.html#ansible-collections-community-general-onepassword-doc-lookup"><span class="std std-ref">community.general.onepassword_doc lookup plugin</span></a>,
@@ -5549,6 +5535,14 @@ Environment variables used by the ansible-core configuration are documented in <
 <dd><p>Only show summary, not individual task profiles. Especially usefull in combination with <code class="docutils literal notranslate"><span class="pre">DISPLAY_SKIPPED_HOSTS=false</span></code> and/or <code class="docutils literal notranslate"><span class="pre">ANSIBLE_DISPLAY_OK_HOSTS=false</span></code>.</p>
 <p><em>Used by:</em>
 <a class="reference internal" href="ansible/posix/profile_roles_callback.html#ansible-collections-ansible-posix-profile-roles-callback"><span class="std std-ref">ansible.posix.profile_roles callback plugin</span></a></p>
+</dd></dl>
+
+<dl class="std envvar">
+<dt class="sig sig-object std" id="envvar-PROFILE_TASKS_DATETIME_FORMAT">
+<span class="sig-name descname"><span class="pre">PROFILE_TASKS_DATETIME_FORMAT</span></span><a class="headerlink" href="#envvar-PROFILE_TASKS_DATETIME_FORMAT" title="Link to this definition"></a></dt>
+<dd><p>Datetime format, as expected by the <code class="docutils literal notranslate"><span class="pre">strftime</span></code> and <code class="docutils literal notranslate"><span class="pre">strptime</span></code> methods. An <code class="docutils literal notranslate"><span class="pre">iso8601</span></code> alias will be translated to <code class="docutils literal notranslate"><span class="pre">'%Y-%m-%dT%H:%M:%S.%f'</span></code> if that datetime standard wants to be used.</p>
+<p><em>Used by:</em>
+<a class="reference internal" href="ansible/posix/profile_tasks_callback.html#ansible-collections-ansible-posix-profile-tasks-callback"><span class="std std-ref">ansible.posix.profile_tasks callback plugin</span></a></p>
 </dd></dl>
 
 <dl class="std envvar">
@@ -6109,7 +6103,7 @@ Environment variables used by the ansible-core configuration are documented in <
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 18, 2026.
+      <span class="lastupdated">Last updated on May 19, 2026.
       </span></p>
   </div>
 

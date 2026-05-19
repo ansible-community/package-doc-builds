@@ -361,7 +361,7 @@
 <h1>community.general.gitlab_user module – Creates/updates/deletes/blocks/unblocks GitLab Users<a class="headerlink" href="#community-general-gitlab-user-module-creates-updates-deletes-blocks-unblocks-gitlab-users" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.6.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -602,7 +602,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-g
 <p><em class="ansible-option-versionadded">added in community.general 3.1.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The expiration date of the SSH public key in ISO 8601 format <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DDTHH:MM:SSZ</span></code>.</p>
-<p>This is only used when adding new SSH public keys.</p>
+<p>This is only used when creating or replacing SSH public keys.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -620,6 +620,24 @@ see <a class="reference internal" href="#ansible-collections-community-general-g
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sshkey_update_mode"></div><p class="ansible-option-title" id="ansible-collections-community-general-gitlab-user-module-parameter-sshkey-update-mode"><strong>sshkey_update_mode</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sshkey_update_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 13.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Controls how existing SSH keys with the same <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-gitlab-user-module-parameter-sshkey-name"><span class="std std-ref"><span class="pre">sshkey_name</span></span></a></strong></code> are handled.</p>
+<p>Use <code class="ansible-value docutils literal notranslate"><span class="pre">create</span></code> to preserve the historical behavior and leave existing keys with the same name unchanged.</p>
+<p>Use <code class="ansible-value docutils literal notranslate"><span class="pre">update</span></code> to replace an existing key only when exactly one key with the same name exists and its key material differs.</p>
+<p>Use <code class="ansible-value docutils literal notranslate"><span class="pre">deduplicate</span></code> to delete all keys with the same name before creating the requested key.</p>
+<p>SSH key comments are ignored when comparing key material.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;create&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;update&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;deduplicate&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-general-gitlab-user-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -633,14 +651,14 @@ see <a class="reference internal" href="#ansible-collections-community-general-g
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-community-general-gitlab-user-module-parameter-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The username of the user.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-community-general-gitlab-user-module-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -717,6 +735,18 @@ see <a class="reference internal" href="#ansible-collections-community-general-g
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">super_group/mon_group</span>
 <span class="w">    </span><span class="nt">access_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">owner</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Replace</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">GitLab</span><span class="nv"> </span><span class="s">SSH</span><span class="nv"> </span><span class="s">key</span><span class="nv"> </span><span class="s">when</span><span class="nv"> </span><span class="s">one</span><span class="nv"> </span><span class="s">matching</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">exists&quot;</span>
+<span class="w">  </span><span class="nt">community.general.gitlab_user</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://gitlab.example.com/</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">access_token</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My Name</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myusername</span>
+<span class="w">    </span><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">me@example.com</span>
+<span class="w">    </span><span class="nt">sshkey_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MySSH</span>
+<span class="w">    </span><span class="nt">sshkey_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI...</span>
+<span class="w">    </span><span class="nt">sshkey_update_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Create</span><span class="nv"> </span><span class="s">GitLab</span><span class="nv"> </span><span class="s">User</span><span class="nv"> </span><span class="s">using</span><span class="nv"> </span><span class="s">external</span><span class="nv"> </span><span class="s">identity</span><span class="nv"> </span><span class="s">provider&quot;</span>
 <span class="w">  </span><span class="nt">community.general.gitlab_user</span><span class="p">:</span>
@@ -833,7 +863,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-g
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 18, 2026.
+      <span class="lastupdated">Last updated on May 19, 2026.
       </span></p>
   </div>
 
