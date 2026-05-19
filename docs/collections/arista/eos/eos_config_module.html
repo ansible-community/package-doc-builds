@@ -334,7 +334,7 @@
 <h1>arista.eos.eos_config module – Manage Arista EOS configuration sections<a class="headerlink" href="#arista-eos-eos-config-module-manage-arista-eos-configuration-sections" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/arista/eos/">arista.eos collection</a> (version 12.0.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/arista/eos/">arista.eos collection</a> (version 12.1.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -356,6 +356,11 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Arista EOS configurations use a simple block indent file syntax for segmenting configuration into sections. This module provides an implementation for working with EOS configuration sections in a deterministic way. This module works with either CLI or eAPI transports.</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module has a corresponding <a class="reference internal" href="../../../plugins/action.html#action-plugins"><span class="std std-ref">action plugin</span></a>.</p>
+</div>
+<p>Aliases: config</p>
 </section>
 <section id="parameters">
 <h2><a class="toc-backref" href="#id2" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
@@ -414,6 +419,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-content"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-content"><strong>content</strong></p>
+<a class="ansibleOptionLink" href="#parameter-content" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Configuration content to apply to the device. This should be the rendered configuration text, not a file path.</p>
+<p>This is the recommended way to provide templated configurations. Use <code class="docutils literal notranslate"><span class="pre">ansible.builtin.template</span></code> lookup to render your Jinja2 template and pass the output to this parameter.</p>
+<p>This argument is mutually exclusive with <em>src</em>, <em>lines</em>, and <em>parents</em>.</p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">content:</span> <span class="pre">&quot;{{</span> <span class="pre">lookup('ansible.builtin.template',</span> <span class="pre">'config.j2'</span></code> }}”)</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-defaults"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-defaults"><strong>defaults</strong></p>
 <a class="ansibleOptionLink" href="#parameter-defaults" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -425,7 +440,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-diff_against"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-diff-against"><strong>diff_against</strong></p>
 <a class="ansibleOptionLink" href="#parameter-diff_against" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -445,21 +460,21 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-diff_ignore_lines"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-diff-ignore-lines"><strong>diff_ignore_lines</strong></p>
 <a class="ansibleOptionLink" href="#parameter-diff_ignore_lines" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Use this argument to specify one or more lines that should be ignored during the diff. This is used for lines in the configuration that are automatically updated by the system. This argument takes a list of regular expressions or exact line matches.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-intended_config"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-intended-config"><strong>intended_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-intended_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The <code class="docutils literal notranslate"><span class="pre">intended_config</span></code> provides the master configuration that the node should conform to and is used to check the final running-config against. This argument will not modify any settings on the remote device and is strictly used to check the compliance of the current device’s configuration against. When specifying this argument, the task should also modify the <code class="docutils literal notranslate"><span class="pre">diff_against</span></code> value and set it to <em>intended</em>. The configuration lines for this value should be similar to how it will appear if present in the running-configuration of the device including the indentation to ensure correct diff.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-lines"></div>
 <div class="ansibleOptionAnchor" id="parameter-commands"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-lines"><span id="ansible-collections-arista-eos-eos-config-module-parameter-commands"></span><strong>lines</strong></p>
 <a class="ansibleOptionLink" href="#parameter-lines" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: commands</span></p>
@@ -468,7 +483,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>The ordered set of commands that should be configured in the section. The commands must be the exact same commands as found in the device running-config as found in the device running-config to ensure idempotency and correct diff. Be sure to note the configuration command syntax as some commands are automatically modified by the device config parser.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-match"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-match"><strong>match</strong></p>
 <a class="ansibleOptionLink" href="#parameter-match" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -482,14 +497,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-parents"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-parents"><strong>parents</strong></p>
 <a class="ansibleOptionLink" href="#parameter-parents" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The ordered set of parents that uniquely identify the section or hierarchy the commands should be checked against. If the parents argument is omitted, the commands are checked against the set of top level or global commands.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-replace"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-replace"><strong>replace</strong></p>
 <a class="ansibleOptionLink" href="#parameter-replace" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -502,7 +517,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-running_config"></div>
 <div class="ansibleOptionAnchor" id="parameter-config"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-running-config"><span id="ansible-collections-arista-eos-eos-config-module-parameter-config"></span><strong>running_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-running_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: config</span></p>
@@ -511,7 +526,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>The module, by default, will connect to the remote device and retrieve the current running-config to use as a base for comparing against the contents of source. There are times when it is not desirable to have the task get the current running-config for every task in a playbook. The <em>running_config</em> argument allows the implementer to pass in the configuration to use as the base config for this module. The configuration lines for this option should be similar to how it will appear if present in the running-configuration of the device including the indentation to ensure idempotency and correct diff.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-save_when"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-save-when"><strong>save_when</strong></p>
 <a class="ansibleOptionLink" href="#parameter-save_when" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -525,11 +540,12 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-src"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-src"><strong>src</strong></p>
 <a class="ansibleOptionLink" href="#parameter-src" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The <em>src</em> argument provides a path to the configuration file to load into the remote system. The path can either be a full system path to the configuration file if the value starts with / or relative to the root of the implemented role or playbook. This argument is mutually exclusive with the <em>lines</em> and <em>parents</em> arguments. It can be a Jinja2 template as well. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration (live switch config) of the device i ncluding the indentation to ensure idempotency and correct diff. Arista EOS device config has 3 spaces indentation.</p>
+<td><div class="ansible-option-cell"><p>Specifies the source path to the file that contains the configuration or configuration template to load. The path to the source file can either be the full path on the Ansible control host or a relative path from the playbook or role root directory. This argument is mutually exclusive with <em>lines</em>, <em>parents</em>, and <em>content</em>. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration (live switch config) of the device including the indentation to ensure idempotency and correct diff. Arista EOS device config has 3 spaces indentation.</p>
+<p>NOTE: The <em>src</em> parameter will no longer process Jinja2 templates starting in January 2028. To use templated configurations, render the template using <code class="docutils literal notranslate"><span class="pre">ansible.builtin.template</span></code> lookup and pass the result to the <em>content</em> parameter instead.</p>
 </div></td>
 </tr>
 </tbody>
@@ -567,10 +583,31 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">  </span><span class="nt">arista.eos.eos_config</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eos.cfg</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">render a Jinja2 template onto an Arista switch</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Render a Jinja2 template onto an Arista switch (DEPRECATED - use content parameter)</span>
 <span class="w">  </span><span class="nt">arista.eos.eos_config</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">backup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eos_template.j2</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Apply templated configuration using content parameter (RECOMMENDED)</span>
+<span class="w">  </span><span class="nt">arista.eos.eos_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;ansible.builtin.template&#39;</span><span class="o">,</span> <span class="s1">&#39;eos_template.j2&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">backup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Apply templated configuration with backup options (RECOMMENDED)</span>
+<span class="w">  </span><span class="nt">arista.eos.eos_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;ansible.builtin.template&#39;</span><span class="o">,</span> <span class="s1">&#39;eos_template.j2&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">backup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">backup_options</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup.cfg</span>
+<span class="w">      </span><span class="nt">dir_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Load configuration from pre-rendered template</span>
+<span class="w">  </span><span class="nt">arista.eos.eos_config</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">interface Ethernet1</span>
+<span class="w">         </span><span class="no">description Uplink to Core</span>
+<span class="w">         </span><span class="no">ip address 10.1.1.1/24</span>
+<span class="w">         </span><span class="no">no shutdown</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">diff the running config against a master config</span>
 <span class="w">  </span><span class="nt">arista.eos.eos_config</span><span class="p">:</span>
@@ -698,7 +735,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 18, 2026.
+      <span class="lastupdated">Last updated on May 19, 2026.
       </span></p>
   </div>
 

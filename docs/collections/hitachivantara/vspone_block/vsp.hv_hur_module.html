@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="hitachivantara.vspone_block.vsp.hv_hur_facts module – Retrieves HUR information from VSP block storage systems." href="vsp.hv_hur_facts_module.html" />
+    <link rel="next" title="hitachivantara.vspone_block.vsp.hv_hur_bulk module – Manages bulk HUR pairs on VSP block storage systems." href="vsp.hv_hur_bulk_module.html" />
     <link rel="prev" title="hitachivantara.vspone_block.vsp.hv_hg_facts module – Retrieves host group information from a specified VSP block storage system." href="vsp.hv_hg_facts_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -335,7 +335,7 @@
 <h1>hitachivantara.vspone_block.vsp.hv_hur module – Manages HUR pairs on VSP block storage systems.<a class="headerlink" href="#hitachivantara-vspone-block-vsp-hv-hur-module-manages-hur-pairs-on-vsp-block-storage-systems" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hitachivantara/vspone_block/">hitachivantara.vspone_block collection</a> (version 4.6.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hitachivantara/vspone_block/">hitachivantara.vspone_block collection</a> (version 4.8.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -580,8 +580,8 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Force copy for data reduction. Optional for the Create HUR pair in new copy group /Create HUR-NVMe pair /Create HUR-ISCSI pair tasks.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
-<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -617,8 +617,10 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-spec/mirror_unit_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-mirror-unit-id"><strong>mirror_unit_id</strong></p>
-<a class="ansibleOptionLink" href="#parameter-spec/mirror_unit_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<div class="ansibleOptionAnchor" id="parameter-spec/mirror_unit_number"></div>
+<div class="ansibleOptionAnchor" id="parameter-spec/mirror_unit_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-mirror-unit-number"><span id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-mirror-unit-id"></span><strong>mirror_unit_number</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/mirror_unit_number" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: mirror_unit_id</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Mirror Unit Id. Optional for the Create HUR pair in new copy group /Create a HUR pair using a range for secondary volume ID /Create HUR-NVMe pair /Create HUR-ISCSI pair /Create HUR pair with provisioned_secondary_volume_id /Create HUR pair with provisioned_secondary_volume_id and hostgroups /Create HUR-iSCSI pair and debug result /Create HUR-NVMe pair and debug result tasks.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
@@ -676,28 +678,30 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroup"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroup"><strong>secondary_hostgroup</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/secondary_hostgroup" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Host group details of secondary volume. Required for the Create HUR pair in new copy group /Create HUR pair with existing copy group /Create a HUR pair using a range for secondary volume ID /Create HUR pair with provisioned_secondary_volume_id and hostgroups tasks. Optional for the Create HUR pair and debug result task.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Use secondary_hostgroups instead.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroup/lun_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroup-lun-id"><strong>lun_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/secondary_hostgroup/lun_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LUN ID can be provided along with host group on the secondary storage system. Optional for the Create HUR pair in new copy group /Create HUR pair with existing copy group tasks. Required for the Create HUR pair with provisioned_secondary_volume_id and hostgroups task.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LUN ID can be provided along with host group on the secondary storage system.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroup/name"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroup-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spec/secondary_hostgroup/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the host group on the secondary storage system. Required for the Create HUR pair in new copy group /Create HUR pair with existing copy group /Create a HUR pair using a range for secondary volume ID /Create HUR pair with provisioned_secondary_volume_id and hostgroups /Create HUR pair and debug result tasks.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the host group on the secondary storage system.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroup/port"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroup-port"><strong>port</strong></p>
-<a class="ansibleOptionLink" href="#parameter-spec/secondary_hostgroup/port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+<div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroup/port_id"></div>
+<div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroup/port"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroup-port-id"><span id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroup-port"></span><strong>port_id</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/secondary_hostgroup/port_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: port</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Port of the host group on the secondary storage system. Required for the Create HUR pair in new copy group /Create HUR pair with existing copy group /Create a HUR pair using a range for secondary volume ID /Create HUR pair with provisioned_secondary_volume_id and hostgroups /Create HUR pair and debug result tasks.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Port ID of the host group on the secondary storage system. port field is deprecated, port_id should be used instead.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -722,10 +726,12 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroups/port"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroups-port"><strong>port</strong></p>
-<a class="ansibleOptionLink" href="#parameter-spec/secondary_hostgroups/port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+<div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroups/port_id"></div>
+<div class="ansibleOptionAnchor" id="parameter-spec/secondary_hostgroups/port"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroups-port-id"><span id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-hostgroups-port"></span><strong>port_id</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/secondary_hostgroups/port_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: port</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Port of the host group on the secondary storage system. Required for the Create HUR pair in new copy group /Create HUR pair with existing copy group /Create a HUR pair using a range for secondary volume ID /Create HUR pair with provisioned_secondary_volume_id and hostgroups /Create HUR pair and debug result tasks.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Port ID of the host group on the secondary storage system. Required for the Create HUR pair in new copy group /Create HUR pair with existing copy group /Create a HUR pair using a range for secondary volume ID /Create HUR pair with provisioned_secondary_volume_id and hostgroups /Create HUR pair and debug result tasks. port field is deprecated, port_id should be used instead.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -750,10 +756,12 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-spec/secondary_iscsi_targets/port"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-iscsi-targets-port"><strong>port</strong></p>
-<a class="ansibleOptionLink" href="#parameter-spec/secondary_iscsi_targets/port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+<div class="ansibleOptionAnchor" id="parameter-spec/secondary_iscsi_targets/port_id"></div>
+<div class="ansibleOptionAnchor" id="parameter-spec/secondary_iscsi_targets/port"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-iscsi-targets-port-id"><span id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-parameter-spec-secondary-iscsi-targets-port"></span><strong>port_id</strong></p>
+<a class="ansibleOptionLink" href="#parameter-spec/secondary_iscsi_targets/port_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: port</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Port name. Required for the Create HUR-ISCSI pair /Create HUR-iSCSI pair and debug result tasks.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Port ID. Required for the Create HUR-ISCSI pair /Create HUR-iSCSI pair and debug result tasks. port field is deprecated, port_id should be used instead.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -916,11 +924,11 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">local_device_group_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hur_copy_group_name_1P_</span>
 <span class="w">      </span><span class="nt">remote_device_group_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hur_copy_group_name_1S_</span>
 <span class="w">      </span><span class="nt">consistency_group_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">      </span><span class="nt">secondary_hostgroup</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hg_1</span>
-<span class="w">        </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CL1-A</span>
-<span class="w">        </span><span class="nt">lun_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="w">      </span><span class="nt">mirror_unit_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">      </span><span class="nt">secondary_hostgroups</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hg_1</span>
+<span class="w">          </span><span class="nt">port_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CL1-A</span>
+<span class="w">          </span><span class="nt">lun_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">      </span><span class="nt">mirror_unit_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a HUR pair in existing copy group</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hur</span><span class="p">:</span>
@@ -940,7 +948,7 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <span class="w">      </span><span class="nt">secondary_pool_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <span class="w">      </span><span class="nt">secondary_hostgroups</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hg_1</span>
-<span class="w">          </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CL1-A</span>
+<span class="w">          </span><span class="nt">port_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CL1-A</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Split HUR pair</span>
 <span class="w">  </span><span class="nt">hitachivantara.vspone_block.vsp.hv_hur</span><span class="p">:</span>
@@ -1042,6 +1050,15 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/copy_rate"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-copy-rate"><strong>copy_rate</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/copy_rate" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Copy rate.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">-1</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hur_info/fence_level"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-fence-level"><strong>fence_level</strong></p>
 <a class="ansibleOptionLink" href="#return-hur_info/fence_level" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1050,173 +1067,200 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;ASYNC&quot;</span></code></p>
 </div></td>
 </tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/local_device_group_name"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-local-device-group-name"><strong>local_device_group_name</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/local_device_group_name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the local device group to retrieve TrueCopy pair information for.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;hur_bulk_cg_1P_&quot;</span></code></p>
+</div></td>
+</tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hur_info/mirror_unit_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-mirror-unit-id"><strong>mirror_unit_id</strong></p>
 <a class="ansibleOptionLink" href="#return-hur_info/mirror_unit_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Use mirror_unit_number instead.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">1</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/mirror_unit_number"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-mirror-unit-number"><strong>mirror_unit_number</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/mirror_unit_number" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Mirror unit number.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">1</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/primary_journal_pool_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-journal-pool-id"><strong>primary_journal_pool_id</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/primary_journal_pool_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Journal ID for primary volume.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">3</span></code></p>
-</div></td>
-</tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/primary_storage_serial"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-storage-serial"><strong>primary_storage_serial</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/primary_storage_serial" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="return-hur_info/primary_journal_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-journal-id"><strong>primary_journal_id</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/primary_journal_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Storage serial number for primary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Primary journal Id.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;810050&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">25</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/primary_volume_difference_data_management"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-volume-difference-data-management"><strong>primary_volume_difference_data_management</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/primary_volume_difference_data_management" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="return-hur_info/primary_journal_pool"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-journal-pool"><strong>primary_journal_pool</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/primary_journal_pool" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Difference data management for primary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Use primary_journal_id instead.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">25</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hur_info/primary_volume_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-volume-id"><strong>primary_volume_id</strong></p>
 <a class="ansibleOptionLink" href="#return-hur_info/primary_volume_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LDEV ID for primary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Primary volume ID.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">6622</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">6442</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hur_info/primary_volume_id_hex"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-volume-id-hex"><strong>primary_volume_id_hex</strong></p>
 <a class="ansibleOptionLink" href="#return-hur_info/primary_volume_id_hex" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Hexadecimal ID for primary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Hexadecimal representation of the primary volume ID.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;00:19:DE&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;00:19:2A&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/primary_volume_processing_status"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-volume-processing-status"><strong>primary_volume_processing_status</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/primary_volume_processing_status" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Processing status for primary volume.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;N&quot;</span></code></p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hur_info/primary_volume_status"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-volume-status"><strong>primary_volume_status</strong></p>
 <a class="ansibleOptionLink" href="#return-hur_info/primary_volume_status" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Status of primary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Primary volume status.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;PAIR&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/primary_volume_storage_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-volume-storage-id"><strong>primary_volume_storage_id</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/primary_volume_storage_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Use primary_volume_storage_serial_number instead.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;810050&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/primary_volume_storage_serial_number"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-volume-storage-serial-number"><strong>primary_volume_storage_serial_number</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/primary_volume_storage_serial_number" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Storage serial number of the primary volume.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;810050&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/pvol_status"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-pvol-status"><strong>pvol_status</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/pvol_status" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Use primary_volume_status instead.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;PAIR&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/primary_volume_storage_device_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-primary-volume-storage-device-id"><strong>primary_volume_storage_device_id</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/primary_volume_storage_device_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="return-hur_info/pvol_storage_device_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-pvol-storage-device-id"><strong>pvol_storage_device_id</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/pvol_storage_device_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Storage device ID for primary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. PVOL storage device ID.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;A34000810050&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/remote_device_group_name"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-remote-device-group-name"><strong>remote_device_group_name</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/remote_device_group_name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the remote device group to retrieve TrueCopy pair information for.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;hur_bulk_cg_1S_&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hur_info/remote_mirror_copy_pair_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-remote-mirror-copy-pair-id"><strong>remote_mirror_copy_pair_id</strong></p>
 <a class="ansibleOptionLink" href="#return-hur_info/remote_mirror_copy_pair_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Remote mirror copy pair ID.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Remote mirror copy pair ID.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;A34000810045,snewar_hur_copy_group_12,snewar_hur_copy_group_12P_,snewar_hur_copy_group_12S_,snewar_hur_copy_pair_12&quot;</span></code></p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/replication_type"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-replication-type"><strong>replication_type</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/replication_type" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Replication type.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;UR&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;A34000810050,spcA34000810045A34000810050,spcA34000810045A34000810050,spcA34000810050A34000810045,spc-7331-6442&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/secondary_journal_pool_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-journal-pool-id"><strong>secondary_journal_pool_id</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/secondary_journal_pool_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<div class="ansibleOptionAnchor" id="return-hur_info/secondary_journal_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-journal-id"><strong>secondary_journal_id</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/secondary_journal_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Journal ID for secondary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Secondary journal ID.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">1</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">25</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/secondary_storage_serial"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-storage-serial"><strong>secondary_storage_serial</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/secondary_storage_serial" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<div class="ansibleOptionAnchor" id="return-hur_info/secondary_journal_pool"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-journal-pool"><strong>secondary_journal_pool</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/secondary_journal_pool" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Storage serial number for secondary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Use secondary_journal_id instead.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">810045</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">25</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_difference_data_management"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-difference-data-management"><strong>secondary_volume_difference_data_management</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_difference_data_management" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Difference data management for secondary volume.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code></p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-id"><strong>secondary_volume_id</strong></p>
 <a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LDEV ID for secondary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Secondary volume ID.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">6623</span></code></p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_id_hex"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-id-hex"><strong>secondary_volume_id_hex</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_id_hex" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Hexadecimal ID for secondary volume.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;00:19:DF&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">7331</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_processing_status"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-processing-status"><strong>secondary_volume_processing_status</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_processing_status" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_id_hex"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-id-hex"><strong>secondary_volume_id_hex</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_id_hex" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Processing status for secondary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Hexadecimal representation of the secondary volume ID.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;N&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;00:1C:A3&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_status"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-status"><strong>secondary_volume_status</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_status" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_storage_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-storage-id"><strong>secondary_volume_storage_id</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_storage_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Status of secondary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. Use secondary_volume_storage_serial_number instead.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;810045&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_storage_serial_number"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-storage-serial-number"><strong>secondary_volume_storage_serial_number</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_storage_serial_number" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Storage serial number of the secondary volume.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;810045&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-hur_info/svol_status"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-svol-status"><strong>svol_status</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/svol_status" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>SVOL status.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;PAIR&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-hur_info/secondary_volume_storage_device_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-secondary-volume-storage-device-id"><strong>secondary_volume_storage_device_id</strong></p>
-<a class="ansibleOptionLink" href="#return-hur_info/secondary_volume_storage_device_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="return-hur_info/svol_storage_device_id"></div><p class="ansible-option-title" id="ansible-collections-hitachivantara-vspone-block-vsp-hv-hur-module-return-hur-info-svol-storage-device-id"><strong>svol_storage_device_id</strong></p>
+<a class="ansibleOptionLink" href="#return-hur_info/svol_storage_device_id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Storage device ID for secondary volume.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Deprecated. SVOL storage device ID.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;A34000810045&quot;</span></code></p>
 </div></td>
@@ -1246,14 +1290,14 @@ see <a class="reference internal" href="#ansible-collections-hitachivantara-vspo
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="vsp.hv_hg_facts_module.html" class="btn btn-neutral float-left" title="hitachivantara.vspone_block.vsp.hv_hg_facts module – Retrieves host group information from a specified VSP block storage system." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="vsp.hv_hur_facts_module.html" class="btn btn-neutral float-right" title="hitachivantara.vspone_block.vsp.hv_hur_facts module – Retrieves HUR information from VSP block storage systems." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="vsp.hv_hur_bulk_module.html" class="btn btn-neutral float-right" title="hitachivantara.vspone_block.vsp.hv_hur_bulk module – Manages bulk HUR pairs on VSP block storage systems." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 18, 2026.
+      <span class="lastupdated">Last updated on May 19, 2026.
       </span></p>
   </div>
 
