@@ -336,7 +336,7 @@
 <h1>ansible.windows.win_powershell module – Run PowerShell scripts<a class="headerlink" href="#ansible-windows-win-powershell-module-run-powershell-scripts" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/windows/">ansible.windows collection</a> (version 3.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/windows/">ansible.windows collection</a> (version 3.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -359,6 +359,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Runs a PowerShell script and outputs the data in a structured format.</p></li>
 <li><p>Use <a class="reference internal" href="win_command_module.html#ansible-collections-ansible-windows-win-command-module"><span class="std std-ref">ansible.windows.win_command</span></a> or <a class="reference internal" href="win_shell_module.html#ansible-collections-ansible-windows-win-shell-module"><span class="std std-ref">ansible.windows.win_shell</span></a> to run a traditional PowerShell process with stdout, stderr, and rc results.</p></li>
+<li><p>Since <code class="docutils literal notranslate"><span class="pre">ansible.windows</span> <span class="pre">3.6.0</span></code> this module can also run on non-Windows targets with PowerShell 7 present. Targeting non-Windows hosts requires Ansible <code class="docutils literal notranslate"><span class="pre">2.22.0</span></code> or newer.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -432,6 +433,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>When not defined the script will run in the current module PowerShell interpreter.</p>
 <p>Both the remote PowerShell and the one specified by <em>executable</em> must be running on PowerShell v5.1 or newer.</p>
 <p>Setting this value may change the values returned in the <code class="docutils literal notranslate"><span class="pre">output</span></code> return value depending on the underlying .NET type.</p>
+<p>This option is only supported on Windows hosts.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -490,6 +492,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Parameters to pass into the script as a SecureString or PSCredential.</p>
 <p>Each sensitive value will be marked with <code class="docutils literal notranslate"><span class="pre">no_log</span></code> to ensure they are not exposed in the module invocation args logs.</p>
 <p>The <em>value</em> suboption can be used to create a SecureString value while <em>username</em> and <em>password</em> can be used to create a PSCredential value.</p>
+<p>If neither <em>value</em> nor <em>username</em>/<em>password</em> is specified, <code class="docutils literal notranslate"><span class="pre">$null</span></code> is passed as the parameter value.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -521,6 +524,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-sensitive_parameters/value" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The string to pass as a SecureString of the parameter specified by <em>name</em>.</p>
+<p>Omit both <em>value</em> and <em>username</em>/<em>password</em> to pass <code class="docutils literal notranslate"><span class="pre">$null</span></code> as the parameter value, allowing the script to use its default.</p>
 <p>This is mutually exclusive with <em>username</em> and <em>password</em>.</p>
 </div></td>
 </tr>
@@ -532,7 +536,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>The module is set as failed when a terminating exception is throw, or <code class="docutils literal notranslate"><span class="pre">error_action=stop</span></code> and a normal error record is raised.</p></li>
+<li><p>The module is set as failed when a terminating exception is thrown, or <code class="docutils literal notranslate"><span class="pre">error_action=stop</span></code> and a normal error record is raised.</p></li>
 <li><p>The output values are processed using a custom filter and while it mostly matches the <code class="docutils literal notranslate"><span class="pre">ConvertTo-Json</span></code> result the following value types are different.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">DateTime</span></code> will be an ISO 8601 string in UTC, <code class="docutils literal notranslate"><span class="pre">DateTimeOffset</span></code> will have the offset as specified by the value.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Enum</span></code> will contain a dictionary with <code class="docutils literal notranslate"><span class="pre">Type</span></code>, <code class="docutils literal notranslate"><span class="pre">String</span></code>, <code class="docutils literal notranslate"><span class="pre">Value</span></code> being the type name, string representation and raw integer value respectively.</p></li>
@@ -1086,7 +1090,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 24, 2026.
+      <span class="lastupdated">Last updated on May 25, 2026.
       </span></p>
   </div>
 
