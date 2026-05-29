@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Community.Crypto" href="../crypto/index.html" />
-    <link rel="prev" title="community.clickhouse.clickhouse_role module – Creates or removes a ClickHouse role." href="clickhouse_role_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="community.clickhouse.clickhouse_script module – Run SQL queries from a file" href="clickhouse_script_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -356,7 +356,7 @@
 <h1>community.clickhouse.clickhouse_user module – Creates or removes a ClickHouse user using the clickhouse-driver Client interface<a class="headerlink" href="#community-clickhouse-clickhouse-user-module-creates-or-removes-a-clickhouse-user-using-the-clickhouse-driver-client-interface" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/clickhouse/">community.clickhouse collection</a> (version 2.1.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/clickhouse/">community.clickhouse collection</a> (version 2.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -540,12 +540,23 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Set the user’s password.</p>
+<td><div class="ansible-option-cell"><p>This option is deprecated and will be removed in 3.0.0. Use <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-authentication"><span class="std std-ref"><span class="pre">authentication</span></span></a></strong></code> instead.</p>
+<p>Set the user’s password.</p>
 <p>Password can be passed unhashed or hashed.</p>
 <p>Cannot be used together with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-authentication"><span class="std std-ref"><span class="pre">authentication</span></span></a></strong></code>.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-profiles"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-parameter-profiles"><strong>profiles</strong></p>
+<a class="ansibleOptionLink" href="#parameter-profiles" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.clickhouse 2.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Settings profiles that will be applied to role.</p>
+<p>Can be only used with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-settings"><span class="std std-ref"><span class="pre">settings</span></span></a></strong></code> as <code class="docutils literal notranslate"><span class="pre">dict</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-roles"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-parameter-roles"><strong>roles</strong></p>
 <a class="ansibleOptionLink" href="#parameter-roles" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in community.clickhouse 0.6.0</em></p>
@@ -555,7 +566,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <p>To revoke all roles, pass an empty list (<code class="docutils literal notranslate"><span class="pre">[]</span></code>) and <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-default-roles-mode"><span class="std std-ref"><span class="pre">default_roles_mode=listed_only</span></span></a></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-roles_mode"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-parameter-roles-mode"><strong>roles_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-roles_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in community.clickhouse 0.6.0</em></p>
@@ -572,18 +583,20 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-settings"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-parameter-settings"><strong>settings</strong></p>
-<a class="ansibleOptionLink" href="#parameter-settings" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<a class="ansibleOptionLink" href="#parameter-settings" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
 <p><em class="ansible-option-versionadded">added in community.clickhouse 0.5.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Settings with their constraints applied by default at user login.</p>
-<p>You can also specify the profile from which the settings will be inherited.</p>
+<p>Can pass either <code class="docutils literal notranslate"><span class="pre">list</span></code>(obsolete) or dictionary.</p>
+<p>You can also specify the profile from which the settings will be inherited <code class="docutils literal notranslate"><span class="pre">list</span></code>.</p>
 <p>When specified for an existing user, settings will only be updated if they differ from current settings.</p>
 <p>The module fetches current settings from <code class="docutils literal notranslate"><span class="pre">system.settings_profile_elements</span></code> for comparison.</p>
+<p>If no <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-profiles"><span class="std std-ref"><span class="pre">profiles</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-settings"><span class="std std-ref"><span class="pre">settings</span></span></a></strong></code> defined setting will not remove anything. Set to {} to purge it.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -597,11 +610,21 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 </ul>
 </div></td>
 </tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-success_on"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-parameter-success-on"><strong>success_on</strong></p>
+<a class="ansibleOptionLink" href="#parameter-success_on" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.clickhouse 2.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of <a class="reference external" href="https://github.com/ClickHouse/ClickHouse/blob/master/src/Common/ErrorCodes.cpp">server error codes</a> that will be treated as success, otherwise throw errors.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[497]</span></code></p>
+</div></td>
+</tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-type_password"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-parameter-type-password"><strong>type_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-type_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The type of password being transmitted(plaintext_password, sha256_password, sha256_hash…).</p>
+<td><div class="ansible-option-cell"><p>This option is deprecated and will be removed in 3.0.0. Use <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-authentication"><span class="std std-ref"><span class="pre">authentication</span></span></a></strong></code> instead.</p>
+<p>The type of password being transmitted(plaintext_password, sha256_password, sha256_hash…).</p>
 <p>For more details, see <a class="reference external" href="https://clickhouse.com/docs/en/sql-reference/statements/create/user">https://clickhouse.com/docs/en/sql-reference/statements/create/user</a>.</p>
 <p>Cannot be used together with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-authentication"><span class="std std-ref"><span class="pre">authentication</span></span></a></strong></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;sha256_password&quot;</span></code></p>
@@ -665,6 +688,15 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Supports check_mode.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-idempotent"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-user-module-attribute-idempotent"><strong>idempotent</strong></p>
+<a class="ansibleOptionLink" href="#attribute-idempotent" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-partial">partial</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-settings"><span class="std std-ref"><span class="pre">settings</span></span></a></strong></code> can break idempotency when the deprecated <code class="docutils literal notranslate"><span class="pre">list</span></code> format is used. Use the dictionary format instead.</p>
+<p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-user-module-parameter-update-password"><span class="std std-ref"><span class="pre">update_password</span></span></a></strong></code> turns off idempotency because ClickHouse doesn’t expose password hashes and the update will always be executed.</p>
 </div></td>
 </tr>
 </tbody>
@@ -745,10 +777,30 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <span class="w">    </span><span class="nt">login_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_password</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_user</span>
 <span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max_memory_usage = 20000 READONLY</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max_threads = 8</span>
+<span class="w">      </span><span class="nt">max_memory_usage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20000</span>
+<span class="w">        </span><span class="nt">writability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readonly</span>
+<span class="w">      </span><span class="nt">max_threads</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create user with specific settings</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update user settings (idempotent - only updates if different)</span>
+<span class="w">  </span><span class="nt">community.clickhouse.clickhouse_user</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">login_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">    </span><span class="nt">login_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alice</span>
+<span class="w">    </span><span class="nt">login_db</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
+<span class="w">    </span><span class="nt">login_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_password</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_user</span>
+<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">max_memory_usage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20G</span>
+<span class="w">        </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10G</span>
+<span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25G</span>
+<span class="w">        </span><span class="nt">writability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readonly</span>
+<span class="w">      </span><span class="nt">max_threads</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">        </span><span class="nt">writability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">writable</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create user with specific settings and profile</span>
 <span class="w">  </span><span class="nt">community.clickhouse.clickhouse_user</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">login_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">    </span><span class="nt">login_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alice</span>
@@ -760,8 +812,13 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256_hash</span>
 <span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_cluster</span>
 <span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max_memory_usage = 15000 MIN 15000 MAX 16000 READONLY</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PROFILE &#39;restricted&#39;</span>
+<span class="w">      </span><span class="nt">max_memory_usage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15000</span>
+<span class="w">        </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15000</span>
+<span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16000</span>
+<span class="w">        </span><span class="nt">writability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readonly</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restricted</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a user that can only connect from a specified host</span>
@@ -848,6 +905,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <ul class="simple">
 <li><p>Aleksandr Vagachev (&#64;aleksvagachev)</p></li>
 <li><p>Andrew Klychkov (&#64;Andersson007)</p></li>
+<li><p>Rafal Kozlowski (&#64;rkozlo)</p></li>
 </ul>
 </section>
 <section id="collection-links">
@@ -868,7 +926,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="clickhouse_role_module.html" class="btn btn-neutral float-left" title="community.clickhouse.clickhouse_role module – Creates or removes a ClickHouse role." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="clickhouse_script_module.html" class="btn btn-neutral float-left" title="community.clickhouse.clickhouse_script module – Run SQL queries from a file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../crypto/index.html" class="btn btn-neutral float-right" title="Community.Crypto" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -876,7 +934,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 28, 2026.
+      <span class="lastupdated">Last updated on May 29, 2026.
       </span></p>
   </div>
 
