@@ -307,6 +307,14 @@ Ansible library, and all Python Ansible modules must import something from
 constructed dynamically for each task invocation, by extracting imports and
 resolving those matching the namespace against a <a class="reference internal" href="overview_architecture.html#ansible-search-path"><span class="std std-ref">search path</span></a> derived from the
 active configuration.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Modules may only import from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.*</span></code>. Importing from
+other parts of the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> namespace (for example, <code class="docutils literal notranslate"><span class="pre">ansible.errors</span></code>
+or <code class="docutils literal notranslate"><span class="pre">ansible.parsing.dataloader</span></code>) is not supported. The <code class="docutils literal notranslate"><span class="pre">ansible</span></code>
+package is not guaranteed to be present on the remote target where modules
+execute, so such imports may fail silently or unpredictably.</p>
+</div>
 <p>To reduce the maintenance burden in a collection or in local modules, you can extract
 duplicated code into one or more module utilities and import them into your modules. For example, if you have your own custom modules that import a <code class="docutils literal notranslate"><span class="pre">my_shared_code</span></code> library, you can place that into a <code class="docutils literal notranslate"><span class="pre">./module_utils/my_shared_code.py</span></code> file like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.my_shared_code</span><span class="w"> </span><span class="kn">import</span> <span class="n">MySharedCodeClient</span>
@@ -387,7 +395,7 @@ Adding a new file under <code class="docutils literal notranslate"><span class="
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on May 25, 2026.
+      <span class="lastupdated">Last updated on Jun 01, 2026.
       </span></p>
   </div>
 
