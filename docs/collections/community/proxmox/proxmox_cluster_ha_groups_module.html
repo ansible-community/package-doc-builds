@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.proxmox.proxmox_cluster_ha_resources module – Management of HA groups in Proxmox VE Cluster" href="proxmox_cluster_ha_resources_module.html" />
-    <link rel="prev" title="community.proxmox.proxmox_cluster module – Create and join Proxmox VE clusters" href="proxmox_cluster_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="community.proxmox.proxmox_cluster_firewall module – Cluster-level firewall options management for Proxmox VE cluster" href="proxmox_cluster_firewall_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -163,6 +163,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Community.Proxmox</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#guides">Guides</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
 </ul>
 </li>
@@ -288,12 +289,12 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /*var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
         '</p>' +
-      '</div>';
+      '</div>';*/
     
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -316,9 +317,6 @@
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
 
       } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
@@ -356,7 +354,7 @@
 <h1>community.proxmox.proxmox_cluster_ha_groups module – Management of HA groups in Proxmox VE Cluster<a class="headerlink" href="#community-proxmox-proxmox-cluster-ha-groups-module-management-of-ha-groups-in-proxmox-ve-cluster" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxmox/">community.proxmox collection</a> (version 1.6.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/proxmox/">community.proxmox collection</a> (version 2.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -372,7 +370,8 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
 <li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#attributes" id="id4">Attributes</a></p></li>
-<li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id5">See Also</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
@@ -385,7 +384,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <span id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
-<li><p>proxmoxer &gt;= 2.0</p></li>
+<li><p>proxmoxer &gt;= 2.3</p></li>
 <li><p>requests</p></li>
 </ul>
 </section>
@@ -403,10 +402,18 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <a class="ansibleOptionLink" href="#parameter-api_host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specify the target host of the Proxmox VE cluster.</p>
-<p>Uses the <code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_HOST</span></code> environment variable if not specified.</p>
+<p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_HOST"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_HOST</span></code></a> environment variable if not specified.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-api_otp"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-api-otp"><strong>api_otp</strong></p>
+<a class="ansibleOptionLink" href="#parameter-api_otp" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specify the OTP.</p>
+<p>Uses the <code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_OTP</span></code> environment variable if not specified.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_password"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-api-password"><strong>api_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -414,15 +421,15 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_PASSWORD"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_PASSWORD</span></code></a> environment variable if not specified.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_port"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-api-port"><strong>api_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specify the target port of the Proxmox VE cluster.</p>
-<p>Uses the <code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_PORT</span></code> environment variable if not specified.</p>
+<p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_PORT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_PORT</span></code></a> environment variable if not specified.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_timeout"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-api-timeout"><strong>api_timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -430,7 +437,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">5</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_token_id"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-api-token-id"><strong>api_token_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_token_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -438,7 +445,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_TOKEN_ID"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_TOKEN_ID</span></code></a> environment variable if not specified.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_token_secret"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-api-token-secret"><strong>api_token_secret</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_token_secret" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -446,7 +453,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_TOKEN_SECRET"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_TOKEN_SECRET</span></code></a> environment variable if not specified.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_user"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-api-user"><strong>api_user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -454,7 +461,7 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <p>Uses the <a class="reference internal" href="../../environment_variables.html#envvar-PROXMOX_USER"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_USER</span></code></a> environment variable if not specified.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ca_path"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-ca-path"><strong>ca_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ca_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
@@ -462,21 +469,21 @@ see <a class="reference internal" href="#ansible-collections-community-proxmox-p
 <p>Ignored if <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-validate-certs"><span class="std std-ref"><span class="pre">validate_certs=false</span></span></a></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-comment"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-comment"><strong>comment</strong></p>
 <a class="ansibleOptionLink" href="#parameter-comment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Description</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>group name</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-nodes"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-nodes"><strong>nodes</strong></p>
 <a class="ansibleOptionLink" href="#parameter-nodes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -486,7 +493,7 @@ relative meaning only. The higher the number, the higher the priority.
 It can either be a string <code class="docutils literal notranslate"><span class="pre">node_name:priority,node_name:priority</span></code> or an actual list of strings.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-nofailback"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-nofailback"><strong>nofailback</strong></p>
 <a class="ansibleOptionLink" href="#parameter-nofailback" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -499,7 +506,7 @@ that node. Setting <code class="ansible-option-value docutils literal notranslat
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-restricted"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-restricted"><strong>restricted</strong></p>
 <a class="ansibleOptionLink" href="#parameter-restricted" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -513,7 +520,7 @@ soon as a group member comes online. One can implement a ‘preferred node’ be
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -525,17 +532,16 @@ soon as a group member comes online. One can implement a ‘preferred node’ be
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-community-proxmox-proxmox-cluster-ha-groups-module-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Validate the TLS certificates used for the connection to the Proxmox VE API.</p>
-<p>Currently defaults to <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> and changes default to <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> with community.proxmox 2.0.0.</p>
-<p>Uses the <code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_VALIDATE_CERTS</span></code> environment variable if not specified.</p>
+<p>May be set through the environment variable <code class="xref std std-envvar docutils literal notranslate"><span class="pre">PROXMOX_VALIDATE_CERTS</span></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
-<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -579,14 +585,20 @@ soon as a group member comes online. One can implement a ‘preferred node’ be
 </tbody>
 </table>
 </section>
+<section id="see-also">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="docsite/guides.html#ansible-collections-community-proxmox-docsite-authentication"><span class="std std-ref">Authentication</span></a></dt><dd><p>Complete guide for the Proxmox API authentication</p>
+</dd>
+</dl>
+</div>
+</section>
 <section id="examples">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create HA group</span>
 <span class="w">  </span><span class="nt">community.proxmox.proxmox_cluster_ha_groups</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">api_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">proxmox_root_pw</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;ansible.builtin.env&#39;</span><span class="o">,</span> <span class="s1">&#39;PROXMOX_PASSWORD&#39;</span><span class="o">,</span> <span class="nv">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="o">))</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root@pam</span>
-
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;present&quot;</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ha0</span>
 <span class="w">    </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
@@ -596,10 +608,6 @@ soon as a group member comes online. One can implement a ‘preferred node’ be
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete HA group</span>
 <span class="w">  </span><span class="nt">community.proxmox.proxmox_cluster_ha_groups</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">api_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">api_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">proxmox_root_pw</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;ansible.builtin.env&#39;</span><span class="o">,</span> <span class="s1">&#39;PROXMOX_PASSWORD&#39;</span><span class="o">,</span> <span class="nv">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="o">))</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">api_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root@pam</span>
-
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;absent&quot;</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ha0</span>
 </pre></div>
@@ -628,7 +636,7 @@ soon as a group member comes online. One can implement a ‘preferred node’ be
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="proxmox_cluster_module.html" class="btn btn-neutral float-left" title="community.proxmox.proxmox_cluster module – Create and join Proxmox VE clusters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="proxmox_cluster_firewall_module.html" class="btn btn-neutral float-left" title="community.proxmox.proxmox_cluster_firewall module – Cluster-level firewall options management for Proxmox VE cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="proxmox_cluster_ha_resources_module.html" class="btn btn-neutral float-right" title="community.proxmox.proxmox_cluster_ha_resources module – Management of HA groups in Proxmox VE Cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -636,7 +644,7 @@ soon as a group member comes online. One can implement a ‘preferred node’ be
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2026.
+      <span class="lastupdated">Last updated on Jun 08, 2026.
       </span></p>
   </div>
 

@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="community.clickhouse.clickhouse_user module – Creates or removes a ClickHouse user using the clickhouse-driver Client interface" href="clickhouse_user_module.html" />
+    <link rel="next" title="community.clickhouse.clickhouse_row_policy module – Creates, removes or modify a ClickHouse row policy using the clickhouse-driver Client interface" href="clickhouse_row_policy_module.html" />
     <link rel="prev" title="community.clickhouse.clickhouse_quota module – Creates or removes a ClickHouse quota" href="clickhouse_quota_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -288,12 +288,12 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /*var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
         '</p>' +
-      '</div>';
+      '</div>';*/
     
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -316,9 +316,6 @@
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
 
       } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
@@ -356,7 +353,7 @@
 <h1>community.clickhouse.clickhouse_role module – Creates or removes a ClickHouse role.<a class="headerlink" href="#community-clickhouse-clickhouse-role-module-creates-or-removes-a-clickhouse-role" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/clickhouse/">community.clickhouse collection</a> (version 2.1.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/clickhouse/">community.clickhouse collection</a> (version 2.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -464,14 +461,25 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-settings"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-role-module-parameter-settings"><strong>settings</strong></p>
-<a class="ansibleOptionLink" href="#parameter-settings" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<div class="ansibleOptionAnchor" id="parameter-profiles"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-role-module-parameter-profiles"><strong>profiles</strong></p>
+<a class="ansibleOptionLink" href="#parameter-profiles" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.clickhouse 2.2.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Settings with their limitations that apply to the role.</p>
-<p>You can also specify the profile from which the settings will be inherited.</p>
+<td><div class="ansible-option-cell"><p>Settings profiles that will be applied to role.</p>
+<p>Can be only used with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-role-module-parameter-settings"><span class="std std-ref"><span class="pre">settings</span></span></a></strong></code> as <code class="docutils literal notranslate"><span class="pre">dict</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-settings"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-role-module-parameter-settings"><strong>settings</strong></p>
+<a class="ansibleOptionLink" href="#parameter-settings" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Settings with their limitations that apply to the role.</p>
+<p>Can pass either list(obsolete) or dictionary.</p>
+<p>You can also specify the profile from which the settings will be inherited <code class="docutils literal notranslate"><span class="pre">list</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-role-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -483,6 +491,15 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;present&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
 </ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-success_on"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-role-module-parameter-success-on"><strong>success_on</strong></p>
+<a class="ansibleOptionLink" href="#parameter-success_on" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.clickhouse 2.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of <a class="reference external" href="https://github.com/ClickHouse/ClickHouse/blob/master/src/Common/ErrorCodes.cpp">server error codes</a> that will be treated as success, otherwise throw errors.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[497]</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -504,6 +521,14 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Supports check_mode.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-idempotent"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-role-module-attribute-idempotent"><strong>idempotent</strong></p>
+<a class="ansibleOptionLink" href="#attribute-idempotent" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-role-module-parameter-settings"><span class="std std-ref"><span class="pre">settings</span></span></a></strong></code> can break idempotency when the deprecated <code class="docutils literal notranslate"><span class="pre">list</span></code> format is used. Use the dictionary format instead.</p>
 </div></td>
 </tr>
 </tbody>
@@ -530,8 +555,27 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_role</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max_memory_usage = 15000 MIN 15000 MAX 16000 READONLY</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PROFILE restricted</span>
+<span class="w">      </span><span class="nt">max_memory_usage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15000</span>
+<span class="w">        </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15000</span>
+<span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16000</span>
+<span class="w">        </span><span class="nt">writability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readonly</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restricted</span>
+<span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_cluster</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a role with settings and profiles</span>
+<span class="w">  </span><span class="nt">community.clickhouse.clickhouse_role</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_role</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">settings</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">max_memory_usage</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15000</span>
+<span class="w">        </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15000</span>
+<span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16000</span>
+<span class="w">        </span><span class="nt">writability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readonly</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restricted</span>
 <span class="w">    </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_cluster</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove role</span>
@@ -568,6 +612,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <li><p>Don Naro (&#64;oranod)</p></li>
 <li><p>Aleksandr Vagachev (&#64;aleksvagachev)</p></li>
 <li><p>Andrew Klychkov (&#64;Andersson007)</p></li>
+<li><p>Rafal Kozlowski (&#64;rkozlo)</p></li>
 </ul>
 </section>
 <section id="collection-links">
@@ -589,14 +634,14 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="clickhouse_quota_module.html" class="btn btn-neutral float-left" title="community.clickhouse.clickhouse_quota module – Creates or removes a ClickHouse quota" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="clickhouse_user_module.html" class="btn btn-neutral float-right" title="community.clickhouse.clickhouse_user module – Creates or removes a ClickHouse user using the clickhouse-driver Client interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="clickhouse_row_policy_module.html" class="btn btn-neutral float-right" title="community.clickhouse.clickhouse_row_policy module – Creates, removes or modify a ClickHouse row policy using the clickhouse-driver Client interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2026.
+      <span class="lastupdated">Last updated on Jun 08, 2026.
       </span></p>
   </div>
 

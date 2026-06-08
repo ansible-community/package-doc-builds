@@ -267,12 +267,12 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /*var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
         '</p>' +
-      '</div>';
+      '</div>';*/
     
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -295,9 +295,6 @@
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
 
       } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
@@ -335,7 +332,7 @@
 <h1>fortinet.fortimanager.fmgr_vap_dynamicmapping module – Configure Virtual Access Points<a class="headerlink" href="#fortinet-fortimanager-fmgr-vap-dynamicmapping-module-configure-virtual-access-points" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/fortinet/fortimanager/">fortinet.fortimanager collection</a> (version 2.13.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/fortinet/fortimanager/">fortinet.fortimanager collection</a> (version 2.14.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -3366,9 +3363,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Starting in version 2.4.0, all input arguments are named using the underscore naming convention (snake_case). Please change the arguments such as “var-name” to “var_name”. Old argument names are still available yet you will receive deprecation warnings. You can ignore this warning by setting deprecation_warnings=False in ansible.cfg.</p></li>
 <li><p>Running in workspace locking mode is supported in this FortiManager module, the top level parameters workspace_locking_adom and workspace_locking_timeout help do the work.</p></li>
+<li><p>Normally, running one module can fail when a non-zero rc is returned. you can also override the conditions to fail or succeed with parameters rc_failed and rc_succeeded</p></li>
 <li><p>To create or update an object, use state present directive.</p></li>
 <li><p>To delete an object, use state absent directive.</p></li>
-<li><p>Normally, running one module can fail when a non-zero rc is returned. you can also override the conditions to fail or succeed with parameters rc_failed and rc_succeeded</p></li>
 </ul>
 </div>
 </section>
@@ -3378,18 +3375,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fortimanagers</span>
 <span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">httpapi</span>
 <span class="w">  </span><span class="nt">gather_facts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">ansible_httpapi_use_ssl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">ansible_httpapi_validate_certs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">ansible_httpapi_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">443</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure Virtual Access Points</span>
 <span class="w">      </span><span class="nt">fortinet.fortimanager.fmgr_vap_dynamicmapping</span><span class="p">:</span>
-<span class="w">        </span><span class="c1"># bypass_validation: false</span>
 <span class="w">        </span><span class="c1"># workspace_locking_adom: &lt;global or your adom name&gt;</span>
-<span class="w">        </span><span class="c1"># workspace_locking_timeout: 300</span>
-<span class="w">        </span><span class="c1"># rc_succeeded: [0, -2, -3, ...]</span>
-<span class="w">        </span><span class="c1"># rc_failed: [-2, -3, ...]</span>
 <span class="w">        </span><span class="nt">adom</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your own value&gt;</span>
 <span class="w">        </span><span class="nt">vap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your own value&gt;</span>
 <span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span><span class="w"> </span><span class="c1"># &lt;value in [present, absent]&gt;</span>
@@ -3399,22 +3388,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">              </span><span class="nt">vdom</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># _centmgmt: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># _dhcp_svr_id: &lt;string&gt;</span>
-<span class="w">          </span><span class="c1"># _intf_allowaccess:</span>
-<span class="w">          </span><span class="c1">#   - &quot;https&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;ping&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;ssh&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;snmp&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;http&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;telnet&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;fgfm&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;auto-ipsec&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;radius-acct&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;probe-response&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;capwap&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;dnp&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;ftm&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;fabric&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;speed-test&quot;</span>
+<span class="w">          </span><span class="c1"># _intf_allowaccess: [&quot;https&quot;, &quot;ping&quot;, &quot;ssh&quot;, &quot;snmp&quot;, &quot;http&quot;, &quot;telnet&quot;, &quot;fgfm&quot;,</span>
+<span class="w">          </span><span class="c1">#                     &quot;auto-ipsec&quot;, &quot;radius-acct&quot;, &quot;probe-response&quot;, &quot;capwap&quot;, &quot;dnp&quot;,</span>
+<span class="w">          </span><span class="c1">#                     &quot;ftm&quot;, &quot;fabric&quot;, &quot;speed-test&quot;]</span>
 <span class="w">          </span><span class="c1"># _intf_device_identification: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># _intf_device_netscan: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># _intf_dhcp_relay_ip: &lt;list or string&gt;</span>
@@ -3425,16 +3401,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">          </span><span class="c1"># _intf_dhcp6_relay_type: &lt;value in [regular]&gt;</span>
 <span class="w">          </span><span class="c1"># _intf_ip: &lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># _intf_ip6_address: &lt;string&gt;</span>
-<span class="w">          </span><span class="c1"># _intf_ip6_allowaccess:</span>
-<span class="w">          </span><span class="c1">#   - &quot;https&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;ping&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;ssh&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;snmp&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;http&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;telnet&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;any&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;fgfm&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;capwap&quot;</span>
+<span class="w">          </span><span class="c1"># _intf_ip6_allowaccess: [&quot;https&quot;, &quot;ping&quot;, &quot;ssh&quot;, &quot;snmp&quot;, &quot;http&quot;, &quot;telnet&quot;, &quot;any&quot;,</span>
+<span class="w">          </span><span class="c1">#                         &quot;fgfm&quot;, &quot;capwap&quot;]</span>
 <span class="w">          </span><span class="c1"># _intf_listen_forticlient_connection: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># acct_interim_interval: &lt;integer&gt;</span>
 <span class="w">          </span><span class="c1"># address_group: &lt;string&gt;</span>
@@ -3442,26 +3410,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">          </span><span class="c1"># atf_weight: &lt;integer&gt;</span>
 <span class="w">          </span><span class="c1"># auth: &lt;value in [PSK, psk, RADIUS, ...]&gt;</span>
 <span class="w">          </span><span class="c1"># broadcast_ssid: &lt;value in [disable, enable]&gt;</span>
-<span class="w">          </span><span class="c1"># broadcast_suppression:</span>
-<span class="w">          </span><span class="c1">#   - &quot;dhcp&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;arp&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;dhcp2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;arp2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;netbios-ns&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;netbios-ds&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;arp3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;dhcp-up&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;dhcp-down&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;arp-known&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;arp-unknown&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;arp-reply&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;ipv6&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;dhcp-starvation&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;arp-poison&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;all-other-mc&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;all-other-bc&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;arp-proxy&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;dhcp-ucast&quot;</span>
+<span class="w">          </span><span class="c1"># broadcast_suppression: [&quot;dhcp&quot;, &quot;arp&quot;, &quot;dhcp2&quot;, &quot;arp2&quot;, &quot;netbios-ns&quot;, &quot;netbios-ds&quot;,</span>
+<span class="w">          </span><span class="c1">#                         &quot;arp3&quot;, &quot;dhcp-up&quot;, &quot;dhcp-down&quot;, &quot;arp-known&quot;, &quot;arp-unknown&quot;,</span>
+<span class="w">          </span><span class="c1">#                         &quot;arp-reply&quot;, &quot;ipv6&quot;, &quot;dhcp-starvation&quot;, &quot;arp-poison&quot;,</span>
+<span class="w">          </span><span class="c1">#                         &quot;all-other-mc&quot;, &quot;all-other-bc&quot;, &quot;arp-proxy&quot;, &quot;dhcp-ucast&quot;]</span>
 <span class="w">          </span><span class="c1"># captive_portal_ac_name: &lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># captive_portal_macauth_radius_secret: &lt;list or string&gt;</span>
 <span class="w">          </span><span class="c1"># captive_portal_macauth_radius_server: &lt;string&gt;</span>
@@ -3512,10 +3464,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">          </span><span class="c1"># multicast_enhance: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># multicast_rate: &lt;value in [0, 6000, 12000, ...]&gt;</span>
 <span class="w">          </span><span class="c1"># okc: &lt;value in [disable, enable]&gt;</span>
-<span class="w">          </span><span class="c1"># owe_groups:</span>
-<span class="w">          </span><span class="c1">#   - &quot;19&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;20&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;21&quot;</span>
+<span class="w">          </span><span class="c1"># owe_groups: [&quot;19&quot;, &quot;20&quot;, &quot;21&quot;]</span>
 <span class="w">          </span><span class="c1"># owe_transition: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># owe_transition_ssid: &lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># passphrase: &lt;list or string&gt;</span>
@@ -3537,157 +3486,28 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">          </span><span class="c1"># radius_mac_auth_server: &lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># radius_mac_auth_usergroups: &lt;list or string&gt;</span>
 <span class="w">          </span><span class="c1"># radius_server: &lt;string&gt;</span>
-<span class="w">          </span><span class="c1"># rates_11a:</span>
-<span class="w">          </span><span class="c1">#   - &quot;1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;1-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;2-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;5.5&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;5.5-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;6&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;6-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;9&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;9-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;12&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;12-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;18&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;18-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;24&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;24-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;36&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;36-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;48&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;48-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;54&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;54-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;11&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;11-basic&quot;</span>
-<span class="w">          </span><span class="c1"># rates_11ac_ss12:</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/2&quot;</span>
-<span class="w">          </span><span class="c1"># rates_11ac_ss34:</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/4&quot;</span>
-<span class="w">          </span><span class="c1"># rates_11bg:</span>
-<span class="w">          </span><span class="c1">#   - &quot;1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;1-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;2-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;5.5&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;5.5-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;6&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;6-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;9&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;9-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;12&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;12-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;18&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;18-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;24&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;24-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;36&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;36-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;48&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;48-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;54&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;54-basic&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;11&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;11-basic&quot;</span>
-<span class="w">          </span><span class="c1"># rates_11n_ss12:</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs12/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs13/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs14/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs15/2&quot;</span>
-<span class="w">          </span><span class="c1"># rates_11n_ss34:</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs16/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs17/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs18/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs19/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs20/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs21/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs22/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs23/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs24/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs25/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs26/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs27/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs28/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs29/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs30/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs31/4&quot;</span>
-<span class="w">          </span><span class="c1"># sae_groups:</span>
-<span class="w">          </span><span class="c1">#   - &quot;1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;5&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;14&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;15&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;16&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;17&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;18&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;19&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;20&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;21&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;27&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;28&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;29&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;30&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;31&quot;</span>
+<span class="w">          </span><span class="c1"># rates_11a: [&quot;1&quot;, &quot;1-basic&quot;, &quot;2&quot;, &quot;2-basic&quot;, &quot;5.5&quot;, &quot;5.5-basic&quot;, &quot;6&quot;, &quot;6-basic&quot;, &quot;9&quot;,</span>
+<span class="w">          </span><span class="c1">#             &quot;9-basic&quot;, &quot;12&quot;, &quot;12-basic&quot;, &quot;18&quot;, &quot;18-basic&quot;, &quot;24&quot;, &quot;24-basic&quot;, &quot;36&quot;,</span>
+<span class="w">          </span><span class="c1">#             &quot;36-basic&quot;, &quot;48&quot;, &quot;48-basic&quot;, &quot;54&quot;, &quot;54-basic&quot;, &quot;11&quot;, &quot;11-basic&quot;]</span>
+<span class="w">          </span><span class="c1"># rates_11ac_ss12: [&quot;mcs0/1&quot;, &quot;mcs1/1&quot;, &quot;mcs2/1&quot;, &quot;mcs3/1&quot;, &quot;mcs4/1&quot;, &quot;mcs5/1&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs6/1&quot;, &quot;mcs7/1&quot;, &quot;mcs8/1&quot;, &quot;mcs9/1&quot;, &quot;mcs0/2&quot;, &quot;mcs1/2&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs2/2&quot;, &quot;mcs3/2&quot;, &quot;mcs4/2&quot;, &quot;mcs5/2&quot;, &quot;mcs6/2&quot;, &quot;mcs7/2&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs8/2&quot;, &quot;mcs9/2&quot;, &quot;mcs10/1&quot;, &quot;mcs11/1&quot;, &quot;mcs10/2&quot;, &quot;mcs11/2&quot;]</span>
+<span class="w">          </span><span class="c1"># rates_11ac_ss34: [&quot;mcs0/3&quot;, &quot;mcs1/3&quot;, &quot;mcs2/3&quot;, &quot;mcs3/3&quot;, &quot;mcs4/3&quot;, &quot;mcs5/3&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs6/3&quot;, &quot;mcs7/3&quot;, &quot;mcs8/3&quot;, &quot;mcs9/3&quot;, &quot;mcs0/4&quot;, &quot;mcs1/4&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs2/4&quot;, &quot;mcs3/4&quot;, &quot;mcs4/4&quot;, &quot;mcs5/4&quot;, &quot;mcs6/4&quot;, &quot;mcs7/4&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs8/4&quot;, &quot;mcs9/4&quot;, &quot;mcs10/3&quot;, &quot;mcs11/3&quot;, &quot;mcs10/4&quot;, &quot;mcs11/4&quot;]</span>
+<span class="w">          </span><span class="c1"># rates_11bg: [&quot;1&quot;, &quot;1-basic&quot;, &quot;2&quot;, &quot;2-basic&quot;, &quot;5.5&quot;, &quot;5.5-basic&quot;, &quot;6&quot;, &quot;6-basic&quot;, &quot;9&quot;,</span>
+<span class="w">          </span><span class="c1">#              &quot;9-basic&quot;, &quot;12&quot;, &quot;12-basic&quot;, &quot;18&quot;, &quot;18-basic&quot;, &quot;24&quot;, &quot;24-basic&quot;, &quot;36&quot;,</span>
+<span class="w">          </span><span class="c1">#              &quot;36-basic&quot;, &quot;48&quot;, &quot;48-basic&quot;, &quot;54&quot;, &quot;54-basic&quot;, &quot;11&quot;, &quot;11-basic&quot;]</span>
+<span class="w">          </span><span class="c1"># rates_11n_ss12: [&quot;mcs0/1&quot;, &quot;mcs1/1&quot;, &quot;mcs2/1&quot;, &quot;mcs3/1&quot;, &quot;mcs4/1&quot;, &quot;mcs5/1&quot;, &quot;mcs6/1&quot;,</span>
+<span class="w">          </span><span class="c1">#                  &quot;mcs7/1&quot;, &quot;mcs8/2&quot;, &quot;mcs9/2&quot;, &quot;mcs10/2&quot;, &quot;mcs11/2&quot;, &quot;mcs12/2&quot;,</span>
+<span class="w">          </span><span class="c1">#                  &quot;mcs13/2&quot;, &quot;mcs14/2&quot;, &quot;mcs15/2&quot;]</span>
+<span class="w">          </span><span class="c1"># rates_11n_ss34: [&quot;mcs16/3&quot;, &quot;mcs17/3&quot;, &quot;mcs18/3&quot;, &quot;mcs19/3&quot;, &quot;mcs20/3&quot;, &quot;mcs21/3&quot;,</span>
+<span class="w">          </span><span class="c1">#                  &quot;mcs22/3&quot;, &quot;mcs23/3&quot;, &quot;mcs24/4&quot;, &quot;mcs25/4&quot;, &quot;mcs26/4&quot;, &quot;mcs27/4&quot;,</span>
+<span class="w">          </span><span class="c1">#                  &quot;mcs28/4&quot;, &quot;mcs29/4&quot;, &quot;mcs30/4&quot;, &quot;mcs31/4&quot;]</span>
+<span class="w">          </span><span class="c1"># sae_groups: [&quot;1&quot;, &quot;2&quot;, &quot;5&quot;, &quot;14&quot;, &quot;15&quot;, &quot;16&quot;, &quot;17&quot;, &quot;18&quot;, &quot;19&quot;, &quot;20&quot;, &quot;21&quot;, &quot;27&quot;,</span>
+<span class="w">          </span><span class="c1">#              &quot;28&quot;, &quot;29&quot;, &quot;30&quot;, &quot;31&quot;]</span>
 <span class="w">          </span><span class="c1"># sae_password: &lt;list or string&gt;</span>
 <span class="w">          </span><span class="c1"># schedule: &lt;list or string&gt;</span>
 <span class="w">          </span><span class="c1"># security: &lt;value in [None, WEP64, wep64, ...]&gt;</span>
@@ -3716,16 +3536,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">          </span><span class="c1"># tunnel_fallback_interval: &lt;integer&gt;</span>
 <span class="w">          </span><span class="c1"># access_control_list: &lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># captive_portal_auth_timeout: &lt;integer&gt;</span>
-<span class="w">          </span><span class="c1"># ipv6_rules:</span>
-<span class="w">          </span><span class="c1">#   - &quot;drop-icmp6ra&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;drop-icmp6rs&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;drop-llmnr6&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;drop-icmp6mld2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;drop-dhcp6s&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;drop-dhcp6c&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;ndp-proxy&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;drop-ns-dad&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;drop-ns-nondad&quot;</span>
+<span class="w">          </span><span class="c1"># ipv6_rules: [&quot;drop-icmp6ra&quot;, &quot;drop-icmp6rs&quot;, &quot;drop-llmnr6&quot;, &quot;drop-icmp6mld2&quot;,</span>
+<span class="w">          </span><span class="c1">#              &quot;drop-dhcp6s&quot;, &quot;drop-dhcp6c&quot;, &quot;ndp-proxy&quot;, &quot;drop-ns-dad&quot;,</span>
+<span class="w">          </span><span class="c1">#              &quot;drop-ns-nondad&quot;]</span>
 <span class="w">          </span><span class="c1"># sticky_client_remove: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># sticky_client_threshold_2g: &lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># sticky_client_threshold_5g: &lt;string&gt;</span>
@@ -3736,9 +3549,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">          </span><span class="c1"># port_macauth: &lt;value in [disable, radius, address-group]&gt;</span>
 <span class="w">          </span><span class="c1"># port_macauth_reauth_timeout: &lt;integer&gt;</span>
 <span class="w">          </span><span class="c1"># port_macauth_timeout: &lt;integer&gt;</span>
-<span class="w">          </span><span class="c1"># additional_akms:</span>
-<span class="w">          </span><span class="c1">#   - &quot;akm6&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;akm24&quot;</span>
+<span class="w">          </span><span class="c1"># additional_akms: [&quot;akm6&quot;, &quot;akm24&quot;]</span>
 <span class="w">          </span><span class="c1"># bstm_disassociation_imminent: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># bstm_load_balancing_disassoc_timer: &lt;integer&gt;</span>
 <span class="w">          </span><span class="c1"># bstm_rssi_disassoc_timer: &lt;integer&gt;</span>
@@ -3762,10 +3573,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">          </span><span class="c1"># application_report_intv: &lt;integer&gt;</span>
 <span class="w">          </span><span class="c1"># auth_cert: &lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># auth_portal_addr: &lt;string&gt;</span>
-<span class="w">          </span><span class="c1"># beacon_advertising:</span>
-<span class="w">          </span><span class="c1">#   - &quot;name&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;model&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;serial-number&quot;</span>
+<span class="w">          </span><span class="c1"># beacon_advertising: [&quot;name&quot;, &quot;model&quot;, &quot;serial-number&quot;]</span>
 <span class="w">          </span><span class="c1"># ips_sensor: &lt;string&gt;</span>
 <span class="w">          </span><span class="c1"># l3_roaming: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># local_standalone_dns: &lt;value in [disable, enable]&gt;</span>
@@ -3773,56 +3581,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">          </span><span class="c1"># osen: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># radius_mac_mpsk_auth: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># radius_mac_mpsk_timeout: &lt;integer&gt;</span>
-<span class="w">          </span><span class="c1"># rates_11ax_ss12:</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/1&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/2&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/2&quot;</span>
-<span class="w">          </span><span class="c1"># rates_11ax_ss34:</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/3&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs0/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs1/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs2/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs3/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs4/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs5/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs6/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs7/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs8/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs9/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs10/4&quot;</span>
-<span class="w">          </span><span class="c1">#   - &quot;mcs11/4&quot;</span>
+<span class="w">          </span><span class="c1"># rates_11ax_ss12: [&quot;mcs0/1&quot;, &quot;mcs1/1&quot;, &quot;mcs2/1&quot;, &quot;mcs3/1&quot;, &quot;mcs4/1&quot;, &quot;mcs5/1&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs6/1&quot;, &quot;mcs7/1&quot;, &quot;mcs8/1&quot;, &quot;mcs9/1&quot;, &quot;mcs10/1&quot;, &quot;mcs11/1&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs0/2&quot;, &quot;mcs1/2&quot;, &quot;mcs2/2&quot;, &quot;mcs3/2&quot;, &quot;mcs4/2&quot;, &quot;mcs5/2&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs6/2&quot;, &quot;mcs7/2&quot;, &quot;mcs8/2&quot;, &quot;mcs9/2&quot;, &quot;mcs10/2&quot;, &quot;mcs11/2&quot;]</span>
+<span class="w">          </span><span class="c1"># rates_11ax_ss34: [&quot;mcs0/3&quot;, &quot;mcs1/3&quot;, &quot;mcs2/3&quot;, &quot;mcs3/3&quot;, &quot;mcs4/3&quot;, &quot;mcs5/3&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs6/3&quot;, &quot;mcs7/3&quot;, &quot;mcs8/3&quot;, &quot;mcs9/3&quot;, &quot;mcs10/3&quot;, &quot;mcs11/3&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs0/4&quot;, &quot;mcs1/4&quot;, &quot;mcs2/4&quot;, &quot;mcs3/4&quot;, &quot;mcs4/4&quot;, &quot;mcs5/4&quot;,</span>
+<span class="w">          </span><span class="c1">#                   &quot;mcs6/4&quot;, &quot;mcs7/4&quot;, &quot;mcs8/4&quot;, &quot;mcs9/4&quot;, &quot;mcs10/4&quot;, &quot;mcs11/4&quot;]</span>
 <span class="w">          </span><span class="c1"># scan_botnet_connections: &lt;value in [disable, block, monitor]&gt;</span>
 <span class="w">          </span><span class="c1"># utm_log: &lt;value in [disable, enable]&gt;</span>
 <span class="w">          </span><span class="c1"># utm_status: &lt;value in [disable, enable]&gt;</span>
@@ -3988,7 +3754,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2026.
+      <span class="lastupdated">Last updated on Jun 08, 2026.
       </span></p>
   </div>
 

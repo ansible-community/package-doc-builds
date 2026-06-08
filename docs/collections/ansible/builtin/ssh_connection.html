@@ -141,6 +141,7 @@
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Ansible.Mysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../netcommon/index.html">Ansible.Netcommon</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../posix/index.html">Ansible.Posix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../utils/index.html">Ansible.Utils</a></li>
@@ -268,12 +269,12 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /*var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
         '</p>' +
-      '</div>';
+      '</div>';*/
     
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -296,9 +297,6 @@
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
 
       } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
@@ -784,7 +782,7 @@ the same connection plugin name.</p>
 <div class="ansibleOptionAnchor" id="parameter-ssh_args"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-ssh-connection-parameter-ssh-args"><strong>ssh_args</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ssh_args" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Arguments to pass to all SSH CLI tools.</p>
+<td><div class="ansible-option-cell"><p>Arguments to pass to all SSH CLI tools. The use of <code class="docutils literal notranslate"><span class="pre">LocalForward</span></code>/<code class="docutils literal notranslate"><span class="pre">-L</span></code> along with the default <code class="docutils literal notranslate"><span class="pre">-C</span></code> can lead to an insecure configuration. Ensure these options are not used in combination.</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;-C</span> <span class="pre">-o</span> <span class="pre">ControlMaster=auto</span> <span class="pre">-o</span> <span class="pre">ControlPersist=60s&quot;</span></code></p>
 <p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
 <ul>
@@ -1014,7 +1012,9 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>This plugin is mostly a wrapper to the ``ssh`` CLI utility and the exact behavior of the options depends on this tool. This means that the documentation provided here is subject to be overridden by the CLI tool itself.</p></li>
+<li><p>This plugin is mostly a wrapper to the <code class="docutils literal notranslate"><span class="pre">ssh</span></code> CLI utility and the exact behavior of the options depends on this tool.</p></li>
+<li><p>The documentation provided here is subject to be overridden by configurations of <code class="docutils literal notranslate"><span class="pre">ssh</span></code> itself.</p></li>
+<li><p>External configurations of the <code class="docutils literal notranslate"><span class="pre">ssh</span></code> client CLI can lead to insecure configurations.</p></li>
 <li><p>Many options default to <code class="ansible-value docutils literal notranslate"><span class="pre">None</span></code> here but that only means we do not override the SSH tool’s defaults and/or configuration. For example, if you specify the port in this plugin it will override any <code class="docutils literal notranslate"><span class="pre">Port</span></code> entry in your <code class="docutils literal notranslate"><span class="pre">.ssh/config</span></code>.</p></li>
 <li><p>The ssh CLI tool uses return code 255 as a ‘connection error’, this can conflict with commands/tools that also return 255 as an error code and will look like an ‘unreachable’ condition or ‘connection error’ to this plugin.</p></li>
 </ul>
@@ -1050,7 +1050,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2026.
+      <span class="lastupdated">Last updated on Jun 08, 2026.
       </span></p>
   </div>
 

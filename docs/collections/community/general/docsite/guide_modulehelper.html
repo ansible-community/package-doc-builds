@@ -154,6 +154,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../index.html#communication">Communication</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../index.html#changelog">Changelog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../index.html#guides">Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../index.html#deployment-guides">Deployment Guides</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../index.html#technology-guides">Technology Guides</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../index.html#developer-guides">Developer Guides</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../index.html#plugin-index">Plugin Index</a></li>
@@ -294,12 +295,12 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /*var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
         '</p>' +
-      '</div>';
+      '</div>';*/
     
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -322,9 +323,6 @@
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
 
       } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
@@ -370,7 +368,7 @@ That is where <code class="docutils literal notranslate"><span class="pre">Modul
 <p>See the <a class="reference external" href="https://docs.ansible.com/projects/ansible/latest/dev_guide/developing_modules_general.html#creating-a-module">example from Ansible documentation</a>
 written with <code class="docutils literal notranslate"><span class="pre">ModuleHelper</span></code>.
 But bear in mind that it does not showcase all of MH’s features:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils.module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleHelper</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils._module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleHelper</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyTest</span><span class="p">(</span><span class="n">ModuleHelper</span><span class="p">):</span>
@@ -412,7 +410,7 @@ But bear in mind that it does not showcase all of MH’s features:</p>
 The basic structure of a module using <code class="docutils literal notranslate"><span class="pre">ModuleHelper</span></code> is as shown in the
 <a class="reference internal" href="#ansible-collections-community-general-docsite-guide-modulehelper-quickstart"><span class="std std-ref">Quickstart</span></a>
 section above, but there are more elements that will take part in it.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils.module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleHelper</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils._module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleHelper</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyTest</span><span class="p">(</span><span class="n">ModuleHelper</span><span class="p">):</span>
@@ -651,7 +649,7 @@ between <code class="docutils literal notranslate"><span class="pre">self.change
 <p>In MH, instead of calling <code class="docutils literal notranslate"><span class="pre">module.fail_json()</span></code> you can just raise an exception.
 The output variables are collected the same way they would be for a successful execution.
 However, you can set output variables specifically for that exception, if you so choose.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils.module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleHelperException</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils._module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleHelperException</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">__init_module__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">complex_validation</span><span class="p">():</span>
@@ -677,7 +675,7 @@ If you want to create specialized error handling for your code, the best way is 
 <p>Many modules use a parameter <code class="docutils literal notranslate"><span class="pre">state</span></code> that effectively controls the exact action performed by the module, such as
 <code class="docutils literal notranslate"><span class="pre">state=present</span></code> or <code class="docutils literal notranslate"><span class="pre">state=absent</span></code> for installing or removing packages.
 By using <code class="docutils literal notranslate"><span class="pre">StateModuleHelper</span></code> you can make your code like the excerpt from the <code class="docutils literal notranslate"><span class="pre">gconftool2</span></code> below:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils.module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateModuleHelper</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils._module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateModuleHelper</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">GConftool</span><span class="p">(</span><span class="n">StateModuleHelper</span><span class="p">):</span>
     <span class="o">...</span>
@@ -780,7 +778,7 @@ The value of <code class="docutils literal notranslate"><span class="pre">change
 <li><p><code class="docutils literal notranslate"><span class="pre">when=&quot;failure&quot;</span></code> and the method raises an exception.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">when=&quot;always&quot;</span></code>, regardless of the method raising an exception or not.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils.module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">cause_changes</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils._module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">cause_changes</span>
 
 <span class="c1"># adapted excerpt from the community.general.jira module</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">JIRA</span><span class="p">(</span><span class="n">StateModuleHelper</span><span class="p">):</span>
@@ -801,7 +799,7 @@ In most of the cases there will be no need to use this decorator, because <code 
 <h4>&#64;check_mode_skip<a class="headerlink" href="#check-mode-skip" title="Link to this heading"></a></h4>
 <p>If the module is running in check mode, this decorator will prevent the method from executing.
 The return value in that case is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils.module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_mode_skip</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible_collections.community.general.plugins.module_utils._module_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_mode_skip</span>
 
 <span class="c1"># adapted excerpt from the community.general.locale_gen module</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">LocaleGen</span><span class="p">(</span><span class="n">StateModuleHelper</span><span class="p">):</span>
@@ -848,7 +846,7 @@ where <code class="docutils literal notranslate"><span class="pre">self</span></
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2026.
+      <span class="lastupdated">Last updated on Jun 08, 2026.
       </span></p>
   </div>
 

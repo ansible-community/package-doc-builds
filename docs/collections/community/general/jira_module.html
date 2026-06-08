@@ -155,6 +155,7 @@
 <li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#changelog">Changelog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#guides">Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#deployment-guides">Deployment Guides</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#technology-guides">Technology Guides</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#developer-guides">Developer Guides</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
@@ -292,12 +293,12 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /*var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
         '</p>' +
-      '</div>';
+      '</div>';*/
     
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -320,9 +321,6 @@
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
 
       } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
@@ -360,7 +358,7 @@
 <h1>community.general.jira module – Create and modify issues in a JIRA instance<a class="headerlink" href="#community-general-jira-module-create-and-modify-issues-in-a-jira-instance" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.0.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -405,7 +403,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-assignee" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Sets the assignee when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-operation"><span class="std std-ref"><span class="pre">operation</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">create</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">transition</span></code>, or <code class="ansible-value docutils literal notranslate"><span class="pre">edit</span></code>.</p>
-<p>Recent versions of JIRA no longer accept a user name as a user identifier. In that case, use <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-account-id"><span class="std std-ref"><span class="pre">account_id</span></span></a></strong></code> instead.</p>
+<p>Jira Cloud requires account IDs for all user-type fields. When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-cloud"><span class="std std-ref"><span class="pre">cloud=true</span></span></a></code>, a string value containing <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> is resolved as an email to an account ID automatically. A string without <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> is assumed to be an account ID. See also <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-account-id"><span class="std std-ref"><span class="pre">account_id</span></span></a></strong></code> for a dedicated assignee account ID parameter. Added in community.general 12.6.0.</p>
+<p>Jira Server and Jira Data Center may still accept <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-assignee"><span class="std std-ref"><span class="pre">assignee</span></span></a></strong></code> as a username.</p>
 <p>Note that JIRA may not allow changing field values on specific transitions or states.</p>
 </div></td>
 </tr>
@@ -457,6 +456,22 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-cloud"></div><p class="ansible-option-title" id="ansible-collections-community-general-jira-module-parameter-cloud"><strong>cloud</strong></p>
+<a class="ansibleOptionLink" href="#parameter-cloud" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 12.6.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Enable when using Jira Cloud.</p>
+<p>When set to <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code>, the module uses Jira Cloud compatible behavior.</p>
+<p>When set to <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> (the default), the module uses Jira Server / Data Center compatible behavior.</p>
+<p>In the future, this option might affect additional operations for Jira Cloud compatibility.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-comment"></div><p class="ansible-option-title" id="ansible-collections-community-general-jira-module-parameter-comment"><strong>comment</strong></p>
 <a class="ansibleOptionLink" href="#parameter-comment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -464,7 +479,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Note that JIRA may not allow changing field values on specific transitions or states.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-comment_visibility"></div><p class="ansible-option-title" id="ansible-collections-community-general-jira-module-parameter-comment-visibility"><strong>comment_visibility</strong></p>
 <a class="ansibleOptionLink" href="#parameter-comment_visibility" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 3.2.0</em></p>
@@ -473,7 +488,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>See <a class="reference external" href="https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-comments/#api-rest-api-2-issue-issueidorkey-comment-post">https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-comments/#api-rest-api-2-issue-issueidorkey-comment-post</a> for details.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-comment_visibility/type"></div><p class="ansible-option-title" id="ansible-collections-community-general-jira-module-parameter-comment-visibility-type"><strong>type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-comment_visibility/type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -485,11 +500,22 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-comment_visibility/value"></div><p class="ansible-option-title" id="ansible-collections-community-general-jira-module-parameter-comment-visibility-value"><strong>value</strong></p>
 <a class="ansibleOptionLink" href="#parameter-comment_visibility/value" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specify value corresponding to the type of visibility restriction. For example name of the group or role.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-custom_user_fields"></div><p class="ansible-option-title" id="ansible-collections-community-general-jira-module-parameter-custom-user-fields"><strong>custom_user_fields</strong></p>
+<a class="ansibleOptionLink" href="#parameter-custom_user_fields" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 12.6.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>A list of field names (for example <code class="ansible-value docutils literal notranslate"><span class="pre">customfield_10050</span></code>) that hold user values.</p>
+<p>When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-cloud"><span class="std std-ref"><span class="pre">cloud=true</span></span></a></code> and a listed field is present in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-fields"><span class="std std-ref"><span class="pre">fields</span></span></a></strong></code> as a string containing <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>, the module resolves the email to a Jira Cloud account ID automatically.</p>
+<p>The built-in user fields <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-assignee"><span class="std std-ref"><span class="pre">assignee</span></span></a></strong></code> and <code class="ansible-value docutils literal notranslate"><span class="pre">reporter</span></code> are always resolved when present; list here any further user-typed fields (from other Jira products or extensions) that should receive the same resolution.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -505,6 +531,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-fields" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>This is a free-form data structure that can contain arbitrary data. This is passed directly to the JIRA REST API (possibly after merging with other required data, as when passed to create). See examples for more information, and the JIRA REST API for the structure required for various fields.</p>
+<p>When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-cloud"><span class="std std-ref"><span class="pre">cloud=true</span></span></a></code>, user-type fields (<code class="ansible-value docutils literal notranslate"><span class="pre">assignee</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">reporter</span></code>, and any fields listed in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-custom-user-fields"><span class="std std-ref"><span class="pre">custom_user_fields</span></span></a></strong></code>) that contain a string value with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> are automatically resolved from email to account ID. String values without <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> are assumed to be account IDs. Added in community.general 12.6.0.</p>
 <p>When passed to comment, the data structure is merged at the first level since community.general 4.6.0. Useful to add JIRA properties for example.</p>
 <p>Note that JIRA may not allow changing field values on specific transitions or states.</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
@@ -710,6 +737,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Currently this only works with basic-auth, or tokens.</p></li>
 <li><p>To use with JIRA Cloud, pass the login e-mail as the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-username"><span class="std std-ref"><span class="pre">username</span></span></a></strong></code> and the API token as <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-password"><span class="std std-ref"><span class="pre">password</span></span></a></strong></code>.</p></li>
+<li><p>Jira Cloud has removed the legacy <code class="docutils literal notranslate"><span class="pre">/rest/api/2/search</span></code> endpoint. Set <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-cloud"><span class="std std-ref"><span class="pre">cloud=true</span></span></a></code> when using <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-jira-module-parameter-operation"><span class="std std-ref"><span class="pre">operation=search</span></span></a></code> against Jira Cloud so that the module uses the replacement <code class="docutils literal notranslate"><span class="pre">/rest/api/2/search/jql</span></code> endpoint instead.</p></li>
 </ul>
 </div>
 </section>
@@ -831,6 +859,39 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">issuetype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Task</span>
 <span class="w">    </span><span class="nt">assignee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssmith</span>
 
+<span class="c1"># Assign an issue on Jira Cloud using an email address</span>
+<span class="c1"># (the module resolves the email to an account ID automatically)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Assign an issue on Jira Cloud using email</span>
+<span class="w">  </span><span class="nt">community.general.jira</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">server</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">user</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">pass</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">issue</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">issue.meta.key</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">edit</span>
+<span class="w">    </span><span class="nt">cloud</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">assignee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user@example.com</span>
+
+<span class="c1"># Create an issue on Jira Cloud with reporter and a custom user field</span>
+<span class="c1"># resolved from email addresses to account IDs</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create an issue on Jira Cloud with user field resolution</span>
+<span class="w">  </span><span class="nt">community.general.jira</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">server</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">user</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">pass</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ANS</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create</span>
+<span class="w">    </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example Issue</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Created using Ansible</span>
+<span class="w">    </span><span class="nt">issuetype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Task</span>
+<span class="w">    </span><span class="nt">cloud</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">assignee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assignee@example.com</span>
+<span class="w">    </span><span class="nt">custom_user_fields</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">customfield_10050</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">fields</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">reporter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reporter@example.com</span>
+<span class="w">      </span><span class="nt">customfield_10050</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">approver@example.com</span>
+
 <span class="c1"># Edit an issue</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set the labels on an issue using free-form fields</span>
 <span class="w">  </span><span class="nt">community.general.jira</span><span class="p">:</span>
@@ -872,7 +933,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">issue</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ANS-63</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">issue</span>
 
-<span class="c1"># Search for an issue</span>
+<span class="c1"># Search for an issue on Jira Data Center / Server</span>
 <span class="c1"># You can limit the search for specific fields by adding optional args. Note! It must be a dict, hence, lastViewed: null</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Search for an issue</span>
 <span class="w">  </span><span class="nt">community.general.jira</span><span class="p">:</span>
@@ -881,6 +942,22 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">pass</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="w">    </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ANS</span>
 <span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">search</span>
+<span class="w">    </span><span class="nt">maxresults</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="nt">jql</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">project=cmdb AND cf[13225]=&quot;test&quot;</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">fields</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">lastViewed</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">issue</span>
+
+<span class="c1"># Search for an issue on Jira Cloud (uses the /search/jql endpoint)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Search for an issue on Jira Cloud</span>
+<span class="w">  </span><span class="nt">community.general.jira</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">server</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">user</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">pass</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ANS</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">search</span>
+<span class="w">    </span><span class="nt">cloud</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">maxresults</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">    </span><span class="nt">jql</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">project=cmdb AND cf[13225]=&quot;test&quot;</span>
 <span class="w">  </span><span class="nt">args</span><span class="p">:</span>
@@ -986,7 +1063,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2026.
+      <span class="lastupdated">Last updated on Jun 08, 2026.
       </span></p>
   </div>
 

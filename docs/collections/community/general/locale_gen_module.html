@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.general.logentries module – Module for tracking logs using logentries.com" href="logentries_module.html" />
-    <link rel="prev" title="community.general.lldp module – Get details reported by LLDP" href="lldp_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="community.general.lldp_facts module – Get details reported by LLDP" href="lldp_facts_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -155,6 +155,7 @@
 <li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#changelog">Changelog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#guides">Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#deployment-guides">Deployment Guides</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#technology-guides">Technology Guides</a></li>
 <li class="toctree-l4"><a class="reference internal" href="index.html#developer-guides">Developer Guides</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
@@ -292,12 +293,12 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /*var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
         '</p>' +
-      '</div>';
+      '</div>';*/
     
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -320,9 +321,6 @@
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
 
       } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
@@ -360,7 +358,7 @@
 <h1>community.general.locale_gen module – Creates or removes locales<a class="headerlink" href="#community-general-locale-gen-module-creates-or-removes-locales" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.0.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -451,11 +449,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Currently the module is <strong>only supported for Debian, Ubuntu, and Arch Linux</strong> systems.</p></li>
 <li><p>This module requires the package <code class="docutils literal notranslate"><span class="pre">locales</span></code> installed in Debian and Ubuntu systems.</p></li>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">/etc/locale.gen</span></code> exists, the module assumes to be using the <strong>glibc</strong> mechanism, else if <code class="docutils literal notranslate"><span class="pre">/var/lib/locales/supported.d/</span></code> exists it assumes to be using the <strong>ubuntu_legacy</strong> mechanism, else it raises an error.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">/etc/locale.gen</span></code> exists, the module assumes to be using the <strong>glibc</strong> mechanism, else it raises an error. Support for <code class="docutils literal notranslate"><span class="pre">/var/lib/locales/supported.d/</span></code> (the <code class="ansible-value docutils literal notranslate"><span class="pre">ubuntu_legacy</span></code> mechanism) has been removed in community.general 13.0.0.</p></li>
 <li><p>When using <code class="ansible-value docutils literal notranslate"><span class="pre">glibc</span></code> mechanism, it manages locales by editing <code class="docutils literal notranslate"><span class="pre">/etc/locale.gen</span></code> and running <code class="docutils literal notranslate"><span class="pre">locale-gen</span></code>.</p></li>
-<li><p>When using <code class="ansible-value docutils literal notranslate"><span class="pre">ubuntu_legacy</span></code> mechanism, it manages locales by editing <code class="docutils literal notranslate"><span class="pre">/var/lib/locales/supported.d/local</span></code> and then running <code class="docutils literal notranslate"><span class="pre">locale-gen</span></code>.</p></li>
 <li><p>Please note that the module asserts the availability of the locale by checking the files <code class="docutils literal notranslate"><span class="pre">/usr/share/i18n/SUPPORTED</span></code> and <code class="docutils literal notranslate"><span class="pre">/usr/local/share/i18n/SUPPORTED</span></code>, but the <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code> one is not supported by Archlinux.</p></li>
-<li><p>Please note that the code path that uses <code class="ansible-value docutils literal notranslate"><span class="pre">ubuntu_legacy</span></code> mechanism has not been tested for a while, because recent versions of Ubuntu is already using the <code class="ansible-value docutils literal notranslate"><span class="pre">glibc</span></code> mechanism. There is no support for <code class="ansible-value docutils literal notranslate"><span class="pre">ubuntu_legacy</span></code>, given our inability to test it. Therefore, that mechanism is <strong>deprecated</strong> and will be removed in community.general 13.0.0.</p></li>
 </ul>
 </div>
 </section>
@@ -495,7 +491,6 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-choices">Can only return:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;glibc&quot;</span></code></p></li>
-<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ubuntu_legacy&quot;</span></code></p></li>
 </ul>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;glibc&quot;</span></code></p>
 </div></td>
@@ -528,7 +523,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="lldp_module.html" class="btn btn-neutral float-left" title="community.general.lldp module – Get details reported by LLDP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lldp_facts_module.html" class="btn btn-neutral float-left" title="community.general.lldp_facts module – Get details reported by LLDP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="logentries_module.html" class="btn btn-neutral float-right" title="community.general.logentries module – Module for tracking logs using logentries.com" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -536,7 +531,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2026.
+      <span class="lastupdated">Last updated on Jun 08, 2026.
       </span></p>
   </div>
 

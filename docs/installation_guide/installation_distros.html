@@ -212,12 +212,12 @@
       /*use extra_banner for when we want something extra, like a survey or Community Day notice */
       var extra_banner = '';
     
-      var extra_banner =
+      /*var extra_banner =
       '<div id="latest_extra_banner_id" class="admonition important">' +
         '<p style="padding-bottom: 1.2rem;text-align: center;">' +
         'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
         '</p>' +
-      '</div>';
+      '</div>';*/
     
     // Create a banner if we're not on the official docs site
     if (location.host == "docs.testing.ansible.com") {
@@ -240,9 +240,6 @@
         banner += extra_banner;
 
         msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
-        /* temp - add extra warning about core-2.19. Included in latest package release docs */
- 
-        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
 
       } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
         msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
@@ -380,10 +377,21 @@ $<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>
 </table>
 <p>The following example assumes that you already have <code class="docutils literal notranslate"><span class="pre">wget</span></code> and <code class="docutils literal notranslate"><span class="pre">gpg</span></code> installed.</p>
 <p>Add the repository and install Ansible.
-Set <code class="docutils literal notranslate"><span class="pre">UBUNTU_CODENAME=...</span></code> based on the table above (we use <code class="docutils literal notranslate"><span class="pre">jammy</span></code> in this example):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">UBUNTU_CODENAME</span><span class="o">=</span>jammy
-$<span class="w"> </span>wget<span class="w"> </span>-O-<span class="w"> </span><span class="s2">&quot;https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&amp;op=get&amp;search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/ansible-archive-keyring.gpg
-$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [signed-by=/usr/share/keyrings/ansible-archive-keyring.gpg] http://ppa.launchpad.net/ansible/ansible/ubuntu </span><span class="nv">$UBUNTU_CODENAME</span><span class="s2"> main&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/ansible.list
+Set <code class="docutils literal notranslate"><span class="pre">UBUNTU_CODENAME=...</span></code> based on the table above (we use <code class="docutils literal notranslate"><span class="pre">noble</span></code> in this example):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nv">UBUNTU_CODENAME</span><span class="o">=</span><span class="s1">&#39;noble&#39;</span>
+$<span class="w"> </span><span class="nv">FINGERPRINT</span><span class="o">=</span><span class="s1">&#39;6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367&#39;</span>
+
+$<span class="w"> </span>wget<span class="w"> </span>-O-<span class="w"> </span><span class="s2">&quot;https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&amp;op=get&amp;search=0x</span><span class="si">${</span><span class="nv">FINGERPRINT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/ansible-archive-keyring.gpg
+
+$<span class="w"> </span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | sudo tee /etc/apt/sources.list.d/ansible.sources &gt; /dev/null</span>
+<span class="s">Types: deb</span>
+<span class="s">URIs: https://ppa.launchpadcontent.net/ansible/ansible/ubuntu/</span>
+<span class="s">Suites: ${UBUNTU_CODENAME}</span>
+<span class="s">Components: main</span>
+<span class="s">Trusted: yes</span>
+<span class="s">Signed-By: /usr/share/keyrings/ansible-archive-keyring.gpg</span>
+<span class="s">EOF</span>
+
 $<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ansible
 </pre></div>
 </div>
@@ -440,7 +448,7 @@ See the <a class="reference external" href="https://archlinux.org/packages/?sort
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Apr 17, 2026.
+      <span class="lastupdated">Last updated on Jun 08, 2026.
       </span></p>
   </div>
 
