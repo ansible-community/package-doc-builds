@@ -1,0 +1,546 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PowerShell 7 Support &mdash; Ansible Community Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=41de9001" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/ansible.css?v=b54c304f" />
+      <link rel="stylesheet" type="text/css" href="../_static/antsibull-minimal.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/rtd-ethical-ads.css?v=289b023e" />
+
+  
+    <link rel="shortcut icon" href="../_static/images/Ansible-Mark-RGB_Black.png"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/os_guide/windows_pwsh.html"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c7b8e248"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Windows SSH" href="windows_ssh.html" />
+    <link rel="prev" title="Windows performance" href="windows_performance.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+    <li><a href="https://forum.ansible.com/" target="_blank">Ansible community forum</a></li>
+    <li><a href="https://docs.ansible.com/" target="_blank">Documentation</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../_static/images/Ansible-Mark-RGB_White.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Community Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ansible
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting started with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started_ee/index.html">Getting started with Execution Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../inventory_guide/index.html">Building Ansible inventories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command_guide/index.html">Using Ansible command line tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../playbook_guide/index.html">Using Ansible playbooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections_guide/index.html">Using Ansible collections</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro_bsd.html">Managing BSD hosts with Ansible</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="intro_windows.html">Managing Windows hosts with Ansible</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="windows_app_control.html">Windows App Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_dsc.html">Desired State Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_performance.html">Windows performance</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">PowerShell 7 Support</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interpreter-configuration">Interpreter Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-shebang-support">Module Shebang Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cross-platform-powershell-modules">Cross-Platform PowerShell Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#verifying-configuration">Verifying Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#psrp-configuration-name">PSRP Configuration Name</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#see-also">See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_ssh.html">Windows SSH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_usage.html">Using Ansible and Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_winrm.html">Windows Remote Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_winrm_certificate.html">WinRM Certificate Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_winrm_kerberos.html">Kerberos Authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#bootstrapping-windows">Bootstrapping Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#connecting-to-windows-nodes">Connecting to Windows nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#which-modules-are-available">Which modules are available?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#using-windows-as-the-control-node">Using Windows as the control node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#windows-facts">Windows facts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="intro_windows.html#common-windows-problems">Common Windows problems</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro_zos.html">Managing z/OS UNIX hosts with Ansible</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tips_tricks/index.html">Ansible tips and tricks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../collections/index.html">Collection Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections/all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
+          <li class="breadcrumb-item"><a href="intro_windows.html">Managing Windows hosts with Ansible</a></li>
+      <li class="breadcrumb-item active">PowerShell 7 Support</li>
+  <li class="wy-breadcrumbs-aside">
+            <!-- Remove main index page as it is no longer editable -->
+            
+              <a href="https://github.com/ansible/ansible-documentation/edit/devel/docs/docsite/rst/os_guide/windows_pwsh.rst?description=%23%23%23%23%23%20SUMMARY%0A%3C!---%20Your%20description%20here%20--%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      /*var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';*/
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <section id="powershell-7-support">
+<span id="windows-pwsh"></span><h1>PowerShell 7 Support<a class="headerlink" href="#powershell-7-support" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#interpreter-configuration" id="id1">Interpreter Configuration</a></p></li>
+<li><p><a class="reference internal" href="#module-shebang-support" id="id2">Module Shebang Support</a></p></li>
+<li><p><a class="reference internal" href="#cross-platform-powershell-modules" id="id3">Cross-Platform PowerShell Modules</a></p></li>
+<li><p><a class="reference internal" href="#verifying-configuration" id="id4">Verifying Configuration</a></p></li>
+<li><p><a class="reference internal" href="#psrp-configuration-name" id="id5">PSRP Configuration Name</a></p></li>
+</ul>
+</nav>
+<p>Starting with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> version 2.21, Ansible supports PowerShell 7 (<code class="docutils literal notranslate"><span class="pre">pwsh</span></code>) as an alternative to Windows PowerShell 5.1 for executing PowerShell modules. This enables cross-platform PowerShell module execution on both Windows and non-Windows systems as well as access to the latest PowerShell features and improvements.</p>
+<section id="interpreter-configuration">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Interpreter Configuration</a><a class="headerlink" href="#interpreter-configuration" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ansible_pwsh_interpreter</span></code> variable specifies which PowerShell executable to use when running PowerShell modules.</p>
+<p><strong>Path requirements:</strong></p>
+<ul class="simple">
+<li><p><strong>Windows</strong>: Supports both absolute paths (<code class="docutils literal notranslate"><span class="pre">C:\Program</span> <span class="pre">Files\PowerShell\7\pwsh.exe</span></code>) and relative paths/executable names (<code class="docutils literal notranslate"><span class="pre">pwsh</span></code>, which searches PATH)</p></li>
+<li><p><strong>Linux/macOS</strong>: Requires absolute paths only (<code class="docutils literal notranslate"><span class="pre">/usr/bin/pwsh</span></code>, <code class="docutils literal notranslate"><span class="pre">/opt/microsoft/powershell/7/pwsh</span></code>)</p></li>
+</ul>
+<p><strong>Default behavior:</strong></p>
+<p>The default interpreter is determined by the module’s shebang line and target platform:</p>
+<ul class="simple">
+<li><p><strong>Windows</strong>:</p>
+<ul>
+<li><p>Modules with <code class="docutils literal notranslate"><span class="pre">#!powershell</span></code> shebang → <code class="docutils literal notranslate"><span class="pre">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</span></code> (Windows PowerShell 5.1)</p></li>
+<li><p>Modules with <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/pwsh</span></code> shebang → <code class="docutils literal notranslate"><span class="pre">pwsh</span></code> (PowerShell 7, searches PATH)</p></li>
+<li><p>This ensures backwards compatibility with existing modules while allowing opt-in to PowerShell 7</p></li>
+</ul>
+</li>
+<li><p><strong>Linux/macOS</strong>:</p>
+<ul>
+<li><p>All modules default to <code class="docutils literal notranslate"><span class="pre">/usr/bin/pwsh</span></code> (PowerShell 7) regardless of shebang</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>The variable can be set per play, or task like the below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use PowerShell 7 on Windows (relative path)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows_servers</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ansible_pwsh_interpreter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pwsh</span>
+
+<span class="c1"># Use PowerShell 7 on Windows (absolute path)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows_servers</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ansible_pwsh_interpreter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Program Files\PowerShell\7\pwsh.exe</span>
+
+<span class="c1"># Use PowerShell 7 on Linux (absolute path required)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux_servers</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ansible_pwsh_interpreter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/pwsh</span>
+
+<span class="c1"># Use custom PowerShell installation on Linux</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux_servers</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ansible_pwsh_interpreter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/microsoft/powershell/7/pwsh</span>
+
+<span class="c1"># Use Windows PowerShell 5.1 explicitly on Windows</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows_legacy</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ansible_pwsh_interpreter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</span>
+</pre></div>
+</div>
+<p>When setting the variable in an ini inventory file, the value should be quoted if it contains whitespace and is part of a host declaration but should be unquoted when set by itself. For example:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[windows]</span>
+<span class="c1"># Quotes required for host variable since it contains spaces</span>
+<span class="na">win-host  ansible_pwsh_interpreter</span><span class="o">=</span><span class="s">&quot;C:\Program Files\PowerShell\7\pwsh.exe&quot;</span>
+
+<span class="k">[windows:vars]</span>
+<span class="c1"># Quotes not required for group variable since it is the only variable on the line</span>
+<span class="na">ansible_pwsh_interpreter</span><span class="o">=</span><span class="s">C:\Program Files\PowerShell\7\pwsh.exe</span>
+</pre></div>
+</div>
+</section>
+<section id="module-shebang-support">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Module Shebang Support</a><a class="headerlink" href="#module-shebang-support" title="Link to this heading"></a></h2>
+<p>PowerShell modules specify their interpreter using shebang lines, which determines the default PowerShell version when <code class="docutils literal notranslate"><span class="pre">ansible_pwsh_interpreter</span></code> is not set. The two shebang formats officially supported for PowerShell based modules are:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c">#!powershell</span>
+<span class="c">#!/usr/bin/pwsh</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">#!powershell</span></code>: Targets Windows PowerShell 5.1 compatibility</p>
+<ul>
+<li><p>Windows: Uses <code class="docutils literal notranslate"><span class="pre">powershell.exe</span></code> (5.1) by default</p></li>
+<li><p>Linux/macOS: Still uses <code class="docutils literal notranslate"><span class="pre">/usr/bin/pwsh</span></code> (cross-platform PowerShell 7)</p></li>
+<li><p>Use for modules that need to work on older Windows systems without PowerShell 7</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">#!/usr/bin/pwsh</span></code>: Targets PowerShell 7</p>
+<ul>
+<li><p>Windows: Uses <code class="docutils literal notranslate"><span class="pre">pwsh.exe</span></code> (PowerShell 7) by default</p></li>
+<li><p>Linux/macOS: Uses <code class="docutils literal notranslate"><span class="pre">/usr/bin/pwsh</span></code> (PowerShell 7)</p></li>
+<li><p>Use for modules requiring PowerShell 7+ features or cross-platform compatibility</p></li>
+</ul>
+</li>
+</ul>
+<p>It is possible to use a custom shebang line for PowerShell modules on non-Windows platforms as long as the filename specified by the shebang is <code class="docutils literal notranslate"><span class="pre">pwsh</span></code> but this is not officially supported and thoroughly tested. It is recommended to use <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/pwsh</span></code> and control the interpreter used through the <code class="docutils literal notranslate"><span class="pre">ansible_pwsh_interpreter</span></code> variable when running on non-Windows platforms to ensure consistent behavior.</p>
+</section>
+<section id="cross-platform-powershell-modules">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Cross-Platform PowerShell Modules</a><a class="headerlink" href="#cross-platform-powershell-modules" title="Link to this heading"></a></h2>
+<p>As PowerShell modules can run on either Windows or non-Windows platforms, there are a few tricks that make it easier to write cross-platform compatible modules that work well with both Windows PowerShell 5.1 and PowerShell 7:</p>
+<p><strong>Use platform checks:</strong></p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c">#!powershell</span>
+
+<span class="c">#AnsibleRequires -CSharpUtil Ansible.Basic</span>
+
+<span class="nv">$spec</span> <span class="p">=</span> <span class="p">@{</span>
+    <span class="n">options</span> <span class="p">=</span> <span class="p">@{</span>
+        <span class="n">path</span> <span class="p">=</span> <span class="p">@{</span> <span class="nb">type </span><span class="p">=</span> <span class="s2">&quot;str&quot;</span><span class="p">;</span> <span class="n">required</span> <span class="p">=</span> <span class="nv">$true</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$module</span> <span class="p">=</span> <span class="no">[Ansible.Basic.AnsibleModule]</span><span class="p">::</span><span class="n">Create</span><span class="p">(</span><span class="nv">$args</span><span class="p">,</span> <span class="nv">$spec</span><span class="p">)</span>
+
+<span class="c"># Set $IsWindows for PowerShell 5.1 to simplify future platform checks.</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="p">(</span><span class="nb">Get-Variable</span> <span class="n">-Name</span> <span class="n">IsWindows</span> <span class="n">-ErrorAction</span> <span class="n">Ignore</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$IsWindows</span> <span class="p">=</span> <span class="nv">$true</span>
+<span class="p">}</span>
+
+<span class="c"># Check platform using PowerShell 7 automatic variables</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$IsWindows</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c"># Windows-specific logic</span>
+<span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$IsLinux</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c"># Linux-specific logic</span>
+<span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$IsMacOS</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c"># macOS-specific logic</span>
+<span class="p">}</span>
+
+<span class="c"># Check if running on WinPS or Pwsh 7</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$IsCoreCLR</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c"># PowerShell 7 specific logic</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c"># Windows PowerShell 5.1 specific logic</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$PSVersionTable</span><span class="p">.</span><span class="n">PSVersion</span> <span class="o">-lt</span> <span class="s1">&#39;6.0&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c"># Windows PowerShell 5.1 specific logic</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c"># PowerShell 7 specific logic</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Avoid Windows-specific cmdlets and APIs:</strong></p>
+<ul class="simple">
+<li><p>Many Windows cmdlets (like <code class="docutils literal notranslate"><span class="pre">Get-WmiObject</span></code>, <code class="docutils literal notranslate"><span class="pre">Get-ComputerInfo</span></code>) are not available on non-Windows platforms</p></li>
+<li><p>Use cross-platform alternatives when possible</p></li>
+<li><p>Rely on .NET APIs that are supported in targeted platforms</p></li>
+<li><p>Test on multiple platforms</p></li>
+<li><p>Document platform requirements clearly in module documentation</p></li>
+<li><p>Use platform checks to conditionally execute platform-specific code paths when necessary</p></li>
+</ul>
+</section>
+<section id="verifying-configuration">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Verifying Configuration</a><a class="headerlink" href="#verifying-configuration" title="Link to this heading"></a></h2>
+<p>The simplest way to check which PowerShell version Ansible is using is to run <code class="docutils literal notranslate"><span class="pre">ansible.windows.win_powershell</span></code> to output <code class="docutils literal notranslate"><span class="pre">$PSVersionTable.PSVersion</span></code> variable:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Display PowerShell version info</span>
+<span class="w">  </span><span class="nt">ansible.windows.win_powershell</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$PSVersionTable.PSVersion.ToString()</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ps_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_task.result.output[0]</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps_version</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ansible.windows.win_powershell</span></code> module by default runs in the same interpreter context as other PowerShell modules, so it can be used to verify any PowerShell details about the target node’s PowerShell environment, such as installed modules, available cmdlets, and more.</p>
+</section>
+<section id="psrp-configuration-name">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">PSRP Configuration Name</a><a class="headerlink" href="#psrp-configuration-name" title="Link to this heading"></a></h2>
+<p>When using the <code class="docutils literal notranslate"><span class="pre">ansible.builtin.psrp</span></code> connection plugin, aligning the PSRemoting session configuration with your desired PowerShell interpreter improves performance significantly.</p>
+<p>If the PSRemoting session configuration does not match the PowerShell interpreter specified by <code class="docutils literal notranslate"><span class="pre">ansible_pwsh_interpreter</span></code>, PSRP must launch a new PowerShell process for each task. This creates extra overhead and slows down playbook execution. By matching the session configuration to your interpreter, modules execute directly in the correct PowerShell environment without process spawning.</p>
+<p><strong>Configuration:</strong></p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">ansible_psrp_configuration_name</span></code> variable to specify which PowerShell session configuration to use:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Microsoft.PowerShell</span></code> (default): Uses Windows PowerShell 5.1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PowerShell.7</span></code>: Uses PowerShell 7</p></li>
+</ul>
+<p>PowerShell 7 typically registers the <code class="docutils literal notranslate"><span class="pre">PowerShell.7</span></code> session configuration during installation when the option is selected, or when <code class="docutils literal notranslate"><span class="pre">Enable-PSRemoting</span></code> is run from within the PowerShell 7 interpreter.</p>
+<p><strong>Example for PowerShell 7:</strong></p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[windows:vars]</span>
+<span class="na">ansible_connection</span><span class="o">=</span><span class="s">psrp</span>
+<span class="na">ansible_pwsh_interpreter</span><span class="o">=</span><span class="s">C:\Program Files\PowerShell\7\pwsh.exe</span>
+<span class="na">ansible_psrp_configuration_name</span><span class="o">=</span><span class="s">PowerShell.7</span>
+</pre></div>
+</div>
+<p><strong>Verifying session configurations:</strong></p>
+<p>To see available session configurations on a Windows host:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nb">Get-PSSessionConfiguration</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">PSVersion</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h1>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="../reference_appendices/release_and_maintenance.html#target-node-windows-support"><span class="std std-ref">ansible-core target node Windows support</span></a> - PowerShell lifecycle and support policy</p></li>
+<li><p><a class="reference external" href="https://docs.ansible.com/projects/ansible/2.9/user_guide/windows_setup.html#windows-setup" title="(in Ansible v2.9)"><span>Setting up a Windows Host</span></a> - Setting up Windows hosts</p></li>
+<li><p><a class="reference internal" href="windows_usage.html#windows-usage"><span class="std std-ref">Using Ansible and Windows</span></a> - Using Ansible with Windows</p></li>
+<li><p><a class="reference internal" href="../dev_guide/developing_modules_general_windows.html#developing-modules-general-windows"><span class="std std-ref">Windows module development walkthrough</span></a> - Developing Windows modules</p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="windows_performance.html" class="btn btn-neutral float-left" title="Windows performance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="windows_ssh.html" class="btn btn-neutral float-right" title="Windows SSH" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Jun 12, 2026.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>
