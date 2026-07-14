@@ -332,7 +332,7 @@
 <h1>kubernetes.core.helm module – Manages Kubernetes packages with the Helm package manager<a class="headerlink" href="#kubernetes-core-helm-module-manages-kubernetes-packages-with-the-helm-package-manager" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/kubernetes/core/">kubernetes.core collection</a> (version 6.4.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/kubernetes/core/">kubernetes.core collection</a> (version 6.5.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -392,6 +392,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <a class="ansibleOptionLink" href="#parameter-atomic" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>If set, the installation process deletes the installation on failure.</p>
+<p>With Helm v4 this is translated to the <code class="docutils literal notranslate"><span class="pre">--rollback-on-failure</span></code> flag, since <code class="docutils literal notranslate"><span class="pre">--atomic</span></code> was renamed; with Helm v3 the <code class="docutils literal notranslate"><span class="pre">--atomic</span></code> flag is used. The <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-atomic"><span class="std std-ref"><span class="pre">atomic</span></span></a></strong></code> option works the same way regardless of the installed Helm version.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -500,6 +501,8 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <a class="ansibleOptionLink" href="#parameter-force" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Helm option to force reinstall, ignore on new install.</p>
+<p>With Helm v4 this performs a client-side replacement. Helm v4 deprecated <code class="docutils literal notranslate"><span class="pre">--force</span></code> (split into <code class="docutils literal notranslate"><span class="pre">--force-replace</span></code> and <code class="docutils literal notranslate"><span class="pre">--force-conflicts</span></code>) and enables server-side apply by default, so for Helm v4 the module emits <code class="docutils literal notranslate"><span class="pre">--server-side=false</span> <span class="pre">--force-replace</span></code> to preserve the Helm v3 behaviour. With Helm v3 the <code class="docutils literal notranslate"><span class="pre">--force</span></code> flag is used. The <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-force"><span class="std std-ref"><span class="pre">force</span></span></a></strong></code> option works the same way regardless of the installed Helm version.</p>
+<p>Mutually exclusive with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-server-side"><span class="std std-ref"><span class="pre">server_side</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-force-conflicts"><span class="std std-ref"><span class="pre">force_conflicts</span></span></a></strong></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -508,6 +511,21 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-force_conflicts"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-force-conflicts"><strong>force_conflicts</strong></p>
+<a class="ansibleOptionLink" href="#parameter-force_conflicts" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 6.5.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When server-side apply is enabled (the Helm v4 default), force changes against conflicts instead of failing.</p>
+<p>Maps to the <code class="docutils literal notranslate"><span class="pre">--force-conflicts</span></code> flag.</p>
+<p>This option requires Helm v4, cannot be combined with <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-server-side"><span class="std std-ref"><span class="pre">server_side=false</span></span></a></code>, and is mutually exclusive with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-force"><span class="std std-ref"><span class="pre">force</span></span></a></strong></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-history_max"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-history-max"><strong>history_max</strong></p>
 <a class="ansibleOptionLink" href="#parameter-history_max" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 2.2.0</em></p>
@@ -516,7 +534,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <p>mutually exclusive with with <code class="docutils literal notranslate"><span class="pre">replace</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-host"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-host"><strong>host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 1.2.0</em></p>
@@ -524,7 +542,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <td><div class="ansible-option-cell"><p>Provide a URL for accessing the API. Can also be specified via <code class="docutils literal notranslate"><span class="pre">K8S_AUTH_HOST</span></code> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-insecure_skip_tls_verify"></div>
 <div class="ansibleOptionAnchor" id="parameter-skip_tls_certs_check"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-skip-tls-certs-check"><span id="ansible-collections-kubernetes-core-helm-module-parameter-insecure-skip-tls-verify"></span><strong>insecure_skip_tls_verify</strong></p>
 <a class="ansibleOptionLink" href="#parameter-insecure_skip_tls_verify" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: skip_tls_certs_check</span></p>
@@ -541,7 +559,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-kubeconfig"></div>
 <div class="ansibleOptionAnchor" id="parameter-kubeconfig_path"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-kubeconfig-path"><span id="ansible-collections-kubernetes-core-helm-module-parameter-kubeconfig"></span><strong>kubeconfig</strong></p>
 <a class="ansibleOptionLink" href="#parameter-kubeconfig" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: kubeconfig_path</span></p>
@@ -552,7 +570,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <p>The configuration can be provided as dictionary. Added in version 2.4.0.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-plain_http"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-plain-http"><strong>plain_http</strong></p>
 <a class="ansibleOptionLink" href="#parameter-plain_http" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 6.1.0</em></p>
@@ -566,7 +584,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-post_renderer"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-post-renderer"><strong>post_renderer</strong></p>
 <a class="ansibleOptionLink" href="#parameter-post_renderer" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 2.4.0</em></p>
@@ -574,7 +592,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <td><div class="ansible-option-cell"><p>Path to an executable to be used for post rendering.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-purge"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-purge"><strong>purge</strong></p>
 <a class="ansibleOptionLink" href="#parameter-purge" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -586,7 +604,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-release_name"></div>
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-release-name"><span id="ansible-collections-kubernetes-core-helm-module-parameter-name"></span><strong>release_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-release_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: name</span></p>
@@ -595,7 +613,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <td><div class="ansible-option-cell"><p>Release name to manage.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-release_namespace"></div>
 <div class="ansibleOptionAnchor" id="parameter-namespace"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-release-namespace"><span id="ansible-collections-kubernetes-core-helm-module-parameter-namespace"></span><strong>release_namespace</strong></p>
 <a class="ansibleOptionLink" href="#parameter-release_namespace" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: namespace</span></p>
@@ -604,7 +622,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <td><div class="ansible-option-cell"><p>Kubernetes namespace where the chart should be installed.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-release_state"></div>
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-state"><span id="ansible-collections-kubernetes-core-helm-module-parameter-release-state"></span><strong>release_state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-release_state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: state</span></p>
@@ -618,7 +636,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-release_values"></div>
 <div class="ansibleOptionAnchor" id="parameter-values"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-values"><span id="ansible-collections-kubernetes-core-helm-module-parameter-release-values"></span><strong>release_values</strong></p>
 <a class="ansibleOptionLink" href="#parameter-release_values" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: values</span></p>
@@ -628,7 +646,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-replace"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-replace"><strong>replace</strong></p>
 <a class="ansibleOptionLink" href="#parameter-replace" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 1.11.0</em></p>
@@ -643,7 +661,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reset_then_reuse_values"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-reset-then-reuse-values"><strong>reset_then_reuse_values</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reset_then_reuse_values" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 6.0.0</em></p>
@@ -658,7 +676,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reset_values"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-reset-values"><strong>reset_values</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reset_values" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 3.0.0</em></p>
@@ -671,7 +689,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reuse_values"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-reuse-values"><strong>reuse_values</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reuse_values" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in kubernetes.core 3.0.0</em></p>
@@ -682,6 +700,22 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-server_side"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-module-parameter-server-side"><strong>server_side</strong></p>
+<a class="ansibleOptionLink" href="#parameter-server_side" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 6.5.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Control Helm v4 server-side apply when installing or upgrading a release.</p>
+<p>Maps to the <code class="docutils literal notranslate"><span class="pre">--server-side</span></code> flag, which accepts <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> or <code class="docutils literal notranslate"><span class="pre">auto</span></code>.</p>
+<p>This option requires Helm v4 and is mutually exclusive with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-module-parameter-force"><span class="std std-ref"><span class="pre">force</span></span></a></strong></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;false&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -1116,7 +1150,7 @@ see <a class="reference internal" href="#ansible-collections-kubernetes-core-hel
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 13, 2026.
+      <span class="lastupdated">Last updated on Jul 14, 2026.
       </span></p>
   </div>
 

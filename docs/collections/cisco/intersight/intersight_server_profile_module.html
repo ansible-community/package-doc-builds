@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="cisco.intersight.intersight_server_profile_info module – Gather information about Server Profiles in Cisco Intersight" href="intersight_server_profile_info_module.html" />
+    <link rel="next" title="cisco.intersight.intersight_server_profile_derive module – Derive Server Profiles from Templates in Cisco Intersight" href="intersight_server_profile_derive_module.html" />
     <link rel="prev" title="cisco.intersight.intersight_server_pool_qualification_policy_info module – Gather information about Server Pool Qualification Policies in Cisco Intersight" href="intersight_server_pool_qualification_policy_info_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -338,7 +338,7 @@
 <h1>cisco.intersight.intersight_server_profile module – Server Profile configuration for Cisco Intersight<a class="headerlink" href="#cisco-intersight-intersight-server-profile-module-server-profile-configuration-for-cisco-intersight" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.19.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.20.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -371,13 +371,53 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-action"><strong>action</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The action to perform on the server profile after it has been configured.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Deploy</span></code> will deploy the profile to the assigned server. The profile must have a server assigned.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Undeploy</span></code> will undeploy the profile from the assigned server.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Unassign</span></code> will unassign the server from the profile by clearing the AssignedServer and setting ServerAssignmentMode to None.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Attach</span></code> will attach the profile to a server profile template using the Intersight MoMerger API. Requires <code class="docutils literal notranslate"><span class="pre">server_profile_template</span></code> to specify the template name.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Detach</span></code> will detach the profile from its associated server profile template.</p>
+<p>If not specified, no action is taken beyond configuring the profile.</p>
+<p>All actions are idempotent and will not repeat if the profile is already in the desired state.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Deploy&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Undeploy&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Unassign&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Attach&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Detach&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action_poll_interval"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-action-poll-interval"><strong>action_poll_interval</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action_poll_interval" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Time in seconds between status polls when waiting for an action to complete.</p>
+<p>Only used when <code class="docutils literal notranslate"><span class="pre">wait_for_action</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">60</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action_timeout"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-action-timeout"><strong>action_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Maximum time in seconds to wait for a deploy or undeploy action to complete.</p>
+<p>Only used when <code class="docutils literal notranslate"><span class="pre">wait_for_action</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">1200</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-adapter_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-adapter-policy"><strong>adapter_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-adapter_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Adapter Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_bearer_token"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-api-bearer-token"><strong>api_bearer_token</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_bearer_token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -386,7 +426,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>If not set, the value of the INTERSIGHT_API_BEARER_TOKEN environment variable is used.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_key_id"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-api-key-id"><strong>api_key_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_key_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -395,7 +435,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Required if <em>api_bearer_token</em> is not provided.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_private_key"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-api-private-key"><strong>api_private_key</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_private_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
@@ -408,7 +448,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Required if <em>api_bearer_token</em> is not provided.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_uri"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-api-uri"><strong>api_uri</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_uri" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -417,7 +457,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;https://intersight.com/api/v1&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-assigned_server"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-assigned-server"><strong>assigned_server</strong></p>
 <a class="ansibleOptionLink" href="#parameter-assigned_server" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -426,7 +466,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">assigned_server_serial</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-assigned_server_serial"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-assigned-server-serial"><strong>assigned_server_serial</strong></p>
 <a class="ansibleOptionLink" href="#parameter-assigned_server_serial" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -436,28 +476,28 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">assigned_server</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-bios_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-bios-policy"><strong>bios_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-bios_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of BIOS Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-boot_order_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-boot-order-policy"><strong>boot_order_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-boot_order_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Boot Order Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-certificate_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-certificate-policy"><strong>certificate_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-certificate_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Certificate Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-description"></div>
 <div class="ansibleOptionAnchor" id="parameter-descr"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-description"><span id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-descr"></span><strong>description</strong></p>
 <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: descr</span></p>
@@ -468,56 +508,56 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-drive_security_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-drive-security-policy"><strong>drive_security_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-drive_security_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Drive Security Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-firmware_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-firmware-policy"><strong>firmware_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-firmware_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Firmware Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-imc_access_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-imc-access-policy"><strong>imc_access_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-imc_access_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of IMC Access Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ipmi_over_lan_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-ipmi-over-lan-policy"><strong>ipmi_over_lan_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ipmi_over_lan_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of IPMI over LAN Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-lan_connectivity_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-lan-connectivity-policy"><strong>lan_connectivity_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-lan_connectivity_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of LAN Connectivity Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ldap_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-ldap-policy"><strong>ldap_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ldap_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of LDAP Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-local_user_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-local-user-policy"><strong>local_user_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-local_user_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Local User Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -525,21 +565,21 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>The name must be between 1 and 64 alphanumeric characters, allowing special characters :-_.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-network_connectivity_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-network-connectivity-policy"><strong>network_connectivity_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-network_connectivity_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Network Connectivity Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ntp_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-ntp-policy"><strong>ntp_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ntp_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of NTP Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-organization"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-organization"><strong>organization</strong></p>
 <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -548,32 +588,40 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-power_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-power-policy"><strong>power_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-power_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Power Policy to associated with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-san_connectivity_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-san-connectivity-policy"><strong>san_connectivity_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-san_connectivity_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of SAN Connectivity Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-sd_card_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-sd-card-policy"><strong>sd_card_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-sd_card_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of SD Card Policy to associate with this profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-serial_over_lan_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-serial-over-lan-policy"><strong>serial_over_lan_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-serial_over_lan_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of Serial over LAN Policy to associate with this profile.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-server_profile_template"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-server-profile-template"><strong>server_profile_template</strong></p>
+<a class="ansibleOptionLink" href="#parameter-server_profile_template" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name of the Server Profile Template to attach to when <code class="docutils literal notranslate"><span class="pre">action</span></code> is <code class="docutils literal notranslate"><span class="pre">Attach</span></code>.</p>
+<p>The template must exist in the same organization as the server profile.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -722,6 +770,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Name of Virtual Media Policy to associate with this profile.</p>
 </div></td>
 </tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-wait_for_action"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-server-profile-module-parameter-wait-for-action"><strong>wait_for_action</strong></p>
+<a class="ansibleOptionLink" href="#parameter-wait_for_action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether to wait for the deploy or undeploy action to complete before returning.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, the module will poll the profile status until the action completes or times out.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">false</span></code>, the module will submit the action and return immediately.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -779,6 +841,55 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">assigned_server_serial</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FCH2149V0GN</span>
 <span class="w">    </span><span class="nt">boot_order_policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">COS-Boot</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure and Deploy Server Profile</span>
+<span class="w">  </span><span class="nt">cisco.intersight.intersight_server_profile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SP-Server5</span>
+<span class="w">    </span><span class="nt">target_platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FIAttached</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Profile with auto-deploy</span>
+<span class="w">    </span><span class="nt">assigned_server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5e3b517d6176752d319a9999</span>
+<span class="w">    </span><span class="nt">boot_order_policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">COS-Boot</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
+<span class="w">    </span><span class="nt">action_timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1800</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy existing Server Profile (fire and forget)</span>
+<span class="w">  </span><span class="nt">cisco.intersight.intersight_server_profile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SP-Server1</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
+<span class="w">    </span><span class="nt">wait_for_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Undeploy Server Profile</span>
+<span class="w">  </span><span class="nt">cisco.intersight.intersight_server_profile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SP-Server1</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Undeploy</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Unassign server from profile</span>
+<span class="w">  </span><span class="nt">cisco.intersight.intersight_server_profile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SP-Server1</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Unassign</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Attach profile to a template</span>
+<span class="w">  </span><span class="nt">cisco.intersight.intersight_server_profile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SP-Server1</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Attach</span>
+<span class="w">    </span><span class="nt">server_profile_template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My-Standard-Template</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Detach profile from its template</span>
+<span class="w">  </span><span class="nt">cisco.intersight.intersight_server_profile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SP-Server1</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Detach</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete Server Profile</span>
 <span class="w">  </span><span class="nt">cisco.intersight.intersight_server_profile</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -835,14 +946,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="intersight_server_pool_qualification_policy_info_module.html" class="btn btn-neutral float-left" title="cisco.intersight.intersight_server_pool_qualification_policy_info module – Gather information about Server Pool Qualification Policies in Cisco Intersight" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="intersight_server_profile_info_module.html" class="btn btn-neutral float-right" title="cisco.intersight.intersight_server_profile_info module – Gather information about Server Profiles in Cisco Intersight" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="intersight_server_profile_derive_module.html" class="btn btn-neutral float-right" title="cisco.intersight.intersight_server_profile_derive module – Derive Server Profiles from Templates in Cisco Intersight" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 13, 2026.
+      <span class="lastupdated">Last updated on Jul 14, 2026.
       </span></p>
   </div>
 

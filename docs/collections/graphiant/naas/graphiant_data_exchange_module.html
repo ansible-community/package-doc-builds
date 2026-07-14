@@ -329,7 +329,7 @@
 <h1>graphiant.naas.graphiant_data_exchange module – Manage Graphiant Data Exchange services, customers, matches, and invitations<a class="headerlink" href="#graphiant-naas-graphiant-data-exchange-module-manage-graphiant-data-exchange-services-customers-matches-and-invitations" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -365,7 +365,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>python &gt;= 3.7</p></li>
-<li><p>graphiant-sdk &gt;= 26.5.0</p></li>
+<li><p>graphiant-sdk &gt;= 26.6.0</p></li>
 <li><p>tabulate</p></li>
 </ul>
 </section>
@@ -393,12 +393,12 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <a class="ansibleOptionLink" href="#parameter-config_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Path to the YAML configuration file for the operation.</p>
-<p>Required for <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">delete_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">delete_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>, and <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> operations.</p>
+<p>Required for <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">delete_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">delete_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>, and <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> operations.</p>
 <p>Can be an absolute path or relative path. Relative paths are resolved using the configured config_path.</p>
 <p>Configuration files support Jinja2 templating syntax for dynamic generation.</p>
 <p>For <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>, file must contain <em>data_exchange_services</em> list. Optional <em>policy.globalObjectOps</em></p>
 <p>per service attaches Graphiant routing policies to devices (device names resolved to IDs).</p>
-<p>For <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">delete_customers</span></code>, file must contain <em>data_exchange_customers</em> list.</p>
+<p>For <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code>, or <code class="ansible-value docutils literal notranslate"><span class="pre">delete_customers</span></code>, file must contain <em>data_exchange_customers</em> list.</p>
 <p>For <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>, file must contain <em>data_exchange_matches</em> list.</p>
 <p>For <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code>, file must contain <em>data_exchange_acceptances</em> list. Optional <em>globalObjectOps</em></p>
 <p>per acceptance attaches Graphiant routing policies to gateway devices (device names resolved to IDs).</p>
@@ -434,9 +434,10 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <a class="ansibleOptionLink" href="#parameter-matches_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Path to the matches responses JSON file for match ID lookup.</p>
-<p>Optional for <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> operation. If not provided, attempts API lookup.</p>
+<p>Optional for <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> operation. If not provided, attempts API lookup using the service name (works when the service is already visible in the consumer tenant).</p>
+<p>When the service is not yet visible via API (e.g. during a dry-run before acceptance, or when the producer has not shared the service yet), provide this file using <code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">matches_file=...</span></code>.</p>
 <p>Can be an absolute path or relative path. Relative paths are resolved using the configured config_path.</p>
-<p>This file is automatically generated by <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code> operation (Workflow 3).</p>
+<p>This file is automatically generated by <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code> operation (Workflow 3) and saved to <em>output/</em> under the config file directory (e.g. <em>de_workflows_configs/output/sample_data_exchange_matches_responses_latest.json</em>).</p>
 <p>File contains match details including <em>customer_id</em>, <em>service_id</em>, <em>match_id</em>, and <em>status</em>.</p>
 <p>Match ID resolution priority:</p>
 <ol class="arabic simple">
@@ -458,10 +459,15 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>Optional <em>policy.globalObjectOps</em>: keys are device names (resolved to device IDs) or device IDs;</p>
 <p>values can include <em>routingPolicyOps</em> to attach Graphiant filters per device (e.g. <em>Policy-DC1-Primary</em>: <em>Attach</em>).</p>
 <p>Configure Graphiant filters first with <a class="reference internal" href="graphiant_global_config_module.html#ansible-collections-graphiant-naas-graphiant-global-config-module"><span class="std std-ref">graphiant.naas.graphiant_global_config</span></a> and <em>configure_graphiant_filters</em>.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">update_services</span></code>: Update existing Data Exchange services (Workflow 1b). Only <em>prefixTags</em> can be changed. The service must already exist; use <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code> for new services. Configuration file must contain <em>data_exchange_services</em> list where each entry has <em>serviceName</em> and <em>policy.prefixTags</em>. At least one prefix must remain after the update. Supports <code class="docutils literal notranslate"><span class="pre">--check</span></code> and <code class="docutils literal notranslate"><span class="pre">--diff</span></code> to preview changes before applying.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">delete_services</span></code>: Delete Data Exchange services from YAML configuration. Services must be deleted after customers that depend on them.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>: Create Data Exchange customers from YAML configuration (Workflow 2).</p>
 <p>Configuration file must contain <em>data_exchange_customers</em> list with customer definitions.</p>
 <p>Customers can be non-Graphiant peers that can be invited to connect to services.</p>
+<p>Existing customers are skipped (idempotent). When run with <code class="docutils literal notranslate"><span class="pre">--check</span></code> and <code class="docutils literal notranslate"><span class="pre">--diff</span></code>, detects</p>
+<p><em>adminEmail</em> drift on existing customers and surfaces it as a diff — no changes are made;</p>
+<p>to apply email changes use <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code> instead.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code>: Update email list on existing Data Exchange customers (Workflow 2b). Only <em>invite.adminEmail</em> can be changed. The customer must already exist; use <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code> for new customers. Configuration file must contain <em>data_exchange_customers</em> list where each entry has <em>name</em> and <em>invite.adminEmail</em>. Supports <code class="docutils literal notranslate"><span class="pre">--check</span></code> and <code class="docutils literal notranslate"><span class="pre">--diff</span></code> to preview changes before applying.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">delete_customers</span></code>: Delete Data Exchange customers from YAML configuration. Customers must be deleted before services they depend on.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>: Match services to customers from YAML configuration (Workflow 3).</p>
 <p>Configuration file must contain <em>data_exchange_matches</em> list with match definitions.</p>
@@ -469,16 +475,23 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>Updates existing match entries or appends new ones based on customer_name and service_name.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code>: Accept Data Exchange service invitation (Workflow 4).</p>
 <p>Configuration file must contain <em>data_exchange_acceptances</em> list with acceptance details.</p>
-<p>Requires <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-data-exchange-module-parameter-matches-file"><span class="std std-ref"><span class="pre">matches_file</span></span></a></strong></code> from Workflow 3 for match ID lookup.</p>
+<p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-data-exchange-module-parameter-matches-file"><span class="std std-ref"><span class="pre">matches_file</span></span></a></strong></code> is optional: when omitted, attempts API lookup (requires service to be visible</p>
+<p>in the consumer tenant). When the service is not visible via API, provide <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-data-exchange-module-parameter-matches-file"><span class="std std-ref"><span class="pre">matches_file</span></span></a></strong></code> saved</p>
+<p>by Workflow 3 (<code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>) with <code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">matches_file=...</span></code>.</p>
 <p>Supports dry-run mode for validation without API calls.</p>
-<p>Configures full IPSec gateway deployment with dual tunnels, static routing, and VPN profiles.</p>
+<p>Use <em>ipsecGatewayPeers</em> (recommended, multi-peer, requires <code class="docutils literal notranslate"><span class="pre">graphiant_sdk</span> <span class="pre">&gt;=</span> <span class="pre">26.6.0</span></code>) or</p>
+<p><em>ipsecGatewayDetails</em> (legacy, single-peer) under <em>siteToSiteVpn</em> in the config file.</p>
+<p>Each <em>remotePeers</em> entry provisions one IPSec interface pair per gateway device; BGP routing</p>
+<p>is shared across peers; tunnel null fields are auto-filled by the playbook before the API call.</p>
 <p>For query operations (get_services_summary, get_customers_summary, get_service_health),</p>
 <p>use <a class="reference internal" href="graphiant_data_exchange_info_module.html#ansible-collections-graphiant-naas-graphiant-data-exchange-info-module"><span class="std std-ref">graphiant.naas.graphiant_data_exchange_info</span></a> module instead.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;create_services&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;update_services&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;delete_services&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;create_customers&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;update_customers&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;delete_customers&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;match_service_to_customers&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;accept_invitation&quot;</span></code></p></li>
@@ -513,6 +526,26 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 </div></td>
 <td><div class="ansible-option-cell"><p>Graphiant portal username for authentication.</p>
 <p>Required for password-based login when no valid bearer token is available from <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-data-exchange-module-parameter-access-token"><span class="std std-ref"><span class="pre">access_token</span></span></a></strong></code> or <code class="docutils literal notranslate"><span class="pre">GRAPHIANT_ACCESS_TOKEN</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-vault_data_exchange_bgp_md5_passwords"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-exchange-module-parameter-vault-data-exchange-bgp-md5-passwords"><strong>vault_data_exchange_bgp_md5_passwords</strong></p>
+<a class="ansibleOptionLink" href="#parameter-vault_data_exchange_bgp_md5_passwords" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Dict of customer name to BGP MD5 password for <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code>. Key must match the <code class="docutils literal notranslate"><span class="pre">customerName</span></code> field in the acceptance config. Precedence{{ “:” }} YAML <code class="docutils literal notranslate"><span class="pre">md5Password</span></code> non-null wins; secrets store fills <code class="docutils literal notranslate"><span class="pre">null</span></code>/absent; absent from both means no MD5 auth (optional field).</p>
+<p>Fetch from your organization’s secrets store and pass as a module param. Secrets are never written to disk — passed in memory only (<code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code>).</p>
+<p>Ansible Vault{{ “:” }} load with <a class="reference internal" href="../../ansible/builtin/include_vars_module.html#ansible-collections-ansible-builtin-include-vars-module"><span class="std std-ref">ansible.builtin.include_vars</span></a> (<code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code>) and pass via <code class="docutils literal notranslate"><span class="pre">vault_data_exchange_bgp_md5_passwords{{</span> <span class="pre">&quot;:&quot;</span> <span class="pre">}}</span> <span class="pre">&quot;{{</span> <span class="pre">vault_data_exchange_bgp_md5_passwords</span> <span class="pre">|</span> <span class="pre">default({}</span></code> }}”). Other secrets stores (HashiCorp Vault, AWS Secrets Manager, etc.){{ “:” }} pre-fetch and pass as an extra var. See <em>configs/vault_secrets.yml.example</em> for the expected dict structure.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-vault_data_exchange_psk"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-exchange-module-parameter-vault-data-exchange-psk"><strong>vault_data_exchange_psk</strong></p>
+<a class="ansibleOptionLink" href="#parameter-vault_data_exchange_psk" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Nested dict of IPSec tunnel preshared keys for <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> <code class="docutils literal notranslate"><span class="pre">ipsecGatewayPeers</span></code> configs. Structure{{ “:” }} <code class="docutils literal notranslate"><span class="pre">customerName</span> <span class="pre">→</span> <span class="pre">peer</span> <span class="pre">name</span> <span class="pre">→</span> <span class="pre">tunnel1/tunnel2</span> <span class="pre">→</span> <span class="pre">psk</span> <span class="pre">string</span></code>. Precedence{{ “:” }} YAML <code class="docutils literal notranslate"><span class="pre">psk</span></code> non-null wins; secrets store fills <code class="docutils literal notranslate"><span class="pre">null</span></code>/absent; if both are null the API auto-fills the PSK (recommended fallback when vault is omitted).</p>
+<p>Fetch from your organization’s secrets store and pass as a module param. Secrets are never written to disk — passed in memory only (<code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code>).</p>
+<p>Ansible Vault{{ “:” }} load with <a class="reference internal" href="../../ansible/builtin/include_vars_module.html#ansible-collections-ansible-builtin-include-vars-module"><span class="std std-ref">ansible.builtin.include_vars</span></a> (<code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code>) and pass via <code class="docutils literal notranslate"><span class="pre">vault_data_exchange_psk{{</span> <span class="pre">&quot;:&quot;</span> <span class="pre">}}</span> <span class="pre">&quot;{{</span> <span class="pre">vault_data_exchange_psk</span> <span class="pre">|</span> <span class="pre">default({}</span></code> }}”). Other secrets stores (HashiCorp Vault, AWS Secrets Manager, etc.){{ “:” }} pre-fetch and pass as an extra var. See <em>configs/vault_secrets.yml.example</em> for the expected dict structure.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -601,6 +634,43 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 1b - Preview prefixTags changes (check + diff)</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update_services</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_services_update.yaml&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update_services_result</span>
+<span class="w">  </span><span class="c1"># Run playbook with: ansible-playbook playbook.yml --check --diff</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 1b - Apply prefixTags update</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update_services</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_services_update.yaml&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update_services_result</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Display service update result</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">update_services_result.msg</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 2 - Preview customer creation and detect adminEmail drift (check + diff)</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_customers</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_customers.yaml&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_customers_result</span>
+<span class="w">  </span><span class="c1"># Run playbook with: ansible-playbook playbook.yml --check --diff</span>
+<span class="w">  </span><span class="c1"># Existing customers with changed adminEmail show a diff and suggest using update_customers</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 2 - Create Data Exchange customers</span>
 <span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_customers</span>
@@ -615,7 +685,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">create_customers_result.msg</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 2 - Create customers with Jinja2 template (scale testing)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 2 - Create customers from custom config file</span>
 <span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_customers</span>
 <span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_customers_scale2.yaml&quot;</span>
@@ -638,10 +708,13 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">match_result.msg</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 4 - Accept Data Exchange service invitation (check mode)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 4 - Accept invitation with matches_file (check mode; service not yet visible via API)</span>
 <span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accept_invitation</span>
 <span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_acceptance.yaml&quot;</span>
+<span class="w">    </span><span class="c1"># matches_file is optional. Required when service is not visible via API in the consumer tenant</span>
+<span class="w">    </span><span class="c1"># (e.g. before the invitation is accepted). The file is saved by Workflow 3 (match_service_to_customers).</span>
+<span class="w">    </span><span class="c1"># Pass via: -e matches_file=de_workflows_configs/output/sample_data_exchange_matches_responses_latest.json</span>
 <span class="w">    </span><span class="nt">matches_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/output/sample_data_exchange_matches_responses_latest.json&quot;</span>
 <span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -654,11 +727,13 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">accept_result.msg</span> <span class="cp">}}</span><span class="s">&quot;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 4 - Accept Data Exchange service invitation (apply)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 4 - Accept invitation (apply; matches_file optional when service is visible via API)</span>
 <span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accept_invitation</span>
 <span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_acceptance.yaml&quot;</span>
-<span class="w">    </span><span class="nt">matches_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/output/sample_data_exchange_matches_responses_latest.json&quot;</span>
+<span class="w">    </span><span class="c1"># Omit matches_file to use API lookup (works after invitation has been accepted once,</span>
+<span class="w">    </span><span class="c1"># when the service is visible to the consumer tenant). Or provide it explicitly:</span>
+<span class="w">    </span><span class="c1"># matches_file: &quot;de_workflows_configs/output/sample_data_exchange_matches_responses_latest.json&quot;</span>
 <span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -668,6 +743,25 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Display acceptance result</span>
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">accept_result.msg</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 4 - Accept invitation with secrets (BGP MD5 password and custom PSKs)</span>
+<span class="w">  </span><span class="c1"># Secrets are fetched from your secrets store and passed as module params (never written to disk).</span>
+<span class="w">  </span><span class="c1"># Ansible Vault: load vault_secrets.yml with include_vars (no_log: true) before this task,</span>
+<span class="w">  </span><span class="c1">#   then run the playbook with --vault-password-file configs/vault-password-file.sh.</span>
+<span class="w">  </span><span class="c1"># Other secrets stores (HashiCorp Vault, AWS Secrets Manager, etc.): pre-fetch and pass as extra vars.</span>
+<span class="w">  </span><span class="c1"># See configs/vault_secrets.yml.example for the expected dict structure.</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accept_invitation</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_acceptance.yaml&quot;</span>
+<span class="w">    </span><span class="nt">matches_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/output/sample_data_exchange_matches_responses_latest.json&quot;</span>
+<span class="w">    </span><span class="nt">vault_data_exchange_bgp_md5_passwords</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vault_data_exchange_bgp_md5_passwords</span> <span class="o">|</span> <span class="nf">default</span><span class="o">({})</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">vault_data_exchange_psk</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vault_data_exchange_psk</span> <span class="o">|</span> <span class="nf">default</span><span class="o">({})</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">no_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accept_result</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete Data Exchange customers (must be deleted before services)</span>
 <span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
@@ -722,6 +816,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">      </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accept_invitation</span>
 <span class="w">        </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_acceptance.yaml&quot;</span>
+<span class="w">        </span><span class="c1"># matches_file is optional; provide when service is not visible via API</span>
 <span class="w">        </span><span class="nt">matches_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/output/sample_data_exchange_matches_responses_latest.json&quot;</span>
 <span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
@@ -772,6 +867,19 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-diff"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-exchange-module-return-diff"><strong>diff</strong></p>
+<a class="ansibleOptionLink" href="#return-diff" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Ansible <code class="docutils literal notranslate"><span class="pre">--diff</span></code> output showing before/after state for each changed item.</p>
+<p>Returned for <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">update_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>, and <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code> when the playbook is run with <code class="docutils literal notranslate"><span class="pre">--diff</span></code> and at least one item would change.</p>
+<p>For <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code> with <code class="docutils literal notranslate"><span class="pre">--check</span> <span class="pre">--diff</span></code>, shows <em>adminEmail</em> drift on existing customers (<code class="docutils literal notranslate"><span class="pre">before</span></code> = current emails, <code class="docutils literal notranslate"><span class="pre">after</span></code> = desired emails) with a note to use <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code>.</p>
+<p>For new items, <code class="docutils literal notranslate"><span class="pre">before</span></code> is empty and <code class="docutils literal notranslate"><span class="pre">after</span></code> is the full target config.</p>
+<p>For updates and drift, <code class="docutils literal notranslate"><span class="pre">before</span></code> shows current values and <code class="docutils literal notranslate"><span class="pre">after</span></code> shows target values.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when playbook uses <code class="docutils literal notranslate"><span class="pre">--diff</span></code> and <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">update_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>, or <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code> has changes or drift</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;after&quot;:</span> <span class="pre">&quot;===</span> <span class="pre">de-service-1</span> <span class="pre">(prefixTags)</span> <span class="pre">===\n{\&quot;prefixTags\&quot;:</span> <span class="pre">[{\&quot;prefix\&quot;:</span> <span class="pre">\&quot;100.1.1.0/24\&quot;,</span> <span class="pre">\&quot;tag\&quot;:</span> <span class="pre">\&quot;new-s-1-prefix1\&quot;}]}\n&quot;,</span> <span class="pre">&quot;before&quot;:</span> <span class="pre">&quot;===</span> <span class="pre">de-service-1</span> <span class="pre">(prefixTags)</span> <span class="pre">===\n{\&quot;prefixTags\&quot;:</span> <span class="pre">[{\&quot;prefix\&quot;:</span> <span class="pre">\&quot;10.1.1.0/24\&quot;,</span> <span class="pre">\&quot;tag\&quot;:</span> <span class="pre">\&quot;s-1-prefix1\&quot;}]}\n&quot;}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-msg"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-exchange-module-return-msg"><strong>msg</strong></p>
 <a class="ansibleOptionLink" href="#return-msg" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -782,17 +890,17 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Successfully</span> <span class="pre">created</span> <span class="pre">3</span> <span class="pre">Data</span> <span class="pre">Exchange</span> <span class="pre">services\n\nDetailed</span> <span class="pre">logs:\n2025-10-19</span> <span class="pre">23:08:05,315</span> <span class="pre">-</span> <span class="pre">Graphiant_playbook</span> <span class="pre">-</span> <span class="pre">INFO</span> <span class="pre">-</span> <span class="pre">Creating</span> <span class="pre">service</span> <span class="pre">'de-service-1'...\n2025-10-19</span> <span class="pre">23:08:05,450</span> <span class="pre">-</span> <span class="pre">Graphiant_playbook</span> <span class="pre">-</span> <span class="pre">INFO</span> <span class="pre">-</span> <span class="pre">Successfully</span> <span class="pre">created</span> <span class="pre">service</span> <span class="pre">'de-service-1'\n&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-operation"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-exchange-module-return-operation"><strong>operation</strong></p>
 <a class="ansibleOptionLink" href="#return-operation" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The operation that was performed.</p>
-<p>One of <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">delete_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">delete_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>, or <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code>.</p>
+<p>One of <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">update_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">delete_services</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">delete_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>, or <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;create_services&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-result_data"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-exchange-module-return-result-data"><strong>result_data</strong></p>
 <a class="ansibleOptionLink" href="#return-result_data" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -839,7 +947,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 13, 2026.
+      <span class="lastupdated">Last updated on Jul 14, 2026.
       </span></p>
   </div>
 

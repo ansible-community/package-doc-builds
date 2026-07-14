@@ -329,7 +329,7 @@
 <h1>graphiant.naas.graphiant_traffic_policy module – Manage device traffic policy rulesets and LAN segment attachments<a class="headerlink" href="#graphiant-naas-graphiant-traffic-policy-module-manage-device-traffic-policy-rulesets-and-lan-segment-attachments" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.6.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -361,6 +361,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <li><p>Deconfigure deletes only the rulesets listed in the YAML by setting <code class="docutils literal notranslate"><span class="pre">ruleset:</span> <span class="pre">null</span></code> per ruleset key.</p></li>
 <li><p>Under <code class="docutils literal notranslate"><span class="pre">configure</span></code>, set <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code> on a ruleset or individual rule in YAML to delete only that object (sends <code class="docutils literal notranslate"><span class="pre">ruleset:</span> <span class="pre">null</span></code> or <code class="docutils literal notranslate"><span class="pre">rule:</span> <span class="pre">null</span></code> in the payload). Omitted <code class="docutils literal notranslate"><span class="pre">state</span></code> means <code class="docutils literal notranslate"><span class="pre">present</span></code>. This allows removing one rule without deconfiguring the whole ruleset.</p></li>
 <li><p>Attach/detach operations compare each listed segment’s ruleset reference to the device and skip when unchanged.</p></li>
+<li><p>With <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span> <span class="pre">--check</span></code>, writes are skipped but <code class="docutils literal notranslate"><span class="pre">changed</span></code> reflects whether an apply would update at least one device. Use <code class="docutils literal notranslate"><span class="pre">--diff</span></code> to preview <code class="docutils literal notranslate"><span class="pre">details.diff_plan</span></code> and Ansible <code class="docutils literal notranslate"><span class="pre">diff</span></code>.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -493,6 +494,15 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <td><div class="ansible-option-cell"><p>Supports check mode.</p>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-traffic-policy-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+<p>When the playbook runs with <code class="docutils literal notranslate"><span class="pre">--diff</span></code> and a device would change, the module returns a <code class="docutils literal notranslate"><span class="pre">diff</span></code> dictionary (<code class="docutils literal notranslate"><span class="pre">before</span></code> / <code class="docutils literal notranslate"><span class="pre">after</span></code> strings). Structured entries are also in <code class="docutils literal notranslate"><span class="pre">details.diff_plan</span></code>. Ruleset diffs list only changed rules under <code class="docutils literal notranslate"><span class="pre">rules</span></code> (plus <code class="docutils literal notranslate"><span class="pre">_meta</span></code> when ruleset metadata changes).</p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Supports Ansible’s <code class="docutils literal notranslate"><span class="pre">--diff</span></code> for pending traffic policy updates.</p>
+</div></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -505,6 +515,8 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <li><p>This module manages traffic policies directly on devices (device config API), not portal-only objects.</p></li>
 <li><p>Configuration files support Jinja2 templating syntax for dynamic configuration generation.</p></li>
 <li><p>Deconfigure payload uses <code class="docutils literal notranslate"><span class="pre">ruleset:</span> <span class="pre">null</span></code> per ruleset key; this module preserves nulls in the final payload pushed to the API.</p></li>
+<li><p>Check mode (<code class="docutils literal notranslate"><span class="pre">--check</span></code>) reads live device state, skips writes, sets <code class="docutils literal notranslate"><span class="pre">changed</span></code> from whether an apply would update at least one device, and logs would-be payloads with a <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code> prefix when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-traffic-policy-module-parameter-detailed-logs"><span class="std std-ref"><span class="pre">detailed_logs</span></span></a></strong></code> is enabled.</p></li>
+<li><p>Diff mode (<code class="docutils literal notranslate"><span class="pre">--diff</span></code>) adds Ansible <code class="docutils literal notranslate"><span class="pre">diff</span></code> (<code class="docutils literal notranslate"><span class="pre">before</span></code> / <code class="docutils literal notranslate"><span class="pre">after</span></code> strings) and <code class="docutils literal notranslate"><span class="pre">details.diff_plan</span></code>. Ruleset entries list only changed rules under <code class="docutils literal notranslate"><span class="pre">rules</span></code> (plus <code class="docutils literal notranslate"><span class="pre">_meta</span></code> when ruleset metadata changes). Segment attach/detach diffs show per-segment ruleset references under <code class="docutils literal notranslate"><span class="pre">segments</span></code>.</p></li>
 </ul>
 </div>
 </section>
@@ -549,6 +561,30 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="c1"># Preview pending changes without pushing (check mode)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Preview traffic policy configure (dry run)</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_traffic_policy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure</span>
+<span class="w">    </span><span class="nt">traffic_policy_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sample_device_traffic_policies.yaml&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">check_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traffic_policy_preview</span>
+
+<span class="c1"># Preview per-rule diffs (run playbook with --diff or set diff: true on the task)</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Preview traffic policy rule changes</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_traffic_policy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure</span>
+<span class="w">    </span><span class="nt">traffic_policy_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sample_device_traffic_policies.yaml&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">  </span><span class="nt">diff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traffic_policy_diff</span>
+<span class="w">  </span><span class="c1"># details.diff_plan[].before/after.trafficRulesets.&lt;name&gt;.rules.&lt;seq&gt; — changed rules only</span>
 </pre></div>
 </div>
 </section>
@@ -577,6 +613,24 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 </div></td>
 <td><div class="ansible-option-cell"><p>Device names where configuration was pushed (when changed=true).</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when supported</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-details"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-traffic-policy-module-return-details"><strong>details</strong></p>
+<a class="ansibleOptionLink" href="#return-details" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Raw manager result details (includes <code class="docutils literal notranslate"><span class="pre">diff_plan</span></code>, configured/skipped device lists).</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">diff_plan</span></code> entry has <code class="docutils literal notranslate"><span class="pre">device</span></code>, <code class="docutils literal notranslate"><span class="pre">branch</span></code> (for example <code class="docutils literal notranslate"><span class="pre">edge.trafficPolicy.trafficRulesets</span></code> or <code class="docutils literal notranslate"><span class="pre">edge.segments</span></code>), and normalized <code class="docutils literal notranslate"><span class="pre">before</span></code> / <code class="docutils literal notranslate"><span class="pre">after</span></code> snapshots. Ruleset branches list only changed rules under <code class="docutils literal notranslate"><span class="pre">rules</span></code>; ruleset metadata changes appear under <code class="docutils literal notranslate"><span class="pre">_meta</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when supported</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-diff"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-traffic-policy-module-return-diff"><strong>diff</strong></p>
+<a class="ansibleOptionLink" href="#return-diff" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Ansible diff output when the playbook runs with <code class="docutils literal notranslate"><span class="pre">--diff</span></code> and at least one device would change.</p>
+<p>Built from <code class="docutils literal notranslate"><span class="pre">details.diff_plan</span></code> as JSON <code class="docutils literal notranslate"><span class="pre">before</span></code> / <code class="docutils literal notranslate"><span class="pre">after</span></code> strings per device and branch.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when diff mode is enabled and <code class="docutils literal notranslate"><span class="pre">details.diff_plan</span></code> is non-empty</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -647,7 +701,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 13, 2026.
+      <span class="lastupdated">Last updated on Jul 14, 2026.
       </span></p>
   </div>
 
