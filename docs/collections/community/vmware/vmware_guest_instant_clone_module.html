@@ -356,7 +356,7 @@
 <h1>community.vmware.vmware_guest_instant_clone module – Instant Clone VM<a class="headerlink" href="#community-vmware-vmware-guest-instant-clone-module-instant-clone-vm" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/vmware/">community.vmware collection</a> (version 6.2.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/vmware/">community.vmware collection</a> (version 6.2.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -377,7 +377,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>This module can be used for Creating a powered-on Instant Clone of a virtual machine.</p></li>
 <li><p><a class="reference internal" href="vmware_guest_module.html#ansible-collections-community-vmware-vmware-guest-module"><span class="std std-ref">community.vmware.vmware_guest</span></a> module is needed for creating a VM with poweredon state which would be used as a parent VM.</p></li>
-<li><p><a class="reference internal" href="vmware_guest_powerstate_module.html#ansible-collections-community-vmware-vmware-guest-powerstate-module"><span class="std std-ref">community.vmware.vmware_guest_powerstate</span></a> module is also needed to poweroff the instant cloned module.</p></li>
+<li><p><a class="reference internal" href="../../vmware/vmware/vm_powerstate_module.html#ansible-collections-vmware-vmware-vm-powerstate-module"><span class="std std-ref">vmware.vmware.vm_powerstate</span></a> module is also needed to poweroff the instant cloned module.</p></li>
 <li><p>The powered off VM would in turn be deleted by again using <a class="reference internal" href="vmware_guest_module.html#ansible-collections-community-vmware-vmware-guest-module"><span class="std std-ref">community.vmware.vmware_guest</span></a> module.</p></li>
 <li><p>Thus <a class="reference internal" href="vmware_guest_module.html#ansible-collections-community-vmware-vmware-guest-module"><span class="std std-ref">community.vmware.vmware_guest</span></a> module is necessary for removing Instant Cloned VM when VMs being created in testing environment.</p></li>
 <li><p>Also GuestOS Customization has now been added with guestinfo_vars parameter.</p></li>
@@ -669,31 +669,6 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">parent_vm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">testvm_1</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">resource_pool</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">test_resource_001</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm_clone</span>
-<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">set state to poweroff the Cloned VM</span>
-<span class="w">  </span><span class="nt">community.vmware.vmware_guest_powerstate</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cloned_vm_from_vm_cluster&quot;</span>
-<span class="w">    </span><span class="nt">folder</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">f0</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powered-off</span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">poweroff_instant_clone_from_vm_when_cluster</span>
-<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Clean VM</span>
-<span class="w">  </span><span class="nt">community.vmware.vmware_guest</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_hostname</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">vcenter_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cloned_vm_from_vm_cluster&quot;</span>
-<span class="w">    </span><span class="nt">datacenter</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">dc1</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">delete_instant_clone_from_vm_when_cluster</span>
-<span class="w">  </span><span class="nt">ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Instant Clone a VM with guest_customization</span>
