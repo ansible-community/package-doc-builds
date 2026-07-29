@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content="2.23.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,8 +20,8 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -141,6 +141,7 @@
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../mariadb/index.html">Ansible.Mariadb</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Ansible.Mysql</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../netcommon/index.html">Ansible.Netcommon</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../posix/index.html">Ansible.Posix</a></li>
@@ -375,7 +376,7 @@ the same module name.</p>
 </div></td>
 <td><div class="ansible-option-cell"><p>This module takes a free form command, as a string. There is not an actual option named “free form”. See the examples!</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">flush_handlers</span></code> makes Ansible run any handler tasks which have thus far been notified. Ansible inserts these tasks internally at certain points to implicitly trigger handler runs (after pre/post tasks, the final role execution, and the main tasks section of your plays).</p>
-<p><code class="ansible-value docutils literal notranslate"><span class="pre">refresh_inventory</span></code> (added in Ansible 2.0) forces the reload of the inventory, which in the case of dynamic inventory scripts means they will be re-executed. If the dynamic inventory script is using a cache, Ansible cannot know this and has no way of refreshing it (you can disable the cache or, if available for your specific inventory datasource (for example <a class="reference internal" href="../../amazon/aws/aws_ec2_inventory.html#ansible-collections-amazon-aws-aws-ec2-inventory"><span class="std std-ref">amazon.aws.aws_ec2</span></a>), you can use the an inventory plugin instead of an inventory script). This is mainly useful when additional hosts are created and users wish to use them instead of using the <a class="reference internal" href="add_host_module.html#ansible-collections-ansible-builtin-add-host-module"><span class="std std-ref">ansible.builtin.add_host</span></a> module.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">refresh_inventory</span></code> (added in Ansible 2.0) reloads inventory sources and the host and group structure based on those sources. It also preserves dynamic hosts created by <a class="reference internal" href="add_host_module.html#ansible-collections-ansible-builtin-add-host-module"><span class="std std-ref">ansible.builtin.add_host</span></a> and dynamic groups created by <a class="reference internal" href="group_by_module.html#ansible-collections-ansible-builtin-group-by-module"><span class="std std-ref">ansible.builtin.group_by</span></a>. In the case of dynamic inventory scripts this means they will be re-executed. If the dynamic inventory script is using a cache, Ansible cannot know this and has no way of refreshing it (you can disable the cache or, if available for your specific inventory datasource (for example <a class="reference internal" href="../../amazon/aws/aws_ec2_inventory.html#ansible-collections-amazon-aws-aws-ec2-inventory"><span class="std std-ref">amazon.aws.aws_ec2</span></a>), you can use an inventory plugin instead of an inventory script). This is mainly useful when additional hosts are created and users wish to use them instead of using the <a class="reference internal" href="add_host_module.html#ansible-collections-ansible-builtin-add-host-module"><span class="std std-ref">ansible.builtin.add_host</span></a> module.</p>
 <p>Note that neither <code class="ansible-value docutils literal notranslate"><span class="pre">refresh_inventory</span></code> nor the <a class="reference internal" href="add_host_module.html#ansible-collections-ansible-builtin-add-host-module"><span class="std std-ref">ansible.builtin.add_host</span></a> add hosts to the hosts the current play iterates over. However, if needed, you can explicitly delegate tasks to new hosts with <code class="docutils literal notranslate"><span class="pre">delegate_to</span></code>. Generally, <code class="docutils literal notranslate"><span class="pre">delegate_to</span></code> can be used against hosts regardless of whether they are in the inventory or not, as long as the value supplied is sufficient for the connection plugin to access the host.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">noop</span></code> (added in Ansible 2.0) This literally does ‘nothing’. It is mainly used internally and not recommended for general use.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">clear_facts</span></code> (added in Ansible 2.1) causes the gathered facts for the hosts specified in the play’s list of hosts to be cleared, including the fact cache.</p>
@@ -541,6 +542,8 @@ the same module name.</p>
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p><code class="ansible-value docutils literal notranslate"><span class="pre">clear_facts</span></code> will remove the persistent facts from <a class="reference internal" href="set_fact_module.html#ansible-collections-ansible-builtin-set-fact-module"><span class="std std-ref">ansible.builtin.set_fact</span></a> using <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="set_fact_module.html#ansible-collections-ansible-builtin-set-fact-module-parameter-cacheable"><span class="std std-ref"><span class="pre">cacheable=True</span></span></a></code>, but not the current host variable it creates for the current run.</p></li>
+<li><p>Variable plugins are not part of inventory and handle execution and caching independently of <code class="ansible-value docutils literal notranslate"><span class="pre">refresh_inventory</span></code>. <code class="ansible-value docutils literal notranslate"><span class="pre">refresh_inventory</span></code> does not invalidate variable plugin caches. Whether later variable resolution sees updated variable plugin data depends on the plugin’s stage and caching behavior.</p></li>
+<li><p>The default variable plugin <a class="reference internal" href="host_group_vars_vars.html#ansible-collections-ansible-builtin-host-group-vars-vars"><span class="std std-ref">ansible.builtin.host_group_vars</span></a> caches applicable paths and file content, so creating, modifying, or removing <code class="docutils literal notranslate"><span class="pre">host_vars</span></code> and <code class="docutils literal notranslate"><span class="pre">group_vars</span></code> files mid-play for hosts or groups that have already been targeted has no effect on the current or any subsequent plays. Use <a class="reference internal" href="include_vars_module.html#ansible-collections-ansible-builtin-include-vars-module"><span class="std std-ref">ansible.builtin.include_vars</span></a> to load variable files modified during playbook execution.</p></li>
 <li><p>Skipping <a class="reference internal" href="#ansible-collections-ansible-builtin-meta-module"><span class="std std-ref">ansible.builtin.meta</span></a> tasks with tags is not supported before Ansible 2.11.</p></li>
 </ul>
 </div>
@@ -637,7 +640,7 @@ the same module name.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 11, 2026.
+      <span class="lastupdated">Last updated on Jul 29, 2026.
       </span></p>
   </div>
 

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content="2.23.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,15 +20,15 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="ansible.mysql.mysql_variables module – Manage MySQL or MariaDB global variables" href="mysql_variables_module.html" />
-    <link rel="prev" title="ansible.mysql.mysql_role module – Adds, removes, or updates a MySQL or MariaDB role" href="mysql_role_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="ansible.mysql.mysql_tls module – Manage MySQL TLS runtime settings" href="mysql_tls_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -136,6 +136,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Ansible Namespace</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../builtin/index.html">Ansible.Builtin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mariadb/index.html">Ansible.Mariadb</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Ansible.Mysql</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
@@ -336,7 +337,7 @@
 <h1>ansible.mysql.mysql_user module – Adds or removes a user from a MySQL or MariaDB database<a class="headerlink" href="#ansible-mysql-mysql-user-module-adds-or-removes-a-user-from-a-mysql-or-mariadb-database" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/mysql/">ansible.mysql collection</a> (version 5.0.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/mysql/">ansible.mysql collection</a> (version 5.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -359,6 +360,7 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
+<li><p>Important: MariaDB support will be dropped in collection version 6.0.0. Use the <a class="reference internal" href="../mariadb/mariadb_user_module.html#ansible-collections-ansible-mariadb-mariadb-user-module"><span class="std std-ref">ansible.mariadb.mariadb_user</span></a> instead.</p></li>
 <li><p>Adds or removes a user from a MySQL or MariaDB database.</p></li>
 </ul>
 </section>
@@ -495,7 +497,8 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 <div class="ansibleOptionAnchor" id="parameter-encrypted"></div><p class="ansible-option-title" id="ansible-collections-ansible-mysql-mysql-user-module-parameter-encrypted"><strong>encrypted</strong></p>
 <a class="ansibleOptionLink" href="#parameter-encrypted" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Indicate that the ‘password’ field is a `mysql_native_password` hash.</p>
+<td><div class="ansible-option-cell"><p>Indicate that the ‘password’ field is a <code class="docutils literal notranslate"><span class="pre">mysql_native_password</span></code> hash.</p>
+<p>Not supported on MySQL 9.7.0+ because the <code class="docutils literal notranslate"><span class="pre">mysql_native_password</span></code> plugin has been removed. The module will fail if this option is used on MySQL 9.7.0+.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -605,6 +608,8 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Set the user’s password. Only for <code class="docutils literal notranslate"><span class="pre">mysql_native_password</span></code> authentication. For other authentication plugins see the combination of <em>plugin</em>, <em>plugin_hash_string</em>, <em>plugin_auth_string</em>.</p>
+<p>On MySQL 9.7.0+, <code class="docutils literal notranslate"><span class="pre">mysql_native_password</span></code> was removed. The password is still accepted and applied via <code class="docutils literal notranslate"><span class="pre">IDENTIFIED</span> <span class="pre">BY</span></code>, letting the server use <code class="docutils literal notranslate"><span class="pre">caching_sha2_password</span></code> instead.</p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">caching_sha2_password</span></code> uses a random salt, the password hash cannot be compared. As a result, <em>update_password=always</em> will always report <code class="docutils literal notranslate"><span class="pre">changed</span></code> on MySQL 9.7.0+.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -807,7 +812,7 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 <ul class="simple">
 <li><p>Compatible with MySQL or MariaDB.</p></li>
 <li><p>MySQL server installs with default <em>login_user</em> of <code class="docutils literal notranslate"><span class="pre">root</span></code> and no password. To secure this user as part of an idempotent playbook, you must create at least two tasks: 1) change the root user’s password, without providing any <em>login_user</em>/<em>login_password</em> details, 2) drop a <code class="docutils literal notranslate"><span class="pre">~/.my.cnf</span></code> file containing the new root credentials. Subsequent runs of the playbook will then succeed by reading the new credentials from the file.</p></li>
-<li><p>Currently, there is only support for the <code class="docutils literal notranslate"><span class="pre">mysql_native_password</span></code> encrypted password hash module.</p></li>
+<li><p>On MySQL versions before 9.7.0, the <code class="docutils literal notranslate"><span class="pre">password</span></code> argument uses <code class="docutils literal notranslate"><span class="pre">mysql_native_password</span></code> hashing. On MySQL 9.7.0+, <code class="docutils literal notranslate"><span class="pre">mysql_native_password</span></code> was removed and the password is applied via <code class="docutils literal notranslate"><span class="pre">IDENTIFIED</span> <span class="pre">BY</span></code>, letting the server use <code class="docutils literal notranslate"><span class="pre">caching_sha2_password</span></code> instead. The <code class="docutils literal notranslate"><span class="pre">encrypted</span></code> argument is not supported on MySQL 9.7.0+.</p></li>
 <li><p>Requires the PyMySQL (Python 2.7 and Python 3.X) package installed on the remote host. The Python package may be installed with apt-get install python-pymysql (Ubuntu; see <a class="reference internal" href="../builtin/apt_module.html#ansible-collections-ansible-builtin-apt-module"><span class="std std-ref">ansible.builtin.apt</span></a>) or yum install python2-PyMySQL (RHEL/CentOS/Fedora; see <a class="reference internal" href="../builtin/yum_module.html#ansible-collections-ansible-builtin-yum-module"><span class="std std-ref">ansible.builtin.yum</span></a>). You can also use dnf install python2-PyMySQL for newer versions of Fedora; see <a class="reference internal" href="../builtin/dnf_module.html#ansible-collections-ansible-builtin-dnf-module"><span class="std std-ref">ansible.builtin.dnf</span></a>.</p></li>
 <li><p>Be sure you have PyMySQL library installed on the target machine for the Python interpreter Ansible discovers. For example if ansible discovers and uses Python 3, you need to install the Python 3 version of PyMySQL. If ansible discovers and uses Python 2, you need to install the Python 2 version of PyMySQL.</p></li>
 <li><p>If you have trouble, it may help to force Ansible to use the Python interpreter you need by specifying <code class="docutils literal notranslate"><span class="pre">ansible_python_interpreter</span></code>. For more information, see <a class="reference external" href="https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html">https://docs.ansible.com/ansible/latest/reference_appendices/interpreter_discovery.html</a>.</p></li>
@@ -1044,7 +1049,7 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="mysql_role_module.html" class="btn btn-neutral float-left" title="ansible.mysql.mysql_role module – Adds, removes, or updates a MySQL or MariaDB role" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mysql_tls_module.html" class="btn btn-neutral float-left" title="ansible.mysql.mysql_tls module – Manage MySQL TLS runtime settings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="mysql_variables_module.html" class="btn btn-neutral float-right" title="ansible.mysql.mysql_variables module – Manage MySQL or MariaDB global variables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -1052,7 +1057,7 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 11, 2026.
+      <span class="lastupdated">Last updated on Jul 29, 2026.
       </span></p>
   </div>
 

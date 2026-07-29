@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content="2.23.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,8 +20,8 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -332,7 +332,7 @@
 <h1>azure.azcollection.azure_rm_backuppolicy module – Manage Azure Backup Policy<a class="headerlink" href="#azure-azcollection-azure-rm-backuppolicy-module-manage-azure-backup-policy" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 3.19.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 3.21.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -510,6 +510,22 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-monthly_retention_count"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-backuppolicy-module-parameter-monthly-retention-count"><strong>monthly_retention_count</strong></p>
+<a class="ansibleOptionLink" href="#parameter-monthly_retention_count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The amount of months to retain backups.</p>
+<p>Requires either the <em>retention_weekdays</em>+<em>retention_weeks_of_the_month</em> pair (Weekly format) or the <em>retention_days_of_the_month</em>/<em>retention_include_last_day</em> pair (Daily format). Set one pair; the two pairs are mutually exclusive.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-months_of_year"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-backuppolicy-module-parameter-months-of-year"><strong>months_of_year</strong></p>
+<a class="ansibleOptionLink" href="#parameter-months_of_year" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of months of the year to retain backups for yearly retention.</p>
+<p>Valid values are full month names (January, February, …).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-backuppolicy-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -569,6 +585,47 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <a class="ansibleOptionLink" href="#parameter-resource_group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The name of the resource group the vault is in.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-retention_days_of_the_month"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-backuppolicy-module-parameter-retention-days-of-the-month"><strong>retention_days_of_the_month</strong></p>
+<a class="ansibleOptionLink" href="#parameter-retention_days_of_the_month" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Days of the month to retain monthly/yearly backups on (Daily format).</p>
+<p>Use 1-28 to guarantee the day exists in every month; values 29, 30, and 31 are accepted but the backup is skipped in months that do not have that day.</p>
+<p>To also retain the last day of every month regardless of length, set <em>retention_include_last_day=true</em>.</p>
+<p>Mutually exclusive with <em>retention_weekdays</em> and <em>retention_weeks_of_the_month</em>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-retention_include_last_day"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-backuppolicy-module-parameter-retention-include-last-day"><strong>retention_include_last_day</strong></p>
+<a class="ansibleOptionLink" href="#parameter-retention_include_last_day" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Include the last day of every month in the Daily-format retention set, regardless of month length.</p>
+<p>Use with <em>retention_days_of_the_month</em> (or on its own to retain only the last day of each month).</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-retention_weekdays"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-backuppolicy-module-parameter-retention-weekdays"><strong>retention_weekdays</strong></p>
+<a class="ansibleOptionLink" href="#parameter-retention_weekdays" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Days of the week to retain monthly/yearly backups on (Weekly format).</p>
+<p>Use with <em>retention_weeks_of_the_month</em>.</p>
+<p>Mutually exclusive with <em>retention_days_of_the_month</em> and <em>retention_include_last_day</em>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-retention_weeks_of_the_month"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-backuppolicy-module-parameter-retention-weeks-of-the-month"><strong>retention_weeks_of_the_month</strong></p>
+<a class="ansibleOptionLink" href="#parameter-retention_weeks_of_the_month" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Weeks of the month to retain monthly/yearly backups on (Weekly format).</p>
+<p>Valid values are First, Second, Third, Fourth, Last.</p>
+<p>Use with <em>retention_weekdays</em>.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -685,6 +742,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Use when authenticating with a Service Principal.</p>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-yearly_retention_count"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-backuppolicy-module-parameter-yearly-retention-count"><strong>yearly_retention_count</strong></p>
+<a class="ansibleOptionLink" href="#parameter-yearly_retention_count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The amount of years to retain backups.</p>
+<p>Requires <em>months_of_year</em> and one of the two format pairs described in <em>monthly_retention_count</em>.</p>
+</div></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -764,6 +829,43 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <span class="w">    </span><span class="nt">daily_retention_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">28</span>
 <span class="w">    </span><span class="nt">time_zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UTC</span>
 <span class="w">    </span><span class="nt">schedule_run_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a daily VM backup policy with monthly and yearly retention</span>
+<span class="w">  </span><span class="nt">azure_rm_backuppolicy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">vault_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vault_Name</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Policy_Name</span>
+<span class="w">    </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Resource_Group_Name</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">backup_management_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;AzureIaasVM&quot;</span>
+<span class="w">    </span><span class="nt">schedule_run_frequency</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Daily&quot;</span>
+<span class="w">    </span><span class="nt">instant_recovery_snapshot_retention</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">daily_retention_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
+<span class="w">    </span><span class="nt">schedule_run_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span>
+<span class="w">    </span><span class="nt">monthly_retention_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
+<span class="w">    </span><span class="nt">yearly_retention_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">    </span><span class="nt">months_of_year</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">January</span>
+<span class="w">    </span><span class="nt">retention_weekdays</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Sunday</span>
+<span class="w">    </span><span class="nt">retention_weeks_of_the_month</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Last</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a daily VM backup policy with monthly retention on specific days of the month</span>
+<span class="w">  </span><span class="nt">azure_rm_backuppolicy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">vault_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vault_Name</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Policy_Name</span>
+<span class="w">    </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Resource_Group_Name</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">backup_management_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;AzureIaasVM&quot;</span>
+<span class="w">    </span><span class="nt">schedule_run_frequency</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Daily&quot;</span>
+<span class="w">    </span><span class="nt">instant_recovery_snapshot_retention</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">daily_retention_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12</span>
+<span class="w">    </span><span class="nt">schedule_run_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14</span>
+<span class="w">    </span><span class="nt">monthly_retention_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<span class="w">    </span><span class="nt">retention_days_of_the_month</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
+<span class="w">    </span><span class="nt">retention_include_last_day</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 </section>
@@ -855,7 +957,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 11, 2026.
+      <span class="lastupdated">Last updated on Jul 29, 2026.
       </span></p>
   </div>
 

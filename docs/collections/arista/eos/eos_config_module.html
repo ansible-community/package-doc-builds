@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content="2.23.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,8 +20,8 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -331,7 +331,7 @@
 <h1>arista.eos.eos_config module – Manage Arista EOS configuration sections<a class="headerlink" href="#arista-eos-eos-config-module-manage-arista-eos-configuration-sections" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/arista/eos/">arista.eos collection</a> (version 12.1.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/arista/eos/">arista.eos collection</a> (version 12.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -505,7 +505,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-replace"></div><p class="ansible-option-title" id="ansible-collections-arista-eos-eos-config-module-parameter-replace"><strong>replace</strong></p>
 <a class="ansibleOptionLink" href="#parameter-replace" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Instructs the module on the way to perform the configuration on the device. If the replace argument is set to <em>line</em> then the modified lines are pushed to the device in configuration mode. If the replace argument is set to <em>block</em> then the entire command block is pushed to the device in configuration mode if any line is not correct.</p>
+<td><div class="ansible-option-cell"><p>Instructs the module on the way to perform the configuration on the device. If the replace argument is set to <em>line</em> then the modified lines are pushed to the device in configuration mode. If the replace argument is set to <em>block</em> then the entire command block is pushed to the device in configuration mode if any line is not correct. If the replace argument is set to <em>config</em> then the entire candidate configuration replaces the running configuration using a configuration session with <code class="docutils literal notranslate"><span class="pre">rollback</span> <span class="pre">clean-config</span></code>. This mode must be used when the candidate configuration contains multiline block commands such as <code class="docutils literal notranslate"><span class="pre">banner</span></code> or <code class="docutils literal notranslate"><span class="pre">code</span></code>/<code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">unit</span></code> (Routing Control Functions / RCF), as these require the eAPI <code class="docutils literal notranslate"><span class="pre">cmd</span></code>/<code class="docutils literal notranslate"><span class="pre">input</span></code> dict format and cannot be processed by the line-diff engine.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;line&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -556,6 +556,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <li><p>Tested against Arista EOS 4.24.6F</p></li>
 <li><p>Abbreviated commands are NOT idempotent, see <a class="reference external" href="../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands">Network FAQ</a>.</p></li>
 <li><p>To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they appear if present in the running configuration on device including the indentation.</p></li>
+<li><p>Multiline block commands such as <code class="docutils literal notranslate"><span class="pre">banner</span></code> and <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">unit</span></code> (Routing Control Functions / RCF) require <em>replace=config</em> when using the eAPI transport. In this mode the module bypasses the standard line-diff engine, which cannot preserve brace-delimited syntax, and instead sends the full candidate configuration to the device using a configuration session with <code class="docutils literal notranslate"><span class="pre">rollback</span> <span class="pre">clean-config</span></code>. The block content is automatically packaged into the eAPI <code class="docutils literal notranslate"><span class="pre">cmd</span></code>/<code class="docutils literal notranslate"><span class="pre">input</span></code> dict form required by the device.</p></li>
 </ul>
 </div>
 </section>
@@ -732,7 +733,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jun 11, 2026.
+      <span class="lastupdated">Last updated on Jul 29, 2026.
       </span></p>
   </div>
 
