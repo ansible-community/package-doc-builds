@@ -428,6 +428,16 @@ the handler from running, such as a host becoming unreachable.)</p>
 <span class="w">    </span><span class="no">(ret.rc == 10)</span>
 </pre></div>
 </div>
+<p>You may also access task results without registering a variable via the <code class="docutils literal notranslate"><span class="pre">result</span></code> property of the implicit variable <code class="docutils literal notranslate"><span class="pre">_task</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fail task when either condition is met</span>
+<span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/example-command</span>
+<span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_task.result.rc != 0 or &#39;ERROR&#39; in _task.result.stdout</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">_task</span></code> implicit variable can be used in all conditional keywords, including <code class="docutils literal notranslate"><span class="pre">when</span></code>, <code class="docutils literal notranslate"><span class="pre">until</span></code>, <code class="docutils literal notranslate"><span class="pre">failed_when</span></code>, <code class="docutils literal notranslate"><span class="pre">changed_when</span></code>, and <code class="docutils literal notranslate"><span class="pre">break_when</span></code>.</p>
+</div>
 </section>
 <section id="defining-changed">
 <span id="override-the-changed-result"></span><h2><a class="toc-backref" href="#id8" role="doc-backlink">Defining “changed”</a><a class="headerlink" href="#defining-changed" title="Link to this heading"></a></h2>
@@ -456,6 +466,14 @@ the handler from running, such as a host becoming unreachable.)</p>
 <span class="w">  </span><span class="nt">changed_when</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;&quot;ERROR&quot;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">result.stderr&#39;</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result.rc == 2</span>
+</pre></div>
+</div>
+<p>As with <code class="docutils literal notranslate"><span class="pre">failed_when</span></code>, you may use the implicit variable <code class="docutils literal notranslate"><span class="pre">_task</span></code> to avoid registering a variable:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Combine multiple conditions to override &#39;changed&#39; result</span>
+<span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/fake_command</span>
+<span class="w">  </span><span class="nt">changed_when</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some_msg in _task.result.stdout</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some_warning not in _task.result.stderr</span>
 </pre></div>
 </div>
 <p>You can reference simple variables in conditionals to avoid repeating certain terms, as in the following example:</p>
@@ -587,7 +605,7 @@ the handler from running, such as a host becoming unreachable.)</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 27, 2026.
+      <span class="lastupdated">Last updated on Aug 03, 2026.
       </span></p>
   </div>
 
