@@ -331,7 +331,7 @@
 <h1>ngine_io.cloudstack.iso module – Manages ISO images on Apache CloudStack based clouds.<a class="headerlink" href="#ngine-io-cloudstack-iso-module-manages-iso-images-on-apache-cloudstack-based-clouds" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ngine_io/cloudstack/">ngine_io.cloudstack collection</a> (version 3.0.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ngine_io/cloudstack/">ngine_io.cloudstack collection</a> (version 3.1.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -354,9 +354,8 @@ see <a class="reference internal" href="#ansible-collections-ngine-io-cloudstack
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Register and remove ISO images.</p></li>
+<li><p>Register, attach, detach, and remove ISO images.</p></li>
 </ul>
-<p>Aliases: cs_iso</p>
 </section>
 <section id="requirements">
 <span id="ansible-collections-ngine-io-cloudstack-iso-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
@@ -523,7 +522,7 @@ see <a class="reference internal" href="#ansible-collections-ngine-io-cloudstack
 <div class="ansibleOptionAnchor" id="parameter-is_ready"></div><p class="ansible-option-title" id="ansible-collections-ngine-io-cloudstack-iso-module-parameter-is-ready"><strong>is_ready</strong></p>
 <a class="ansibleOptionLink" href="#parameter-is_ready" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>This flag is used for searching existing ISOs. If set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>, it will only list ISO ready for deployment e.g. successfully downloaded and installed. Recommended to set it to <code class="docutils literal notranslate"><span class="pre">no</span></code>.</p>
+<td><div class="ansible-option-cell"><p>This flag is used for searching existing ISOs. If set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, it will only list ISO ready for deployment e.g. successfully downloaded and installed. Recommended to set it to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -585,10 +584,13 @@ see <a class="reference internal" href="#ansible-collections-ngine-io-cloudstack
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>State of the ISO.</p>
+<p><code class="docutils literal notranslate"><span class="pre">attached</span></code> and <code class="docutils literal notranslate"><span class="pre">detached</span></code> was added in version 3.1.0.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;present&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;attached&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;detached&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -625,11 +627,20 @@ see <a class="reference internal" href="#ansible-collections-ngine-io-cloudstack
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-vm"></div><p class="ansible-option-title" id="ansible-collections-ngine-io-cloudstack-iso-module-parameter-vm"><strong>vm</strong></p>
+<a class="ansibleOptionLink" href="#parameter-vm" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in ngine_io.cloudstack 3.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Virtual machine to attach or detach the ISO from.</p>
+<p>Required when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">attached</span></code> or <code class="docutils literal notranslate"><span class="pre">detached</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-zone"></div><p class="ansible-option-title" id="ansible-collections-ngine-io-cloudstack-iso-module-parameter-zone"><strong>zone</strong></p>
 <a class="ansibleOptionLink" href="#parameter-zone" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the zone you wish the ISO to be registered or deleted from.</p>
-<p>Required when <em>cross_zones</em> is <code class="docutils literal notranslate"><span class="pre">no</span></code></p>
+<p>Required when <em>cross_zones</em> is <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -674,6 +685,29 @@ see <a class="reference internal" href="#ansible-collections-ngine-io-cloudstack
 <span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">zone01</span>
 <span class="w">    </span><span class="nt">checksum</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0b31bccccb048d20b551f70830bb7ad0</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Register and attach an ISO to a VM</span>
+<span class="w">  </span><span class="nt">ngine_io.cloudstack.iso</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Debian 7 64-bit</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">zone01</span>
+<span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://mirror.switch.ch/ftp/mirror/debian-cd/current/amd64/iso-cd/debian-7.7.0-amd64-netinst.iso</span>
+<span class="w">    </span><span class="nt">os_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Debian GNU/Linux 7(64-bit)</span>
+<span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-vm-01</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attached</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Attach an existing ISO to a VM</span>
+<span class="w">  </span><span class="nt">ngine_io.cloudstack.iso</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Debian 7 64-bit</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">zone01</span>
+<span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-vm-01</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attached</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Detach an ISO from a VM</span>
+<span class="w">  </span><span class="nt">ngine_io.cloudstack.iso</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Debian 7 64-bit</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">zone01</span>
+<span class="w">    </span><span class="nt">vm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-vm-01</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detached</span>
 </pre></div>
 </div>
 </section>
@@ -808,7 +842,7 @@ see <a class="reference internal" href="#ansible-collections-ngine-io-cloudstack
 <div class="ansibleOptionAnchor" id="return-os_type"></div><p class="ansible-option-title" id="ansible-collections-ngine-io-cloudstack-iso-module-return-os-type"><strong>os_type</strong></p>
 <a class="ansibleOptionLink" href="#return-os_type" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Typo of the OS.</p>
+<td><div class="ansible-option-cell"><p>Type of the OS.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;CentOS</span> <span class="pre">6.5</span> <span class="pre">(64-bit)&quot;</span></code></p>
 </div></td>
@@ -841,6 +875,15 @@ see <a class="reference internal" href="#ansible-collections-ngine-io-cloudstack
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-vm"></div><p class="ansible-option-title" id="ansible-collections-ngine-io-cloudstack-iso-module-return-vm"><strong>vm</strong></p>
+<a class="ansibleOptionLink" href="#return-vm" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name of the virtual machine the ISO is attached to.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;my-vm-01&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-zone"></div><p class="ansible-option-title" id="ansible-collections-ngine-io-cloudstack-iso-module-return-zone"><strong>zone</strong></p>
 <a class="ansibleOptionLink" href="#return-zone" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -881,7 +924,7 @@ see <a class="reference internal" href="#ansible-collections-ngine-io-cloudstack
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 02, 2026.
+      <span class="lastupdated">Last updated on Aug 03, 2026.
       </span></p>
   </div>
 
