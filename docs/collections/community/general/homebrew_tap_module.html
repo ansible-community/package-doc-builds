@@ -358,7 +358,7 @@
 <h1>community.general.homebrew_tap module – Tap a Homebrew repository<a class="headerlink" href="#community-general-homebrew-tap-module-tap-a-homebrew-repository" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.2.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.3.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -380,6 +380,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-h
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Tap external Homebrew repositories.</p></li>
+<li><p>Optionally control whether Homebrew trusts the tapped repositories.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -429,6 +430,22 @@ see <a class="reference internal" href="#ansible-collections-community-general-h
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-trust"></div><p class="ansible-option-title" id="ansible-collections-community-general-homebrew-tap-module-parameter-trust"><strong>trust</strong></p>
+<a class="ansibleOptionLink" href="#parameter-trust" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 13.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether Homebrew trusts the repository. Homebrew refuses to load formulae, casks and commands from untrusted third-party taps.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> trusts the repository, <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> stops trusting it. When this option is not specified, the trust state of the repository is left untouched.</p>
+<p>Combining <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> with <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-homebrew-tap-module-parameter-state"><span class="std std-ref"><span class="pre">state=absent</span></span></a></code> is an error.</p>
+<p>This requires a Homebrew version providing the <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">trust</span></code> command.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-url"></div><p class="ansible-option-title" id="ansible-collections-community-general-homebrew-tap-module-parameter-url"><strong>url</strong></p>
 <a class="ansibleOptionLink" href="#parameter-url" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -488,6 +505,22 @@ see <a class="reference internal" href="#ansible-collections-community-general-h
 <span class="w">  </span><span class="nt">community.general.homebrew_tap</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemachus/brew</span>
 <span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://bitbucket.org/telemachus/brew&#39;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Tap a Homebrew repository and trust it</span>
+<span class="w">  </span><span class="nt">community.general.homebrew_tap</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hashicorp/tap</span>
+<span class="w">    </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Stop trusting a Homebrew repository, but keep it tapped</span>
+<span class="w">  </span><span class="nt">community.general.homebrew_tap</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hashicorp/tap</span>
+<span class="w">    </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Untrust and untap a Homebrew repository</span>
+<span class="w">  </span><span class="nt">community.general.homebrew_tap</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hashicorp/tap</span>
+<span class="w">    </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -525,7 +558,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-h
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 10, 2026.
+      <span class="lastupdated">Last updated on Aug 11, 2026.
       </span></p>
   </div>
 
