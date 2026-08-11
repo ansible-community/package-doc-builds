@@ -136,6 +136,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Ansible Namespace</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../builtin/index.html">Ansible.Builtin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mariadb/index.html">Ansible.Mariadb</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Ansible.Mysql</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Ansible.Netcommon</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
@@ -336,7 +337,7 @@
 <h1>ansible.netcommon.cli_config module – Push text based configuration to network devices over network_cli<a class="headerlink" href="#ansible-netcommon-cli-config-module-push-text-based-configuration-to-network-devices-over-network-cli" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/netcommon/">ansible.netcommon collection</a> (version 8.6.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ansible/netcommon/">ansible.netcommon collection</a> (version 8.6.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -447,7 +448,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-diff_ignore_lines"></div><p class="ansible-option-title" id="ansible-collections-ansible-netcommon-cli-config-module-parameter-diff-ignore-lines"><strong>diff_ignore_lines</strong></p>
 <a class="ansibleOptionLink" href="#parameter-diff_ignore_lines" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Use this argument to specify one or more lines that should be ignored during the diff. This is used for lines in the configuration that are automatically updated by the system. This argument takes a list of regular expressions or exact line matches. Note that this parameter will be ignored if the platform has onbox diff support.</p>
+<td><div class="ansible-option-cell"><p>Use this argument to specify one or more lines that should be ignored during the diff. This is used for lines in the configuration that are automatically updated by the system. This argument takes a list of regular expressions or exact line matches. Note that this parameter will be ignored if the platform has onbox diff support. For platforms whose cliconf plugin supports generate diff, this is passed to the connection plugin’s diff generation. For platforms whose cliconf plugin supports neither onbox diff nor generate diff, this is instead applied locally by the module when comparing the before/after running-config snapshots used to detect <code class="docutils literal notranslate"><span class="pre">changed</span></code>.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -508,6 +509,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>The commands will be returned only for platforms that do not support onbox diff. The <code class="docutils literal notranslate"><span class="pre">--diff</span></code> option with the playbook will return the difference in configuration for devices that has support for onbox diff</p></li>
 <li><p>To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they appear if present in the running configuration on device including the indentation.</p></li>
+<li><p>For platforms whose cliconf plugin supports neither <code class="docutils literal notranslate"><span class="pre">supports_onbox_diff</span></code> nor <code class="docutils literal notranslate"><span class="pre">supports_generate_diff</span></code>, the configuration is pushed to the device unconditionally and the <code class="docutils literal notranslate"><span class="pre">changed</span></code> status is determined by comparing a running-config snapshot taken before and after the change. Check mode is not supported in this scenario.</p></li>
+<li><p>If the connection plugin’s capabilities response is missing, empty, or not a valid mapping, the module fails with an error instead of assuming the platform supports neither <code class="docutils literal notranslate"><span class="pre">supports_onbox_diff</span></code> nor <code class="docutils literal notranslate"><span class="pre">supports_generate_diff</span></code>. This distinguishes a connection/cliconf plugin problem from a platform that intentionally declares no diff support.</p></li>
 <li><p>This module is supported on <code class="docutils literal notranslate"><span class="pre">ansible_network_os</span></code> network platforms. See the :ref:`Network Platform Options &lt;platform_options&gt;` for details.</p></li>
 </ul>
 </div>
@@ -589,8 +592,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="return-diff"></div><p class="ansible-option-title" id="ansible-collections-ansible-netcommon-cli-config-module-return-diff"><strong>diff</strong></p>
 <a class="ansibleOptionLink" href="#return-diff" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The diff generated on the device when the commands were applied</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> When <em>supports_onbox_diff=True</em> in the platform’s cliconf plugin</p>
+<td><div class="ansible-option-cell"><p>The diff generated on the device when the commands were applied.</p>
+<p>When neither <em>supports_onbox_diff</em> nor <em>supports_generate_diff</em> is set in the platform’s cliconf plugin, this is a dictionary with <code class="docutils literal notranslate"><span class="pre">before</span></code> and <code class="docutils literal notranslate"><span class="pre">after</span></code> keys containing the running configuration snapshots taken before and after the configuration was pushed.</p>
+<p>When <em>diff_ignore_lines</em> is set, it only affects whether <code class="docutils literal notranslate"><span class="pre">changed</span></code> (and therefore whether this diff) is reported for that fallback path; the <code class="docutils literal notranslate"><span class="pre">before</span></code> and <code class="docutils literal notranslate"><span class="pre">after</span></code> snapshots themselves are not filtered and may still contain lines matched by <em>diff_ignore_lines</em>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> When <em>supports_onbox_diff=True</em> in the platform’s cliconf plugin, or when neither <em>supports_onbox_diff</em> nor <em>supports_generate_diff</em> is set and the <code class="docutils literal notranslate"><span class="pre">--diff</span></code> option is used</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;---</span> <span class="pre">system:/running-config\n+++</span> <span class="pre">session:/ansible_1599745461-session-config\n&#64;&#64;</span> <span class="pre">-4,7</span> <span class="pre">+4,7</span> <span class="pre">&#64;&#64;\n</span> <span class="pre">!\n</span> <span class="pre">transceiver</span> <span class="pre">qsfp</span> <span class="pre">default-mode</span> <span class="pre">4x10G\n</span> <span class="pre">!\n-hostname</span> <span class="pre">veos\n+hostname</span> <span class="pre">veos3\n</span> <span class="pre">!\n</span> <span class="pre">spanning-tree</span> <span class="pre">mode</span> <span class="pre">mstp&quot;</span></code></p>
 </div></td>
 </tr>
@@ -626,7 +631,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 10, 2026.
+      <span class="lastupdated">Last updated on Aug 11, 2026.
       </span></p>
   </div>
 

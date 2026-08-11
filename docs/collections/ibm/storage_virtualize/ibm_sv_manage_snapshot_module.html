@@ -328,7 +328,7 @@
 <h1>ibm.storage_virtualize.ibm_sv_manage_snapshot module – This module manages snapshots (PiT image of a volume) on IBM Storage Virtualize family systems<a class="headerlink" href="#ibm-storage-virtualize-ibm-sv-manage-snapshot-module-this-module-manages-snapshots-pit-image-of-a-volume-on-ibm-storage-virtualize-family-systems" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ibm/storage_virtualize/">ibm.storage_virtualize collection</a> (version 3.3.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/ibm/storage_virtualize/">ibm.storage_virtualize collection</a> (version 3.4.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -398,14 +398,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-ibm-storage-virtualize-ibm-sv-manage-snapshot-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Specifies the name of a snapshot.</p>
+<td><div class="ansible-option-cell"><p>Specifies the name or UUID of a snapshot.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-old_name"></div><p class="ansible-option-title" id="ansible-collections-ibm-storage-virtualize-ibm-sv-manage-snapshot-module-parameter-old-name"><strong>old_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-old_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Specifies the old name of a snapshot.</p>
+<td><div class="ansible-option-cell"><p>Specifies the old name or UUID of a snapshot.</p>
 <p>Valid when <em>state=present</em>, to rename the existing snapshot.</p>
 </div></td>
 </tr>
@@ -464,14 +464,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-snapshot_pool"></div><p class="ansible-option-title" id="ansible-collections-ibm-storage-virtualize-ibm-sv-manage-snapshot-module-parameter-snapshot-pool"><strong>snapshot_pool</strong></p>
 <a class="ansibleOptionLink" href="#parameter-snapshot_pool" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Specifies the name of child pool within which the snapshot is being created.</p>
+<td><div class="ansible-option-cell"><p>Specifies the name or UUID of child pool within which the snapshot is being created.</p>
+<p>This parameter is checked for idempotency ONLY when the snapshot is managed using <code class="docutils literal notranslate"><span class="pre">src_volume_names</span></code>. When <code class="docutils literal notranslate"><span class="pre">src_volumegroup_name</span></code> is used, validation is skipped for existing snapshots due to performance considerations.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-src_volume_names"></div><p class="ansible-option-title" id="ansible-collections-ibm-storage-virtualize-ibm-sv-manage-snapshot-module-parameter-src-volume-names"><strong>src_volume_names</strong></p>
 <a class="ansibleOptionLink" href="#parameter-src_volume_names" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Specifies the name/UID of the volumes for which the snapshots are to be created.</p>
+<td><div class="ansible-option-cell"><p>Specifies the name or UID of the volumes for which the snapshots are to be created.</p>
 <p>List of volume names can be specified with the delimiter colon.</p>
 <p>Valid when <em>state=present</em>, to create a snapshot.</p>
 </div></td>
@@ -480,7 +481,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-src_volumegroup_name"></div><p class="ansible-option-title" id="ansible-collections-ibm-storage-virtualize-ibm-sv-manage-snapshot-module-parameter-src-volumegroup-name"><strong>src_volumegroup_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-src_volumegroup_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Specifies the name of the source volume group for which the snapshot is being created.</p>
+<td><div class="ansible-option-cell"><p>Specifies the name or UUID of the source volume group for which the snapshot is being created.</p>
 <p><em>src_volumegroup_name</em> and <em>src_volume_names</em> are mutually exclusive for creating snapshot.</p>
 <p>Required one of <em>src_volumegroup_name</em> or <em>src_volume_names</em> for creation of snapshot.</p>
 </div></td>
@@ -625,6 +626,41 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">   </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">password</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_new</span>
 <span class="w">   </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create volumegroup snapshot using UUID for source volumegroup</span>
+<span class="w">  </span><span class="nt">ibm.storage_virtualize.ibm_sv_manage_snapshot</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">clustername</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">clustername</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">username</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">password</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_snapshot_uuid</span>
+<span class="w">   </span><span class="nt">src_volumegroup_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">66197B52-9707-548D-8C42-E91A7D35F6B8</span>
+<span class="w">   </span><span class="nt">snapshot_pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">252FB6EB-46EB-5B18-8C42-E91A7D35F6B8</span>
+<span class="w">   </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create volumegroup snapshot using UIDs from list of volumes</span>
+<span class="w">  </span><span class="nt">ibm.storage_virtualize.ibm_sv_manage_snapshot</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">clustername</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">clustername</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">username</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">password</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_snapshot_uuid</span>
+<span class="w">   </span><span class="nt">src_volume_names</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6005076400810261F80000000000027E:6005076400810261F80000000000027D</span>
+<span class="w">   </span><span class="nt">snapshot_pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">252FB6EB-46EB-5B18-8C42-E91A7D35F6B8</span>
+<span class="w">   </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Rename snapshot using old_name UUID</span>
+<span class="w">  </span><span class="nt">ibm.storage_virtualize.ibm_sv_manage_snapshot</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">clustername</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">clustername</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">username</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">password</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_snapshot_renamed</span>
+<span class="w">   </span><span class="nt">old_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C2A27DD7-C5DA-5078-A7E3-5CB912F84D60</span>
+<span class="w">   </span><span class="nt">src_volumegroup_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">66197B52-9707-548D-8C42-E91A7D35F6B8</span>
+<span class="w">   </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete snapshot using UUID</span>
+<span class="w">  </span><span class="nt">ibm.storage_virtualize.ibm_sv_manage_snapshot</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">clustername</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">clustername</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">username</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">password</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C2A27DD7-C5DA-5078-A7E3-5CB912F84D60</span>
+<span class="w">   </span><span class="nt">src_volumegroup_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">66197B52-9707-548D-8C42-E91A7D35F6B8</span>
+<span class="w">   </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -632,6 +668,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Sanjaikumaar M (&#64;sanjaikumaar)</p></li>
 <li><p>Sumit Kumar Gupta (&#64;sumitguptaibm)</p></li>
+<li><p>Sandip Gulab Rajbanshi (&#64;sandip-rajbanshi)</p></li>
 </ul>
 </section>
 <section id="collection-links">
@@ -659,7 +696,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 10, 2026.
+      <span class="lastupdated">Last updated on Aug 11, 2026.
       </span></p>
   </div>
 
