@@ -355,7 +355,7 @@
 <h1>community.sap_libs.sapcar_extract module – Manages SAP SAPCAR archives<a class="headerlink" href="#community-sap-libs-sapcar-extract-module-manages-sap-sapcar-archives" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/sap_libs/">community.sap_libs collection</a> (version 1.7.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/sap_libs/">community.sap_libs collection</a> (version 1.7.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -391,14 +391,17 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-binary_path"></div><p class="ansible-option-title" id="ansible-collections-community-sap-libs-sapcar-extract-module-parameter-binary-path"><strong>binary_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-binary_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The path to the SAPCAR binary, for example, <code class="docutils literal notranslate"><span class="pre">/home/dummy/sapcar</span></code> or <code class="docutils literal notranslate"><span class="pre">https://myserver/SAPCAR</span></code>. If this parameter is not provided, the module will look in <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<td><div class="ansible-option-cell"><p>The path to the SAPCAR binary, for example, <code class="docutils literal notranslate"><span class="pre">/home/dummy/sapcar</span></code> or <code class="docutils literal notranslate"><span class="pre">https://myserver/SAPCAR</span></code>.</p>
+<p>If this parameter is not provided, the module will look in <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<p>Note that when executing the module as a SAP HANA user, functionality might be limited due to the outdated Python version bundled with SAP HANA.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dest"></div><p class="ansible-option-title" id="ansible-collections-community-sap-libs-sapcar-extract-module-parameter-dest"><strong>dest</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dest" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The destination where SAPCAR extracts the SAR file. Missing folders will be created. If this parameter is not provided, it will unpack in the same folder as the SAR file.</p>
+<td><div class="ansible-option-cell"><p>The destination where SAPCAR extracts the SAR file. Missing folders will be created.</p>
+<p>If this parameter is not provided, it will unpack in the same folder as the SAR file.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -475,34 +478,40 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file in same directory using SAPCAR executable from user&#39;s PATH</span>
 <span class="w">  </span><span class="nt">community.sap_libs.sapcar_extract</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/source/hana.sar&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/SAPEXEDB_50-70008101.SAR&quot;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file with destination</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file in different directory using SAPCAR executable from user&#39;s PATH</span>
 <span class="w">  </span><span class="nt">community.sap_libs.sapcar_extract</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/source/hana.sar&quot;</span>
-<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/test/&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/SAPEXEDB_50-70008101.SAR&quot;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/sapexedb_extracted/&quot;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file with destination and download from webserver can be a fileshare as well</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file in different directory using SAPCAR from local path</span>
 <span class="w">  </span><span class="nt">community.sap_libs.sapcar_extract</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/source/hana.sar&quot;</span>
-<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/dest/&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/SAPEXEDB_50-70008101.SAR&quot;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/sapexedb_extracted/&quot;</span>
+<span class="w">    </span><span class="nt">binary_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/SAPCAR_1300-70007716.EXE&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file in different directory using SAPCAR from web server</span>
+<span class="w">  </span><span class="nt">community.sap_libs.sapcar_extract</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/SAPEXEDB_50-70008101.SAR&quot;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/sapexedb_extracted/&quot;</span>
 <span class="w">    </span><span class="nt">binary_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://myserver/SAPCAR&quot;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file and delete SAR after extract</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file and delete SAR after extraction</span>
 <span class="w">  </span><span class="nt">community.sap_libs.sapcar_extract</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/source/hana.sar&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/SAPEXEDB_50-70008101.SAR&quot;</span>
 <span class="w">    </span><span class="nt">remove</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file with manifest</span>
 <span class="w">  </span><span class="nt">community.sap_libs.sapcar_extract</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/source/hana.sar&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/SAPEXEDB_50-70008101.SAR&quot;</span>
 <span class="w">    </span><span class="nt">signature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract SAR file with manifest and rename it</span>
 <span class="w">  </span><span class="nt">community.sap_libs.sapcar_extract</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/source/hana.sar&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/software/SAPEXEDB_50-70008101.SAR&quot;</span>
 <span class="w">    </span><span class="nt">manifest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MyNewSignature.SMF&quot;</span>
 <span class="w">    </span><span class="nt">signature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
@@ -533,7 +542,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>The full SAPCAR command that was executed.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;/tmp/sapcar</span> <span class="pre">-xvf</span> <span class="pre">/tmp/hana.sar</span> <span class="pre">-R</span> <span class="pre">/tmp/test2&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;/tmp/sapcar</span> <span class="pre">-xvf</span> <span class="pre">/software/SAPEXEDB_50-70008101.SAR</span> <span class="pre">-R</span> <span class="pre">/software/sapexedb_extracted/&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -560,7 +569,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>Standard output from the SAPCAR command.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;SAPCAR:</span> <span class="pre">processing</span> <span class="pre">archive</span> <span class="pre">/tmp/hana.sar</span> <span class="pre">(version</span> <span class="pre">2.01)\\nfile1\\nfile2&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;SAPCAR:</span> <span class="pre">processing</span> <span class="pre">archive</span> <span class="pre">/software/SAPEXEDB_50-70008101.SAR</span> <span class="pre">(version</span> <span class="pre">2.01)\\nfile1\\nfile2&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -595,7 +604,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 18, 2026.
+      <span class="lastupdated">Last updated on Aug 19, 2026.
       </span></p>
   </div>
 
