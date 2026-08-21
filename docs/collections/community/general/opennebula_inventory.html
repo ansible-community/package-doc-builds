@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 <meta content="2.23.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,8 +20,8 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -358,7 +358,7 @@
 <h1>community.general.opennebula inventory – OpenNebula inventory source<a class="headerlink" href="#community-general-opennebula-inventory-opennebula-inventory-source" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.2.0).</p>
+<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.3.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -603,6 +603,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-prefer_existing_ansible_host"></div><p class="ansible-option-title" id="ansible-collections-community-general-opennebula-inventory-parameter-prefer-existing-ansible-host"><strong>prefer_existing_ansible_host</strong></p>
+<a class="ansibleOptionLink" href="#parameter-prefer_existing_ansible_host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 13.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code>, do not set <code class="docutils literal notranslate"><span class="pre">ansible_host</span></code> if the host already has one from an earlier inventory source.</p>
+<p>When <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code>, the plugin always sets <code class="docutils literal notranslate"><span class="pre">ansible_host</span></code> from <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-opennebula-inventory-parameter-hostname"><span class="std std-ref"><span class="pre">hostname</span></span></a></strong></code>, which is the historical behavior.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-strict"></div><p class="ansible-option-title" id="ansible-collections-community-general-opennebula-inventory-parameter-strict"><strong>strict</strong></p>
 <a class="ansibleOptionLink" href="#parameter-strict" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -615,7 +629,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_extra_vars"></div><p class="ansible-option-title" id="ansible-collections-community-general-opennebula-inventory-parameter-use-extra-vars"><strong>use_extra_vars</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_extra_vars" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in ansible-core 2.11</em></p>
@@ -670,14 +684,42 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 <span class="nt">filter_by_label</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cache</span>
 
 <span class="nn">---</span>
-<span class="c1"># Only return VMs whose USER_TEMPLATE has both PROJECT=climb and ENVIRONMENT=test</span>
+<span class="c1"># Filter VMs by USER_TEMPLATE attributes on a shared instance.</span>
+<span class="c1"># Use &quot;| default(&#39;&#39;)&quot; so VMs missing the attribute are excluded rather than</span>
+<span class="c1"># causing an &#39;undefined&#39; error.</span>
 <span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.general.opennebula</span>
 <span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://opennebula:2633/RPC2</span>
-<span class="nt">filter</span><span class="p">:</span>
+<span class="nt">filters</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
-<span class="w">      </span><span class="no">PROJECT == &quot;climb&quot; and</span>
-<span class="w">      </span><span class="no">ENVIRONMENT == &quot;test&quot;</span>
+<span class="w">      </span><span class="no">(PROJECT | default(&#39;&#39;)) == &quot;myproject&quot; and</span>
+<span class="w">      </span><span class="no">(ENVIRONMENT | default(&#39;&#39;)) == &quot;production&quot;</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">exclude</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nn">---</span>
+<span class="c1"># Connect by VM name (useful with ~/.ssh/config Host aliases) and suppress</span>
+<span class="c1"># automatic label-based groups when labels are noisy or inconsistent.</span>
+<span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.general.opennebula</span>
+<span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://opennebula:2633/RPC2</span>
+<span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span>
+<span class="nt">group_by_labels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nn">---</span>
+<span class="c1"># Keep ansible_host from an earlier static inventory source instead of</span>
+<span class="c1"># overwriting it with the VM&#39;s IP address.</span>
+<span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.general.opennebula</span>
+<span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://opennebula:2633/RPC2</span>
+<span class="nt">prefer_existing_ansible_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nn">---</span>
+<span class="c1"># Group VMs by their OpenNebula owner and group (UNAME/GNAME).</span>
+<span class="c1"># Produces groups like opennebula_group_Development, opennebula_owner_jsmith.</span>
+<span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.general.opennebula</span>
+<span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://opennebula:2633/RPC2</span>
+<span class="nt">keyed_groups</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GNAME</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opennebula_group</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UNAME</span>
+<span class="w">    </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opennebula_owner</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -714,7 +756,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Jul 29, 2026.
+      <span class="lastupdated">Last updated on Aug 21, 2026.
       </span></p>
   </div>
 
