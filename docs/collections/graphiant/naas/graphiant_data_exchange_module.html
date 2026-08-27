@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="graphiant.naas.graphiant_data_exchange_info module – Query Graphiant Data Exchange services, customers, and health information" href="graphiant_data_exchange_info_module.html" />
-    <link rel="prev" title="graphiant.naas.graphiant_bgp module – Manage Graphiant BGP peering, routing policies, and route aggregations" href="graphiant_bgp_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="graphiant.naas.graphiant_data_assurance module – Manage Graphiant Data Assurance policies" href="graphiant_data_assurance_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -329,7 +329,7 @@
 <h1>graphiant.naas.graphiant_data_exchange module – Manage Graphiant Data Exchange services, customers, matches, and invitations<a class="headerlink" href="#graphiant-naas-graphiant-data-exchange-module-manage-graphiant-data-exchange-services-customers-matches-and-invitations" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.7.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.8.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -365,7 +365,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>python &gt;= 3.7</p></li>
-<li><p>graphiant-sdk &gt;= 26.7.0</p></li>
+<li><p>graphiant-sdk &gt;= 26.8.0</p></li>
 <li><p>tabulate</p></li>
 </ul>
 </section>
@@ -399,9 +399,10 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>For <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>, file must contain <em>data_exchange_services</em> list. Optional <em>policy.globalObjectOps</em></p>
 <p>per service attaches Graphiant routing policies to devices (device names resolved to IDs).</p>
 <p>For <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code>, or <code class="ansible-value docutils literal notranslate"><span class="pre">delete_customers</span></code>, file must contain <em>data_exchange_customers</em> list.</p>
-<p>For <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>, file must contain <em>data_exchange_matches</em> list. Each entry needs <em>natTranslationMode.peerToPeer.prefixes</em> (for <em>type: peering_service</em> services, matches the API payload directly; the flat <em>nat</em> list is accepted as a legacy alias) or <em>consumerPrefixes</em> (for <em>type: client_to_server</em> services) — the two service types use different match-time fields.</p>
+<p>For <code class="ansible-value docutils literal notranslate"><span class="pre">match_service_to_customers</span></code>, file must contain <em>data_exchange_matches</em> list. Each entry needs <em>natTranslationMode.peerToPeer.prefixes</em> (for <em>serviceType: peering_service</em> services, matches the API payload directly; the flat <em>nat</em> list is accepted as a legacy alias) or <em>consumerPrefixes</em> (for <em>serviceType: client_to_server</em> services) — the two service types use different match-time fields.</p>
 <p>For <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code>, file must contain <em>data_exchange_acceptances</em> list. Optional <em>policy.globalObjectOps</em> per acceptance attaches Graphiant routing policies to gateway devices (device names resolved to IDs).</p>
-<p><code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> config shape mirrors the <code class="docutils literal notranslate"><span class="pre">/v1/extranet/b2b/matches/{id}/consumer</span></code> API payload directly: everything nests under a top-level <em>policy</em> key — <em>policy.sites</em> (site/siteList names), <em>policy.consumerLanSegments</em> (list of <em>lanSegment</em>/<em>consumerPrefixes</em> entries), <em>policy.siteToSiteVpn</em>, and <em>policy.globalObjectOps</em>. <em>policy.natTranslationMode.peerToPeer.prefixes</em> applies only to <em>type: peering_service</em> and must be omitted entirely for <em>type: client_to_server</em> (see sample_data_exchange_acceptance_client_to_server.yaml). <em>routingPolicyTable</em> stays a top-level sibling of <em>policy</em>, not nested inside it.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> config shape mirrors the <code class="docutils literal notranslate"><span class="pre">/v1/extranet/b2b/matches/{id}/consumer</span></code> API payload directly: everything nests under a top-level <em>policy</em> key — <em>policy.sites</em> (site/siteList names), <em>policy.consumerLanSegments</em> (list of <em>lanSegment</em>/<em>consumerPrefixes</em> entries), <em>policy.siteToSiteVpn</em>, and <em>policy.globalObjectOps</em>. <em>policy.natTranslationMode.peerToPeer.prefixes</em> applies only to <em>serviceType: peering_service</em> and must be omitted entirely for <em>serviceType: client_to_server</em> (see sample_data_exchange_acceptance_client_to_server.yaml). <em>routingPolicyTable</em> stays a top-level sibling of <em>policy</em>, not nested inside it.</p>
+<p><em>policy.siteToSiteVpn</em> is required for a non-Graphiant customer (<em>type: non_graphiant_peer</em>, see <code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code> above) and must be omitted entirely for a Graphiant customer (<em>type: graphiant_peer</em>) — the module confirms this from the customer’s type before proceeding without it (see sample_data_exchange_acceptance_graphiant_peer_client_to_server.yaml).</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> configs written for the old peering-specific API (flat top-level <em>siteInformation</em>, <em>policy</em> as a list, <em>nat</em>, <em>siteToSiteVpn</em> at the top level) are still accepted — auto-detected (by <em>policy</em> being a list rather than a dict) and translated internally, the same backward-compatible alias pattern as <em>site</em>/<em>sites</em> and <em>adminEmail</em>/<em>adminEmails</em> above. New configs should still prefer the <em>policy</em>-nested shape since it maps 1:1 to the wire payload; see sample_data_exchange_acceptance.yaml for that shape and sample_data_exchange_acceptance_legacy.yaml for the old shape and key mapping.</p>
 <p>Match responses are saved to <em>output/</em> directory near the configuration file.</p>
 </div></td>
@@ -456,18 +457,21 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <td><div class="ansible-option-cell"><p>The specific Data Exchange operation to perform.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code>: Create Data Exchange services from YAML configuration (Workflow 1).</p>
 <p>Configuration file must contain <em>data_exchange_services</em> list with service definitions.</p>
-<p>Services define <em>type: peering_service</em> (full network-level routing/segmentation with a</p>
-<p>partner) or <em>type: client_to_server</em> (partner access to your organization’s services) with</p>
-<p>LAN segments, sites, and service prefixes.</p>
+<p>Services define <em>serviceType: peering_service</em> (full network-level routing/segmentation with a</p>
+<p>partner) or <em>serviceType: client_to_server</em> (partner access to your organization’s services) with</p>
+<p>LAN segments, sites, and service prefixes. <em>type</em>, singular key, is accepted as a legacy alias</p>
+<p>for <em>serviceType</em>.</p>
 <p>Optional <em>policy.globalObjectOps</em>: keys are device names (resolved to device IDs) or device IDs;</p>
 <p>values can include <em>routingPolicyOps</em> to attach Graphiant filters per device (e.g. <em>Policy-DC1-Primary</em>: <em>Attach</em>).</p>
 <p>Configure Graphiant filters first with <a class="reference internal" href="graphiant_global_config_module.html#ansible-collections-graphiant-naas-graphiant-global-config-module"><span class="std std-ref">graphiant.naas.graphiant_global_config</span></a> and <em>configure_graphiant_filters</em>.</p>
-<p>For <em>type: client_to_server</em>, <em>policy.natTranslationMode.centralized.prefixes</em> (or <em>decentralized</em>) is required: keys are edge device names (resolved to device IDs), values are NAT pool prefixes for that edge. A pool must be provided for every edge of the selected site(s).</p>
-<p><code class="ansible-value docutils literal notranslate"><span class="pre">update_services</span></code>: Update existing Data Exchange services (Workflow 1b). The service must already exist; use <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code> for new services. Configuration file must contain <em>data_exchange_services</em> list where each entry has <em>serviceName</em>. For <em>type: peering_service</em>, only <em>policy.prefixTags</em> can be changed, and at least one prefix must remain after the update. For <em>type: client_to_server</em>, <em>policy.prefixTags</em> and/or <em>policy.natTranslationMode</em> can be changed; at least one of the two is required. Known API limitation: once an IP is added to a device’s NAT pool it cannot be removed via update_services — only adding new prefixes is supported (confirmed against the portal UI, not specific to this module). Supports <code class="docutils literal notranslate"><span class="pre">--check</span></code> and <code class="docutils literal notranslate"><span class="pre">--diff</span></code> to preview changes before applying.</p>
+<p>For <em>serviceType: client_to_server</em>, <em>policy.natTranslationMode.centralized.prefixes</em> (or <em>decentralized</em>) is required: keys are edge device names (resolved to device IDs), values are NAT pool prefixes for that edge. A pool must be provided for every edge of the selected site(s).</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">update_services</span></code>: Update existing Data Exchange services (Workflow 1b). The service must already exist; use <code class="ansible-value docutils literal notranslate"><span class="pre">create_services</span></code> for new services. Configuration file must contain <em>data_exchange_services</em> list where each entry has <em>serviceName</em>. For <em>serviceType: peering_service</em>, only <em>policy.prefixTags</em> can be changed, and at least one prefix must remain after the update. For <em>serviceType: client_to_server</em>, <em>policy.prefixTags</em> and/or <em>policy.natTranslationMode</em> can be changed; at least one of the two is required. Known API limitation: once an IP is added to a device’s NAT pool it cannot be removed via update_services — only adding new prefixes is supported (confirmed against the portal UI, not specific to this module). Supports <code class="docutils literal notranslate"><span class="pre">--check</span></code> and <code class="docutils literal notranslate"><span class="pre">--diff</span></code> to preview changes before applying.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">delete_services</span></code>: Delete Data Exchange services from YAML configuration. Services must be deleted after customers that depend on them. Works for both <em>peering_service</em> and <em>client_to_server</em> types.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">create_customers</span></code>: Create Data Exchange customers from YAML configuration (Workflow 2).</p>
 <p>Configuration file must contain <em>data_exchange_customers</em> list with customer definitions.</p>
-<p>Customers can be non-Graphiant peers that can be invited to connect to services.</p>
+<p><em>type</em>: <code class="ansible-value docutils literal notranslate"><span class="pre">non_graphiant_peer</span></code> connects via a Site-to-Site VPN Connection on acceptance;</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">graphiant_peer</span></code> marks a customer already on the Graphiant network, needing no such VPN</p>
+<p>— see <code class="ansible-value docutils literal notranslate"><span class="pre">accept_invitation</span></code> below.</p>
 <p>Existing customers are skipped (idempotent). When run with <code class="docutils literal notranslate"><span class="pre">--check</span></code> and <code class="docutils literal notranslate"><span class="pre">--diff</span></code>, detects</p>
 <p><em>invite.adminEmails</em> drift on existing customers and surfaces it as a diff — no changes are</p>
 <p>made; to apply email changes use <code class="ansible-value docutils literal notranslate"><span class="pre">update_customers</span></code> instead.</p>
@@ -583,9 +587,10 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <ul class="simple">
 <li><p>Data Exchange Workflows:</p></li>
 <li><p>- Workflow 1 (Create Services): Create Data Exchange services that can be shared with customers.</p></li>
-<li><p>- Workflow 2 (Create Customers): Create Data Exchange customers (nonGraphiant peers).</p></li>
+<li><p>- Workflow 2 (Create Customers): Create Data Exchange customers — Graphiant or non-Graphiant peers.</p></li>
 <li><p>- Workflow 3 (Match Services): Match services to customers and establish peering relationships.</p></li>
-<li><p>- Workflow 4 (Accept Invitation): Accept service invitations for non Graphiant customers.</p></li>
+<li><p>- Workflow 4 (Accept Invitation): Accept service invitations, for Graphiant and non-Graphiant</p></li>
+<li><p>customers alike (a Graphiant customer needs no Site-to-Site VPN).</p></li>
 <li><p>Configuration files support Jinja2 templating syntax for dynamic configuration generation.</p></li>
 <li><p>Match responses are automatically saved to JSON files in the output directory near the configuration file.</p></li>
 <li><p>The module automatically resolves names to IDs for sites, LAN segments, services, customers, and regions.</p></li>
@@ -717,6 +722,15 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 2 - Create a Graphiant-peer customer (already on the Graphiant network)</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">create_customers</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_customers_graphiant_peer.yaml&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 2b - Update adminEmails on an existing Data Exchange customer</span>
 <span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">update_customers</span>
@@ -796,6 +810,17 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Display acceptance result</span>
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">accept_result.msg</span> <span class="cp">}}</span><span class="s">&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 4 - Accept an invitation for a Graphiant-peer customer (no siteToSiteVpn needed)</span>
+<span class="w">  </span><span class="c1"># matches_file omitted: service is already visible via API, so match ID is looked up by name.</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_exchange</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accept_invitation</span>
+<span class="w">    </span><span class="nt">config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;de_workflows_configs/sample_data_exchange_acceptance_graphiant_peer_client_to_server.yaml&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accept_result</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Workflow 4 - Accept invitation with secrets (BGP MD5 password and custom PSKs)</span>
 <span class="w">  </span><span class="c1"># Secrets are fetched from your secrets store and passed as module params (never written to disk).</span>
@@ -992,7 +1017,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="graphiant_bgp_module.html" class="btn btn-neutral float-left" title="graphiant.naas.graphiant_bgp module – Manage Graphiant BGP peering, routing policies, and route aggregations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="graphiant_data_assurance_module.html" class="btn btn-neutral float-left" title="graphiant.naas.graphiant_data_assurance module – Manage Graphiant Data Assurance policies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="graphiant_data_exchange_info_module.html" class="btn btn-neutral float-right" title="graphiant.naas.graphiant_data_exchange_info module – Query Graphiant Data Exchange services, customers, and health information" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -1000,7 +1025,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 26, 2026.
+      <span class="lastupdated">Last updated on Aug 27, 2026.
       </span></p>
   </div>
 
