@@ -332,7 +332,7 @@
 <h1>azure.azcollection.azure_rm_virtualmachine module – Manage Azure virtual machines<a class="headerlink" href="#azure-azcollection-azure-rm-virtualmachine-module-manage-azure-virtual-machines" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 3.21.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 4.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -358,6 +358,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <ul class="simple">
 <li><p>Manage and configure virtual machines (VMs) and associated resources on Azure.</p></li>
 <li><p>Requires a resource group containing at least one virtual network with at least one subnet.</p></li>
+<li><p>VMs are created with Azure managed disks. Unmanaged VHD page-blob disks were retired by Azure on 2026-03-31.</p></li>
 <li><p>Supports images from the Azure Marketplace, which can be discovered with <a class="reference internal" href="azure_rm_virtualmachineimage_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachineimage-info-module"><span class="std std-ref">azure.azcollection.azure_rm_virtualmachineimage_info</span></a>.</p></li>
 <li><p>Supports custom images since Ansible 2.5.</p></li>
 <li><p>To use <em>custom_data</em> on a Linux image, the image must have cloud-init enabled. If cloud-init is not enabled, <em>custom_data</em> is ignored.</p></li>
@@ -544,7 +545,6 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <a class="ansibleOptionLink" href="#parameter-boot_diagnostics/storage_account" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of an existing storage account to use for boot diagnostics.</p>
-<p>If not specified, uses <em>storage_account_name</em> defined one level up.</p>
 <p>If storage account is not specified anywhere, and <code class="docutils literal notranslate"><span class="pre">enabled</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, a default storage account is created for boot diagnostics data.</p>
 <p>It is mutually exclusive with <em>type</em></p>
 </div></td>
@@ -732,8 +732,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <a class="ansibleOptionLink" href="#parameter-data_disks/managed_disk_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Managed data disk type.</p>
-<p>Defaults to <code class="docutils literal notranslate"><span class="pre">Standard_LRS</span></code> when no disk options are specified. Unmanaged disks were retired by Azure on March 31, 2026.</p>
-<p>See <a class="reference external" href="https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation">https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation</a>.</p>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">Standard_LRS</span></code> when no disk options are specified.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Standard_LRS&quot;</span></code></p></li>
@@ -752,45 +751,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The disk name.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-data_disks/storage_account_name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-data-disks-storage-account-name"><strong>storage_account_name</strong></p>
-<a class="ansibleOptionLink" href="#parameter-data_disks/storage_account_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>(Deprecated) Name of an existing storage account that supports creation of VHD blobs.</p>
-<p>If not specified for a new VM, a new storage account started with <em>name</em> will be created using storage type <code class="docutils literal notranslate"><span class="pre">Standard_LRS</span></code>.</p>
-<p>Cannot be updated unless <em>lun</em> updated.</p>
-<p>Unmanaged disks were retired by Azure on March 31, 2026. Use <em>managed_disk_type</em> instead.</p>
-<p>This option will be removed in version 4.0.0.</p>
-<p>See <a class="reference external" href="https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation">https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation</a>.</p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-data_disks/storage_blob_name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-data-disks-storage-blob-name"><strong>storage_blob_name</strong></p>
-<a class="ansibleOptionLink" href="#parameter-data_disks/storage_blob_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>(Deprecated) Name of the storage blob used to hold the OS disk image of the VM.</p>
-<p>Must end with ‘.vhd’.</p>
-<p>Default to the <em>name</em> + timestamp + <em>lun</em> + ‘.vhd’.</p>
-<p>Cannot be updated unless <em>lun</em> updated.</p>
-<p>Unmanaged disks were retired by Azure on March 31, 2026. Use <em>managed_disk_type</em> instead.</p>
-<p>This option will be removed in version 4.0.0.</p>
-<p>See <a class="reference external" href="https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation">https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation</a>.</p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-data_disks/storage_container_name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-data-disks-storage-container-name"><strong>storage_container_name</strong></p>
-<a class="ansibleOptionLink" href="#parameter-data_disks/storage_container_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>(Deprecated) Name of the container to use within the storage account to store VHD blobs.</p>
-<p>If no name is specified a default container named ‘vhds’ will created.</p>
-<p>Cannot be updated unless <em>lun</em> updated.</p>
-<p>Unmanaged disks were retired by Azure on March 31, 2026. Use <em>managed_disk_type</em> instead.</p>
-<p>This option will be removed in version 4.0.0.</p>
-<p>See <a class="reference external" href="https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation">https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation</a>.</p>
-<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;vhds&quot;</span></code></p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-disable_instance_discovery"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-disable-instance-discovery"><strong>disable_instance_discovery</strong></p>
 <a class="ansibleOptionLink" href="#parameter-disable_instance_discovery" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 2.3.0</em></p>
@@ -804,7 +765,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ephemeral_os_disk"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-ephemeral-os-disk"><strong>ephemeral_os_disk</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ephemeral_os_disk" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -818,7 +779,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-eviction_policy"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-eviction-policy"><strong>eviction_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-eviction_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -831,7 +792,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-force"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-force"><strong>force</strong></p>
 <a class="ansibleOptionLink" href="#parameter-force" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -845,7 +806,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-generalized"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-generalized"><strong>generalized</strong></p>
 <a class="ansibleOptionLink" href="#parameter-generalized" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -859,7 +820,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-image"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-image"><strong>image</strong></p>
 <a class="ansibleOptionLink" href="#parameter-image" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
 </div></td>
@@ -873,7 +834,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Required when creating.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-license_type"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-license-type"><strong>license_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-license_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -889,14 +850,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-linux_config"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-linux-config"><strong>linux_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-linux_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the Linux operating system settings on the virtual machine.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-linux_config/disable_password_authentication"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-linux-config-disable-password-authentication"><strong>disable_password_authentication</strong></p>
 <a class="ansibleOptionLink" href="#parameter-linux_config/disable_password_authentication" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -908,36 +869,33 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-location"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-location"><strong>location</strong></p>
 <a class="ansibleOptionLink" href="#parameter-location" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Valid Azure location for the VM. Defaults to location of the resource group.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-log_mode"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-log-mode"><strong>log_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-log_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Parent argument.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-log_path"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-log-path"><strong>log_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-log_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Parent argument.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-managed_disk_type"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-managed-disk-type"><strong>managed_disk_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-managed_disk_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Managed OS disk type.</p>
-<p>Create OS disk with managed disk if defined.</p>
-<p>Defaults to <code class="docutils literal notranslate"><span class="pre">Standard_LRS</span></code> when no disk options are specified.</p>
-<p>Unmanaged disks were retired by Azure on March 31, 2026.</p>
-<p>See <a class="reference external" href="https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation">https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation</a>.</p>
+<td><div class="ansible-option-cell"><p>Azure managed-disk storage type for the OS disk.</p>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">Standard_LRS</span></code> when not specified. Azure creates the OS disk automatically from <em>image</em>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Standard_LRS&quot;</span></code></p></li>
@@ -949,7 +907,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-max_price"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-max-price"><strong>max_price</strong></p>
 <a class="ansibleOptionLink" href="#parameter-max_price" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">float</span></p>
 </div></td>
@@ -960,14 +918,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">-1.0</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the VM.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-network_interface_names"></div>
 <div class="ansibleOptionAnchor" id="parameter-network_interfaces"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-network-interfaces"><span id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-network-interface-names"></span><strong>network_interface_names</strong></p>
 <a class="ansibleOptionLink" href="#parameter-network_interface_names" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: network_interfaces</span></p>
@@ -981,7 +939,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>To create a new network interface, at least one Virtual Network with one Subnet must exist.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-oidc_token"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-oidc-token"><strong>oidc_token</strong></p>
 <a class="ansibleOptionLink" href="#parameter-oidc_token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 3.17.0</em></p>
@@ -992,7 +950,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Can also be set via the <code class="docutils literal notranslate"><span class="pre">AZURE_FEDERATED_TOKEN</span></code> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-oidc_token_file_path"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-oidc-token-file-path"><strong>oidc_token_file_path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-oidc_token_file_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 3.17.0</em></p>
@@ -1003,7 +961,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Can also be set via the <code class="docutils literal notranslate"><span class="pre">AZURE_FEDERATED_TOKEN_FILE</span></code> environment variable.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-open_ports"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-open-ports"><strong>open_ports</strong></p>
 <a class="ansibleOptionLink" href="#parameter-open_ports" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -1012,7 +970,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>For Windows hosts, defaults to opening ports 3389 and 5986.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-os_disk_caching"></div>
 <div class="ansibleOptionAnchor" id="parameter-disk_caching"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-os-disk-caching"><span id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-disk-caching"></span><strong>os_disk_caching</strong></p>
 <a class="ansibleOptionLink" href="#parameter-os_disk_caching" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: disk_caching</span></p>
@@ -1027,7 +985,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-os_disk_delete_option"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-os-disk-delete-option"><strong>os_disk_delete_option</strong></p>
 <a class="ansibleOptionLink" href="#parameter-os_disk_delete_option" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1042,28 +1000,28 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-os_disk_encryption_set"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-os-disk-encryption-set"><strong>os_disk_encryption_set</strong></p>
 <a class="ansibleOptionLink" href="#parameter-os_disk_encryption_set" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>ID of disk encryption set for OS disk.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-os_disk_name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-os-disk-name"><strong>os_disk_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-os_disk_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>OS disk name.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-os_disk_size_gb"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-os-disk-size-gb"><strong>os_disk_size_gb</strong></p>
 <a class="ansibleOptionLink" href="#parameter-os_disk_size_gb" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Size of OS disk in GB.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-os_type"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-os-type"><strong>os_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-os_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1077,49 +1035,49 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Active Directory user password. Use when authenticating with an Active Directory user rather than service principal.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-plan"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-plan"><strong>plan</strong></p>
 <a class="ansibleOptionLink" href="#parameter-plan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Third-party billing plan for the VM.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-plan/name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-plan-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-plan/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Billing plan name.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-plan/product"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-plan-product"><strong>product</strong></p>
 <a class="ansibleOptionLink" href="#parameter-plan/product" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Product name.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-plan/promotion_code"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-plan-promotion-code"><strong>promotion_code</strong></p>
 <a class="ansibleOptionLink" href="#parameter-plan/promotion_code" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Optional promotion code.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-plan/publisher"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-plan-publisher"><strong>publisher</strong></p>
 <a class="ansibleOptionLink" href="#parameter-plan/publisher" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Publisher offering the plan.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-priority"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-priority"><strong>priority</strong></p>
 <a class="ansibleOptionLink" href="#parameter-priority" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1132,42 +1090,42 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-profile"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-profile"><strong>profile</strong></p>
 <a class="ansibleOptionLink" href="#parameter-profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Security profile found in ~/.azure/credentials file.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proximity_placement_group"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-proximity-placement-group"><strong>proximity_placement_group</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proximity_placement_group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The name or ID of the proximity placement group to be associated with.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proximity_placement_group/id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-proximity-placement-group-id"><strong>id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proximity_placement_group/id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The ID of the proximity placement group to be associated with.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proximity_placement_group/name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-proximity-placement-group-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proximity_placement_group/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The Name of the proximity placement group to be associated with.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-proximity_placement_group/resource_group"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-proximity-placement-group-resource-group"><strong>resource_group</strong></p>
 <a class="ansibleOptionLink" href="#parameter-proximity_placement_group/resource_group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The resource group of the proximity placement group to be associated with.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-public_ip_allocation_method"></div>
 <div class="ansibleOptionAnchor" id="parameter-public_ip_allocation"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-public-ip-allocation-method"><span id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-public-ip-allocation"></span><strong>public_ip_allocation_method</strong></p>
 <a class="ansibleOptionLink" href="#parameter-public_ip_allocation_method" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: public_ip_allocation</span></p>
@@ -1185,7 +1143,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-remove_on_absent"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-remove-on-absent"><strong>remove_on_absent</strong></p>
 <a class="ansibleOptionLink" href="#parameter-remove_on_absent" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -1197,14 +1155,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;all&quot;]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-resource_group"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-resource-group"><strong>resource_group</strong></p>
 <a class="ansibleOptionLink" href="#parameter-resource_group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the resource group containing the VM.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-restarted"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-restarted"><strong>restarted</strong></p>
 <a class="ansibleOptionLink" href="#parameter-restarted" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1216,21 +1174,21 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secret"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-secret"><strong>secret</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secret" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Azure client secret. Use when authenticating with a Service Principal.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-security_profile"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-security-profile"><strong>security_profile</strong></p>
 <a class="ansibleOptionLink" href="#parameter-security_profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the Security related profile settings for the virtual machine.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-security_profile/encryption_at_host"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-security-profile-encryption-at-host"><strong>encryption_at_host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-security_profile/encryption_at_host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1243,7 +1201,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-security_profile/security_type"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-security-profile-security-type"><strong>security_type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-security_profile/security_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1255,14 +1213,14 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-security_profile/uefi_settings"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-security-profile-uefi-settings"><strong>uefi_settings</strong></p>
 <a class="ansibleOptionLink" href="#parameter-security_profile/uefi_settings" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specifies the security settings like secure boot and vTPM used while creating the virtual machine.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-security_profile/uefi_settings/secure_boot_enabled"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-security-profile-uefi-settings-secure-boot-enabled"><strong>secure_boot_enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-security_profile/uefi_settings/secure_boot_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1274,7 +1232,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-security_profile/uefi_settings/v_tpm_enabled"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-security-profile-uefi-settings-v-tpm-enabled"><strong>v_tpm_enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-security_profile/uefi_settings/v_tpm_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1286,7 +1244,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-short_hostname"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-short-hostname"><strong>short_hostname</strong></p>
 <a class="ansibleOptionLink" href="#parameter-short_hostname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1294,7 +1252,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>When creating a VM, short_hostname defaults to <em>name</em>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-specialized_image"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-specialized-image"><strong>specialized_image</strong></p>
 <a class="ansibleOptionLink" href="#parameter-specialized_image" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in azure.azcollection 3.20.0</em></p>
@@ -1310,7 +1268,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ssh_password_enabled"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-ssh-password-enabled"><strong>ssh_password_enabled</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ssh_password_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1323,7 +1281,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ssh_public_keys"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-ssh-public-keys"><strong>ssh_public_keys</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ssh_public_keys" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -1333,7 +1291,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>Set <em>key_data</em> to the actual value of the public key.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-started"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-started"><strong>started</strong></p>
 <a class="ansibleOptionLink" href="#parameter-started" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1347,7 +1305,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1360,47 +1318,6 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;present&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-storage_account_name"></div>
-<div class="ansibleOptionAnchor" id="parameter-storage_account"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-storage-account-name"><span id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-storage-account"></span><strong>storage_account_name</strong></p>
-<a class="ansibleOptionLink" href="#parameter-storage_account_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: storage_account</span></p>
-<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-cell"><p>(Deprecated) Name of a storage account that supports creation of VHD blobs.</p>
-<p>If not specified for a new VM, a new storage account named &lt;vm name&gt;01 will be created using storage type <code class="docutils literal notranslate"><span class="pre">Standard_LRS</span></code>.</p>
-<p>Unmanaged disks were retired by Azure on March 31, 2026. Use <em>managed_disk_type</em> instead.</p>
-<p>See <a class="reference external" href="https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation">https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation</a>.</p>
-<p>This option will be removed in version 4.0.0.</p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-storage_blob_name"></div>
-<div class="ansibleOptionAnchor" id="parameter-storage_blob"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-storage-blob-name"><span id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-storage-blob"></span><strong>storage_blob_name</strong></p>
-<a class="ansibleOptionLink" href="#parameter-storage_blob_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: storage_blob</span></p>
-<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-cell"><p>(Deprecated) Name of the storage blob used to hold the OS disk image of the VM.</p>
-<p>Must end with ‘.vhd’.</p>
-<p>If not specified, defaults to the VM name + ‘.vhd’.</p>
-<p>Unmanaged disks were retired by Azure on March 31, 2026. Use <em>managed_disk_type</em> instead.</p>
-<p>This option will be removed in version 4.0.0.</p>
-<p>See <a class="reference external" href="https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation">https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation</a>.</p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-storage_container_name"></div>
-<div class="ansibleOptionAnchor" id="parameter-storage_container"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-storage-container-name"><span id="ansible-collections-azure-azcollection-azure-rm-virtualmachine-module-parameter-storage-container"></span><strong>storage_container_name</strong></p>
-<a class="ansibleOptionLink" href="#parameter-storage_container_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: storage_container</span></p>
-<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-cell"><p>(Deprecated) Name of the container to use within the storage account to store VHD blobs.</p>
-<p>If not specified, a default container will be created.</p>
-<p>Unmanaged disks were retired by Azure on March 31, 2026. Use <em>managed_disk_type</em> instead.</p>
-<p>This option will be removed in version 4.0.0.</p>
-<p>See <a class="reference external" href="https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation">https://learn.microsoft.com/azure/virtual-machines/unmanaged-disks-deprecation</a>.</p>
-<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;vhds&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -1715,12 +1632,11 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span>
 <span class="w">    </span><span class="nt">vm_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_D4</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VM with existing storage account and NIC</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VM with existing NIC</span>
 <span class="w">  </span><span class="nt">azure_rm_virtualmachine</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myResourceGroup</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testvm002</span>
 <span class="w">    </span><span class="nt">vm_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_D4</span>
-<span class="w">    </span><span class="nt">storage_account</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testaccount001</span>
 <span class="w">    </span><span class="nt">admin_username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">username</span> <span class="cp">}}</span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">ssh_public_keys</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/adminUser/.ssh/authorized_keys</span>
@@ -1754,37 +1670,6 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">newdisk</span>
 <span class="w">        </span><span class="nt">disk_size_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
 <span class="w">        </span><span class="nt">managed_disk_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Premium_LRS</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VM with OS and multiple data storage accounts</span>
-<span class="w">  </span><span class="nt">azure_rm_virtualmachine</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myResourceGroup</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testvm001</span>
-<span class="w">    </span><span class="nt">vm_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_DS1_v2</span>
-<span class="w">    </span><span class="nt">admin_username</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">username</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">ssh_password_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">    </span><span class="nt">ssh_public_keys</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/adminUser/.ssh/authorized_keys</span>
-<span class="w">        </span><span class="nt">key_data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt; insert your ssh public key here... &gt;</span>
-<span class="w">    </span><span class="nt">network_interfaces</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testvm001</span>
-<span class="w">    </span><span class="nt">storage_container</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">osdisk</span>
-<span class="w">    </span><span class="nt">storage_blob</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">osdisk.vhd</span>
-<span class="w">    </span><span class="nt">boot_diagnostics</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">managed</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">offer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0001-com-ubuntu-server-focal</span>
-<span class="w">      </span><span class="nt">publisher</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">canonical</span>
-<span class="w">      </span><span class="nt">sku</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20_04-lts-gen2</span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span>
-<span class="w">    </span><span class="nt">data_disks</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lun</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">        </span><span class="nt">disk_size_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
-<span class="w">        </span><span class="nt">storage_container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datadisk1</span>
-<span class="w">        </span><span class="nt">storage_blob_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datadisk1.vhd</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lun</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">        </span><span class="nt">disk_size_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
-<span class="w">        </span><span class="nt">storage_container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datadisk2</span>
-<span class="w">        </span><span class="nt">storage_blob_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datadisk2.vhd</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a VM with a custom image</span>
 <span class="w">  </span><span class="nt">azure_rm_virtualmachine</span><span class="p">:</span>
@@ -1987,8 +1872,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <span class="w">    </span><span class="nt">data_disks</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lun</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 <span class="w">        </span><span class="nt">disk_size_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
-<span class="w">        </span><span class="nt">storage_container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datadisk1</span>
-<span class="w">        </span><span class="nt">storage_blob_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datadisk1.vhd</span>
+<span class="w">        </span><span class="nt">managed_disk_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Standard_LRS</span>
 <span class="w">        </span><span class="nt">delete_option</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove a VM and all resources that were autocreated</span>
@@ -2104,7 +1988,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 27, 2026.
+      <span class="lastupdated">Last updated on Aug 28, 2026.
       </span></p>
   </div>
 

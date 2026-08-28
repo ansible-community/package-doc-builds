@@ -332,7 +332,7 @@
 <h1>azure.azcollection.azure_rm_virtualmachinescaleset module – Manage Azure virtual machine scale sets<a class="headerlink" href="#azure-azcollection-azure-rm-virtualmachinescaleset-module-manage-azure-virtual-machine-scale-sets" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 3.21.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 4.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -474,7 +474,8 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <a class="ansibleOptionLink" href="#parameter-capacity" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Capacity of VMSS.</p>
-<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">1</span></code></p>
+<p>When not set on create, Azure defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<p>When not set on update, the existing capacity is preserved (safe for autoscaled VMSS).</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -782,9 +783,10 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p>When <em>orchestration_mode=Flexible</em>, <em>single_placement_group=False</em> must be set.</p>
 <p>When <em>orchestration_mode=Flexible</em>, it cannot be configured <em>overprovision</em>.</p>
 <p>When <em>orchestration_mode=Flexible</em>, it cannot be configured <em>upgrade_policy</em> and configured when <em>orchestration_mode=Uniform</em>.</p>
+<p>When omitted on create, Azure’s service default is used. When omitted on update, the existing value is retained.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;Flexible&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Flexible&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Uniform&quot;</span></code></p></li>
 </ul>
 </div></td>
@@ -796,9 +798,11 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Type of OS disk caching.</p>
+<p>When not set on create, Azure defaults to <code class="docutils literal notranslate"><span class="pre">ReadOnly</span></code>.</p>
+<p>When not set on update, the existing value is preserved.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;ReadOnly&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ReadOnly&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ReadWrite&quot;</span></code></p></li>
 </ul>
 </div></td>
@@ -891,7 +895,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <a class="ansibleOptionLink" href="#parameter-platform_fault_domain_count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Fault Domain count for each placement group.</p>
-<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">1</span></code></p>
+<p>When omitted on create, Azure’s service default is used. When omitted on update, the existing value is retained.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -1064,9 +1068,11 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <a class="ansibleOptionLink" href="#parameter-single_placement_group" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>When true this limits the scale set to a single placement group, of max size 100 virtual machines.</p>
+<p>When <em>orchestration_mode=Flexible</em>, this must be <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>When not set on update, the existing value is preserved.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
@@ -1522,7 +1528,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 27, 2026.
+      <span class="lastupdated">Last updated on Aug 28, 2026.
       </span></p>
   </div>
 
