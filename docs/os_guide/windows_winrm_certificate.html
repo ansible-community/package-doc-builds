@@ -347,7 +347,7 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">userPrincipalName</span></code> value can be anything but in this guide we will use the value <code class="docutils literal notranslate"><span class="pre">$USERNAME&#64;localhost</span></code> where <code class="docutils literal notranslate"><span class="pre">$USERNAME</span></code> is the name of the user that the certificate will be mapped to.</p>
 <p>This can be done through a variety of methods, such as OpenSSL, PowerShell, or Active Directory Certificate Services. The following example shows how to generate a certificate using OpenSSL:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the username to the name of the user the certificate will be mapped to</span>
-<span class="nv">USERNAME</span><span class="o">=</span><span class="s2">&quot;local-user&quot;</span>
+<span class="nv">USERNAME</span><span class="o">=</span><span class="s2">"local-user"</span>
 
 cat<span class="w"> </span>&gt;<span class="w"> </span>openssl.conf<span class="w"> </span><span class="s">&lt;&lt; EOL</span>
 <span class="s">distinguished_name = req_distinguished_name</span>
@@ -361,7 +361,7 @@ cat<span class="w"> </span>&gt;<span class="w"> </span>openssl.conf<span class="
 openssl<span class="w"> </span>req<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-new<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-sha256<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-subj<span class="w"> </span><span class="s2">&quot;/CN=</span><span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-subj<span class="w"> </span><span class="s2">"/CN=</span><span class="si">${</span><span class="nv">USERNAME</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-newkey<span class="w"> </span>rsa:2048<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-nodes<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-keyout<span class="w"> </span>cert.key<span class="w"> </span><span class="se">\</span>
@@ -384,32 +384,32 @@ rm<span class="w"> </span>openssl.conf<span class="w"> </span>cert.csr
 </div>
 <p>The following example shows how to generate a certificate using PowerShell:</p>
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Set the username to the name of the user the certificate will be mapped to</span>
-<span class="nv">$username</span> <span class="p">=</span> <span class="s1">&#39;local-user&#39;</span>
+<span class="nv">$username</span> <span class="p">=</span> <span class="s1">'local-user'</span>
 
 <span class="nv">$clientParams</span> <span class="p">=</span> <span class="p">@{</span>
-    <span class="n">CertStoreLocation</span> <span class="p">=</span> <span class="s1">&#39;Cert:\CurrentUser\My&#39;</span>
+    <span class="n">CertStoreLocation</span> <span class="p">=</span> <span class="s1">'Cert:\CurrentUser\My'</span>
     <span class="n">NotAfter</span>          <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddYears</span><span class="p">(</span><span class="n">1</span><span class="p">)</span>
-    <span class="n">Provider</span>          <span class="p">=</span> <span class="s1">&#39;Microsoft Software Key Storage Provider&#39;</span>
-    <span class="n">Subject</span>           <span class="p">=</span> <span class="s2">&quot;CN=$username&quot;</span>
-    <span class="n">TextExtension</span>     <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;2.5.29.37={text}1.3.6.1.5.5.7.3.2&quot;</span><span class="p">,</span><span class="s2">&quot;2.5.29.17={text}upn=$username@localhost&quot;</span><span class="p">)</span>
-    <span class="nb">Type </span>             <span class="p">=</span> <span class="s1">&#39;Custom&#39;</span>
+    <span class="n">Provider</span>          <span class="p">=</span> <span class="s1">'Microsoft Software Key Storage Provider'</span>
+    <span class="n">Subject</span>           <span class="p">=</span> <span class="s2">"CN=$username"</span>
+    <span class="n">TextExtension</span>     <span class="p">=</span> <span class="p">@(</span><span class="s2">"2.5.29.37={text}1.3.6.1.5.5.7.3.2"</span><span class="p">,</span><span class="s2">"2.5.29.17={text}upn=$username@localhost"</span><span class="p">)</span>
+    <span class="nb">Type </span>             <span class="p">=</span> <span class="s1">'Custom'</span>
 <span class="p">}</span>
 <span class="nv">$cert</span> <span class="p">=</span> <span class="nb">New-SelfSignedCertificate</span> <span class="nv">@clientParams</span>
 <span class="nv">$certKeyName</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.RSACertificateExtensions]</span><span class="p">::</span><span class="n">GetRSAPrivateKey</span><span class="p">(</span>
     <span class="nv">$cert</span><span class="p">).</span><span class="n">Key</span><span class="p">.</span><span class="n">UniqueName</span>
 
 <span class="c"># Exports the public cert.pem and key cert.pfx</span>
-<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;cert.pem&quot;</span> <span class="n">-Value</span> <span class="p">@(</span>
-    <span class="s2">&quot;-----BEGIN CERTIFICATE-----&quot;</span>
-    <span class="no">[Convert]</span><span class="p">::</span><span class="n">ToBase64String</span><span class="p">(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">RawData</span><span class="p">)</span> <span class="o">-replace</span> <span class="s2">&quot;.{64}&quot;</span><span class="p">,</span> <span class="s2">&quot;$&amp;</span><span class="se">`n</span><span class="s2">&quot;</span>
-    <span class="s2">&quot;-----END CERTIFICATE-----&quot;</span>
+<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"cert.pem"</span> <span class="n">-Value</span> <span class="p">@(</span>
+    <span class="s2">"-----BEGIN CERTIFICATE-----"</span>
+    <span class="no">[Convert]</span><span class="p">::</span><span class="n">ToBase64String</span><span class="p">(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">RawData</span><span class="p">)</span> <span class="o">-replace</span> <span class="s2">".{64}"</span><span class="p">,</span> <span class="s2">"$&amp;</span><span class="se">`n</span><span class="s2">"</span>
+    <span class="s2">"-----END CERTIFICATE-----"</span>
 <span class="p">)</span>
-<span class="nv">$certPfxBytes</span> <span class="p">=</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">Export</span><span class="p">(</span><span class="s1">&#39;Pfx&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="no">[System.IO.File]</span><span class="p">::</span><span class="n">WriteAllBytes</span><span class="p">(</span><span class="s2">&quot;$pwd\cert.pfx&quot;</span><span class="p">,</span> <span class="nv">$certPfxBytes</span><span class="p">)</span>
+<span class="nv">$certPfxBytes</span> <span class="p">=</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">Export</span><span class="p">(</span><span class="s1">'Pfx'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
+<span class="no">[System.IO.File]</span><span class="p">::</span><span class="n">WriteAllBytes</span><span class="p">(</span><span class="s2">"$pwd\cert.pfx"</span><span class="p">,</span> <span class="nv">$certPfxBytes</span><span class="p">)</span>
 
 <span class="c"># Removes the private key and cert from the store after exporting</span>
-<span class="nv">$keyPath</span> <span class="p">=</span> <span class="no">[System.IO.Path]</span><span class="p">::</span><span class="n">Combine</span><span class="p">(</span><span class="nv">$env:AppData</span><span class="p">,</span> <span class="s1">&#39;Microsoft&#39;</span><span class="p">,</span> <span class="s1">&#39;Crypto&#39;</span><span class="p">,</span> <span class="s1">&#39;Keys&#39;</span><span class="p">,</span> <span class="nv">$certKeyName</span><span class="p">)</span>
-<span class="nb">Remove-Item</span> <span class="n">-LiteralPath</span> <span class="s2">&quot;Cert:\CurrentUser\My\</span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">Thumbprint</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-Force</span>
+<span class="nv">$keyPath</span> <span class="p">=</span> <span class="no">[System.IO.Path]</span><span class="p">::</span><span class="n">Combine</span><span class="p">(</span><span class="nv">$env:AppData</span><span class="p">,</span> <span class="s1">'Microsoft'</span><span class="p">,</span> <span class="s1">'Crypto'</span><span class="p">,</span> <span class="s1">'Keys'</span><span class="p">,</span> <span class="nv">$certKeyName</span><span class="p">)</span>
+<span class="nb">Remove-Item</span> <span class="n">-LiteralPath</span> <span class="s2">"Cert:\CurrentUser\My\</span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">Thumbprint</span><span class="p">)</span><span class="s2">"</span> <span class="n">-Force</span>
 <span class="nb">Remove-Item</span> <span class="n">-LiteralPath</span> <span class="nv">$keyPath</span> <span class="n">-Force</span>
 </pre></div>
 </div>
@@ -419,7 +419,7 @@ rm<span class="w"> </span>openssl.conf<span class="w"> </span>cert.csr
 <span class="w">    </span>-nocerts<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-nodes<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-passin<span class="w"> </span>pass:<span class="w"> </span><span class="p">|</span>
-<span class="w">    </span>sed<span class="w"> </span>-ne<span class="w"> </span><span class="s1">&#39;/-BEGIN PRIVATE KEY-/,/-END PRIVATE KEY-/p&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>cert.key
+<span class="w">    </span>sed<span class="w"> </span>-ne<span class="w"> </span><span class="s1">'/-BEGIN PRIVATE KEY-/,/-END PRIVATE KEY-/p'</span><span class="w"> </span>&gt;<span class="w"> </span>cert.key
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">cert.pem</span></code> is the public key and the <code class="docutils literal notranslate"><span class="pre">cert.key</span></code> is the plaintext private key. These files must be accessible by the Ansible control node to use for authentication. The private key does not need to be present on the Windows node.</p>
@@ -431,19 +431,19 @@ The Windows host does not need access to the private key, only the public key <c
 <section id="import-certificate-to-the-certificate-store">
 <h3><a class="toc-backref" href="#id4" role="doc-backlink">Import Certificate to the Certificate Store</a><a class="headerlink" href="#import-certificate-to-the-certificate-store" title="Link to this heading"></a></h3>
 <p>For Windows to trust the certificate it must be imported into the <code class="docutils literal notranslate"><span class="pre">LocalMachine\TrustedPeople</span></code> certificate store. You can do this by running the following:</p>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$cert</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.X509Certificate2]</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;cert.pem&quot;</span><span class="p">)</span>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$cert</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.X509Certificate2]</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s2">"cert.pem"</span><span class="p">)</span>
 
 <span class="nv">$store</span> <span class="p">=</span> <span class="nb">Get-Item</span> <span class="n">-LiteralPath</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">LocalMachine</span><span class="p">\</span><span class="n">TrustedPeople</span>
-<span class="nv">$store</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s1">&#39;ReadWrite&#39;</span><span class="p">)</span>
+<span class="nv">$store</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s1">'ReadWrite'</span><span class="p">)</span>
 <span class="nv">$store</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="nv">$cert</span><span class="p">)</span>
 <span class="nv">$store</span><span class="p">.</span><span class="n">Dispose</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>If the cert is self-signed, or issued by a CA that is not trusted by the host, you will need to import the CA certificate into the trusted root store. As our example uses a self-signed cert, we will import that certificate as a trusted CA but in a production environment you would import the CA that signed the certificate.</p>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$cert</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.X509Certificate2]</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;cert.pem&quot;</span><span class="p">)</span>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$cert</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.X509Certificate2]</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s2">"cert.pem"</span><span class="p">)</span>
 
 <span class="nv">$store</span> <span class="p">=</span> <span class="nb">Get-Item</span> <span class="n">-LiteralPath</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">LocalMachine</span><span class="p">\</span><span class="n">Root</span>
-<span class="nv">$store</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s1">&#39;ReadWrite&#39;</span><span class="p">)</span>
+<span class="nv">$store</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s1">'ReadWrite'</span><span class="p">)</span>
 <span class="nv">$store</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="nv">$cert</span><span class="p">)</span>
 <span class="nv">$store</span><span class="p">.</span><span class="n">Dispose</span><span class="p">()</span>
 </pre></div>
@@ -455,14 +455,14 @@ The Windows host does not need access to the private key, only the public key <c
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Will prompt for the password of the user.</span>
 <span class="nv">$credential</span> <span class="p">=</span> <span class="nb">Get-Credential</span> <span class="n">local-user</span>
 
-<span class="nv">$cert</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.X509Certificate2]</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;cert.pem&quot;</span><span class="p">)</span>
+<span class="nv">$cert</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.X509Certificate2]</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s2">"cert.pem"</span><span class="p">)</span>
 <span class="nv">$certChain</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.X509Chain]</span><span class="p">::</span><span class="n">new</span><span class="p">()</span>
 <span class="no">[void]</span><span class="nv">$certChain</span><span class="p">.</span><span class="n">Build</span><span class="p">(</span><span class="nv">$cert</span><span class="p">)</span>
 <span class="nv">$caThumbprint</span> <span class="p">=</span> <span class="nv">$certChain</span><span class="p">.</span><span class="n">ChainElements</span><span class="p">.</span><span class="n">Certificate</span><span class="p">[-</span><span class="n">1</span><span class="p">].</span><span class="n">Thumbprint</span>
 
 <span class="nv">$certMapping</span> <span class="p">=</span> <span class="p">@{</span>
-    <span class="n">Path</span>       <span class="p">=</span> <span class="s1">&#39;WSMan:\localhost\ClientCertificate&#39;</span>
-    <span class="n">Subject</span>    <span class="p">=</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">GetNameInfo</span><span class="p">(</span><span class="s1">&#39;UpnName&#39;</span><span class="p">,</span> <span class="nv">$false</span><span class="p">)</span>
+    <span class="n">Path</span>       <span class="p">=</span> <span class="s1">'WSMan:\localhost\ClientCertificate'</span>
+    <span class="n">Subject</span>    <span class="p">=</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">GetNameInfo</span><span class="p">(</span><span class="s1">'UpnName'</span><span class="p">,</span> <span class="nv">$false</span><span class="p">)</span>
     <span class="n">Issuer</span>     <span class="p">=</span> <span class="nv">$caThumbprint</span>
     <span class="n">Credential</span> <span class="p">=</span> <span class="nv">$credential</span>
     <span class="n">Force</span>      <span class="p">=</span> <span class="nv">$true</span>
@@ -488,7 +488,7 @@ The Windows host does not need access to the private key, only the public key <c
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check that the required files are present</span>
 <span class="w">    </span><span class="nt">ansible.builtin.stat</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">cert_pem</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">cert_pem</span><span class="nv"> </span><span class="s">}}'</span>
 <span class="w">    </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">    </span><span class="nt">run_once</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local_cert_stat</span>
@@ -500,22 +500,22 @@ The Windows host does not need access to the private key, only the public key <c
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Generate local user password</span>
 <span class="w">    </span><span class="nt">ansible.builtin.set_fact</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">user_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;ansible.builtin.password&#39;,</span><span class="nv"> </span><span class="s">playbook_dir</span><span class="nv"> </span><span class="s">~</span><span class="nv"> </span><span class="s">&#39;/user_password&#39;,</span><span class="nv"> </span><span class="s">length=15)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">      </span><span class="nt">user_password</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">lookup('ansible.builtin.password',</span><span class="nv"> </span><span class="s">playbook_dir</span><span class="nv"> </span><span class="s">~</span><span class="nv"> </span><span class="s">'/user_password',</span><span class="nv"> </span><span class="s">length=15)</span><span class="nv"> </span><span class="s">}}"</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create local user</span>
 <span class="w">    </span><span class="nt">ansible.windows.win_user</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">username</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">username</span><span class="nv"> </span><span class="s">}}'</span>
 <span class="w">      </span><span class="nt">groups</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrators</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Users</span>
 <span class="w">      </span><span class="nt">update_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
-<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">user_password</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">user_password</span><span class="nv"> </span><span class="s">}}'</span>
 <span class="w">      </span><span class="nt">user_cannot_change_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">password_never_expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy across client certificate</span>
 <span class="w">    </span><span class="nt">ansible.windows.win_copy</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">cert_pem</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">      </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">cert_pem</span><span class="nv"> </span><span class="s">}}'</span>
 <span class="w">      </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\TEMP\cert.pem</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Import client certificate</span>
@@ -523,7 +523,7 @@ The Windows host does not need access to the private key, only the public key <c
 <span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\TEMP\cert.pem</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">      </span><span class="nt">store_location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LocalMachine</span>
-<span class="w">      </span><span class="nt">store_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">      </span><span class="nt">store_name</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}'</span>
 <span class="w">    </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">client_cert_info</span>
 <span class="w">    </span><span class="nt">loop</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Root</span>
@@ -532,11 +532,11 @@ The Windows host does not need access to the private key, only the public key <c
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable WinRM Certificate auth</span>
 <span class="w">    </span><span class="nt">ansible.windows.win_powershell</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">        </span><span class="no">$ErrorActionPreference = &#39;Stop&#39;</span>
+<span class="w">        </span><span class="no">$ErrorActionPreference = 'Stop'</span>
 <span class="w">        </span><span class="no">$Ansible.Changed = $false</span>
 
-<span class="w">        </span><span class="no">$authPath = &#39;WSMan:\localhost\Service\Auth\Certificate&#39;</span>
-<span class="w">        </span><span class="no">if ((Get-Item -LiteralPath $authPath).Value -ne &#39;true&#39;) {</span>
+<span class="w">        </span><span class="no">$authPath = 'WSMan:\localhost\Service\Auth\Certificate'</span>
+<span class="w">        </span><span class="no">if ((Get-Item -LiteralPath $authPath).Value -ne 'true') {</span>
 <span class="w">            </span><span class="no">Set-Item -LiteralPath $authPath -Value true</span>
 <span class="w">            </span><span class="no">$Ansible.Changed = $true</span>
 <span class="w">        </span><span class="no">}</span>
@@ -544,11 +544,11 @@ The Windows host does not need access to the private key, only the public key <c
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Client Certificate Mapping</span>
 <span class="w">    </span><span class="nt">ansible.windows.win_powershell</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">parameters</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">Thumbprint</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">client_cert_info.results[0].thumbprints[0]</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">        </span><span class="nt">Thumbprint</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">client_cert_info.results[0].thumbprints[0]</span><span class="nv"> </span><span class="s">}}'</span>
 <span class="w">      </span><span class="nt">sensitive_parameters</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Credential</span>
-<span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">username</span><span class="nv"> </span><span class="s">}}&#39;</span>
-<span class="w">        </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">user_password</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">        </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">username</span><span class="nv"> </span><span class="s">}}'</span>
+<span class="w">        </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">user_password</span><span class="nv"> </span><span class="s">}}'</span>
 <span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">        </span><span class="no">param(</span>
 <span class="w">            </span><span class="no">[Parameter(Mandatory)]</span>
@@ -560,11 +560,11 @@ The Windows host does not need access to the private key, only the public key <c
 <span class="w">            </span><span class="no">$Thumbprint</span>
 <span class="w">        </span><span class="no">)</span>
 
-<span class="w">        </span><span class="no">$ErrorActionPreference = &#39;Stop&#39;</span>
+<span class="w">        </span><span class="no">$ErrorActionPreference = 'Stop'</span>
 <span class="w">        </span><span class="no">$Ansible.Changed = $false</span>
 
-<span class="w">        </span><span class="no">$userCert = Get-Item -LiteralPath &quot;Cert:\LocalMachine\TrustedPeople\$Thumbprint&quot;</span>
-<span class="w">        </span><span class="no">$subject = $userCert.GetNameInfo(&#39;UpnName&#39;, $false)  # SAN userPrincipalName</span>
+<span class="w">        </span><span class="no">$userCert = Get-Item -LiteralPath "Cert:\LocalMachine\TrustedPeople\$Thumbprint"</span>
+<span class="w">        </span><span class="no">$subject = $userCert.GetNameInfo('UpnName', $false)  # SAN userPrincipalName</span>
 
 <span class="w">        </span><span class="no">$certChain = New-Object -TypeName Security.Cryptography.X509Certificates.X509Chain</span>
 <span class="w">        </span><span class="no">[void]$certChain.Build($userCert)</span>
@@ -573,10 +573,10 @@ The Windows host does not need access to the private key, only the public key <c
 <span class="w">        </span><span class="no">$mappings = Get-ChildItem -LiteralPath WSMan:\localhost\ClientCertificate |</span>
 <span class="w">            </span><span class="no">Where-Object {</span>
 <span class="w">                </span><span class="no">$mapping = $_ | Get-Item</span>
-<span class="w">                </span><span class="no">&quot;Subject=$subject&quot; -in $mapping.Keys</span>
+<span class="w">                </span><span class="no">"Subject=$subject" -in $mapping.Keys</span>
 <span class="w">            </span><span class="no">}</span>
 
-<span class="w">        </span><span class="no">if ($mappings -and &quot;issuer=$($caThumbprint)&quot; -notin $mappings.Keys) {</span>
+<span class="w">        </span><span class="no">if ($mappings -and "issuer=$($caThumbprint)" -notin $mappings.Keys) {</span>
 <span class="w">            </span><span class="no">$null = $mappings | Remove-Item -Force -Recurse</span>
 <span class="w">            </span><span class="no">$mappings = $null</span>
 <span class="w">            </span><span class="no">$Ansible.Changed = $true</span>
@@ -584,7 +584,7 @@ The Windows host does not need access to the private key, only the public key <c
 
 <span class="w">        </span><span class="no">if (-not $mappings) {</span>
 <span class="w">            </span><span class="no">$certMapping = @{</span>
-<span class="w">                </span><span class="no">Path = &#39;WSMan:\localhost\ClientCertificate&#39;</span>
+<span class="w">                </span><span class="no">Path = 'WSMan:\localhost\ClientCertificate'</span>
 <span class="w">                </span><span class="no">Subject = $subject</span>
 <span class="w">                </span><span class="no">Issuer = $caThumbprint</span>
 <span class="w">                </span><span class="no">Credential = $Credential</span>
@@ -613,7 +613,7 @@ The Windows host does not need access to the private key, only the public key <c
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

@@ -388,14 +388,14 @@ the handler from running, such as a host becoming unreachable.)</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fail task when either condition is met</span>
 <span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/example-command</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">command_result</span>
-<span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">command_result.rc != 0 or &#39;ERROR&#39; in command_result.stdout</span>
+<span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">command_result.rc != 0 or 'ERROR' in command_result.stdout</span>
 </pre></div>
 </div>
 <p>You may check for failure by searching for a word or phrase in the output of a command</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fail task when the command error output prints FAILED</span>
 <span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/example-command -x -y -z</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">command_result</span>
-<span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;FAILED&#39;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">command_result.stderr&quot;</span>
+<span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="s">"'FAILED'</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">command_result.stderr"</span>
 </pre></div>
 </div>
 <p>or based on the return code</p>
@@ -411,27 +411,27 @@ the handler from running, such as a host becoming unreachable.)</p>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result</span>
 <span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result.rc == 0</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;&quot;No</span><span class="nv"> </span><span class="s">such&quot;</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">result.stderr&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'"No</span><span class="nv"> </span><span class="s">such"</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">result.stderr'</span>
 </pre></div>
 </div>
 <p>If you want the task to fail when only one condition is satisfied, change the <code class="docutils literal notranslate"><span class="pre">failed_when</span></code> definition to</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result.rc == 0 or &quot;No such&quot; not in result.stderr</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result.rc == 0 or "No such" not in result.stderr</span>
 </pre></div>
 </div>
 <p>If you have too many conditions to fit neatly into one line, you can split it into a multi-line YAML value with <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example of many failed_when conditions with OR</span>
-<span class="w">  </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;./myBinary&quot;</span>
+<span class="w">  </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="s">"./myBinary"</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ret</span>
 <span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
-<span class="w">    </span><span class="no">(&quot;No such file or directory&quot; in ret.stdout) or</span>
-<span class="w">    </span><span class="no">(ret.stderr != &#39;&#39;) or</span>
+<span class="w">    </span><span class="no">("No such file or directory" in ret.stdout) or</span>
+<span class="w">    </span><span class="no">(ret.stderr != '') or</span>
 <span class="w">    </span><span class="no">(ret.rc == 10)</span>
 </pre></div>
 </div>
 <p>You may also access task results without registering a variable via the <code class="docutils literal notranslate"><span class="pre">result</span></code> property of the implicit variable <code class="docutils literal notranslate"><span class="pre">_task</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fail task when either condition is met</span>
 <span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/example-command</span>
-<span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_task.result.rc != 0 or &#39;ERROR&#39; in _task.result.stdout</span>
+<span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_task.result.rc != 0 or 'ERROR' in _task.result.stdout</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -444,32 +444,32 @@ the handler from running, such as a host becoming unreachable.)</p>
 <p>Ansible lets you define when a particular task has “changed” a remote node using the <code class="docutils literal notranslate"><span class="pre">changed_when</span></code> conditional. This lets you determine, based on return codes or output, whether a change should be reported in Ansible statistics and whether a handler should be triggered or not. As with all conditionals in Ansible, lists of multiple <code class="docutils literal notranslate"><span class="pre">changed_when</span></code> conditions are joined with an implicit <code class="docutils literal notranslate"><span class="pre">and</span></code>, meaning the task only reports a change when <em>all</em> conditions are met. If you want to report a change when any of the conditions is met, you must define the conditions in a string with an explicit <code class="docutils literal notranslate"><span class="pre">or</span></code> operator. For example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Report &#39;changed&#39; when the return code is not equal to 2</span>
-<span class="w">    </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/billybass --mode=&quot;take me to the river&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Report 'changed' when the return code is not equal to 2</span>
+<span class="w">    </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/billybass --mode="take me to the river"</span>
 <span class="w">    </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bass_result</span>
-<span class="w">    </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bass_result.rc</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">2&quot;</span>
+<span class="w">    </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="s">"bass_result.rc</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">2"</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">This will never report &#39;changed&#39; status</span>
-<span class="w">    </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wall &#39;beep&#39;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">This will never report 'changed' status</span>
+<span class="w">    </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">wall 'beep'</span>
 <span class="w">    </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">This task will always report &#39;changed&#39; status</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">This task will always report 'changed' status</span>
 <span class="w">    </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/command</span>
 <span class="w">    </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 </pre></div>
 </div>
 <p>You can also combine multiple conditions to override “changed” result.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Combine multiple conditions to override &#39;changed&#39; result</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Combine multiple conditions to override 'changed' result</span>
 <span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/fake_command</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result</span>
 <span class="w">  </span><span class="nt">ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 <span class="w">  </span><span class="nt">changed_when</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;&quot;ERROR&quot;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">result.stderr&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'"ERROR"</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">result.stderr'</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result.rc == 2</span>
 </pre></div>
 </div>
 <p>As with <code class="docutils literal notranslate"><span class="pre">failed_when</span></code>, you may use the implicit variable <code class="docutils literal notranslate"><span class="pre">_task</span></code> to avoid registering a variable:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Combine multiple conditions to override &#39;changed&#39; result</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Combine multiple conditions to override 'changed' result</span>
 <span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/fake_command</span>
 <span class="w">  </span><span class="nt">changed_when</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some_msg in _task.result.stdout</span>
@@ -489,7 +489,7 @@ the handler from running, such as a host becoming unreachable.)</p>
 <span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tmp</span>
 <span class="w">      </span><span class="nt">changed_when</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tmp.rc == 0</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;tmp.stderr</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">&quot;mkdir:</span><span class="nv"> </span><span class="s">cannot</span><span class="nv"> </span><span class="s">create</span><span class="nv"> </span><span class="s">directory</span><span class="nv"> </span><span class="s">‘&quot;</span><span class="nv"> </span><span class="s">~</span><span class="nv"> </span><span class="s">log_path</span><span class="nv"> </span><span class="s">~</span><span class="nv"> </span><span class="s">&quot;’:</span><span class="nv"> </span><span class="s">File</span><span class="nv"> </span><span class="s">exists&quot;&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'tmp.stderr</span><span class="nv"> </span><span class="s">!=</span><span class="nv"> </span><span class="s">"mkdir:</span><span class="nv"> </span><span class="s">cannot</span><span class="nv"> </span><span class="s">create</span><span class="nv"> </span><span class="s">directory</span><span class="nv"> </span><span class="s">‘"</span><span class="nv"> </span><span class="s">~</span><span class="nv"> </span><span class="s">log_path</span><span class="nv"> </span><span class="s">~</span><span class="nv"> </span><span class="s">"’:</span><span class="nv"> </span><span class="s">File</span><span class="nv"> </span><span class="s">exists"'</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -533,7 +533,7 @@ the handler from running, such as a host becoming unreachable.)</p>
 <span class="w">  </span><span class="nt">any_errors_fatal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down datacenter &#39;A&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down datacenter 'A'</span>
 <span class="w">      </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/disable-dc</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">frontends_dc_a</span>
@@ -548,7 +548,7 @@ the handler from running, such as a host becoming unreachable.)</p>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">load_balancers_dc_a</span>
 
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Start datacenter &#39;A&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Start datacenter 'A'</span>
 <span class="w">      </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/enable-dc</span>
 </pre></div>
 </div>
@@ -605,7 +605,7 @@ the handler from running, such as a host becoming unreachable.)</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

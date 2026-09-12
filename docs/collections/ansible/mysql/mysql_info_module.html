@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.23.0" name="antsibull-docs" />
+<meta content="2.27.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ansible.mysql.mysql_info module – Gather information about MySQL or MariaDB servers &mdash; Ansible Community Documentation</title>
@@ -595,18 +595,18 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 <span class="c1"># ansible mysql-hosts -m mysql_info</span>
 
 <span class="c1"># Display only databases and users info:</span>
-<span class="c1"># ansible mysql-hosts -m mysql_info -a &#39;filter=databases,users&#39;</span>
+<span class="c1"># ansible mysql-hosts -m mysql_info -a 'filter=databases,users'</span>
 
 <span class="c1"># Display all users privileges:</span>
-<span class="c1"># ansible mysql-hosts -m mysql_info -a &#39;filter=users_info&#39;</span>
+<span class="c1"># ansible mysql-hosts -m mysql_info -a 'filter=users_info'</span>
 
 <span class="c1"># Display only slave status:</span>
-<span class="c1"># ansible standby -m mysql_info -a &#39;filter=slave_status&#39;</span>
+<span class="c1"># ansible standby -m mysql_info -a 'filter=slave_status'</span>
 
 <span class="c1"># Display all info from databases group except settings:</span>
-<span class="c1"># ansible databases -m mysql_info -a &#39;filter=!settings&#39;</span>
+<span class="c1"># ansible databases -m mysql_info -a 'filter=!settings'</span>
 
-<span class="c1"># If you encounter the &quot;Please explicitly state intended protocol&quot; error,</span>
+<span class="c1"># If you encounter the "Please explicitly state intended protocol" error,</span>
 <span class="c1"># use the login_unix_socket argument</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Collect all possible information using passwordless root access</span>
 <span class="w">  </span><span class="nt">ansible.mysql.mysql_info</span><span class="p">:</span>
@@ -623,7 +623,7 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 <span class="w">  </span><span class="nt">ansible.mysql.mysql_info</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">login_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span>
 <span class="w">    </span><span class="nt">login_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rootpass</span>
-<span class="w">    </span><span class="nt">filter</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;!settings,!users&quot;</span>
+<span class="w">    </span><span class="nt">filter</span><span class="p">:</span><span class="w"> </span><span class="s">"!settings,!users"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Collect info about databases and version using ~/.my.cnf as a credential file</span>
 <span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -660,27 +660,27 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 <span class="w">      </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result</span>
 
 <span class="w">    </span><span class="c1"># Step 2</span>
-<span class="w">    </span><span class="c1"># Don&#39;t work with sha256_password and cache_sha2_password</span>
+<span class="w">    </span><span class="c1"># Don't work with sha256_password and cache_sha2_password</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Clone users fetched in a previous task to a target server</span>
 <span class="w">      </span><span class="nt">ansible.mysql.mysql_user</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.host</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.plugin</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">plugin_hash_string</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.plugin_hash_string</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">tls_requires</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.tls_requires</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">priv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.priv</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">resource_limits</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.resource_limits</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">locked</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.locked</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.host</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.plugin</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">plugin_hash_string</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.plugin_hash_string</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">tls_requires</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.tls_requires</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">priv</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.priv</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">resource_limits</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.resource_limits</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">locked</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.locked</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">        </span><span class="nt">column_case_sensitive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">      </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">result.users_info</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">result.users_info</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">      </span><span class="nt">loop_control</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">@</span><span class="cp">{{</span> <span class="nv">item.host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.name</span> <span class="cp">}}</span><span class="s">@</span><span class="cp">{{</span> <span class="nv">item.host</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != &#39;root&#39;</span><span class="w">  </span><span class="c1"># In case you don&#39;t want to import admin accounts</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != &#39;mariadb.sys&#39;</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != &#39;mysql&#39;</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != &#39;PUBLIC&#39;</span><span class="w">  </span><span class="c1"># MariaDB roles are not supported</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != 'root'</span><span class="w">  </span><span class="c1"># In case you don't want to import admin accounts</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != 'mariadb.sys'</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != 'mysql'</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.name != 'PUBLIC'</span><span class="w">  </span><span class="c1"># MariaDB roles are not supported</span>
 </pre></div>
 </div>
 </section>
@@ -918,7 +918,7 @@ see <a class="reference internal" href="#ansible-collections-ansible-mysql-mysql
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

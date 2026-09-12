@@ -356,7 +356,7 @@
 <span class="k">try</span><span class="p">:</span>
     <span class="n">cause_an_exception</span><span class="p">()</span>
 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">AnsibleError</span><span class="p">(</span><span class="s1">&#39;Something happened, this was original exception: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">AnsibleError</span><span class="p">(</span><span class="s1">'Something happened, this was original exception: </span><span class="si">%s</span><span class="s1">'</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Since Ansible evaluates variables only when they are needed, filter and test plugins should propagate the exceptions <code class="docutils literal notranslate"><span class="pre">jinja2.exceptions.UndefinedError</span></code> and <code class="docutils literal notranslate"><span class="pre">AnsibleUndefinedVariable</span></code> to ensure undefined variables are only fatal when necessary.</p>
@@ -470,7 +470,7 @@ Some plugin types handle this differently:</p>
 </div>
 <p>From there, execute the module using the <code class="docutils literal notranslate"><span class="pre">_execute_module</span></code> method to call the original module.
 After successful execution of the module, you can modify the module return data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module_return</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_module</span><span class="p">(</span><span class="n">module_name</span><span class="o">=</span><span class="s1">&#39;&lt;NAME_OF_MODULE&gt;&#39;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module_return</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_module</span><span class="p">(</span><span class="n">module_name</span><span class="o">=</span><span class="s1">'&lt;NAME_OF_MODULE&gt;'</span><span class="p">,</span>
                                      <span class="n">module_args</span><span class="o">=</span><span class="n">module_args</span><span class="p">,</span>
                                      <span class="n">task_vars</span><span class="o">=</span><span class="n">task_vars</span><span class="p">,</span> <span class="n">tmp</span><span class="o">=</span><span class="n">tmp</span><span class="p">)</span>
 </pre></div>
@@ -489,22 +489,22 @@ After successful execution of the module, you can modify the module return data.
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ActionModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">task_vars</span><span class="p">)</span>
         <span class="n">module_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">module_return</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_module</span><span class="p">(</span><span class="n">module_name</span><span class="o">=</span><span class="s1">&#39;setup&#39;</span><span class="p">,</span>
+        <span class="n">module_return</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_module</span><span class="p">(</span><span class="n">module_name</span><span class="o">=</span><span class="s1">'setup'</span><span class="p">,</span>
                                              <span class="n">module_args</span><span class="o">=</span><span class="n">module_args</span><span class="p">,</span>
                                              <span class="n">task_vars</span><span class="o">=</span><span class="n">task_vars</span><span class="p">,</span> <span class="n">tmp</span><span class="o">=</span><span class="n">tmp</span><span class="p">)</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">remote_date</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">module_return</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">module_return</span><span class="p">[</span><span class="s1">&#39;ansible_facts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;ansible_date_time&#39;</span><span class="p">:</span>
-                    <span class="n">remote_date</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s1">&#39;iso8601&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">module_return</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'failed'</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">module_return</span><span class="p">[</span><span class="s1">'ansible_facts'</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">'ansible_date_time'</span><span class="p">:</span>
+                    <span class="n">remote_date</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s1">'iso8601'</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">remote_date</span><span class="p">:</span>
-            <span class="n">remote_date_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">remote_date</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%SZ&#39;</span><span class="p">)</span>
+            <span class="n">remote_date_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">remote_date</span><span class="p">,</span> <span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%SZ'</span><span class="p">)</span>
             <span class="n">time_delta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">remote_date_obj</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s1">&#39;delta_seconds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">seconds</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s1">&#39;delta_days&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">days</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s1">&#39;delta_microseconds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">microseconds</span>
+            <span class="n">ret</span><span class="p">[</span><span class="s1">'delta_seconds'</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">seconds</span>
+            <span class="n">ret</span><span class="p">[</span><span class="s1">'delta_days'</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">days</span>
+            <span class="n">ret</span><span class="p">[</span><span class="s1">'delta_microseconds'</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">microseconds</span>
 
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ansible_facts</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">ret</span><span class="p">))</span>
 </pre></div>
@@ -520,7 +520,7 @@ see the source code for the <a class="reference external" href="https://github.c
 <p>Import cache plugins using the cache_loader so you can use <code class="docutils literal notranslate"><span class="pre">self.set_options()</span></code> and <code class="docutils literal notranslate"><span class="pre">self.get_option(&lt;option_name&gt;)</span></code>. If you import a cache plugin directly in the code base, you can only access options by the <code class="docutils literal notranslate"><span class="pre">ansible.constants</span></code>, and you break the cache plugin’s ability to be used by an inventory plugin.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache_loader</span>
 <span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="n">plugin</span> <span class="o">=</span> <span class="n">cache_loader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;custom_cache&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">cache_kwargs</span><span class="p">)</span>
+<span class="n">plugin</span> <span class="o">=</span> <span class="n">cache_loader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'custom_cache'</span><span class="p">,</span> <span class="o">**</span><span class="n">cache_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>There are two base classes for cache plugins, <code class="docutils literal notranslate"><span class="pre">BaseCacheModule</span></code> for database-backed caches, and <code class="docutils literal notranslate"><span class="pre">BaseCacheFileModule</span></code> for file-backed caches.</p>
@@ -531,9 +531,9 @@ see the source code for the <a class="reference external" href="https://github.c
 <span class="k">class</span><span class="w"> </span><span class="nc">CacheModule</span><span class="p">(</span><span class="n">BaseCacheModule</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CacheModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;_uri&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;_prefix&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;_timeout&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">'_uri'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">'_prefix'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">'_timeout'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you use the <code class="docutils literal notranslate"><span class="pre">BaseCacheModule</span></code>, you must implement the methods <code class="docutils literal notranslate"><span class="pre">get</span></code>, <code class="docutils literal notranslate"><span class="pre">contains</span></code>, <code class="docutils literal notranslate"><span class="pre">keys</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">delete</span></code>, <code class="docutils literal notranslate"><span class="pre">flush</span></code>, and <code class="docutils literal notranslate"><span class="pre">copy</span></code>. The <code class="docutils literal notranslate"><span class="pre">contains</span></code> method should return a boolean that indicates if the key exists and has not expired. Unlike file-based caches, the <code class="docutils literal notranslate"><span class="pre">get</span></code> method does not raise a KeyError if the cache has expired.</p>
@@ -566,14 +566,14 @@ but with an extra option so you can see how configuration works in Ansible versi
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
 <span class="n">__metaclass__</span> <span class="o">=</span> <span class="nb">type</span>
 
-<span class="c1"># not only visible to ansible-doc, it also &#39;declares&#39; the options the plugin requires and how to configure them.</span>
-<span class="n">DOCUMENTATION</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="c1"># not only visible to ansible-doc, it also 'declares' the options the plugin requires and how to configure them.</span>
+<span class="n">DOCUMENTATION</span> <span class="o">=</span> <span class="s1">'''</span>
 <span class="s1">name: timer</span>
 <span class="s1">callback_type: aggregate</span>
 <span class="s1">requirements:</span>
 <span class="s1">    - enable in configuration</span>
 <span class="s1">short_description: Adds time to play stats</span>
-<span class="s1">version_added: &quot;2.0&quot;  # for collections, use the collection version, not the Ansible version</span>
+<span class="s1">version_added: "2.0"  # for collections, use the collection version, not the Ansible version</span>
 <span class="s1">description:</span>
 <span class="s1">    - This callback just adds total play duration to the play stats.</span>
 <span class="s1">options:</span>
@@ -584,34 +584,34 @@ but with an extra option so you can see how configuration works in Ansible versi
 <span class="s1">        key: format_string</span>
 <span class="s1">    env:</span>
 <span class="s1">      - name: ANSIBLE_CALLBACK_TIMER_FORMAT</span>
-<span class="s1">    default: &quot;Playbook run took </span><span class="si">%s</span><span class="s1"> days, </span><span class="si">%s</span><span class="s1"> hours, </span><span class="si">%s</span><span class="s1"> minutes, </span><span class="si">%s</span><span class="s1"> seconds&quot;</span>
-<span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    default: "Playbook run took </span><span class="si">%s</span><span class="s1"> days, </span><span class="si">%s</span><span class="s1"> hours, </span><span class="si">%s</span><span class="s1"> minutes, </span><span class="si">%s</span><span class="s1"> seconds"</span>
+<span class="s1">'''</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.callback</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBase</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This callback module tells you how long your plays ran for.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">CALLBACK_VERSION</span> <span class="o">=</span> <span class="mf">2.0</span>
-    <span class="n">CALLBACK_TYPE</span> <span class="o">=</span> <span class="s1">&#39;aggregate&#39;</span>
-    <span class="n">CALLBACK_NAME</span> <span class="o">=</span> <span class="s1">&#39;namespace.collection_name.timer&#39;</span>
+    <span class="n">CALLBACK_TYPE</span> <span class="o">=</span> <span class="s1">'aggregate'</span>
+    <span class="n">CALLBACK_NAME</span> <span class="o">=</span> <span class="s1">'namespace.collection_name.timer'</span>
 
-    <span class="c1"># only needed if you ship it and don&#39;t want to enable by default</span>
+    <span class="c1"># only needed if you ship it and don't want to enable by default</span>
     <span class="n">CALLBACK_NEEDS_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-      <span class="c1"># make sure the expected objects are present, calling the base&#39;s __init__</span>
+      <span class="c1"># make sure the expected objects are present, calling the base's __init__</span>
       <span class="nb">super</span><span class="p">(</span><span class="n">CallbackModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
       <span class="c1"># start the timer when the plugin is loaded, the first play should start a few milliseconds after.</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_days_hours_minutes_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runtime</span><span class="p">):</span>
-<span class="w">      </span><span class="sd">&#39;&#39;&#39; internal helper method for this callback &#39;&#39;&#39;</span>
+<span class="w">      </span><span class="sd">''' internal helper method for this callback '''</span>
       <span class="n">minutes</span> <span class="o">=</span> <span class="p">(</span><span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">//</span> <span class="mi">60</span><span class="p">)</span> <span class="o">%</span> <span class="mi">60</span>
       <span class="n">r_seconds</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">-</span> <span class="p">(</span><span class="n">minutes</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
       <span class="k">return</span> <span class="n">runtime</span><span class="o">.</span><span class="n">days</span><span class="p">,</span> <span class="n">runtime</span><span class="o">.</span><span class="n">seconds</span> <span class="o">//</span> <span class="mi">3600</span><span class="p">,</span> <span class="n">minutes</span><span class="p">,</span> <span class="n">r_seconds</span>
@@ -623,7 +623,7 @@ but with an extra option so you can see how configuration works in Ansible versi
 
       <span class="c1"># Shows the usage of a config option declared in the DOCUMENTATION variable. Ansible will have set it when it loads the plugin.</span>
       <span class="c1"># Also note the use of the display object to print to screen. This is available to all callbacks, and you should use this over printing yourself</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_plugin_options</span><span class="p">[</span><span class="s1">&#39;format_string&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_days_hours_minutes_seconds</span><span class="p">(</span><span class="n">runtime</span><span class="p">)))</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_plugin_options</span><span class="p">[</span><span class="s1">'format_string'</span><span class="p">]</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_days_hours_minutes_seconds</span><span class="p">(</span><span class="n">runtime</span><span class="p">)))</span>
 </pre></div>
 </div>
 <p>Note that the <code class="docutils literal notranslate"><span class="pre">CALLBACK_VERSION</span></code> and <code class="docutils literal notranslate"><span class="pre">CALLBACK_NAME</span></code> definitions are required for properly functioning plugins for Ansible version 2.0 and later. <code class="docutils literal notranslate"><span class="pre">CALLBACK_TYPE</span></code> is mostly needed to distinguish ‘stdout’ plugins from the rest, since you can only load one plugin that writes to stdout.</p>
@@ -646,9 +646,9 @@ but with an extra option so you can see how configuration works in Ansible versi
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="n">cause_an_exception</span><span class="p">(</span><span class="n">with_undefined_variable</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">UndefinedError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">AnsibleUndefinedVariable</span><span class="p">(</span><span class="s2">&quot;Something happened, this was the original exception: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">AnsibleUndefinedVariable</span><span class="p">(</span><span class="s2">"Something happened, this was the original exception: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">AnsibleFilterError</span><span class="p">(</span><span class="s2">&quot;Something happened, this was the original exception: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">AnsibleFilterError</span><span class="p">(</span><span class="s2">"Something happened, this was the original exception: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>For example filter plugins, see the source code for the <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/filter">filter plugins included with Ansible Core</a>.</p>
@@ -668,13 +668,13 @@ but with an extra option so you can see how configuration works in Ansible versi
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">)</span>
 <span class="n">__metaclass__</span> <span class="o">=</span> <span class="nb">type</span>
 
-<span class="n">DOCUMENTATION</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="n">DOCUMENTATION</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"""</span>
 <span class="s2">  name: file</span>
 <span class="s2">  author: Daniel Hokka Zakrisson (@dhozac) &lt;daniel@hozac.com&gt;</span>
-<span class="s2">  version_added: &quot;0.9&quot;  # for collections, use the collection version, not the Ansible version</span>
+<span class="s2">  version_added: "0.9"  # for collections, use the collection version, not the Ansible version</span>
 <span class="s2">  short_description: read file contents</span>
 <span class="s2">  description:</span>
-<span class="s2">      - This lookup returns the contents from a file on the Ansible control node&#39;s file system.</span>
+<span class="s2">      - This lookup returns the contents from a file on the Ansible control node's file system.</span>
 <span class="s2">  options:</span>
 <span class="s2">    _terms:</span>
 <span class="s2">      description: path(s) of files to read</span>
@@ -682,7 +682,7 @@ but with an extra option so you can see how configuration works in Ansible versi
 <span class="s2">    option1:</span>
 <span class="s2">      description:</span>
 <span class="s2">            - Sample option that could modify plugin behavior.</span>
-<span class="s2">            - This one can be set directly ``option1=&#39;x&#39;`` or in ansible.cfg, but can also use vars or environment.</span>
+<span class="s2">            - This one can be set directly ``option1='x'`` or in ansible.cfg, but can also use vars or environment.</span>
 <span class="s2">      type: string</span>
 <span class="s2">      ini:</span>
 <span class="s2">        - section: file_lookup</span>
@@ -690,7 +690,7 @@ but with an extra option so you can see how configuration works in Ansible versi
 <span class="s2">  notes:</span>
 <span class="s2">    - if read in variable context, the file can be interpreted as YAML if the content is valid to the parser.</span>
 <span class="s2">    - this lookup does not understand globbing --- use the fileglob lookup instead.</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ansible.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnsibleError</span><span class="p">,</span> <span class="n">AnsibleParserError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.lookup</span><span class="w"> </span><span class="kn">import</span> <span class="n">LookupBase</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ansible.utils.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Display</span>
@@ -706,32 +706,32 @@ but with an extra option so you can see how configuration works in Ansible versi
       <span class="bp">self</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="n">var_options</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="n">direct</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
 
       <span class="c1"># lookups in general are expected to both take a list as input and output a list</span>
-      <span class="c1"># this is done so they work with the looping construct &#39;with_&#39;.</span>
+      <span class="c1"># this is done so they work with the looping construct 'with_'.</span>
       <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
       <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span>
-          <span class="n">display</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File lookup term: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">term</span><span class="p">)</span>
+          <span class="n">display</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"File lookup term: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">term</span><span class="p">)</span>
 
           <span class="c1"># Find the file in the expected search path, using a class method</span>
-          <span class="c1"># that implements the &#39;expected&#39; search path for Ansible plugins.</span>
-          <span class="n">lookupfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_file_in_search_path</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="n">term</span><span class="p">)</span>
+          <span class="c1"># that implements the 'expected' search path for Ansible plugins.</span>
+          <span class="n">lookupfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_file_in_search_path</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="s1">'files'</span><span class="p">,</span> <span class="n">term</span><span class="p">)</span>
 
-          <span class="c1"># Don&#39;t use print or your own logging, the display class</span>
+          <span class="c1"># Don't use print or your own logging, the display class</span>
           <span class="c1"># takes care of it in a unified way.</span>
-          <span class="n">display</span><span class="o">.</span><span class="n">vvvv</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;File lookup using </span><span class="si">%s</span><span class="s2"> as file&quot;</span> <span class="o">%</span> <span class="n">lookupfile</span><span class="p">)</span>
+          <span class="n">display</span><span class="o">.</span><span class="n">vvvv</span><span class="p">(</span><span class="sa">u</span><span class="s2">"File lookup using </span><span class="si">%s</span><span class="s2"> as file"</span> <span class="o">%</span> <span class="n">lookupfile</span><span class="p">)</span>
           <span class="k">try</span><span class="p">:</span>
               <span class="k">if</span> <span class="n">lookupfile</span><span class="p">:</span>
                   <span class="n">contents</span><span class="p">,</span> <span class="n">show_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loader</span><span class="o">.</span><span class="n">_get_file_contents</span><span class="p">(</span><span class="n">lookupfile</span><span class="p">)</span>
                   <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">contents</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
               <span class="k">else</span><span class="p">:</span>
-                  <span class="c1"># Always use ansible error classes to throw &#39;final&#39; exceptions,</span>
+                  <span class="c1"># Always use ansible error classes to throw 'final' exceptions,</span>
                   <span class="c1"># so the Ansible engine will know how to deal with them.</span>
                   <span class="c1"># The Parser error indicates invalid options passed</span>
                   <span class="k">raise</span> <span class="n">AnsibleParserError</span><span class="p">()</span>
           <span class="k">except</span> <span class="n">AnsibleParserError</span><span class="p">:</span>
-              <span class="k">raise</span> <span class="n">AnsibleError</span><span class="p">(</span><span class="s2">&quot;could not locate file in lookup: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">term</span><span class="p">)</span>
+              <span class="k">raise</span> <span class="n">AnsibleError</span><span class="p">(</span><span class="s2">"could not locate file in lookup: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">term</span><span class="p">)</span>
 
           <span class="c1"># consume an option: if this did something useful, you can retrieve the option value here</span>
-          <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">&#39;option1&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;do something&#39;</span><span class="p">:</span>
+          <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s1">'option1'</span><span class="p">)</span> <span class="o">==</span> <span class="s1">'do something'</span><span class="p">:</span>
             <span class="k">pass</span>
 
       <span class="k">return</span> <span class="n">ret</span>
@@ -741,12 +741,12 @@ but with an extra option so you can see how configuration works in Ansible versi
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">     </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;namespace.collection_name.file&#39;,</span><span class="nv"> </span><span class="s">&#39;/etc/foo.txt&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">     </span><span class="nt">contents_with_option</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;namespace.collection_name.file&#39;,</span><span class="nv"> </span><span class="s">&#39;/etc/foo.txt&#39;,</span><span class="nv"> </span><span class="s">option1=&#39;donothing&#39;)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">     </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">lookup('namespace.collection_name.file',</span><span class="nv"> </span><span class="s">'/etc/foo.txt')</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">     </span><span class="nt">contents_with_option</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">lookup('namespace.collection_name.file',</span><span class="nv"> </span><span class="s">'/etc/foo.txt',</span><span class="nv"> </span><span class="s">option1='donothing')</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 
 <span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
-<span class="w">         </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">the value of foo.txt is {{ contents }} as seen today {{ lookup(&#39;pipe&#39;, &#39;date +&quot;%Y-%m-%d&quot;&#39;) }}</span>
+<span class="w">         </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">the value of foo.txt is {{ contents }} as seen today {{ lookup('pipe', 'date +"%Y-%m-%d"') }}</span>
 </pre></div>
 </div>
 <p>For example lookup plugins, see the source code for the <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/lookup">lookup plugins included with Ansible Core</a>.</p>
@@ -760,9 +760,9 @@ but with an extra option so you can see how configuration works in Ansible versi
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="n">cause_an_exception</span><span class="p">(</span><span class="n">with_undefined_variable</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">UndefinedError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">AnsibleUndefinedVariable</span><span class="p">(</span><span class="s2">&quot;Something happened, this was the original exception: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">AnsibleUndefinedVariable</span><span class="p">(</span><span class="s2">"Something happened, this was the original exception: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">AnsibleFilterError</span><span class="p">(</span><span class="s2">&quot;Something happened, this was the original exception: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">AnsibleFilterError</span><span class="p">(</span><span class="s2">"Something happened, this was the original exception: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">to_native</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>For example test plugins, see the source code for the <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/test">test plugins included with Ansible Core</a>.</p>
@@ -799,9 +799,9 @@ Most of the work now  happens in the <code class="docutils literal notranslate">
 </pre></div>
 </div>
 <p>Include the <code class="docutils literal notranslate"><span class="pre">vars_plugin_staging</span></code> documentation fragment to allow users to determine when vars plugins run.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DOCUMENTATION</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DOCUMENTATION</span> <span class="o">=</span> <span class="s1">'''</span>
 <span class="s1">    name: custom_hostvars</span>
-<span class="s1">    version_added: &quot;2.10&quot;  # for collections, use the collection version, not the Ansible version</span>
+<span class="s1">    version_added: "2.10"  # for collections, use the collection version, not the Ansible version</span>
 <span class="s1">    short_description: Load custom host vars</span>
 <span class="s1">    description: Load custom host vars</span>
 <span class="s1">    options:</span>
@@ -813,7 +813,7 @@ Most of the work now  happens in the <code class="docutils literal notranslate">
 <span class="s1">          - name: ANSIBLE_VARS_PLUGIN_STAGE</span>
 <span class="s1">    extends_documentation_fragment:</span>
 <span class="s1">      - vars_plugin_staging</span>
-<span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">'''</span>
 </pre></div>
 </div>
 <p>At times a value provided by a vars plugin will contain unsafe values. The utility function <cite>wrap_var</cite> provided by <cite>ansible.utils.unsafe_proxy</cite> should be used to ensure that Ansible handles the variable and value correctly. The use cases for unsafe data is covered in <a class="reference internal" href="../playbook_guide/playbooks_advanced_syntax.html#unsafe-strings"><span class="std std-ref">Unsafe or raw strings</span></a>.</p>
@@ -823,7 +823,7 @@ Most of the work now  happens in the <code class="docutils literal notranslate">
 <span class="k">class</span><span class="w"> </span><span class="nc">VarsPlugin</span><span class="p">(</span><span class="n">BaseVarsPlugin</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_vars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">something_unsafe</span><span class="o">=</span><span class="n">wrap_var</span><span class="p">(</span><span class="s2">&quot;{{ SOMETHING_UNSAFE }}&quot;</span><span class="p">)</span>
+            <span class="n">something_unsafe</span><span class="o">=</span><span class="n">wrap_var</span><span class="p">(</span><span class="s2">"{{ SOMETHING_UNSAFE }}"</span><span class="p">)</span>
         <span class="p">)</span>
 </pre></div>
 </div>
@@ -863,7 +863,7 @@ Most of the work now  happens in the <code class="docutils literal notranslate">
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

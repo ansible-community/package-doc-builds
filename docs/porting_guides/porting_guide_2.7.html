@@ -426,8 +426,8 @@ hashing algorithm being used with this filter.</p>
 <p>Ansible 2.8 will no longer create a temporary file for <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code>; instead it will read the file out of a zip file. This change should speed up module execution, but it does mean that starting with Ansible 2.8, referencing <code class="docutils literal notranslate"><span class="pre">__file__</span></code> will always fail in <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code>.</p>
 <p>If you are the author of a third-party module which uses <code class="docutils literal notranslate"><span class="pre">__file__</span></code> with <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code>, please update your module(s) now, while the use of <code class="docutils literal notranslate"><span class="pre">__file__</span></code> is deprecated but still available. The most common use of <code class="docutils literal notranslate"><span class="pre">__file__</span></code> is to find a directory to write a temporary file. In Ansible 2.5 and above, you can use the <code class="docutils literal notranslate"><span class="pre">tmpdir</span></code> attribute on an <code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> instance instead, as shown in this code from the <span class="xref std std-ref">apt module</span>:</p>
 <div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gd">-    tempdir = os.path.dirname(__file__)</span>
-<span class="gd">-    package = os.path.join(tempdir, to_native(deb.rsplit(&#39;/&#39;, 1)[1]))</span>
-<span class="gi">+    package = os.path.join(module.tmpdir, to_native(deb.rsplit(&#39;/&#39;, 1)[1]))</span>
+<span class="gd">-    package = os.path.join(tempdir, to_native(deb.rsplit('/', 1)[1]))</span>
+<span class="gi">+    package = os.path.join(module.tmpdir, to_native(deb.rsplit('/', 1)[1]))</span>
 </pre></div>
 </div>
 </section>
@@ -438,15 +438,15 @@ hashing algorithm being used with this filter.</p>
 <p><strong>OLD</strong> In Ansible 2.6 (and earlier) the following task would invoke the “yum” module only 1 time to install multiple packages</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install packages</span>
 <span class="w">  </span><span class="nt">yum</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">  </span><span class="nt">with_items</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">packages</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">with_items</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">packages</span><span class="nv"> </span><span class="s">}}"</span>
 </pre></div>
 </div>
 <p><strong>NEW</strong> In Ansible 2.7 it should be changed to look like this:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install packages</span>
 <span class="w">  </span><span class="nt">yum</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">packages</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">packages</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 </pre></div>
 </div>
@@ -513,7 +513,7 @@ nothing</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">win_disk_image</span></code> module has deprecated the return value <code class="docutils literal notranslate"><span class="pre">mount_path</span></code>, use <code class="docutils literal notranslate"><span class="pre">mount_paths[0]</span></code> instead. This will
 be removed in Ansible 2.11.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">include_role</span></code> and <code class="docutils literal notranslate"><span class="pre">include_tasks</span></code> can now be used directly from <code class="docutils literal notranslate"><span class="pre">ansible</span></code> (adhoc) and <code class="docutils literal notranslate"><span class="pre">ansible-console</span></code>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>&gt;<span class="w"> </span>ansible<span class="w"> </span>-m<span class="w"> </span>include_role<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;name=myrole&#39;</span><span class="w"> </span>all
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>&gt;<span class="w"> </span>ansible<span class="w"> </span>-m<span class="w"> </span>include_role<span class="w"> </span>-a<span class="w"> </span><span class="s1">'name=myrole'</span><span class="w"> </span>all
 </pre></div>
 </div>
 </li>
@@ -557,7 +557,7 @@ hashing algorithm being used with this filter.</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.23.0" name="antsibull-docs" />
+<meta content="2.27.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.general.dependent lookup – Composes a list with nested elements of other lists or dicts which can depend on previous loop variables &mdash; Ansible Community Documentation</title>
@@ -406,16 +406,16 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install/remove public keys for active admin users</span>
 <span class="w">  </span><span class="nt">ansible.posix.authorized_key</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.admin.key</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;file&#39;</span><span class="o">,</span> <span class="nv">item.key.public_key</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="s1">&#39;present&#39;</span> <span class="k">if</span> <span class="nv">item.key.active</span> <span class="k">else</span> <span class="s1">&#39;absent&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.admin.key</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">'file'</span><span class="o">,</span> <span class="nv">item.key.public_key</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="s1">'present'</span> <span class="k">if</span> <span class="nv">item.key.active</span> <span class="k">else</span> <span class="s1">'absent'</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.admin.value.active</span>
 <span class="w">  </span><span class="nt">with_community.general.dependent</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">admin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin_user_data</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin_ssh_keys[item.admin.key]</span>
 <span class="w">  </span><span class="nt">loop_control</span><span class="p">:</span>
-<span class="w">    </span><span class="c1"># Makes the output readable, so that it doesn&#39;t contain the whole subdictionaries and lists</span>
-<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="o">[</span><span class="nv">item.admin.key</span><span class="o">,</span> <span class="s1">&#39;active&#39;</span> <span class="k">if</span> <span class="nv">item.key.active</span> <span class="k">else</span> <span class="s1">&#39;inactive&#39;</span><span class="o">,</span> <span class="nv">item.key.public_key</span><span class="o">]</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="c1"># Makes the output readable, so that it doesn't contain the whole subdictionaries and lists</span>
+<span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="o">[</span><span class="nv">item.admin.key</span><span class="o">,</span> <span class="s1">'active'</span> <span class="k">if</span> <span class="nv">item.key.active</span> <span class="k">else</span> <span class="s1">'inactive'</span><span class="o">,</span> <span class="nv">item.key.public_key</span><span class="o">]</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">admin_user_data</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">admin1</span><span class="p">:</span>
@@ -439,15 +439,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update DNS records</span>
 <span class="w">  </span><span class="nt">community.aws.route53</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.zone.key</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">record</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.prefix.key</span> <span class="o">~</span> <span class="s1">&#39;.&#39;</span> <span class="k">if</span> <span class="nv">item.prefix.key</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span> <span class="cp">}}{{</span> <span class="nv">item.zone.key</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.entry.key</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.entry.value.ttl</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="m">3600</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item.entry.value.value</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="s1">&#39;absent&#39;</span> <span class="k">if</span> <span class="o">(</span><span class="nv">item.entry.value.absent</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="kp">False</span><span class="o">))</span> <span class="k">else</span> <span class="s1">&#39;present&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.zone.key</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">record</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.prefix.key</span> <span class="o">~</span> <span class="s1">'.'</span> <span class="k">if</span> <span class="nv">item.prefix.key</span> <span class="k">else</span> <span class="s1">''</span> <span class="cp">}}{{</span> <span class="nv">item.zone.key</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.entry.key</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.entry.value.ttl</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="m">3600</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item.entry.value.value</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="s1">'absent'</span> <span class="k">if</span> <span class="o">(</span><span class="nv">item.entry.value.absent</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="kp">False</span><span class="o">))</span> <span class="k">else</span> <span class="s1">'present'</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">overwrite</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">  </span><span class="nt">loop_control</span><span class="p">:</span>
-<span class="w">    </span><span class="c1"># Makes the output readable, so that it doesn&#39;t contain the whole subdictionaries and lists</span>
+<span class="w">    </span><span class="c1"># Makes the output readable, so that it doesn't contain the whole subdictionaries and lists</span>
 <span class="w">    </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
 <span class="w">      </span><span class="cp">{{</span> <span class="o">[</span><span class="nv">item.zone.key</span><span class="o">,</span> <span class="nv">item.prefix.key</span><span class="o">,</span> <span class="nv">item.entry.key</span><span class="o">,</span>
           <span class="nv">item.entry.value.ttl</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="m">3600</span><span class="o">),</span>
@@ -459,20 +459,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">dns_setup</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">example.com</span><span class="p">:</span>
-<span class="w">        </span><span class="s">&#39;&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">        </span><span class="s">''</span><span class="p p-Indicator">:</span>
 <span class="w">          </span><span class="nt">A</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">value</span><span class="p">:</span>
 <span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.2.3.4</span>
 <span class="w">          </span><span class="nt">AAAA</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;2a01:1:2:3::1&quot;</span>
-<span class="w">        </span><span class="s">&#39;test._domainkey&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"2a01:1:2:3::1"</span>
+<span class="w">        </span><span class="s">'test._domainkey'</span><span class="p p-Indicator">:</span>
 <span class="w">          </span><span class="nt">TXT</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span>
 <span class="w">            </span><span class="nt">value</span><span class="p">:</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;&quot;k=rsa;</span><span class="nv"> </span><span class="s">t=s;</span><span class="nv"> </span><span class="s">p=MIGfMA...&quot;&#39;</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'"k=rsa;</span><span class="nv"> </span><span class="s">t=s;</span><span class="nv"> </span><span class="s">p=MIGfMA..."'</span>
 <span class="w">      </span><span class="nt">example.org</span><span class="p">:</span>
-<span class="w">        </span><span class="s">&#39;www&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">        </span><span class="s">'www'</span><span class="p p-Indicator">:</span>
 <span class="w">          </span><span class="nt">A</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">value</span><span class="p">:</span>
 <span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.2.3.4</span>
@@ -534,7 +534,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

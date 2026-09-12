@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.23.0" name="antsibull-docs" />
+<meta content="2.27.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.general.deploy_helper module – Manages some of the steps common in deploying projects &mdash; Ansible Community Documentation</title>
@@ -630,21 +630,21 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#     current: releases/20140416082818</span>
 
 
-<span class="c1"># The &#39;releases&#39; folder holds all the available releases. A release is a complete build of the application being</span>
+<span class="c1"># The 'releases' folder holds all the available releases. A release is a complete build of the application being</span>
 <span class="c1"># deployed. This can be a clone of a repository for example, or a sync of a local folder on your filesystem.</span>
 <span class="c1"># Having timestamped folders is one way of having distinct releases, but you could choose your own strategy like</span>
 <span class="c1"># git tags or commit hashes.</span>
 <span class="c1">#</span>
 <span class="c1"># During a deploy, a new folder should be created in the releases folder and any build steps required should be</span>
-<span class="c1"># performed. Once the new build is ready, the deploy procedure is &#39;finalized&#39; by replacing the &#39;current&#39; symlink</span>
+<span class="c1"># performed. Once the new build is ready, the deploy procedure is 'finalized' by replacing the 'current' symlink</span>
 <span class="c1"># with a link to this build.</span>
 <span class="c1">#</span>
-<span class="c1"># The &#39;shared&#39; folder holds any resource that is shared between releases. Examples of this are web-server</span>
-<span class="c1"># session files, or files uploaded by users of your application. It&#39;s quite common to have symlinks from a release</span>
+<span class="c1"># The 'shared' folder holds any resource that is shared between releases. Examples of this are web-server</span>
+<span class="c1"># session files, or files uploaded by users of your application. It's quite common to have symlinks from a release</span>
 <span class="c1"># folder pointing to a shared/subfolder, and creating these links would be automated as part of the build steps.</span>
 <span class="c1">#</span>
-<span class="c1"># The &#39;current&#39; symlink points to one of the releases. Probably the latest one, unless a deploy is in progress.</span>
-<span class="c1"># The web-server&#39;s root for the project will go through this symlink, so the &#39;downtime&#39; when switching to a new</span>
+<span class="c1"># The 'current' symlink points to one of the releases. Probably the latest one, unless a deploy is in progress.</span>
+<span class="c1"># The web-server's root for the project will go through this symlink, so the 'downtime' when switching to a new</span>
 <span class="c1"># release is reduced to the time it takes to switch the link.</span>
 <span class="c1">#</span>
 <span class="c1"># To distinguish between successful builds and unfinished ones, a file can be placed in the folder of the release</span>
@@ -659,27 +659,27 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Clone the project to the new release folder</span>
 <span class="w">  </span><span class="nt">ansible.builtin.git</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.builtin.git://foosball.example.org/path/to/repo.git</span>
-<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release_path</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release_path</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1.1.1</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add an unfinished file, to allow cleanup on successful finalize</span>
 <span class="w">  </span><span class="nt">ansible.builtin.file</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release_path</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">deploy_helper.unfinished_filename</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release_path</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">deploy_helper.unfinished_filename</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">touch</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Perform some build steps, like running your dependency manager for example</span>
 <span class="w">  </span><span class="nt">composer</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">install</span>
-<span class="w">    </span><span class="nt">working_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release_path</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">working_dir</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release_path</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create some folders in the shared folder</span>
 <span class="w">  </span><span class="nt">ansible.builtin.file</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.shared_path</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.shared_path</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">directory</span>
 <span class="w">  </span><span class="nt">with_items</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sessions</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uploads</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add symlinks from the new release to the shared folder</span>
 <span class="w">  </span><span class="nt">ansible.builtin.file</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release_path</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">item.path</span> <span class="cp">}}</span><span class="s">&#39;</span>
-<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.shared_path</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">item.src</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release_path</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">item.path</span> <span class="cp">}}</span><span class="s">'</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.shared_path</span> <span class="cp">}}</span><span class="s">/</span><span class="cp">{{</span> <span class="nv">item.src</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">link</span>
 <span class="w">  </span><span class="nt">with_items</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app/sessions</span>
@@ -689,22 +689,22 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Finalize the deploy, removing the unfinished file and switching the symlink</span>
 <span class="w">  </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
-<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finalize</span>
 
 <span class="c1"># Retrieving facts before running a deploy</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run &#39;state=query&#39; to gather facts without changing anything</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run 'state=query' to gather facts without changing anything</span>
 <span class="w">  </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query</span>
-<span class="c1"># Remember to set the &#39;release&#39; parameter when you actually call &#39;state=present&#39; later</span>
+<span class="c1"># Remember to set the 'release' parameter when you actually call 'state=present' later</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Initialize the deploy root</span>
 <span class="w">  </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
-<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
-<span class="c1"># all paths can be absolute or relative (to the &#39;path&#39; parameter)</span>
+<span class="c1"># all paths can be absolute or relative (to the 'path' parameter)</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
 <span class="w">    </span><span class="nt">releases_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/www/project/releases</span>
@@ -718,20 +718,20 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
-<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finalize</span>
 
 <span class="c1"># Using a different unfinished_filename:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
 <span class="w">    </span><span class="nt">unfinished_filename</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">README.md</span>
-<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finalize</span>
 
 <span class="c1"># Postponing the cleanup of older builds:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
-<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finalize</span>
 <span class="w">    </span><span class="nt">clean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
@@ -748,10 +748,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># Keeping more old releases:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
-<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="s">'</span><span class="cp">{{</span> <span class="nv">deploy_helper.new_release</span> <span class="cp">}}</span><span class="s">'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">finalize</span>
 <span class="w">    </span><span class="nt">keep_releases</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="c1"># Or, if you use &#39;clean=false&#39; on finalize:</span>
+<span class="c1"># Or, if you use 'clean=false' on finalize:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.general.deploy_helper</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/root</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">clean</span>
@@ -803,7 +803,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

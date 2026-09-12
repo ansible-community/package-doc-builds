@@ -316,19 +316,19 @@
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;SiPolicy&gt;
    ...
    &lt;Signers&gt;
-      &lt;Signer Name=&quot;Some Signer&quot; ID=&quot;ID_SIGNER_S_0&quot;&gt;
-         &lt;CertRoot Type=&quot;TBS&quot; Value=&quot;1DBF60AFC6313593EDB09B6C6239BE493FF3461D4BD6D0A8C6E1723A12C06438F471BB7F6BAA73BD142D0698CEFF9DBB&quot; /&gt;
-         &lt;CertPublisher Value=&quot;Some Publisher&quot; /&gt;
+      &lt;Signer Name="Some Signer" ID="ID_SIGNER_S_0"&gt;
+         &lt;CertRoot Type="TBS" Value="1DBF60AFC6313593EDB09B6C6239BE493FF3461D4BD6D0A8C6E1723A12C06438F471BB7F6BAA73BD142D0698CEFF9DBB" /&gt;
+         &lt;CertPublisher Value="Some Publisher" /&gt;
       &lt;/Signer&gt;
    &lt;/Signers&gt;
    &lt;SigningScenarios&gt;
-      &lt;SigningScenario ID=&quot;ID_SIGNINGSCENARIO_KMCI&quot; FriendlyName=&quot;Kernel Mode Signing Scenario&quot; Value=&quot;131&quot;&gt;
+      &lt;SigningScenario ID="ID_SIGNINGSCENARIO_KMCI" FriendlyName="Kernel Mode Signing Scenario" Value="131"&gt;
          &lt;ProductSigners /&gt;
       &lt;/SigningScenario&gt;
-      &lt;SigningScenario ID=&quot;ID_SIGNINGSCENARIO_UMCI&quot; FriendlyName=&quot;User Mode Signing Scenario&quot; Value=&quot;12&quot;&gt;
+      &lt;SigningScenario ID="ID_SIGNINGSCENARIO_UMCI" FriendlyName="User Mode Signing Scenario" Value="12"&gt;
          &lt;ProductSigners&gt;
          &lt;AllowedSigners&gt;
-            &lt;AllowedSigner SignerId=&quot;ID_SIGNER_S_0&quot; /&gt;
+            &lt;AllowedSigner SignerId="ID_SIGNER_S_0" /&gt;
          &lt;/AllowedSigners&gt;
          &lt;/ProductSigners&gt;
       &lt;/SigningScenario&gt;
@@ -357,9 +357,9 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">New-AnsiblePowerShellSignature</span></code> function is not officially supported and is marked as a tech preview.</p>
 </div>
 <p>To sign the Ansible PowerShell wrapper scripts, and modules in a collection, the following PowerShell script can be used with the loaded function from above:</p>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$certPassword</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="s2">&quot;Enter the password for the certificate&quot;</span> <span class="n">-AsSecureString</span>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$certPassword</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="s2">"Enter the password for the certificate"</span> <span class="n">-AsSecureString</span>
 <span class="nv">$cert</span> <span class="p">=</span> <span class="no">[System.Security.Cryptography.X509Certificates.X509Certificate2]</span><span class="p">::</span><span class="n">new</span><span class="p">(</span>
-   <span class="s2">&quot;wdac-cert.pfx&quot;</span>
+   <span class="s2">"wdac-cert.pfx"</span>
    <span class="nv">$certPassword</span><span class="p">)</span>
 
 <span class="nv">$signingParams</span> <span class="p">=</span> <span class="p">@{</span>
@@ -367,27 +367,27 @@
 
    <span class="n">Collection</span> <span class="p">=</span> <span class="p">@(</span>
       <span class="c"># Includes all the builtin execution wrappers and scripts needed for Ansible</span>
-      <span class="s1">&#39;ansible.builtin&#39;</span>
+      <span class="s1">'ansible.builtin'</span>
 
       <span class="c"># Add any remaining collections used in the playbook like microsoft.ad, community.windows, etc.</span>
-      <span class="s1">&#39;ansible.windows&#39;</span>
-      <span class="s1">&#39;microsoft.ad&#39;</span>
-      <span class="s1">&#39;microsoft.iis&#39;</span>
-      <span class="s1">&#39;community.windows&#39;</span>
+      <span class="s1">'ansible.windows'</span>
+      <span class="s1">'microsoft.ad'</span>
+      <span class="s1">'microsoft.iis'</span>
+      <span class="s1">'community.windows'</span>
    <span class="p">)</span>
 
    <span class="c"># The URL of the Authenticode timestamp server to use for timestamping</span>
    <span class="c"># the signature.</span>
    <span class="c"># https://learn.microsoft.com/en-us/windows/win32/seccrypto/time-stamping-authenticode-signatures</span>
-   <span class="n">TimeStampServer</span> <span class="p">=</span> <span class="s1">&#39;...&#39;</span>
+   <span class="n">TimeStampServer</span> <span class="p">=</span> <span class="s1">'...'</span>
 <span class="p">}</span>
 <span class="nb">New-AnsiblePowerShellSignature</span> <span class="nv">@signingParams</span> <span class="n">-Verbose</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">ansible.builtin</span></code> collection refers to the builtin execution scripts used in Ansible. Any other collection with PowerShell modules used in the playbook should be added to the <code class="docutils literal notranslate"><span class="pre">-Collection</span></code> parameter. The script will generate the <code class="docutils literal notranslate"><span class="pre">powershell_signatures.psd1</span></code> script signed by the certificate and contains the hashes of all the modules in the collection that should be trusted to run. It will also generate the signature for Ansible’s execution wrapper script in the Ansible installation directory so that Ansible can automatically run the script trusted by the App Control policy. The current behavior of <code class="docutils literal notranslate"><span class="pre">New-AnsiblePowerShellSignature</span></code> is to sign all the modules in the collection and the Ansible execution wrapper script even if they could include an escape hatch. It is recommended to skip any modules using the <code class="docutils literal notranslate"><span class="pre">-Skip</span></code> parameter that are not needed in the playbook, for example:</p>
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nb">New-AnsiblePowerShellSignature</span> <span class="p">...</span> <span class="n">-Skip</span> <span class="p">@(</span>
-    <span class="s1">&#39;ansible.windows.win_dsc&#39;</span>
-    <span class="s1">&#39;ansible.windows.win_timezone&#39;</span>
+    <span class="s1">'ansible.windows.win_dsc'</span>
+    <span class="s1">'ansible.windows.win_timezone'</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -427,7 +427,7 @@
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run signed script through win_powershell as inline content</span>
 <span class="w">  </span><span class="nt">ansible.windows.win_powershell</span><span class="p">:</span>
 <span class="w">    </span><span class="c1"># rstrip=False is important so the last \r\n of the signature is not removed.</span>
-<span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">lookup(&#39;ansible.builtin.file&#39;,</span><span class="nv"> </span><span class="s">&#39;signed-script.ps1&#39;,</span><span class="nv"> </span><span class="s">rstrip=False)</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">lookup('ansible.builtin.file',</span><span class="nv"> </span><span class="s">'signed-script.ps1',</span><span class="nv"> </span><span class="s">rstrip=False)</span><span class="nv"> </span><span class="s">}}"</span>
 </pre></div>
 </div>
 </section>
@@ -447,7 +447,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

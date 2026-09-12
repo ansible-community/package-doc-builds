@@ -297,15 +297,15 @@
 <section id="asynchronous-ad-hoc-tasks">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Asynchronous ad hoc tasks</a><a class="headerlink" href="#asynchronous-ad-hoc-tasks" title="Link to this heading"></a></h2>
 <p>You can execute long-running operations in the background with <a class="reference internal" href="../command_guide/intro_adhoc.html#intro-adhoc"><span class="std std-ref">ad hoc tasks</span></a>. For example, to execute <code class="docutils literal notranslate"><span class="pre">long_running_operation</span></code> asynchronously in the background, with a timeout (<code class="docutils literal notranslate"><span class="pre">-B</span></code>) of 3600 seconds, and without polling (<code class="docutils literal notranslate"><span class="pre">-P</span></code>):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-B<span class="w"> </span><span class="m">3600</span><span class="w"> </span>-P<span class="w"> </span><span class="m">0</span><span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;/usr/bin/long_running_operation --do-stuff&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-B<span class="w"> </span><span class="m">3600</span><span class="w"> </span>-P<span class="w"> </span><span class="m">0</span><span class="w"> </span>-a<span class="w"> </span><span class="s2">"/usr/bin/long_running_operation --do-stuff"</span>
 </pre></div>
 </div>
 <p>To check on the job status later, use the <code class="docutils literal notranslate"><span class="pre">async_status</span></code> module, passing it the job ID that was returned when you ran the original job in the background:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>web1.example.com<span class="w"> </span>-m<span class="w"> </span>async_status<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;jid=488359678239.2844&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>web1.example.com<span class="w"> </span>-m<span class="w"> </span>async_status<span class="w"> </span>-a<span class="w"> </span><span class="s2">"jid=488359678239.2844"</span>
 </pre></div>
 </div>
 <p>Ansible can also check on the status of your long-running job automatically with polling. In most cases, Ansible will keep the connection to your remote node open between polls. To run for 30 minutes and poll for status every 60 seconds:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-B<span class="w"> </span><span class="m">1800</span><span class="w"> </span>-P<span class="w"> </span><span class="m">60</span><span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;/usr/bin/long_running_operation --do-stuff&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-B<span class="w"> </span><span class="m">1800</span><span class="w"> </span>-P<span class="w"> </span><span class="m">60</span><span class="w"> </span>-a<span class="w"> </span><span class="s2">"/usr/bin/long_running_operation --do-stuff"</span>
 </pre></div>
 </div>
 <p>Poll mode is smart so all jobs will be started before polling begins on any machine. Be sure to use a high enough <code class="docutils literal notranslate"><span class="pre">--forks</span></code> value if you want to get all of your jobs started very quickly. After the time limit (in seconds) runs out (<code class="docutils literal notranslate"><span class="pre">-B</span></code>), the process on the remote nodes will be terminated.</p>
@@ -392,7 +392,7 @@ with <code class="docutils literal notranslate"><span class="pre">mode:</span> <
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check on an async task</span>
 <span class="w">  </span><span class="nt">async_status</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">jid</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">yum_sleeper.ansible_job_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">jid</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">yum_sleeper.ansible_job_id</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">job_result</span>
 <span class="w">  </span><span class="nt">until</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">job_result is finished</span>
 <span class="w">  </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
@@ -423,9 +423,9 @@ then those should be added to the following <code class="docutils literal notran
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="w">    </span><span class="nt">durations</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">durations</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">  </span><span class="nt">include_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute_batch.yml</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">sleep_durations</span> <span class="o">|</span> <span class="nf">batch</span><span class="o">(</span><span class="m">2</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">sleep_durations</span> <span class="o">|</span> <span class="nf">batch</span><span class="o">(</span><span class="m">2</span><span class="o">)</span> <span class="o">|</span> <span class="nf">list</span> <span class="cp">}}</span><span class="s">"</span>
 
 <span class="c1">#####################</span>
 <span class="c1"># execute_batch.yml</span>
@@ -434,17 +434,17 @@ then those should be added to the following <code class="docutils literal notran
 <span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sleep</span><span class="w"> </span><span class="cp">{{</span> <span class="nv">async_item</span> <span class="cp">}}</span>
 <span class="w">  </span><span class="nt">async</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">45</span>
 <span class="w">  </span><span class="nt">poll</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">durations</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">durations</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">  </span><span class="nt">loop_control</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">loop_var</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;async_item&quot;</span>
+<span class="w">    </span><span class="nt">loop_var</span><span class="p">:</span><span class="w"> </span><span class="s">"async_item"</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async_results</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check sync status</span>
 <span class="w">  </span><span class="nt">async_status</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">jid</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">async_result_item.ansible_job_id</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">async_results.results</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">jid</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">async_result_item.ansible_job_id</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">async_results.results</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">  </span><span class="nt">loop_control</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">loop_var</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;async_result_item&quot;</span>
+<span class="w">    </span><span class="nt">loop_var</span><span class="p">:</span><span class="w"> </span><span class="s">"async_result_item"</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async_poll_results</span>
 <span class="w">  </span><span class="nt">until</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async_poll_results is finished</span>
 <span class="w">  </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
@@ -479,7 +479,7 @@ then those should be added to the following <code class="docutils literal notran
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.23.0" name="antsibull-docs" />
+<meta content="2.27.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>azure.azcollection.azure_rm_arcssh module – Configure SSH proxy for ARC hosts &mdash; Ansible Community Documentation</title>
@@ -671,16 +671,16 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <span class="c1"># ---</span>
 <span class="c1"># plugin: azure.azcollection.azure_rm</span>
 <span class="c1"># plain_host_names: yes</span>
-<span class="c1"># include_arc_resource_groups: [&#39;*&#39;]</span>
+<span class="c1"># include_arc_resource_groups: ['*']</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
 <span class="c1"># hostvar_expressions:</span>
-<span class="c1">#   ansible_host: &quot;resource_group + &#39;-&#39; + name if &#39;Microsoft.HybridCompute/machines&#39; == resource_type else (public_dns_hostnames + public_ipv4_address) | first&quot;</span>
-<span class="c1">#   ansible_ssh_common_args: &quot;&#39;-F /tmp/&#39; + resource_group + &#39;-&#39; + name + &#39;/ssh_config&#39; if &#39;Microsoft.HybridCompute/machines&#39; == resource_type&quot;</span>
+<span class="c1">#   ansible_host: "resource_group + '-' + name if 'Microsoft.HybridCompute/machines' == resource_type else (public_dns_hostnames + public_ipv4_address) | first"</span>
+<span class="c1">#   ansible_ssh_common_args: "'-F /tmp/' + resource_group + '-' + name + '/ssh_config' if 'Microsoft.HybridCompute/machines' == resource_type"</span>
 <span class="c1">#</span>
 <span class="c1"># keyed_groups:</span>
-<span class="c1"># # places each host in a group named &#39;tag_(tag name)_(tag value)&#39; for each tag on a VM.</span>
-<span class="c1">#  - prefix: &quot;type&quot;</span>
+<span class="c1"># # places each host in a group named 'tag_(tag name)_(tag value)' for each tag on a VM.</span>
+<span class="c1">#  - prefix: "type"</span>
 <span class="c1">#    key: resource_type</span>
 <span class="c1">#    trailing_separator: false</span>
 
@@ -690,16 +690,16 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Proxy</span>
 <span class="w">      </span><span class="nt">azure.azcollection.azure_rm_arcssh</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">inventory_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">ansible_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.ansible_host</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="nt">inventory_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">ansible_host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.ansible_host</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">        </span><span class="nt">local_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
-<span class="w">        </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.resource_group</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">resource_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.resource_type</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">        </span><span class="nt">private_key_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/.ssh/id_rsa&quot;</span>
-<span class="w">        </span><span class="nt">ssh_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp/</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.resource_group</span> <span class="cp">}}</span><span class="s">-</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">/ssh_config&quot;</span>
-<span class="w">        </span><span class="nt">ssh_relay_file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp/</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.resource_group</span> <span class="cp">}}</span><span class="s">-</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">/relay_info&quot;</span>
-<span class="w">        </span><span class="nt">ssh_proxy_folder</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;~/.clientsshproxy&quot;</span>
-<span class="w">      </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;type_Microsoft_HybridCompute_machines&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.resource_group</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">resource_type</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.resource_type</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">        </span><span class="nt">private_key_file</span><span class="p">:</span><span class="w"> </span><span class="s">"~/.ssh/id_rsa"</span>
+<span class="w">        </span><span class="nt">ssh_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"/tmp/</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.resource_group</span> <span class="cp">}}</span><span class="s">-</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">/ssh_config"</span>
+<span class="w">        </span><span class="nt">ssh_relay_file</span><span class="p">:</span><span class="w"> </span><span class="s">"/tmp/</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">item</span><span class="o">]</span><span class="nv">.resource_group</span> <span class="cp">}}</span><span class="s">-</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">/relay_info"</span>
+<span class="w">        </span><span class="nt">ssh_proxy_folder</span><span class="p">:</span><span class="w"> </span><span class="s">"~/.clientsshproxy"</span>
+<span class="w">      </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">'type_Microsoft_HybridCompute_machines'</span><span class="o">]</span> <span class="cp">}}</span><span class="s">"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ping ARC Hosts</span>
 <span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">type_Microsoft_HybridCompute_machines</span>
@@ -739,7 +739,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

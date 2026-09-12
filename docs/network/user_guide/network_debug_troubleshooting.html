@@ -437,7 +437,7 @@ ansible-playbook<span class="w"> </span>-vvvv<span class="w"> </span>...
 A future Ansible release will improve this message so that the port is always logged.</p>
 </div>
 <p>Because the log files are verbose, you can use grep to look for specific information. For example, once you have identified the <code class="docutils literal notranslate"><span class="pre">pid</span></code> from the <code class="docutils literal notranslate"><span class="pre">creating</span> <span class="pre">new</span> <span class="pre">control</span> <span class="pre">socket</span> <span class="pre">for</span> <span class="pre">host</span></code> line you can search for other connection log entries:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span><span class="s2">&quot;p=28990&quot;</span><span class="w"> </span><span class="nv">$ANSIBLE_LOG_PATH</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span><span class="s2">"p=28990"</span><span class="w"> </span><span class="nv">$ANSIBLE_LOG_PATH</span>
 </pre></div>
 </div>
 </section>
@@ -498,7 +498,7 @@ information in log file thus creating security vulnerability.</p>
 <li><p>Using an ad hoc <code class="docutils literal notranslate"><span class="pre">ansible</span></code> command</p></li>
 </ul>
 <p><cite>ad hoc</cite> refers to running Ansible to perform some quick command using <code class="docutils literal notranslate"><span class="pre">/usr/bin/ansible</span></code>, rather than the orchestration language, which is <code class="docutils literal notranslate"><span class="pre">/usr/bin/ansible-playbook</span></code>. In this case we can ensure connectivity by attempting to execute a single command on the remote device:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>-m<span class="w"> </span>arista.eos.eos_command<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;commands=?&#39;</span><span class="w"> </span>-i<span class="w"> </span>inventory<span class="w"> </span>switch1.example.net<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;ansible_connection=ansible.netcommon.network_cli&#39;</span><span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-k
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>-m<span class="w"> </span>arista.eos.eos_command<span class="w"> </span>-a<span class="w"> </span><span class="s1">'commands=?'</span><span class="w"> </span>-i<span class="w"> </span>inventory<span class="w"> </span>switch1.example.net<span class="w"> </span>-e<span class="w"> </span><span class="s1">'ansible_connection=ansible.netcommon.network_cli'</span><span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-k
 </pre></div>
 </div>
 <p>In the above example, we:</p>
@@ -516,7 +516,7 @@ information in log file thus creating security vulnerability.</p>
 <span class="c1"># Enable Debug</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">ANSIBLE_DEBUG</span><span class="o">=</span>True
 <span class="c1"># Run with ``-vvvv`` for connection level verbosity</span>
-ansible<span class="w"> </span>-m<span class="w"> </span>arista.eos.eos_command<span class="w"> </span>-a<span class="w"> </span><span class="s1">&#39;commands=?&#39;</span><span class="w"> </span>-i<span class="w"> </span>inventory<span class="w"> </span>switch1.example.net<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;ansible_connection=ansible.netcommon.network_cli&#39;</span><span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-k
+ansible<span class="w"> </span>-m<span class="w"> </span>arista.eos.eos_command<span class="w"> </span>-a<span class="w"> </span><span class="s1">'commands=?'</span><span class="w"> </span>-i<span class="w"> </span>inventory<span class="w"> </span>switch1.example.net<span class="w"> </span>-e<span class="w"> </span><span class="s1">'ansible_connection=ansible.netcommon.network_cli'</span><span class="w"> </span>-u<span class="w"> </span>admin<span class="w"> </span>-k
 </pre></div>
 </div>
 <p>Then review the log file and find the relevant error message in the rest of this document.</p>
@@ -528,23 +528,23 @@ ansible<span class="w"> </span>-m<span class="w"> </span>arista.eos.eos_command<
 <p>The <code class="docutils literal notranslate"><span class="pre">Socket</span> <span class="pre">path</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">exist</span> <span class="pre">or</span> <span class="pre">cannot</span> <span class="pre">be</span> <span class="pre">found</span></code>  and <code class="docutils literal notranslate"><span class="pre">Unable</span> <span class="pre">to</span> <span class="pre">connect</span> <span class="pre">to</span> <span class="pre">socket</span></code> messages indicate that the socket used to communicate with the remote network device is unavailable or does not exist.</p>
 <p>For example:</p>
 <div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span><span class="k">fatal</span><span class="p">:</span> <span class="p">[</span><span class="nv">spine02</span><span class="p">]:</span> <span class="k">FAILED</span><span class="p">!</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nt">&quot;changed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nt">&quot;failed&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">&quot;module_stderr&quot;</span><span class="p">:</span> <span class="s">&quot;Traceback (most recent call last):\n  File \&quot;/tmp/ansible_TSqk5J/ansible_modlib.zip/ansible/module_utils/connection.py\&quot;, line 115, in _exec_jsonrpc\nansible.module_utils.connection.ConnectionError: Socket path XX does not exist or cannot be found. See Troubleshooting socket path issues in the Network Debug and Troubleshooting Guide\n&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;module_stdout&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;msg&quot;</span><span class="p">:</span> <span class="s">&quot;MODULE FAILURE&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;rc&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="nt">"changed"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">"failed"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">"module_stderr"</span><span class="p">:</span> <span class="s">"Traceback (most recent call last):\n  File \"/tmp/ansible_TSqk5J/ansible_modlib.zip/ansible/module_utils/connection.py\", line 115, in _exec_jsonrpc\nansible.module_utils.connection.ConnectionError: Socket path XX does not exist or cannot be found. See Troubleshooting socket path issues in the Network Debug and Troubleshooting Guide\n"</span><span class="p">,</span>
+    <span class="nt">"module_stdout"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+    <span class="nt">"msg"</span><span class="p">:</span> <span class="s">"MODULE FAILURE"</span><span class="p">,</span>
+    <span class="nt">"rc"</span><span class="p">:</span> <span class="mi">1</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>or</p>
 <div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span><span class="k">fatal</span><span class="p">:</span> <span class="p">[</span><span class="nv">spine02</span><span class="p">]:</span> <span class="k">FAILED</span><span class="p">!</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nt">&quot;changed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nt">&quot;failed&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">&quot;module_stderr&quot;</span><span class="p">:</span> <span class="s">&quot;Traceback (most recent call last):\n  File \&quot;/tmp/ansible_TSqk5J/ansible_modlib.zip/ansible/module_utils/connection.py\&quot;, line 123, in _exec_jsonrpc\nansible.module_utils.connection.ConnectionError: Unable to connect to socket XX. See Troubleshooting socket path issues in Network Debug and Troubleshooting Guide\n&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;module_stdout&quot;</span><span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;msg&quot;</span><span class="p">:</span> <span class="s">&quot;MODULE FAILURE&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;rc&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="nt">"changed"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">"failed"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">"module_stderr"</span><span class="p">:</span> <span class="s">"Traceback (most recent call last):\n  File \"/tmp/ansible_TSqk5J/ansible_modlib.zip/ansible/module_utils/connection.py\", line 123, in _exec_jsonrpc\nansible.module_utils.connection.ConnectionError: Unable to connect to socket XX. See Troubleshooting socket path issues in Network Debug and Troubleshooting Guide\n"</span><span class="p">,</span>
+    <span class="nt">"module_stdout"</span><span class="p">:</span> <span class="s">""</span><span class="p">,</span>
+    <span class="nt">"msg"</span><span class="p">:</span> <span class="s">"MODULE FAILURE"</span><span class="p">,</span>
+    <span class="nt">"rc"</span><span class="p">:</span> <span class="mi">1</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -569,16 +569,16 @@ ansible<span class="w"> </span>-m<span class="w"> </span>arista.eos.eos_command<
 <p>The <code class="docutils literal notranslate"><span class="pre">unable</span> <span class="pre">to</span> <span class="pre">open</span> <span class="pre">shell</span></code> message means that the <code class="docutils literal notranslate"><span class="pre">ansible-connection</span></code> daemon has not been able to successfully talk to the remote network device. This generally means that there is an authentication issue. It is a “catch all” message, meaning you need to enable <a class="reference internal" href="#enable-network-logging"><span class="std std-ref">logging</span></a> to find the underlying issues.</p>
 <p>For example:</p>
 <div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span><span class="k">TASK</span> <span class="p">[</span><span class="l">prepare_eos_tests : enable cli on remote device</span><span class="p">]</span> <span class="nv">**************************************************</span>
-<span class="k">fatal</span><span class="p">:</span> <span class="p">[</span><span class="nv">veos01</span><span class="p">]:</span> <span class="k">FAILED</span><span class="p">!</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nt">&quot;changed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nt">&quot;failed&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nt">&quot;msg&quot;</span><span class="p">:</span> <span class="s">&quot;unable to open shell&quot;</span><span class="p">}</span>
+<span class="k">fatal</span><span class="p">:</span> <span class="p">[</span><span class="nv">veos01</span><span class="p">]:</span> <span class="k">FAILED</span><span class="p">!</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nt">"changed"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nt">"failed"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nt">"msg"</span><span class="p">:</span> <span class="s">"unable to open shell"</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>or:</p>
 <div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span><span class="k">TASK</span> <span class="p">[</span><span class="l">ios_system : configure name_servers</span><span class="p">]</span> <span class="nv">*************************************************************</span>
 task path:
 <span class="k">fatal</span><span class="p">:</span> <span class="p">[</span><span class="nv">ios-csr1000v</span><span class="p">]:</span> <span class="k">FAILED</span><span class="p">!</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nt">&quot;changed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nt">&quot;failed&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">&quot;msg&quot;</span><span class="p">:</span> <span class="s">&quot;unable to open shell&quot;</span><span class="p">,</span>
+    <span class="nt">"changed"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nt">"failed"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">"msg"</span><span class="p">:</span> <span class="s">"unable to open shell"</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -630,7 +630,7 @@ task path:
 <p>For example:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2017-04-04 12:06:03,486 p=17981 u=fred |  using connection plugin network_cli
 2017-04-04 12:06:04,680 p=17981 u=fred |  connecting to host veos01 returned an error
-2017-04-04 12:06:04,682 p=17981 u=fred |  (14, &#39;Bad address&#39;)
+2017-04-04 12:06:04,682 p=17981 u=fred |  (14, 'Bad address')
 2017-04-04 12:06:33,519 p=17981 u=fred |  number of connection attempts exceeded, unable to connect to control socket
 2017-04-04 12:06:33,520 p=17981 u=fred |  persistent_connect_interval=1, persistent_connect_retries=30
 </pre></div>
@@ -729,7 +729,7 @@ task will fail if the command has not returned.</p>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">save running-config</span>
 <span class="w">  </span><span class="nt">cisco.ios.ios_command</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">commands</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">copy running-config startup-config</span>
-<span class="w">    </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">cli</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">provider</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">cli</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
 </pre></div>
 </div>
@@ -780,20 +780,20 @@ variables.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>host_vars/&lt;hostname&gt;.yaml
 <span class="go">---</span>
 <span class="go">ansible_terminal_initial_prompt:</span>
-<span class="go">  - &quot;Connect to a host&quot;</span>
+<span class="go">  - "Connect to a host"</span>
 <span class="go">ansible_terminal_initial_answer:</span>
-<span class="go">  - &quot;3&quot;</span>
+<span class="go">  - "3"</span>
 </pre></div>
 </div>
 <p>Example: Handle remote host multiple login menu prompts with host variables</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>host_vars/&lt;inventory-hostname&gt;.yaml
 <span class="go">---</span>
 <span class="go">ansible_terminal_initial_prompt:</span>
-<span class="go">  - &quot;Press any key to enter main menu&quot;</span>
-<span class="go">  - &quot;Connect to a host&quot;</span>
+<span class="go">  - "Press any key to enter main menu"</span>
+<span class="go">  - "Connect to a host"</span>
 <span class="go">ansible_terminal_initial_answer:</span>
-<span class="go">  - &quot;\\r&quot;</span>
-<span class="go">  - &quot;3&quot;</span>
+<span class="go">  - "\\r"</span>
+<span class="go">  - "3"</span>
 <span class="go">ansible_terminal_initial_prompt_checkall: True</span>
 </pre></div>
 </div>
@@ -820,9 +820,9 @@ variables.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">TASK [ios_system : configure name_servers] *****************************************************************************</span>
 <span class="go">task path:</span>
 <span class="go">fatal: [ios-csr1000v]: FAILED! =&gt; {</span>
-<span class="go">    &quot;changed&quot;: false,</span>
-<span class="go">    &quot;failed&quot;: true,</span>
-<span class="go">   &quot;msg&quot;: &quot;unable to enter configuration mode&quot;,</span>
+<span class="go">    "changed": false,</span>
+<span class="go">    "failed": true,</span>
+<span class="go">   "msg": "unable to enter configuration mode",</span>
 <span class="go">}</span>
 </pre></div>
 </div>
@@ -847,7 +847,7 @@ file to specify the proxy host.</p>
 <span class="na">nxos02</span>
 
 <span class="k">[nxos:vars]</span>
-<span class="na">ansible_paramiko_proxy_command</span><span class="o">=</span><span class="s">&#39;-o ProxyCommand=&quot;</span><span class="na">ssh -W %h</span><span class="o">:</span><span class="s">%p -q bastion01&quot;&#39;</span>
+<span class="na">ansible_paramiko_proxy_command</span><span class="o">=</span><span class="s">'-o ProxyCommand="</span><span class="na">ssh -W %h</span><span class="o">:</span><span class="s">%p -q bastion01"'</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -859,7 +859,7 @@ no additional changes necessary.  The network module will now connect to the
 network device by first connecting to the host specified in
 <code class="docutils literal notranslate"><span class="pre">ansible_paramiko_proxy_command</span></code>, which is <code class="docutils literal notranslate"><span class="pre">bastion01</span></code> in the above example.</p>
 <p>You can also set the proxy target for all hosts by using environment variables.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ANSIBLE_PARAMIKO_PROXY_COMMAND</span><span class="o">=</span><span class="s1">&#39;-o ProxyCommand=&quot;ssh -W %h:%p -q bastion01&quot;&#39;</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ANSIBLE_PARAMIKO_PROXY_COMMAND</span><span class="o">=</span><span class="s1">'-o ProxyCommand="ssh -W %h:%p -q bastion01"'</span>
 </pre></div>
 </div>
 </section>
@@ -886,7 +886,7 @@ from the given custom ssh file path</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Host jumphost
   HostName jumphost.domain.name.com
   User jumphost-user
-  IdentityFile &quot;/path/to/ssh-key.pem&quot;
+  IdentityFile "/path/to/ssh-key.pem"
   Port 22
 
 # Note: Due to the way that Paramiko reads the SSH Config file,
@@ -969,10 +969,10 @@ tasks variables.</p>
 <p>Playbook run output:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">TASK [first fetch logs] ********************************************************</span>
 <span class="go">fatal: [ios01]: FAILED! =&gt; {</span>
-<span class="go">    &quot;changed&quot;: false,</span>
-<span class="go">    &quot;msg&quot;: &quot;RF Name:\r\n\r\n &lt;--nsip--&gt;</span>
-<span class="go">           \&quot;IPSEC-3-REPLAY_ERROR: Test log\&quot;\r\n*Aug  1 08:36:18.483: %SYS-7-USERLOG_DEBUG:</span>
-<span class="go">            Message from tty578(user id: ansible): test\r\nan-ios-02#&quot;}</span>
+<span class="go">    "changed": false,</span>
+<span class="go">    "msg": "RF Name:\r\n\r\n &lt;--nsip--&gt;</span>
+<span class="go">           \"IPSEC-3-REPLAY_ERROR: Test log\"\r\n*Aug  1 08:36:18.483: %SYS-7-USERLOG_DEBUG:</span>
+<span class="go">            Message from tty578(user id: ansible): test\r\nan-ios-02#"}</span>
 </pre></div>
 </div>
 <p>Suggestions to resolve:</p>
@@ -983,8 +983,8 @@ tasks variables.</p>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">show logging</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">ansible_terminal_stderr_re</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;connection</span><span class="nv"> </span><span class="s">timed</span><span class="nv"> </span><span class="s">out&#39;</span>
-<span class="w">        </span><span class="nt">flags</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;re.I&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">'connection</span><span class="nv"> </span><span class="s">timed</span><span class="nv"> </span><span class="s">out'</span>
+<span class="w">        </span><span class="nt">flags</span><span class="p">:</span><span class="w"> </span><span class="s">'re.I'</span>
 </pre></div>
 </div>
 <p>The terminal plugin regex options <code class="docutils literal notranslate"><span class="pre">ansible_terminal_stderr_re</span></code> and <code class="docutils literal notranslate"><span class="pre">ansible_terminal_stdout_re</span></code> have
@@ -1020,7 +1020,7 @@ maximum attempts are exhausted or either the <code class="docutils literal notra
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

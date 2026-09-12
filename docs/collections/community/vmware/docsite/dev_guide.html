@@ -490,7 +490,7 @@ should be called <cite>test/integration/cloud-config-vcenter.ini</cite> and base
 <p>The VMware modules have limited unit-test coverage. You can run the test suite with the
 following commands:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>hacking/env-setup
-ansible-test<span class="w"> </span>units<span class="w"> </span>--venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.7<span class="w"> </span><span class="s1">&#39;.*vmware.*&#39;</span>
+ansible-test<span class="w"> </span>units<span class="w"> </span>--venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.7<span class="w"> </span><span class="s1">'.*vmware.*'</span>
 </pre></div>
 </div>
 </section>
@@ -506,14 +506,14 @@ not realize that Ansible silently targets the wrong data center.</p>
 <p>Depending upon the functionality provided by ESXi or vCenter, some modules can seamlessly work with both. In this case,
 <code class="docutils literal notranslate"><span class="pre">esxi_hostname</span></code> parameter should be optional.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_vcenter</span><span class="p">():</span>
-    <span class="n">esxi_hostname</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;esxi_hostname&#39;</span><span class="p">)</span>
+    <span class="n">esxi_hostname</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'esxi_hostname'</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">esxi_hostname</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">fail_json</span><span class="p">(</span><span class="s2">&quot;esxi_hostname parameter is mandatory&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">fail_json</span><span class="p">(</span><span class="s2">"esxi_hostname parameter is mandatory"</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_host_objs</span><span class="p">(</span><span class="n">cluster_name</span><span class="o">=</span><span class="n">cluster_name</span><span class="p">,</span> <span class="n">esxi_host_name</span><span class="o">=</span><span class="n">esxi_hostname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">find_obj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="p">[</span><span class="n">vim</span><span class="o">.</span><span class="n">HostSystem</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">fail_json</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Failed to find host system.&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">fail_json</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">"Failed to find host system."</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -563,20 +563,20 @@ allow us to preinitialize the following default keys of the VMware modules:</p>
 <p>For example, the following block:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a VMware vSwitch</span>
 <span class="w">  </span><span class="nt">community.vmware.vmware_vswitch</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">vcenter_hostname</span><span class="nv"> </span><span class="s">}}&#39;</span>
-<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">vcenter_username</span><span class="nv"> </span><span class="s">}}&#39;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">vcenter_password</span><span class="nv"> </span><span class="s">}}&#39;</span>
-<span class="w">    </span><span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;no&#39;</span>
-<span class="w">    </span><span class="nt">esxi_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;esxi1&#39;</span>
-<span class="w">    </span><span class="nt">switch_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;boby&quot;</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">vcenter_hostname</span><span class="nv"> </span><span class="s">}}'</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">vcenter_username</span><span class="nv"> </span><span class="s">}}'</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">vcenter_password</span><span class="nv"> </span><span class="s">}}'</span>
+<span class="w">    </span><span class="nt">validate_certs</span><span class="p">:</span><span class="w"> </span><span class="s">'no'</span>
+<span class="w">    </span><span class="nt">esxi_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">'esxi1'</span>
+<span class="w">    </span><span class="nt">switch_name</span><span class="p">:</span><span class="w"> </span><span class="s">"boby"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 </pre></div>
 </div>
 <p>should be simplified to just:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a VMware vSwitch</span>
 <span class="w">  </span><span class="nt">community.vmware.vmware_vswitch</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">esxi_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;esxi1&#39;</span>
-<span class="w">    </span><span class="nt">switch_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;boby&quot;</span>
+<span class="w">    </span><span class="nt">esxi_hostname</span><span class="p">:</span><span class="w"> </span><span class="s">'esxi1'</span>
+<span class="w">    </span><span class="nt">switch_name</span><span class="p">:</span><span class="w"> </span><span class="s">"boby"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 </pre></div>
 </div>
@@ -611,7 +611,7 @@ allow us to preinitialize the following default keys of the VMware modules:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

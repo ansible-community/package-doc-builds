@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.23.0" name="antsibull-docs" />
+<meta content="2.27.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ansible.builtin.script inventory – Executes an inventory script that returns JSON &mdash; Ansible Community Documentation</title>
@@ -420,36 +420,36 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
    #!/usr/bin/env bash
 
-   if [ &quot;$1&quot; == &quot;--list&quot; ]; then
+   if [ "$1" == "--list" ]; then
    cat&lt;&lt;EOF
    {
-     &quot;bash_hosts&quot;: {
-       &quot;hosts&quot;: [
-         &quot;myhost.domain.com&quot;,
-         &quot;myhost2.domain.com&quot;
+     "bash_hosts": {
+       "hosts": [
+         "myhost.domain.com",
+         "myhost2.domain.com"
        ],
-       &quot;vars&quot;: {
-         &quot;host_test&quot;: &quot;test-value&quot;
+       "vars": {
+         "host_test": "test-value"
        }
      },
-     &quot;_meta&quot;: {
-       &quot;hostvars&quot;: {
-         &quot;myhost.domain.com&quot;: {
-           &quot;host_specific_test_var&quot;: &quot;test-value&quot;
+     "_meta": {
+       "hostvars": {
+         "myhost.domain.com": {
+           "host_specific_test_var": "test-value"
          }
        }
      }
    }
    EOF
-   elif [ &quot;$1&quot; == &quot;--host&quot; ]; then
+   elif [ "$1" == "--host" ]; then
      # this should not normally be called by Ansible as we return _meta above
-     if [ &quot;$2&quot; == &quot;myhost.domain.com&quot; ]; then
-        echo &#39;{&quot;_meta&quot;: {&quot;hostvars&quot;: {&quot;myhost.domain.com&quot;: {&quot;host_specific-test_var&quot;: &quot;test-value&quot;}}}}&#39;
+     if [ "$2" == "myhost.domain.com" ]; then
+        echo '{"_meta": {"hostvars": {"myhost.domain.com": {"host_specific-test_var": "test-value"}}}}'
      else
-        echo &#39;{&quot;_meta&quot;: {&quot;hostvars&quot;: {}}}&#39;
+        echo '{"_meta": {"hostvars": {}}}'
      fi
    else
-     echo &quot;Invalid option: use --list or --host &lt;hostname&gt;&quot;
+     echo "Invalid option: use --list or --host &lt;hostname&gt;"
      exit 1
    fi
 
@@ -457,9 +457,9 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 ### python example with ini config
 
     #!/usr/bin/env python
-    &quot;&quot;&quot;
+    """
     # ansible_inventory.py
-    &quot;&quot;&quot;
+    """
     import argparse
     import json
     import os.path
@@ -469,64 +469,64 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
     def load_config() -&gt; ConfigParser:
         cp = ConfigParser()
-        config_file = os.path.expanduser(&quot;~/.config/ansible_inventory_script.cfg&quot;)
+        config_file = os.path.expanduser("~/.config/ansible_inventory_script.cfg")
         cp.read(config_file)
-        if not cp.has_option(&#39;DEFAULT&#39;, &#39;namespace&#39;):
-            raise ValueError(&quot;Missing configuration option: DEFAULT -&gt; namespace&quot;)
+        if not cp.has_option('DEFAULT', 'namespace'):
+            raise ValueError("Missing configuration option: DEFAULT -&gt; namespace")
         return cp
 
 
     def get_api_data(namespace: str, pretty=False) -&gt; str:
-        &quot;&quot;&quot;
+        """
         :param namespace: parameter for our custom api
         :param pretty: Human readable JSON vs machine readable
         :return: JSON string
-        &quot;&quot;&quot;
+        """
         found_data = list(MyInventoryAPI(namespace))
         hostvars = {}
-        data = { &#39;_meta&#39;: { &#39;hostvars&#39;: {}},}
+        data = { '_meta': { 'hostvars': {}},}
 
-        groups = found_data[&#39;groups&#39;].keys()
+        groups = found_data['groups'].keys()
         for group in groups:
-            groups[group][&#39;hosts&#39;] = found_data[groups].get(&#39;host_list&#39;, [])
+            groups[group]['hosts'] = found_data[groups].get('host_list', [])
             if group not in data:
                 data[group] = {}
-            data[group][&#39;hosts&#39;] = found_data[groups].get(&#39;host_list&#39;, [])
-            data[group][&#39;vars&#39;] = found_data[groups].get(&#39;info&#39;, [])
-            data[group][&#39;children&#39;] = found_data[group].get(&#39;subgroups&#39;, [])
+            data[group]['hosts'] = found_data[groups].get('host_list', [])
+            data[group]['vars'] = found_data[groups].get('info', [])
+            data[group]['children'] = found_data[group].get('subgroups', [])
 
-        for host_data in found_data[&#39;hosts&#39;]:
+        for host_data in found_data['hosts']:
             for name in host_data.items():
                 # turn info into vars
-                data[&#39;_meta&#39;][name] = found_data[name].get(&#39;info&#39;, {})
+                data['_meta'][name] = found_data[name].get('info', {})
                 # set ansible_host if possible
-                if &#39;address&#39; in found_data[name]:
-                    data[name][&#39;_meta&#39;][&#39;ansible_host&#39;] = found_data[name][&#39;address&#39;]
-        data[&#39;_meta&#39;][&#39;hostvars&#39;] = hostvars
+                if 'address' in found_data[name]:
+                    data[name]['_meta']['ansible_host'] = found_data[name]['address']
+        data['_meta']['hostvars'] = hostvars
 
         return json.dumps(data, indent=pretty)
 
-    if __name__ == &#39;__main__&#39;:
+    if __name__ == '__main__':
 
         arg_parser = argparse.ArgumentParser( description=__doc__, prog=__file__)
-        arg_parser.add_argument(&#39;--pretty&#39;, action=&#39;store_true&#39;, default=False, help=&quot;Pretty JSON&quot;)
+        arg_parser.add_argument('--pretty', action='store_true', default=False, help="Pretty JSON")
         mandatory_options = arg_parser.add_mutually_exclusive_group()
-        mandatory_options.add_argument(&#39;--list&#39;, action=&#39;store&#39;, nargs=&quot;*&quot;, help=&quot;Get inventory JSON from our API&quot;)
-        mandatory_options.add_argument(&#39;--host&#39;, action=&#39;store&#39;,
-                                       help=&quot;Get variables for specific host, not used but kept for compatibility&quot;)
+        mandatory_options.add_argument('--list', action='store', nargs="*", help="Get inventory JSON from our API")
+        mandatory_options.add_argument('--host', action='store',
+                                       help="Get variables for specific host, not used but kept for compatibility")
 
         try:
             config = load_config()
-            namespace = config.get(&#39;DEFAULT&#39;, &#39;namespace&#39;)
+            namespace = config.get('DEFAULT', 'namespace')
 
             args = arg_parser.parse_args()
             if args.host:
-                print(&#39;{&quot;_meta&quot;:{}}&#39;)
-                sys.stderr.write(&#39;This script already provides _meta via --list, so this option is really ignored&#39;)
+                print('{"_meta":{}}')
+                sys.stderr.write('This script already provides _meta via --list, so this option is really ignored')
             elif len(args.list) &gt;= 0:
                 print(get_api_data(namespace, args.pretty))
             else:
-                raise ValueError(&quot;Valid options are --list or --host &lt;HOSTNAME&gt;&quot;)
+                raise ValueError("Valid options are --list or --host &lt;HOSTNAME&gt;")
 
         except ValueError:
             raise
@@ -557,7 +557,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

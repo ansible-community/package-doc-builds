@@ -302,7 +302,7 @@ layer that can represent data for multiple configuration management systems (eve
 <p>Add a <code class="docutils literal notranslate"><span class="pre">cobbler.ini</span></code> file in <code class="docutils literal notranslate"><span class="pre">/etc/ansible</span></code> so Ansible knows where the Cobbler server is and some cache improvements can be used. For example:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[cobbler]
 
-# Set Cobbler&#39;s hostname or IP address
+# Set Cobbler's hostname or IP address
 host = http://127.0.0.1/cobbler_api
 
 # API calls to Cobbler can be slow. For this reason, we cache the results of an API
@@ -322,9 +322,9 @@ cache_max_age = 900
 <p>First test the script by running <code class="docutils literal notranslate"><span class="pre">/etc/ansible/cobbler.py</span></code> directly. You should see some JSON data output, but it may not have anything in it just yet.</p>
 <p>Let’s explore what this does.  In Cobbler, assume a scenario somewhat like the following:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cobbler<span class="w"> </span>profile<span class="w"> </span>add<span class="w"> </span>--name<span class="o">=</span>webserver<span class="w"> </span>--distro<span class="o">=</span>CentOS6-x86_64
-cobbler<span class="w"> </span>profile<span class="w"> </span>edit<span class="w"> </span>--name<span class="o">=</span>webserver<span class="w"> </span>--mgmt-classes<span class="o">=</span><span class="s2">&quot;webserver&quot;</span><span class="w"> </span>--ksmeta<span class="o">=</span><span class="s2">&quot;a=2 b=3&quot;</span>
-cobbler<span class="w"> </span>system<span class="w"> </span>edit<span class="w"> </span>--name<span class="o">=</span>foo<span class="w"> </span>--dns-name<span class="o">=</span><span class="s2">&quot;foo.example.com&quot;</span><span class="w"> </span>--mgmt-classes<span class="o">=</span><span class="s2">&quot;atlanta&quot;</span><span class="w"> </span>--ksmeta<span class="o">=</span><span class="s2">&quot;c=4&quot;</span>
-cobbler<span class="w"> </span>system<span class="w"> </span>edit<span class="w"> </span>--name<span class="o">=</span>bar<span class="w"> </span>--dns-name<span class="o">=</span><span class="s2">&quot;bar.example.com&quot;</span><span class="w"> </span>--mgmt-classes<span class="o">=</span><span class="s2">&quot;atlanta&quot;</span><span class="w"> </span>--ksmeta<span class="o">=</span><span class="s2">&quot;c=5&quot;</span>
+cobbler<span class="w"> </span>profile<span class="w"> </span>edit<span class="w"> </span>--name<span class="o">=</span>webserver<span class="w"> </span>--mgmt-classes<span class="o">=</span><span class="s2">"webserver"</span><span class="w"> </span>--ksmeta<span class="o">=</span><span class="s2">"a=2 b=3"</span>
+cobbler<span class="w"> </span>system<span class="w"> </span>edit<span class="w"> </span>--name<span class="o">=</span>foo<span class="w"> </span>--dns-name<span class="o">=</span><span class="s2">"foo.example.com"</span><span class="w"> </span>--mgmt-classes<span class="o">=</span><span class="s2">"atlanta"</span><span class="w"> </span>--ksmeta<span class="o">=</span><span class="s2">"c=4"</span>
+cobbler<span class="w"> </span>system<span class="w"> </span>edit<span class="w"> </span>--name<span class="o">=</span>bar<span class="w"> </span>--dns-name<span class="o">=</span><span class="s2">"bar.example.com"</span><span class="w"> </span>--mgmt-classes<span class="o">=</span><span class="s2">"atlanta"</span><span class="w"> </span>--ksmeta<span class="o">=</span><span class="s2">"c=5"</span>
 </pre></div>
 </div>
 <p>In the example above, the system ‘foo.example.com’ is addressable by ansible directly, but is also addressable when using the group names ‘webserver’ or ‘atlanta’. Since Ansible uses SSH, it contacts system foo over ‘foo.example.com’, only, never just ‘foo’. Similarly, if you tried “ansible foo”, it would not find the system… but “ansible ‘foo*’” would do, because the system DNS name starts with ‘foo’.</p>
@@ -335,7 +335,7 @@ Welcome, I am templated with a value of a={{ a }}, b={{ b }}, and c={{ c }}
 </div>
 <p>Which could be executed just like this:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>webserver<span class="w"> </span>-m<span class="w"> </span>setup
-ansible<span class="w"> </span>webserver<span class="w"> </span>-m<span class="w"> </span>template<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;src=/tmp/motd.j2 dest=/etc/motd&quot;</span>
+ansible<span class="w"> </span>webserver<span class="w"> </span>-m<span class="w"> </span>template<span class="w"> </span>-a<span class="w"> </span><span class="s2">"src=/tmp/motd.j2 dest=/etc/motd"</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -354,7 +354,7 @@ will override any that have the same name.</p>
 </pre></div>
 </div>
 <p>And technically, though there is no major good reason to do it, this also works:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>webserver<span class="w"> </span>-m<span class="w"> </span>ansible.builtin.shell<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;echo {{ a }}&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>webserver<span class="w"> </span>-m<span class="w"> </span>ansible.builtin.shell<span class="w"> </span>-a<span class="w"> </span><span class="s2">"echo {{ a }}"</span>
 </pre></div>
 </div>
 <p>So, in other words, you can use those variables in arguments/actions as well.</p>
@@ -416,7 +416,7 @@ tag_Name_staging_bar
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

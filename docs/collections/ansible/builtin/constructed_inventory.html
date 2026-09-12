@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.23.0" name="antsibull-docs" />
+<meta content="2.27.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ansible.builtin.constructed inventory – Uses Jinja2 to construct vars and groups based on existing inventory. &mdash; Ansible Community Documentation</title>
@@ -559,23 +559,23 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
 <span class="w">    </span><span class="c1"># this variable will only be set if I have a persistent fact cache enabled (and have non expired facts)</span>
 <span class="w">    </span><span class="c1"># `strict: False` will skip this instead of producing an error if it is missing facts.</span>
-<span class="w">    </span><span class="nt">server_type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ansible_hostname</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">regex_replace</span><span class="nv"> </span><span class="s">(&#39;(.{6})(.{2}).*&#39;,</span><span class="nv"> </span><span class="s">&#39;\\2&#39;)&quot;</span>
+<span class="w">    </span><span class="nt">server_type</span><span class="p">:</span><span class="w"> </span><span class="s">"ansible_hostname</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">regex_replace</span><span class="nv"> </span><span class="s">('(.{6})(.{2}).*',</span><span class="nv"> </span><span class="s">'\\2')"</span>
 <span class="nt">groups</span><span class="p">:</span>
 <span class="w">    </span><span class="c1"># simple name matching</span>
-<span class="w">    </span><span class="nt">webservers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inventory_hostname.startswith(&#39;web&#39;)</span>
+<span class="w">    </span><span class="nt">webservers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inventory_hostname.startswith('web')</span>
 
-<span class="w">    </span><span class="c1"># using ec2 &#39;tags&#39; (assumes aws inventory)</span>
-<span class="w">    </span><span class="nt">development</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;devel&#39;</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">(ec2_tags|list)&quot;</span>
+<span class="w">    </span><span class="c1"># using ec2 'tags' (assumes aws inventory)</span>
+<span class="w">    </span><span class="nt">development</span><span class="p">:</span><span class="w"> </span><span class="s">"'devel'</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">(ec2_tags|list)"</span>
 
 <span class="w">    </span><span class="c1"># using other host properties populated in inventory</span>
 <span class="w">    </span><span class="nt">private_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">not (public_dns_name is defined or ip_address is defined)</span>
 
 <span class="w">    </span><span class="c1"># complex group membership</span>
-<span class="w">    </span><span class="nt">multi_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(group_names | intersect([&#39;alpha&#39;, &#39;beta&#39;, &#39;omega&#39;])) | length &gt;= 2</span>
+<span class="w">    </span><span class="nt">multi_group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(group_names | intersect(['alpha', 'beta', 'omega'])) | length &gt;= 2</span>
 
 <span class="nt">keyed_groups</span><span class="p">:</span>
 <span class="w">    </span><span class="c1"># this creates a group per distro (distro_CentOS, distro_Debian) and assigns the hosts that have matching values to it,</span>
-<span class="w">    </span><span class="c1"># using the default separator &quot;_&quot;</span>
+<span class="w">    </span><span class="c1"># using the default separator "_"</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">distro</span>
 <span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_distribution</span>
 
@@ -584,9 +584,9 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arch</span>
 <span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture</span>
 
-<span class="w">    </span><span class="c1"># this creates a group per ec2 region like &quot;us_west_1&quot;</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
-<span class="w">      </span><span class="nt">separator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="c1"># this creates a group per ec2 region like "us_west_1"</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
+<span class="w">      </span><span class="nt">separator</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
 <span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">placement.region</span>
 
 <span class="w">    </span><span class="c1"># this creates a common parent group for all ec2 availability zones</span>
@@ -619,7 +619,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

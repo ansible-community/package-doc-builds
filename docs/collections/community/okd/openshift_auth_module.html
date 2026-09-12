@@ -4,7 +4,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.23.0" name="antsibull-docs" />
+<meta content="2.27.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.okd.openshift_auth module – Authenticate to OpenShift clusters which require an explicit login step &mdash; Ansible Community Documentation</title>
@@ -479,22 +479,22 @@ see <a class="reference internal" href="#ansible-collections-community-okd-opens
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Authenticate to OpenShift cluster and gell a list of all pods from any namespace</span>
 <span class="w">      </span><span class="nt">block</span><span class="p">:</span>
-<span class="w">        </span><span class="c1"># It&#39;s good practice to store login credentials in a secure vault and not</span>
+<span class="w">        </span><span class="c1"># It's good practice to store login credentials in a secure vault and not</span>
 <span class="w">        </span><span class="c1"># directly in playbooks.</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Include &#39;openshift_passwords.yml&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Include 'openshift_passwords.yml'</span>
 <span class="w">          </span><span class="nt">ansible.builtin.include_vars</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift_passwords.yml</span>
 
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Log in (obtain access token)</span>
 <span class="w">          </span><span class="nt">community.okd.openshift_auth</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
-<span class="w">            </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">openshift_admin_password</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">            </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">openshift_admin_password</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">          </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift_auth_results</span>
 
 <span class="w">        </span><span class="c1"># Previous task provides the token/api_key, while all other parameters</span>
 <span class="w">        </span><span class="c1"># are taken from module_defaults</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get a list of all pods from any namespace</span>
 <span class="w">          </span><span class="nt">kubernetes.core.k8s_info</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">openshift_auth_results.openshift_auth.api_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">            </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">openshift_auth_results.openshift_auth.api_key</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">            </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span>
 <span class="w">          </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pod_list</span>
 
@@ -503,7 +503,7 @@ see <a class="reference internal" href="#ansible-collections-community-okd-opens
 <span class="w">          </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift_auth_results.openshift_auth.api_key is defined</span>
 <span class="w">          </span><span class="nt">community.okd.openshift_auth</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
-<span class="w">            </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">openshift_auth_results.openshift_auth.api_key</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">            </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">openshift_auth_results.openshift_auth.api_key</span> <span class="cp">}}</span><span class="s">"</span>
 </pre></div>
 </div>
 </section>
@@ -646,7 +646,7 @@ see <a class="reference internal" href="#ansible-collections-community-okd-opens
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

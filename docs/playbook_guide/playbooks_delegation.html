@@ -369,7 +369,7 @@ If the <code class="docutils literal notranslate"><span class="pre">connection</
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Recursively copy files from management server to target</span>
 <span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible.builtin.command</span>
 <span class="w">      </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rsync</span><span class="nv"> </span><span class="s">-a</span><span class="nv"> </span><span class="s">/path/to/files</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}:/path/to/target/&quot;</span>
+<span class="w">        </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="s">"rsync</span><span class="nv"> </span><span class="s">-a</span><span class="nv"> </span><span class="s">/path/to/files</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}:/path/to/target/"</span>
 </pre></div>
 </div>
 <p>Note that you must have passphrase-less SSH keys or an ssh-agent configured for this to work, otherwise rsync asks for a passphrase.</p>
@@ -381,9 +381,9 @@ If the <code class="docutils literal notranslate"><span class="pre">connection</
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Send summary mail</span>
 <span class="w">      </span><span class="nt">local_action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">community.general.mail</span>
 <span class="w">      </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">subject</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Summary</span><span class="nv"> </span><span class="s">Mail&quot;</span>
-<span class="w">        </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">mail_recipient</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">        </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">mail_body</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">subject</span><span class="p">:</span><span class="w"> </span><span class="s">"Summary</span><span class="nv"> </span><span class="s">Mail"</span>
+<span class="w">        </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">mail_recipient</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">        </span><span class="nt">body</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">mail_body</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">      </span><span class="nt">run_once</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 </pre></div>
 </div>
@@ -408,10 +408,10 @@ If the <code class="docutils literal notranslate"><span class="pre">connection</
 <p>By default, Ansible tasks are executed in parallel. Delegating a task does not change this and does not handle concurrency issues (multiple forks writing to the same file).
 Most commonly, users are affected by this when updating a single file on a single delegated to host for all hosts (using the <code class="docutils literal notranslate"><span class="pre">copy</span></code>, <code class="docutils literal notranslate"><span class="pre">template</span></code>, or <code class="docutils literal notranslate"><span class="pre">lineinfile</span></code> modules, for example). They will still operate in parallel forks (default 5) and overwrite each other.</p>
 <p>This can be handled in several ways:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;handle</span><span class="nv"> </span><span class="s">concurrency</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">loop</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">hosts</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">`run_once:</span><span class="nv"> </span><span class="s">true`&quot;</span>
-<span class="w">  </span><span class="nt">lineinfile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;options</span><span class="nv"> </span><span class="s">here&gt;&quot;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"handle</span><span class="nv"> </span><span class="s">concurrency</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">loop</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">hosts</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">`run_once:</span><span class="nv"> </span><span class="s">true`"</span>
+<span class="w">  </span><span class="nt">lineinfile</span><span class="p">:</span><span class="w"> </span><span class="s">"&lt;options</span><span class="nv"> </span><span class="s">here&gt;"</span>
 <span class="w">  </span><span class="nt">run_once</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">ansible_play_hosts_all</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">ansible_play_hosts_all</span><span class="nv"> </span><span class="s">}}'</span>
 </pre></div>
 </div>
 <p>By using an intermediate play with  <cite>serial: 1</cite> or using  <cite>throttle: 1</cite> at the task level, for more detail see <a class="reference internal" href="playbooks_strategies.html#playbooks-strategies"><span class="std std-ref">Controlling playbook execution: strategies and more</span></a></p>
@@ -425,9 +425,9 @@ Most commonly, users are affected by this when updating a single file on a singl
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gather facts from db servers</span>
 <span class="w">      </span><span class="nt">ansible.builtin.setup</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">      </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">      </span><span class="nt">delegate_facts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">groups[&#39;dbservers&#39;]</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">      </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">groups['dbservers']</span><span class="nv"> </span><span class="s">}}"</span>
 </pre></div>
 </div>
 <p>This task gathers facts for the machines in the dbservers group and assigns the facts to those machines, even though the play targets the app_servers group. This way you can lookup <cite>hostvars[‘dbhost1’][‘ansible_default_ipv4’][‘address’]</cite> even though dbservers were not part of the play, or left out by using <code class="docutils literal notranslate"><span class="pre">--limit</span></code>.</p>
@@ -481,7 +481,7 @@ host_vars/localhost.yml, for example. You can avoid this issue by using <code cl
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

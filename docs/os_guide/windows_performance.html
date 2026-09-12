@@ -304,17 +304,17 @@ point execute faster than otherwise).</p>
 </div>
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> <span class="nb">Optimize-Assemblies</span> <span class="p">{</span>
     <span class="k">param</span> <span class="p">(</span>
-        <span class="no">[string]</span><span class="nv">$assemblyFilter</span> <span class="p">=</span> <span class="s2">&quot;Microsoft.PowerShell.&quot;</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$activity</span> <span class="p">=</span> <span class="s2">&quot;Native Image Installation&quot;</span>
+        <span class="no">[string]</span><span class="nv">$assemblyFilter</span> <span class="p">=</span> <span class="s2">"Microsoft.PowerShell."</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$activity</span> <span class="p">=</span> <span class="s2">"Native Image Installation"</span>
     <span class="p">)</span>
 
     <span class="k">try</span> <span class="p">{</span>
         <span class="c"># Get the path to the ngen executable dynamically</span>
-        <span class="nv">$ngenPath</span> <span class="p">=</span> <span class="no">[System.IO.Path]</span><span class="p">::</span><span class="n">Combine</span><span class="p">(</span><span class="no">[Runtime.InteropServices.RuntimeEnvironment]</span><span class="p">::</span><span class="n">GetRuntimeDirectory</span><span class="p">(),</span> <span class="s2">&quot;ngen.exe&quot;</span><span class="p">)</span>
+        <span class="nv">$ngenPath</span> <span class="p">=</span> <span class="no">[System.IO.Path]</span><span class="p">::</span><span class="n">Combine</span><span class="p">(</span><span class="no">[Runtime.InteropServices.RuntimeEnvironment]</span><span class="p">::</span><span class="n">GetRuntimeDirectory</span><span class="p">(),</span> <span class="s2">"ngen.exe"</span><span class="p">)</span>
 
         <span class="c"># Check if ngen.exe exists</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">-Not</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$ngenPath</span><span class="p">))</span> <span class="p">{</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;Ngen.exe not found at $ngenPath. Make sure .NET Framework is installed.&quot;</span>
+            <span class="nb">Write-Host</span> <span class="s2">"Ngen.exe not found at $ngenPath. Make sure .NET Framework is installed."</span>
             <span class="k">return</span>
         <span class="p">}</span>
 
@@ -322,10 +322,10 @@ point execute faster than otherwise).</p>
         <span class="nv">$assemblies</span> <span class="p">=</span> <span class="no">[AppDomain]</span><span class="p">::</span><span class="n">CurrentDomain</span><span class="p">.</span><span class="n">GetAssemblies</span><span class="p">()</span>
 
         <span class="c"># Filter assemblies based on the provided filter</span>
-        <span class="nv">$filteredAssemblies</span> <span class="p">=</span> <span class="nv">$assemblies</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span> <span class="o">-ilike</span> <span class="s2">&quot;$assemblyFilter*&quot;</span> <span class="p">}</span>
+        <span class="nv">$filteredAssemblies</span> <span class="p">=</span> <span class="nv">$assemblies</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span> <span class="o">-ilike</span> <span class="s2">"$assemblyFilter*"</span> <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nv">$filteredAssemblies</span><span class="p">.</span><span class="n">Count</span> <span class="o">-eq</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;No matching assemblies found for optimization.&quot;</span>
+            <span class="nb">Write-Host</span> <span class="s2">"No matching assemblies found for optimization."</span>
             <span class="k">return</span>
         <span class="p">}</span>
 
@@ -334,20 +334,20 @@ point execute faster than otherwise).</p>
             <span class="nv">$name</span> <span class="p">=</span> <span class="no">[System.IO.Path]</span><span class="p">::</span><span class="n">GetFileName</span><span class="p">(</span><span class="nv">$assembly</span><span class="p">.</span><span class="n">Location</span><span class="p">)</span>
 
             <span class="c"># Display progress</span>
-            <span class="nb">Write-Progress</span> <span class="n">-Activity</span> <span class="nv">$activity</span> <span class="n">-Status</span> <span class="s2">&quot;Optimizing $name&quot;</span>
+            <span class="nb">Write-Progress</span> <span class="n">-Activity</span> <span class="nv">$activity</span> <span class="n">-Status</span> <span class="s2">"Optimizing $name"</span>
 
             <span class="c"># Use Ngen to install the assembly</span>
-            <span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="nv">$ngenPath</span> <span class="n">-ArgumentList</span> <span class="s2">&quot;install </span><span class="se">`&quot;</span><span class="p">$(</span><span class="nv">$assembly</span><span class="p">.</span><span class="n">Location</span><span class="p">)</span><span class="se">`&quot;</span><span class="s2">&quot;</span> <span class="n">-Wait</span> <span class="n">-WindowStyle</span> <span class="n">Hidden</span>
+            <span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="nv">$ngenPath</span> <span class="n">-ArgumentList</span> <span class="s2">"install </span><span class="se">`"</span><span class="p">$(</span><span class="nv">$assembly</span><span class="p">.</span><span class="n">Location</span><span class="p">)</span><span class="se">`"</span><span class="s2">"</span> <span class="n">-Wait</span> <span class="n">-WindowStyle</span> <span class="n">Hidden</span>
         <span class="p">}</span>
 
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Optimization complete.&quot;</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Optimization complete."</span>
     <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;An error occurred: $_&quot;</span>
+        <span class="nb">Write-Host</span> <span class="s2">"An error occurred: $_"</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c"># Optimize PowerShell assemblies:</span>
-<span class="nb">Optimize-Assemblies</span> <span class="n">-assemblyFilter</span> <span class="s2">&quot;Microsoft.PowerShell.&quot;</span>
+<span class="nb">Optimize-Assemblies</span> <span class="n">-assemblyFilter</span> <span class="s2">"Microsoft.PowerShell."</span>
 </pre></div>
 </div>
 <p>PowerShell is used by every Windows Ansible module. This optimization reduces
@@ -383,7 +383,7 @@ golden image build process and runtime.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

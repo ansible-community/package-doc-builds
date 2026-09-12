@@ -329,7 +329,7 @@ However, some command line programs may return output in UTF-8 and not tag the p
 In this case, the autoconversion may incorrectly assume output is in EBCDIC and attempt to convert it and yield unreadable data.
 If the source encoding is known, you can use the <a class="reference internal" href="../collections/ansible/builtin/shell_module.html#ansible-collections-ansible-builtin-shell-module"><span class="std std-ref">ansible.builtin.shell</span></a> module’s capability to chain commands together through pipes,
 and pipe the output to <code class="docutils literal notranslate"><span class="pre">iconv</span></code>. In this example, you may need to select other encodings for the ‘to’ and ‘from’ that represent your file encodings.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;some_pgm</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">iconv</span><span class="nv"> </span><span class="s">-f</span><span class="nv"> </span><span class="s">ibm-1047</span><span class="nv"> </span><span class="s">-t</span><span class="nv"> </span><span class="s">iso8859-1&quot;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="s">"some_pgm</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">iconv</span><span class="nv"> </span><span class="s">-f</span><span class="nv"> </span><span class="s">ibm-1047</span><span class="nv"> </span><span class="s">-t</span><span class="nv"> </span><span class="s">iso8859-1"</span>
 </pre></div>
 </div>
 </dd>
@@ -339,12 +339,12 @@ and pipe the output to <code class="docutils literal notranslate"><span class="p
 <dt><a class="reference internal" href="../collections/ansible/builtin/raw_module.html#ansible-collections-ansible-builtin-raw-module"><span class="std std-ref">ansible.builtin.raw</span></a></dt><dd><p>The raw module, by design, ignores all remote environment settings. However, z/OS UNIX System Services managed nodes require some base configurations.
 To use this module with UNIX System Services, configure the minimum environment variables as a chain of export statements before the desired command.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ansible.builtin.raw</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">    </span><span class="no">export _BPXK_AUTOCVT: &quot;ON&quot; ;</span>
-<span class="w">    </span><span class="no">export _CEE_RUNOPTS: &quot;FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)&quot; ;</span>
-<span class="w">    </span><span class="no">export _TAG_REDIR_ERR: &quot;txt&quot; ;</span>
-<span class="w">    </span><span class="no">export _TAG_REDIR_IN: &quot;txt&quot; ;</span>
-<span class="w">    </span><span class="no">export _TAG_REDIR_OUT: &quot;txt&quot; ;</span>
-<span class="w">    </span><span class="no">echo &quot;hello world!&quot;</span>
+<span class="w">    </span><span class="no">export _BPXK_AUTOCVT: "ON" ;</span>
+<span class="w">    </span><span class="no">export _CEE_RUNOPTS: "FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)" ;</span>
+<span class="w">    </span><span class="no">export _TAG_REDIR_ERR: "txt" ;</span>
+<span class="w">    </span><span class="no">export _TAG_REDIR_IN: "txt" ;</span>
+<span class="w">    </span><span class="no">export _TAG_REDIR_OUT: "txt" ;</span>
+<span class="w">    </span><span class="no">echo "hello world!"</span>
 </pre></div>
 </div>
 <p>Alternatively, consider using the <a class="reference internal" href="../collections/ansible/builtin/command_module.html#ansible-collections-ansible-builtin-command-module"><span class="std std-ref">ansible.builtin.command</span></a> or <a class="reference internal" href="../collections/ansible/builtin/shell_module.html#ansible-collections-ansible-builtin-shell-module"><span class="std std-ref">ansible.builtin.shell</span></a> modules mentioned above,
@@ -379,14 +379,14 @@ With this work-around, some of the conveniences of the script module are lost, s
 but it is trivial to perform those steps as additional playbook tasks.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy local script file to remote node.</span>
 <span class="w">  </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">playbook_dir</span><span class="nv"> </span><span class="s">}}/local/scripts/sample.sh&quot;</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">playbook_dir</span><span class="nv"> </span><span class="s">}}/local/scripts/sample.sh"</span>
 <span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/u/ibmuser/scripts/</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Tag remote script file.</span>
-<span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;chtag</span><span class="nv"> </span><span class="s">-tc</span><span class="nv"> </span><span class="s">ISO8859-1</span><span class="nv"> </span><span class="s">/u/ibmuser/scripts/sample.sh&quot;</span>
+<span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="s">"chtag</span><span class="nv"> </span><span class="s">-tc</span><span class="nv"> </span><span class="s">ISO8859-1</span><span class="nv"> </span><span class="s">/u/ibmuser/scripts/sample.sh"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run script.</span>
-<span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/u/ibmuser/scripts/sample.sh&quot;</span>
+<span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="s">"/u/ibmuser/scripts/sample.sh"</span>
 </pre></div>
 </div>
 <p>Another work-around is to store local script files in EBCDIC.
@@ -403,12 +403,12 @@ but managing unreadable EBCDIC files locally makes maintaining those script file
 <p>Certain Language Environment (LE) configurations enable automatic encoding conversion and automatic file tagging functionality
 required by Python on z/OS UNIX systems (<a class="reference external" href="https://www.ibm.com/products/open-enterprise-python-zos">IBM Open Enterprise SDK for Python</a> ).</p>
 <p>Include the following configurations when setting the remote environment for any z/OS UNIX managed nodes:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">_BPXK_AUTOCVT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ON&quot;</span>
-<span class="nt">_CEE_RUNOPTS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FILETAG(AUTOCVT,AUTOTAG)</span><span class="nv"> </span><span class="s">POSIX(ON)&quot;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">_BPXK_AUTOCVT</span><span class="p">:</span><span class="w"> </span><span class="s">"ON"</span>
+<span class="nt">_CEE_RUNOPTS</span><span class="p">:</span><span class="w"> </span><span class="s">"FILETAG(AUTOCVT,AUTOTAG)</span><span class="nv"> </span><span class="s">POSIX(ON)"</span>
 
-<span class="nt">_TAG_REDIR_ERR</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;txt&quot;</span>
-<span class="nt">_TAG_REDIR_IN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;txt&quot;</span>
-<span class="nt">_TAG_REDIR_OUT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;txt&quot;</span>
+<span class="nt">_TAG_REDIR_ERR</span><span class="p">:</span><span class="w"> </span><span class="s">"txt"</span>
+<span class="nt">_TAG_REDIR_IN</span><span class="p">:</span><span class="w"> </span><span class="s">"txt"</span>
+<span class="nt">_TAG_REDIR_OUT</span><span class="p">:</span><span class="w"> </span><span class="s">"txt"</span>
 </pre></div>
 </div>
 <p>Ansible can be configured with remote environment variables in these options:</p>
@@ -454,12 +454,12 @@ For more details on pipelining, see: <a class="reference internal" href="../dev_
 <p>Enabling this behavior is encouraged because Python will tag its pipes with the proper encoding, so there is less chance of encountering encoding errors.
 Further, using Python stdin pipes is more performant than file I/O.</p>
 <p>Include the following in the environment for any tasks performed on z/OS UNIX managed nodes.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">PYTHONSTDINENCODING</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cp1047&quot;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">PYTHONSTDINENCODING</span><span class="p">:</span><span class="w"> </span><span class="s">"cp1047"</span>
 </pre></div>
 </div>
 <p>When Ansible pipelining is enabled but the <code class="docutils literal notranslate"><span class="pre">PYTHONSTDINENCODING</span></code> property is not correctly set, the following error may result.
 Note, the hex <code class="docutils literal notranslate"><span class="pre">'\x81'</span></code> below may vary depending on the source causing the error:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SyntaxError: Non-UTF-8 code starting with &#39;\\x81&#39; in file &lt;stdin&gt; on line 1, but no encoding declared; see https://peps.python.org/pep-0263/ for details
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SyntaxError: Non-UTF-8 code starting with '\\x81' in file &lt;stdin&gt; on line 1, but no encoding declared; see https://peps.python.org/pep-0263/ for details
 </pre></div>
 </div>
 </section>
@@ -500,7 +500,7 @@ z/OS UNIX System Services interface also cannot be configured to run as an Ansib
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

@@ -349,7 +349,7 @@ fooservers.yml
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>roles/
-    common/               # this hierarchy represents a &quot;role&quot;
+    common/               # this hierarchy represents a "role"
         tasks/            #
             main.yml      #  &lt;-- tasks file can include smaller files if warranted
         handlers/         #
@@ -369,9 +369,9 @@ fooservers.yml
         module_utils/     # roles can also include custom module_utils
         lookup_plugins/   # or other types of plugins, like lookup in this case
 
-    webtier/              # same kind of structure as &quot;common&quot; was above, done for the webtier role
-    monitoring/           # &quot;&quot;
-    fooapp/               # &quot;&quot;
+    webtier/              # same kind of structure as "common" was above, done for the webtier role
+    monitoring/           # ""
+    fooapp/               # ""
 </pre></div>
 </div>
 <p>By default, Ansible will look in most role directories for a <code class="docutils literal notranslate"><span class="pre">main.yml</span></code> file for relevant content (also <code class="docutils literal notranslate"><span class="pre">main.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">main</span></code>):</p>
@@ -398,22 +398,22 @@ For example, you can place platform-specific tasks in separate files and refer t
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># roles/example/tasks/main.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install the correct web server for RHEL</span>
 <span class="w">  </span><span class="nt">ansible.builtin.import_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redhat.yml</span>
-<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;]|lower == &#39;redhat&#39;</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts['os_family']|lower == 'redhat'</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install the correct web server for Debian</span>
 <span class="w">  </span><span class="nt">ansible.builtin.import_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debian.yml</span>
-<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;]|lower == &#39;debian&#39;</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts['os_family']|lower == 'debian'</span>
 
 <span class="c1"># roles/example/tasks/redhat.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install web server</span>
 <span class="w">  </span><span class="nt">ansible.builtin.yum</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;httpd&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"httpd"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
 <span class="c1"># roles/example/tasks/debian.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install web server</span>
 <span class="w">  </span><span class="nt">ansible.builtin.apt</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;apache2&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"apache2"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 </pre></div>
 </div>
@@ -422,12 +422,12 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">  </span><span class="nt">ansible.builtin.include_role</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">package_manager_bootstrap</span>
 <span class="w">      </span><span class="nt">tasks_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apt.yml</span>
-<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;] == &#39;Debian&#39;</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts['os_family'] == 'Debian'</span>
 </pre></div>
 </div>
 <p>Directories <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and <code class="docutils literal notranslate"><span class="pre">vars</span></code> may also include <em>nested directories</em>. If your variables file is a directory, Ansible reads all variables files and directories inside in alphabetical order. If a nested directory contains variables files as well as directories, Ansible reads the directories first. Below is an example of a <code class="docutils literal notranslate"><span class="pre">vars/main</span></code> directory:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>roles/
-    common/          # this hierarchy represents a &quot;role&quot;
+    common/          # this hierarchy represents a "role"
         vars/
             main/    #  &lt;-- variables associated with this role
                 first_nested_directory/
@@ -452,7 +452,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
 <span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/path/to/my/roles/common&#39;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="s">'/path/to/my/roles/common'</span>
 </pre></div>
 </div>
 </section>
@@ -513,12 +513,12 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">common</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo_app_instance</span>
 <span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/opt/a&#39;</span>
+<span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">'/opt/a'</span>
 <span class="w">        </span><span class="nt">app_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
 <span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">typeA</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo_app_instance</span>
 <span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/opt/b&#39;</span>
+<span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">'/opt/b'</span>
 <span class="w">        </span><span class="nt">app_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5001</span>
 <span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">typeB</span>
 </pre></div>
@@ -538,7 +538,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
 <span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;this</span><span class="nv"> </span><span class="s">task</span><span class="nv"> </span><span class="s">runs</span><span class="nv"> </span><span class="s">before</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">role&quot;</span>
+<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"this</span><span class="nv"> </span><span class="s">task</span><span class="nv"> </span><span class="s">runs</span><span class="nv"> </span><span class="s">before</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">role"</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Include the example role</span>
 <span class="w">      </span><span class="nt">ansible.builtin.include_role</span><span class="p">:</span>
@@ -546,7 +546,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
 <span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;this</span><span class="nv"> </span><span class="s">task</span><span class="nv"> </span><span class="s">runs</span><span class="nv"> </span><span class="s">after</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">role&quot;</span>
+<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"this</span><span class="nv"> </span><span class="s">task</span><span class="nv"> </span><span class="s">runs</span><span class="nv"> </span><span class="s">after</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">role"</span>
 </pre></div>
 </div>
 <p>You can pass other keywords, including variables and tags, when including roles:</p>
@@ -557,7 +557,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">      </span><span class="nt">ansible.builtin.include_role</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo_app_instance</span>
 <span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/opt/a&#39;</span>
+<span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">'/opt/a'</span>
 <span class="w">        </span><span class="nt">app_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
 <span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">typeA</span>
 <span class="w">  </span><span class="c1"># ...</span>
@@ -571,7 +571,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Include the some_role role</span>
 <span class="w">      </span><span class="nt">ansible.builtin.include_role</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some_role</span>
-<span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ansible_facts[&#39;os_family&#39;]</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">&#39;RedHat&#39;&quot;</span>
+<span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">"ansible_facts['os_family']</span><span class="nv"> </span><span class="s">==</span><span class="nv"> </span><span class="s">'RedHat'"</span>
 </pre></div>
 </div>
 </section>
@@ -583,7 +583,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
 <span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;before</span><span class="nv"> </span><span class="s">we</span><span class="nv"> </span><span class="s">run</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">role&quot;</span>
+<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"before</span><span class="nv"> </span><span class="s">we</span><span class="nv"> </span><span class="s">run</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">role"</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Import the example role</span>
 <span class="w">      </span><span class="nt">ansible.builtin.import_role</span><span class="p">:</span>
@@ -591,7 +591,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
 <span class="w">      </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;after</span><span class="nv"> </span><span class="s">we</span><span class="nv"> </span><span class="s">ran</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">role&quot;</span>
+<span class="w">        </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"after</span><span class="nv"> </span><span class="s">we</span><span class="nv"> </span><span class="s">ran</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">role"</span>
 </pre></div>
 </div>
 <p>You can pass other keywords, including variables and tags when importing roles:</p>
@@ -602,7 +602,7 @@ For example, you can place platform-specific tasks in separate files and refer t
 <span class="w">      </span><span class="nt">ansible.builtin.import_role</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo_app_instance</span>
 <span class="w">      </span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/opt/a&#39;</span>
+<span class="w">        </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="s">'/opt/a'</span>
 <span class="w">        </span><span class="nt">app_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
 <span class="w">  </span><span class="c1"># ...</span>
 </pre></div>
@@ -774,91 +774,91 @@ default for the role variable will always come from the role defaults (as define
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Daniel Ziegenberg</span>
 <span class="w">    </span><span class="nt">options</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">myapp_int</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;int&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"int"</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">integer</span><span class="nv"> </span><span class="s">value,</span><span class="nv"> </span><span class="s">defaulting</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">42.&quot;</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;This</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">second</span><span class="nv"> </span><span class="s">paragraph.&quot;</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"The</span><span class="nv"> </span><span class="s">integer</span><span class="nv"> </span><span class="s">value,</span><span class="nv"> </span><span class="s">defaulting</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">42."</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"This</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">second</span><span class="nv"> </span><span class="s">paragraph."</span>
 
 <span class="w">      </span><span class="nt">myapp_str</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"str"</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">value&quot;</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"The</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">value"</span>
 
 <span class="w">      </span><span class="nt">myapp_list</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;list&quot;</span>
-<span class="w">        </span><span class="nt">elements</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"list"</span>
+<span class="w">        </span><span class="nt">elements</span><span class="p">:</span><span class="w"> </span><span class="s">"str"</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;A</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">values.&quot;</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"A</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">values."</span>
 <span class="w">        </span><span class="nt">version_added</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.3.0</span>
 
 <span class="w">      </span><span class="nt">myapp_list_with_dicts</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;list&quot;</span>
-<span class="w">        </span><span class="nt">elements</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dict&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"list"</span>
+<span class="w">        </span><span class="nt">elements</span><span class="p">:</span><span class="w"> </span><span class="s">"dict"</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">myapp_food_kind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;meat&quot;</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">myapp_food_kind</span><span class="p">:</span><span class="w"> </span><span class="s">"meat"</span>
 <span class="w">            </span><span class="nt">myapp_food_boiling_required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">            </span><span class="nt">myapp_food_preparation_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">myapp_food_kind</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fruits&quot;</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">myapp_food_kind</span><span class="p">:</span><span class="w"> </span><span class="s">"fruits"</span>
 <span class="w">            </span><span class="nt">myapp_food_preparation_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;A</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">dicts</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">defined</span><span class="nv"> </span><span class="s">structure</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">default</span><span class="nv"> </span><span class="s">value.&quot;</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"A</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">dicts</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">defined</span><span class="nv"> </span><span class="s">structure</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">default</span><span class="nv"> </span><span class="s">value."</span>
 <span class="w">        </span><span class="nt">options</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">myapp_food_kind</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"str"</span>
 <span class="w">            </span><span class="nt">choices</span><span class="p">:</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;vegetables&quot;</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;fruits&quot;</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;grains&quot;</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;meat&quot;</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"vegetables"</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"fruits"</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"grains"</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"meat"</span>
 <span class="w">            </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;A</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">limited</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">allowed</span><span class="nv"> </span><span class="s">choices.&quot;</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"A</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">limited</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">allowed</span><span class="nv"> </span><span class="s">choices."</span>
 
 <span class="w">          </span><span class="nt">myapp_food_boiling_required</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bool&quot;</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"bool"</span>
 <span class="w">            </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">            </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Whether</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">kind</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">food</span><span class="nv"> </span><span class="s">requires</span><span class="nv"> </span><span class="s">boiling</span><span class="nv"> </span><span class="s">before</span><span class="nv"> </span><span class="s">consumption.&quot;</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"Whether</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">kind</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">food</span><span class="nv"> </span><span class="s">requires</span><span class="nv"> </span><span class="s">boiling</span><span class="nv"> </span><span class="s">before</span><span class="nv"> </span><span class="s">consumption."</span>
 
 <span class="w">          </span><span class="nt">myapp_food_preparation_time</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
 <span class="w">            </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Time</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">prepare</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">dish</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">minutes.&quot;</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"Time</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">prepare</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">dish</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">minutes."</span>
 
 <span class="w">      </span><span class="nt">myapp_dict_with_suboptions</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dict&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"dict"</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">myapp_host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bar.foo&quot;</span>
+<span class="w">          </span><span class="nt">myapp_host</span><span class="p">:</span><span class="w"> </span><span class="s">"bar.foo"</span>
 <span class="w">          </span><span class="nt">myapp_exclude_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">          </span><span class="nt">myapp_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/etc/myapp&quot;</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;A</span><span class="nv"> </span><span class="s">dict</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">defined</span><span class="nv"> </span><span class="s">structure</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">default</span><span class="nv"> </span><span class="s">values.&quot;</span>
+<span class="w">          </span><span class="nt">myapp_path</span><span class="p">:</span><span class="w"> </span><span class="s">"/etc/myapp"</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"A</span><span class="nv"> </span><span class="s">dict</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">defined</span><span class="nv"> </span><span class="s">structure</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">default</span><span class="nv"> </span><span class="s">values."</span>
 <span class="w">        </span><span class="nt">options</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">myapp_host</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"str"</span>
 <span class="w">            </span><span class="nt">choices</span><span class="p">:</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;foo.bar&quot;</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;bar.foo&quot;</span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ansible.foo.bar&quot;</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"foo.bar"</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"bar.foo"</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"ansible.foo.bar"</span>
 <span class="w">            </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;A</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">limited</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">allowed</span><span class="nv"> </span><span class="s">choices.&quot;</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"A</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">limited</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">allowed</span><span class="nv"> </span><span class="s">choices."</span>
 
 <span class="w">          </span><span class="nt">myapp_exclude_host</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bool&quot;</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"bool"</span>
 <span class="w">            </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;A</span><span class="nv"> </span><span class="s">boolean</span><span class="nv"> </span><span class="s">value.&quot;</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"A</span><span class="nv"> </span><span class="s">boolean</span><span class="nv"> </span><span class="s">value."</span>
 
 <span class="w">          </span><span class="nt">myapp_path</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path&quot;</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"path"</span>
 <span class="w">            </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;A</span><span class="nv"> </span><span class="s">path</span><span class="nv"> </span><span class="s">value.&quot;</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"A</span><span class="nv"> </span><span class="s">path</span><span class="nv"> </span><span class="s">value."</span>
 
 <span class="w">          </span><span class="nt">original_name</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">list</span>
-<span class="w">            </span><span class="nt">elements</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;str&quot;</span>
+<span class="w">            </span><span class="nt">elements</span><span class="p">:</span><span class="w"> </span><span class="s">"str"</span>
 <span class="w">            </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;An</span><span class="nv"> </span><span class="s">optional</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">values.&quot;</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"An</span><span class="nv"> </span><span class="s">optional</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">string</span><span class="nv"> </span><span class="s">values."</span>
 
 <span class="w">  </span><span class="c1"># roles/myapp/tasks/alternate.yml entry point</span>
 <span class="w">  </span><span class="nt">alternate</span><span class="p">:</span>
@@ -868,10 +868,10 @@ default for the role variable will always come from the role defaults (as define
 <span class="w">    </span><span class="nt">version_added</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.2.0</span>
 <span class="w">    </span><span class="nt">options</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">myapp_int</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;int&quot;</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">"int"</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">integer</span><span class="nv"> </span><span class="s">value,</span><span class="nv"> </span><span class="s">defaulting</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">1024.&quot;</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">"The</span><span class="nv"> </span><span class="s">integer</span><span class="nv"> </span><span class="s">value,</span><span class="nv"> </span><span class="s">defaulting</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">1024."</span>
 </pre></div>
 </div>
 </section>
@@ -895,8 +895,8 @@ default for the role variable will always come from the role defaults (as define
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
 <span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span><span class="w"> </span><span class="nv">foo</span><span class="p p-Indicator">,</span><span class="nt"> message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;first&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span><span class="w"> </span><span class="nv">foo</span><span class="p p-Indicator">,</span><span class="nt"> message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;second&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span><span class="w"> </span><span class="nv">foo</span><span class="p p-Indicator">,</span><span class="nt"> message</span><span class="p">:</span><span class="w"> </span><span class="s">"first"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span><span class="w"> </span><span class="nv">foo</span><span class="p p-Indicator">,</span><span class="nt"> message</span><span class="p">:</span><span class="w"> </span><span class="s">"second"</span><span class="w"> </span><span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>This syntax also runs the <code class="docutils literal notranslate"><span class="pre">foo</span></code> role twice;</p>
@@ -904,9 +904,9 @@ default for the role variable will always come from the role defaults (as define
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
 <span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
-<span class="w">      </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;first&quot;</span>
+<span class="w">      </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">"first"</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
-<span class="w">      </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;second&quot;</span>
+<span class="w">      </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">"second"</span>
 </pre></div>
 </div>
 <p>In these examples, Ansible runs <code class="docutils literal notranslate"><span class="pre">foo</span></code> twice because each role definition has different parameters.</p>
@@ -1088,7 +1088,7 @@ Alongside the ‘tasks’ and ‘handlers’ structure of a role, add a director
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 

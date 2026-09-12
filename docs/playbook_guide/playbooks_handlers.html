@@ -397,7 +397,7 @@
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Template services</span>
 <span class="w">  </span><span class="nt">ansible.builtin.template</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}.j2&quot;</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}.j2"</span>
 <span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/systemd/system/{{ item }}.service</span>
 <span class="w">  </span><span class="c1"># Note: if *any* loop iteration triggers a change, *all* handlers are run</span>
 <span class="w">  </span><span class="nt">notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart {{ item }}</span>
@@ -425,21 +425,21 @@
 <p>Alternatively, handlers can utilize the <code class="docutils literal notranslate"><span class="pre">listen</span></code> keyword. Using this handler keyword, handlers can listen on topics that can group multiple handlers as follows:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart everything</span>
-<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;this task will restart the web services&quot;</span>
-<span class="w">    </span><span class="nt">notify</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;restart</span><span class="nv"> </span><span class="s">web</span><span class="nv"> </span><span class="s">services&quot;</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "this task will restart the web services"</span>
+<span class="w">    </span><span class="nt">notify</span><span class="p">:</span><span class="w"> </span><span class="s">"restart</span><span class="nv"> </span><span class="s">web</span><span class="nv"> </span><span class="s">services"</span>
 
 <span class="nt">handlers</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart memcached</span>
 <span class="w">    </span><span class="nt">service</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memcached</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarted</span>
-<span class="w">    </span><span class="nt">listen</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;restart</span><span class="nv"> </span><span class="s">web</span><span class="nv"> </span><span class="s">services&quot;</span>
+<span class="w">    </span><span class="nt">listen</span><span class="p">:</span><span class="w"> </span><span class="s">"restart</span><span class="nv"> </span><span class="s">web</span><span class="nv"> </span><span class="s">services"</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart apache</span>
 <span class="w">    </span><span class="nt">service</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apache</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarted</span>
-<span class="w">    </span><span class="nt">listen</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;restart</span><span class="nv"> </span><span class="s">web</span><span class="nv"> </span><span class="s">services&quot;</span>
+<span class="w">    </span><span class="nt">listen</span><span class="p">:</span><span class="w"> </span><span class="s">"restart</span><span class="nv"> </span><span class="s">web</span><span class="nv"> </span><span class="s">services"</span>
 </pre></div>
 </div>
 <p>Notifying the <code class="docutils literal notranslate"><span class="pre">restart</span> <span class="pre">web</span> <span class="pre">services</span></code> topic results in executing all handlers listening to that topic regardless of how those handlers are named.</p>
@@ -496,19 +496,19 @@
 <p>You may want your Ansible handlers to use variables. For example, if the name of a service varies slightly by distribution, you want your output to show the exact name of the restarted service for each target machine. Avoid placing variables in the name of the handler. Since handler names are templated early on, Ansible may not have a value available for a handler name like this:</p>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">handlers</span><span class="p">:</span>
 <span class="c1"># This handler name may cause your play to fail!</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart &quot;</span><span class="cp">{{</span> <span class="nv">web_service_name</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">&quot;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart "</span><span class="cp">{{</span> <span class="nv">web_service_name</span> <span class="cp">}}</span><span class="l l-Scalar l-Scalar-Plain">"</span>
 </pre></div>
 </div>
 <p>If the variable used in the handler name is not available, the entire play fails. Changing that variable mid-play <strong>will not</strong> result in newly created handler.</p>
 <p>Instead, place variables in the task parameters of your handler. You can load the values using <code class="docutils literal notranslate"><span class="pre">include_vars</span></code> like this:</p>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set host variables based on distribution</span>
-<span class="w">    </span><span class="nt">include_vars</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">ansible_facts.distribution</span> <span class="cp">}}</span><span class="s">.yml&quot;</span>
+<span class="w">    </span><span class="nt">include_vars</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">ansible_facts.distribution</span> <span class="cp">}}</span><span class="s">.yml"</span>
 
 <span class="nt">handlers</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart web service</span>
 <span class="w">    </span><span class="nt">ansible.builtin.service</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">web_service_name</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="s1">&#39;httpd&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">web_service_name</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="s1">'httpd'</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarted</span>
 </pre></div>
 </div>
@@ -549,7 +549,7 @@ Handlers <a class="reference internal" href="playbooks_tags.html#tags-on-handler
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Sep 11, 2026.
+      <span class="lastupdated">Last updated on Sep 12, 2026.
       </span></p>
   </div>
 
