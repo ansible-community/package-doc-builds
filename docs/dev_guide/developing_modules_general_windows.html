@@ -150,6 +150,7 @@
 <li class="toctree-l2"><a class="reference internal" href="developing_api.html">Python API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_secret_masking.html">Handling secrets in modules and plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_collections_path.html">Ansible collection creator path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
@@ -512,7 +513,7 @@ options set:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">default</span></code>: The default value for the module option if not set</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated_aliases</span></code>: A list of hashtables that define aliases that are deprecated and the versions they will be removed in. Each entry must contain the keys <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">collection_name</span></code> with either <code class="docutils literal notranslate"><span class="pre">version</span></code> or <code class="docutils literal notranslate"><span class="pre">date</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">elements</span></code>: When <code class="docutils literal notranslate"><span class="pre">type=list</span></code>, this sets the type of each list value, the values are the same as <code class="docutils literal notranslate"><span class="pre">type</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">no_log</span></code>: Will sanitize the input value before being returned in the <code class="docutils literal notranslate"><span class="pre">module_invocation</span></code> return value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">no_log</span></code>: Hides the input value from Ansible output. On <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.22 and later the value is masked in the Event Log and in output, on earlier versions it is removed from <code class="docutils literal notranslate"><span class="pre">module_invocation</span></code>. See <a class="reference internal" href="developing_secret_masking.html#developing-secret-masking"><span class="std std-ref">Handling secrets in modules and plugins</span></a></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">removed_in_version</span></code>: States when a deprecated module option is to be removed, a warning is displayed to the end user if set</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">removed_at_date</span></code>: States the date (YYYY-MM-DD) when a deprecated module option will be removed, a warning is displayed to the end user if set</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">removed_from_collection</span></code>: States from which collection the deprecated module option will be removed; must be specified if one of <code class="docutils literal notranslate"><span class="pre">removed_in_version</span></code> and <code class="docutils literal notranslate"><span class="pre">removed_at_date</span></code> is specified</p></li>
@@ -643,7 +644,9 @@ module:</p>
 </pre></div>
 </div>
 <p>This will import the module_util at <code class="docutils literal notranslate"><span class="pre">./lib/ansible/module_utils/csharp/Ansible.Basic.cs</span></code>
-and automatically load the types in the executing process. C# module utils can
+and automatically load the types in the executing process. The <code class="docutils literal notranslate"><span class="pre">Ansible.Secrets</span></code>
+C# module util provides the <code class="docutils literal notranslate"><span class="pre">[Ansible.Secrets.SecretMasker]</span></code> class for registering
+secrets and masking strings, see <a class="reference internal" href="developing_secret_masking.html#developing-secret-masking"><span class="std std-ref">Handling secrets in modules and plugins</span></a>. C# module utils can
 reference each other and be loaded together by adding the following line to the
 using statements at the top of the util:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">Ansible.Become</span><span class="p">;</span>

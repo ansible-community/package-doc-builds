@@ -151,6 +151,7 @@
 <li class="toctree-l1"><a class="reference internal" href="automationhub.html">Ansible Automation Hub</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Logging Ansible output</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#protecting-sensitive-data-with-no-log">Protecting sensitive data with <code class="docutils literal notranslate"><span class="pre">no_log</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#masking-registered-secrets">Masking registered secrets</a></li>
 </ul>
 </li>
 </ul>
@@ -271,6 +272,10 @@
 <section id="protecting-sensitive-data-with-no-log">
 <h2>Protecting sensitive data with <code class="docutils literal notranslate"><span class="pre">no_log</span></code><a class="headerlink" href="#protecting-sensitive-data-with-no-log" title="Link to this heading"></a></h2>
 <p>If you save Ansible output to a log, you expose any secret data in your Ansible output, such as passwords and usernames. To keep sensitive values out of your logs, mark tasks that expose them with the <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">True</span></code> attribute. However, the <code class="docutils literal notranslate"><span class="pre">no_log</span></code> attribute does not affect debugging output, so be careful not to debug playbooks in a production environment. See <a class="reference internal" href="faq.html#keep-secret-data"><span class="std std-ref">How do I keep secret data in my playbook?</span></a> for an example.</p>
+</section>
+<section id="masking-registered-secrets">
+<h2>Masking registered secrets<a class="headerlink" href="#masking-registered-secrets" title="Link to this heading"></a></h2>
+<p>Starting with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.22, Ansible also masks known secrets in the output it writes to the screen and to the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> log file. Values such as vault-encrypted variables, <code class="docutils literal notranslate"><span class="pre">no_log</span></code> module options, prompted passwords, and any value you register with the <code class="docutils literal notranslate"><span class="pre">register_secret</span></code> filter are replaced with <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> in the log. Masking applies to output that Ansible controls and does not cover every way a secret can reach a log, so it complements <code class="docutils literal notranslate"><span class="pre">no_log</span></code> rather than replacing it. In particular, messages that other Python libraries write to <code class="docutils literal notranslate"><span class="pre">log_path</span></code> through the standard <code class="docutils literal notranslate"><span class="pre">logging</span></code> module are not masked. See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#playbooks-secret-masking"><span class="std std-ref">Masking secrets in Ansible output</span></a> for what is masked, what is registered automatically, and the limitations.</p>
 </section>
 </section>
 

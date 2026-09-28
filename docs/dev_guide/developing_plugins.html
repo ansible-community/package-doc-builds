@@ -156,6 +156,7 @@
 <li class="toctree-l2"><a class="reference internal" href="developing_api.html">Python API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_secret_masking.html">Handling secrets in modules and plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_collections_path.html">Ansible collection creator path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
@@ -388,12 +389,13 @@ Check the section on the specific plugin type you’re developing for type-speci
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mycollection_name_of_second_var</span>
 <span class="w">        </span><span class="nt">version_added</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">X.x</span>
 <span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True/False</span>
+<span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True/False</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean/float/integer/list/none/path/pathlist/pathspec/string/tmppath</span>
 <span class="w">    </span><span class="nt">version_added</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">X.x</span>
 </pre></div>
 </div>
 <p>The supported configuration fields are:</p>
-<dl class="simple">
+<dl>
 <dt><strong>env</strong></dt><dd><p>List of environment variables that can be used to set this option.
 Each entry includes a <code class="docutils literal notranslate"><span class="pre">name</span></code> field specifying the environment variable name.
 The name should be in uppercase and should be prefixed with the collection name.
@@ -417,6 +419,15 @@ The last set variable in the list takes precedence if multiple are set.
 Variables follow Ansible’s variable precedence rules.
 This allows plugins to be configured with Ansible variables.
 Example: <code class="docutils literal notranslate"><span class="pre">ansible_vmware_port</span></code></p>
+</dd>
+<dt><strong>secret</strong></dt><dd><p>Boolean that marks the option as sensitive.
+When set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the resolved value is registered as a secret and is masked in Ansible output regardless of the source that set it.
+Only supported for options of type <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>, and <code class="docutils literal notranslate"><span class="pre">list</span></code> (string elements), and not supported on <code class="docutils literal notranslate"><span class="pre">suboptions</span></code>.
+Use it for passwords, tokens, private keys, and similar values.
+See <a class="reference internal" href="developing_secret_masking.html#plugin-config-secret"><span class="std std-ref">Marking plugin configuration options as secret</span></a> for details.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.22.</span></p>
+</div>
 </dd>
 </dl>
 <section id="general-precedence-rules">
@@ -627,6 +638,7 @@ but with an extra option so you can see how configuration works in Ansible versi
 </pre></div>
 </div>
 <p>Note that the <code class="docutils literal notranslate"><span class="pre">CALLBACK_VERSION</span></code> and <code class="docutils literal notranslate"><span class="pre">CALLBACK_NAME</span></code> definitions are required for properly functioning plugins for Ansible version 2.0 and later. <code class="docutils literal notranslate"><span class="pre">CALLBACK_TYPE</span></code> is mostly needed to distinguish ‘stdout’ plugins from the rest, since you can only load one plugin that writes to stdout.</p>
+<p>New in ansible-core 2.22, the task result a callback plugin receives has registered secrets already masked, and anything a callback writes through <code class="docutils literal notranslate"><span class="pre">Display()</span></code> is masked as well. A callback that writes other data, such as task names, to a file or an external service should pass it through <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> first. See <a class="reference internal" href="developing_secret_masking.html#developing-callbacks-masking"><span class="std std-ref">Callback plugins</span></a> for the details and an example.</p>
 <p>For example callback plugins, see the source code for the <a class="reference external" href="https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/callback">callback plugins included with Ansible Core</a></p>
 <p>New in ansible-core 2.11, callback plugins are notified (by the <code class="docutils literal notranslate"><span class="pre">v2_playbook_on_task_start</span></code>) of <a class="reference internal" href="../collections/ansible/builtin/meta_module.html#meta-module"><span class="std std-ref">meta</span></a> tasks. By default, only explicit <code class="docutils literal notranslate"><span class="pre">meta</span></code> tasks that users list in their plays are sent to callbacks.</p>
 <p>There are also some tasks which are generated internally and implicitly at various points in execution. Callback plugins can opt-in to receiving these implicit tasks as well, by setting <code class="docutils literal notranslate"><span class="pre">self.wants_implicit_tasks</span> <span class="pre">=</span> <span class="pre">True</span></code>. Any <code class="docutils literal notranslate"><span class="pre">Task</span></code> object received by a callback hook will have an <code class="docutils literal notranslate"><span class="pre">.implicit</span></code> attribute, which can be consulted to determine whether the <code class="docutils literal notranslate"><span class="pre">Task</span></code> originated from within Ansible, or explicitly by the user.</p>

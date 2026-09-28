@@ -256,7 +256,7 @@
            <div itemprop="articleBody">
              
   <section id="ansible-core-2-22-porting-guide">
-<span id="porting-2-22-guide-core"></span><h1><a class="toc-backref" href="#id8" role="doc-backlink">Ansible-core 2.22 Porting Guide</a><a class="headerlink" href="#ansible-core-2-22-porting-guide" title="Link to this heading"></a></h1>
+<span id="porting-2-22-guide-core"></span><h1><a class="toc-backref" href="#id10" role="doc-backlink">Ansible-core 2.22 Porting Guide</a><a class="headerlink" href="#ansible-core-2-22-porting-guide" title="Link to this heading"></a></h1>
 <p>This section discusses the behavioral changes between <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.21 and <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.22.</p>
 <p>It is intended to assist in updating your playbooks, plugins,
 and other parts of your Ansible infrastructure so they will work with this version of Ansible.</p>
@@ -268,87 +268,240 @@ The complete list of porting guides can be found at <a class="reference internal
 <nav class="contents" id="topics">
 <p class="topic-title">Topics</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#ansible-core-2-22-porting-guide" id="id8">Ansible-core 2.22 Porting Guide</a></p>
+<li><p><a class="reference internal" href="#ansible-core-2-22-porting-guide" id="id10">Ansible-core 2.22 Porting Guide</a></p>
 <ul>
-<li><p><a class="reference internal" href="#introduction" id="id9">Introduction</a></p></li>
-<li><p><a class="reference internal" href="#playbook" id="id10">Playbook</a></p></li>
-<li><p><a class="reference internal" href="#engine" id="id11">Engine</a></p></li>
-<li><p><a class="reference internal" href="#plugin-api" id="id12">Plugin API</a></p></li>
-<li><p><a class="reference internal" href="#command-line" id="id13">Command Line</a></p></li>
-<li><p><a class="reference internal" href="#deprecated" id="id14">Deprecated</a></p></li>
-<li><p><a class="reference internal" href="#modules" id="id15">Modules</a></p>
+<li><p><a class="reference internal" href="#introduction" id="id11">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#playbook" id="id12">Playbook</a></p>
 <ul>
-<li><p><a class="reference internal" href="#modules-removed" id="id16">Modules removed</a></p></li>
-<li><p><a class="reference internal" href="#deprecation-notices" id="id17">Deprecation notices</a></p></li>
-<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id18">Noteworthy module changes</a></p></li>
+<li><p><a class="reference internal" href="#secret-masking" id="id13">Secret masking</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#plugins" id="id19">Plugins</a></p>
+<li><p><a class="reference internal" href="#engine" id="id14">Engine</a></p>
 <ul>
-<li><p><a class="reference internal" href="#noteworthy-plugin-changes" id="id20">Noteworthy plugin changes</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id15">Secret masking</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#porting-custom-scripts" id="id21">Porting custom scripts</a></p></li>
-<li><p><a class="reference internal" href="#networking" id="id22">Networking</a></p></li>
+<li><p><a class="reference internal" href="#plugin-api" id="id16">Plugin API</a></p>
+<ul>
+<li><p><a class="reference internal" href="#secret-masking-api" id="id17">Secret masking API</a></p></li>
+<li><p><a class="reference internal" href="#callback-plugins" id="id18">Callback plugins</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#command-line" id="id19">Command Line</a></p></li>
+<li><p><a class="reference internal" href="#deprecated" id="id20">Deprecated</a></p></li>
+<li><p><a class="reference internal" href="#modules" id="id21">Modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#modules-removed" id="id22">Modules removed</a></p></li>
+<li><p><a class="reference internal" href="#deprecation-notices" id="id23">Deprecation notices</a></p></li>
+<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id24">Noteworthy module changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#plugins" id="id25">Plugins</a></p>
+<ul>
+<li><p><a class="reference internal" href="#noteworthy-plugin-changes" id="id26">Noteworthy plugin changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id27">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#networking" id="id28">Networking</a></p></li>
 </ul>
 </li>
 </ul>
 </nav>
 <section id="introduction">
-<span id="id1"></span><h2><a class="toc-backref" href="#id9" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id1"></span><h2><a class="toc-backref" href="#id11" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>This release adds secret masking. Ansible now registers known secret values, such as decrypted vault content, <code class="docutils literal notranslate"><span class="pre">no_log</span></code> module options, and prompted passwords, and replaces them with <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> wherever it writes output.
+The values themselves are unchanged, so playbooks keep working with the real data and only the rendered output is masked.</p>
+<p>Most playbooks need no changes. Content that inspected the <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code> placeholder, and modules or plugins that stripped secrets from results by hand, should be reviewed.
+Authors of custom callback plugins should update them to declare support for masking, as described in <a class="reference internal" href="#callback-plugins"><span class="std std-ref">Callback plugins</span></a>.</p>
+<p>We recommend you test your playbooks, callback plugins, and any tooling that consumes Ansible output in a staging environment with this release.
+See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#playbooks-secret-masking"><span class="std std-ref">Masking secrets in Ansible output</span></a> for the user guide and <a class="reference internal" href="../dev_guide/developing_secret_masking.html#developing-secret-masking"><span class="std std-ref">Handling secrets in modules and plugins</span></a> for the developer guide.</p>
 </section>
 <section id="playbook">
-<span id="id2"></span><h2><a class="toc-backref" href="#id10" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id2"></span><h2><a class="toc-backref" href="#id12" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
+<section id="secret-masking">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Secret masking</a><a class="headerlink" href="#secret-masking" title="Link to this heading"></a></h3>
+<p>Ansible now masks registered secrets in its output. Values such as decrypted vault content, <code class="docutils literal notranslate"><span class="pre">no_log</span></code> module option values, and prompted passwords are replaced with <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> on the screen, in the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> log file, in callback output, and in module logs on the managed node. The values themselves are unchanged and remain usable by tasks. Use the new <code class="docutils literal notranslate"><span class="pre">register_secret</span></code> filter to register your own values and the <code class="docutils literal notranslate"><span class="pre">mask_secrets</span></code> filter to redact registered secrets from a string. See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#playbooks-secret-masking"><span class="std std-ref">Masking secrets in Ansible output</span></a> for details, including the minimum secret length and the limitations of masking.</p>
+<p>Module options marked with <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code> are no longer replaced with the literal <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code> in the module result. The real value is kept in the result and registered as a secret so it is masked in output. Playbooks that compared a result value against <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code> should be updated.</p>
+<p>One consequence of this change is that a <code class="docutils literal notranslate"><span class="pre">no_log</span></code> option value shorter than 4 characters is no longer hidden at all. The placeholder used to replace the value regardless of its length, but masking is subject to the <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#secret-masking-length-rules"><span class="std std-ref">minimum secret length</span></a>, so such a value is now shown in the output as is. Values of 4 to 6 characters are only masked when they appear as a whole word. If a module option must hold a value this short, set the <code class="docutils literal notranslate"><span class="pre">no_log</span></code> task keyword on the task to hide its whole result, or better, use a longer value where the system accepting it allows.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">register_secret</span></code> filter fails on a value that is not a string or is shorter than 4 characters after leading and trailing whitespace is stripped, because such a value cannot be masked. Set the filter’s <code class="docutils literal notranslate"><span class="pre">validation_action</span></code> option to <code class="docutils literal notranslate"><span class="pre">warn</span></code> or <code class="docutils literal notranslate"><span class="pre">ignore</span></code> to return the value unregistered instead of failing.</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">debug</span></code> module with <code class="docutils literal notranslate"><span class="pre">msg</span></code> or <code class="docutils literal notranslate"><span class="pre">var</span></code> to show a password or other sensitive value on the screen no longer works. The <code class="docutils literal notranslate"><span class="pre">debug</span></code> module writes through <code class="docutils literal notranslate"><span class="pre">Display</span></code>, so a registered secret is shown as <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> wherever it appears, including inside a larger variable and at any verbosity level. There is no option to disable masking for a single task.</p>
+<p>If you need to see the real value, for example to confirm that a vault variable decrypts to what you expect, write it to a file instead of displaying it. A file written by a module is not an output boundary, so the file contains the unmasked value:</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Write the secret to a file for inspection</span>
+<span class="w">  </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">db_password</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/db_password.txt</span>
+<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">"0600"</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+</pre></div>
+</div>
+<p>Read the file outside of Ansible and delete it when you are done.</p>
+</section>
 </section>
 <section id="engine">
-<span id="id3"></span><h2><a class="toc-backref" href="#id11" role="doc-backlink">Engine</a><a class="headerlink" href="#engine" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id3"></span><h2><a class="toc-backref" href="#id14" role="doc-backlink">Engine</a><a class="headerlink" href="#engine" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Secret masking</a><a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>Masking is applied at the points where data leaves Ansible rather than to the data itself:</p>
+<ul class="simple">
+<li><p>All <code class="docutils literal notranslate"><span class="pre">Display</span></code> output, including the screen, the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> log file, warnings, deprecation messages, errors, and tracebacks.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">result</span></code> mapping of every task result passed to a callback plugin.</p></li>
+<li><p>Module logging to syslog and the Windows Event Log, including the module invocation entry.</p></li>
+</ul>
+<p>Secrets registered in a worker process or inside a module on a managed node are sent back to the controller and registered there, so a value discovered by one task is masked in every later task.
+Registered secrets that appear in a module’s arguments are passed to the module so module-side logging can mask them.</p>
+<p>Values shorter than 4 characters are never masked. Values of 4 to 6 characters are only masked when they appear as a whole word. Values longer than 65536 characters are matched on their first 65536 characters. Overlapping and adjacent secrets are replaced with a single placeholder. See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#secret-masking-length-rules"><span class="std std-ref">Secret length rules</span></a> for the details.
+Leading and trailing whitespace is stripped from a value before it is registered, so a secret read from a file with a trailing newline is masked with or without that newline.
+Masking only matches the exact registered string, so an encoded or hashed copy of a secret is not masked unless it is registered as well. The JSON-escaped form of a secret is the one exception and is always masked.
+Masking also only covers messages Ansible writes through <code class="docutils literal notranslate"><span class="pre">Display</span></code>. Messages that other Python libraries emit with the standard <code class="docutils literal notranslate"><span class="pre">logging</span></code> module share the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> file and are not masked.</p>
+</section>
 </section>
 <section id="plugin-api">
-<span id="id4"></span><h2><a class="toc-backref" href="#id12" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
+<span id="id5"></span><h2><a class="toc-backref" href="#id16" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
+<section id="secret-masking-api">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Secret masking API</a><a class="headerlink" href="#secret-masking-api" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> module is a new public API providing <code class="docutils literal notranslate"><span class="pre">register_secret()</span></code>, <code class="docutils literal notranslate"><span class="pre">register_secrets()</span></code>, and <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code>. See <a class="reference internal" href="../dev_guide/developing_secret_masking.html#developing-secret-masking"><span class="std std-ref">Handling secrets in modules and plugins</span></a>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Ansible.Secrets</span></code> C# module util provides the same API for PowerShell modules through <code class="docutils literal notranslate"><span class="pre">[Ansible.Secrets.SecretMasker]</span></code>.</p></li>
+<li><p>Plugin configuration options can set <code class="docutils literal notranslate"><span class="pre">secret:</span> <span class="pre">true</span></code> to register the resolved value as a secret regardless of the source that set it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> no longer strips <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values from module results.</p></li>
+</ul>
+<p>Values registered through the secrets API are masked in <code class="docutils literal notranslate"><span class="pre">Display</span></code> output, callback output, and module logs.
+Any plugin or module that discovers a sensitive value at runtime, such as a token returned by an API, should register it as soon as it is known.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">secret</span></code> configuration keyword is only supported for the <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>, and <code class="docutils literal notranslate"><span class="pre">list</span></code> types and is not supported on <code class="docutils literal notranslate"><span class="pre">suboptions</span></code>.
+Declaring it on any other type is an error when the plugin configuration is loaded.
+The <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> connection and become plugins use it for their password and key options, and plugins that accept a password or token should do the same.</p>
+<p>Modules that relied on <code class="docutils literal notranslate"><span class="pre">remove_values()</span></code> or <code class="docutils literal notranslate"><span class="pre">sanitize_keys()</span></code> to strip <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values from their results should remove those calls.
+The values are now masked at the output boundary instead, and both helpers are deprecated.</p>
+</section>
+<section id="callback-plugins">
+<span id="id6"></span><h3><a class="toc-backref" href="#id18" role="doc-backlink">Callback plugins</a><a class="headerlink" href="#callback-plugins" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">result</span></code> mapping of every task result passed to a callback plugin is now masked before the callback receives it.
+Every string value and every string dictionary key in <code class="docutils literal notranslate"><span class="pre">result.result</span></code> is masked at any depth of nesting, including inside loop results.
+Existing callbacks keep working without changes and no longer see the real value of any registered secret in the result.
+Masking also changes some values that are not strings:</p>
+<ul class="simple">
+<li><p>An <code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code> whose text form is a registered secret is replaced with the placeholder string. A callback that expects a number in a result must handle receiving the string <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> instead when that number was registered as a secret.</p></li>
+<li><p>When two dictionary keys mask to the same placeholder, the second is renamed with a numeric suffix such as <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span> <span class="pre">(2)</span></code> so that no entry is lost.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdout_lines</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr_lines</span></code> are rebuilt from the masked <code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr</span></code> so that a secret spanning several lines is masked in the lines as well.</p></li>
+</ul>
+<p>Only <code class="docutils literal notranslate"><span class="pre">result.result</span></code> is masked.
+Task and play names, the <code class="docutils literal notranslate"><span class="pre">warnings</span></code>, <code class="docutils literal notranslate"><span class="pre">deprecations</span></code>, and <code class="docutils literal notranslate"><span class="pre">exception</span></code> attributes of the result, the statistics passed to <code class="docutils literal notranslate"><span class="pre">v2_playbook_on_stats()</span></code>, and anything a callback derives itself are masked only when written through <code class="docutils literal notranslate"><span class="pre">Display()</span></code>.
+A callback that writes such data to a file, socket, HTTP request, database, or any other destination must pass it through <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets.mask_secrets()</span></code> first.</p>
+<p>To update a custom callback plugin:</p>
+<ol class="arabic simple">
+<li><p>Audit every place the callback writes data other than through <code class="docutils literal notranslate"><span class="pre">Display()</span></code>, and mask any data that does not come from <code class="docutils literal notranslate"><span class="pre">result.result</span></code> with <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code>.</p></li>
+<li><p>Remove any custom code that stripped <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values or checked for <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code>, as results no longer contain that placeholder.</p></li>
+<li><p>Check any code that relies on the type of a result value, since a number registered as a secret is replaced with a string.</p></li>
+</ol>
+<p>The following example supports both <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.22 and earlier versions.
+On versions before 2.22 the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> import fails and the result already has <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values removed, so <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> falls back to returning the text unchanged.
+On 2.22 and later the result is already masked and <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> covers the task name written alongside it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.callback</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBase</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.secrets</span><span class="w"> </span><span class="kn">import</span> <span class="n">mask_secrets</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="c1"># ansible-core &lt; 2.22 has no secret masking API. Results on those versions</span>
+    <span class="c1"># already have no_log values removed, so there is nothing to mask here.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mask_secrets</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
+    <span class="n">CALLBACK_VERSION</span> <span class="o">=</span> <span class="mf">2.0</span>
+    <span class="n">CALLBACK_TYPE</span> <span class="o">=</span> <span class="s1">'notification'</span>
+    <span class="n">CALLBACK_NAME</span> <span class="o">=</span> <span class="s1">'namespace.collection_name.json_file'</span>
+    <span class="n">CALLBACK_NEEDS_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">v2_runner_on_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="c1"># result.result is already masked on 2.22+, but the task name is not, so mask</span>
+        <span class="c1"># the serialized form before writing it.</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'task'</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">task_name</span><span class="p">,</span> <span class="s1">'result'</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">result</span><span class="p">}</span>
+        <span class="n">entry_json</span> <span class="o">=</span> <span class="n">mask_secrets</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'/var/log/ansible-results.jsonl'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entry_json</span> <span class="o">+</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">junit</span></code> and <code class="docutils literal notranslate"><span class="pre">tree</span></code> callbacks shipped with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> are examples of callbacks that write to files and mask everything they write.
+The task <code class="docutils literal notranslate"><span class="pre">no_log</span></code> keyword continues to censor the entire result regardless of masking as it affects the <code class="docutils literal notranslate"><span class="pre">result</span></code> value provided.
+See <a class="reference internal" href="../dev_guide/developing_secret_masking.html#developing-callbacks-masking"><span class="std std-ref">Callback plugins</span></a> for more details.</p>
+</section>
 </section>
 <section id="command-line">
-<span id="id5"></span><h2><a class="toc-backref" href="#id13" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id7"></span><h2><a class="toc-backref" href="#id19" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Passwords entered for <code class="docutils literal notranslate"><span class="pre">--ask-pass</span></code>, <code class="docutils literal notranslate"><span class="pre">--ask-become-pass</span></code>, and <code class="docutils literal notranslate"><span class="pre">--ask-vault-pass</span></code> are registered as secrets and masked in output.</p></li>
+<li><p>Values entered for a <code class="docutils literal notranslate"><span class="pre">vars_prompt</span></code> with <code class="docutils literal notranslate"><span class="pre">private:</span> <span class="pre">true</span></code> (the default) are registered as secrets and masked in output.</p></li>
+</ul>
 </section>
 <section id="deprecated">
-<span id="id6"></span><h2><a class="toc-backref" href="#id14" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id8"></span><h2><a class="toc-backref" href="#id20" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic.heuristic_log_sanitize()</span></code> is deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.25. Secret values are now masked automatically. Use the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> API to handle secrets manually.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ansible.module_utils.common.parameters.remove_values()</span></code> and <code class="docutils literal notranslate"><span class="pre">sanitize_keys()</span></code> are deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.25. Secret values are now masked automatically. Use the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> API to handle secrets manually.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">live</span></code> argument of <code class="docutils literal notranslate"><span class="pre">ansible.utils.cmd_functions.run_cmd()</span></code> is deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.25 because it bypasses secret masking. Callers that need to stream output live should run the subprocess themselves and mask any secrets in the output.</p></li>
+</ul>
 </section>
 <section id="modules">
-<span id="id7"></span><h2><a class="toc-backref" href="#id15" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<span id="id9"></span><h2><a class="toc-backref" href="#id21" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
 <section id="modules-removed">
-<h3><a class="toc-backref" href="#id16" role="doc-backlink">Modules removed</a><a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id22" role="doc-backlink">Modules removed</a><a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
 <p>The following modules no longer exist:</p>
 <ul class="simple">
 <li><p>No notable changes</p></li>
 </ul>
 </section>
 <section id="deprecation-notices">
-<h3><a class="toc-backref" href="#id17" role="doc-backlink">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
 <p>No notable changes</p>
 </section>
 <section id="noteworthy-module-changes">
-<h3><a class="toc-backref" href="#id18" role="doc-backlink">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
-<p>No notable changes</p>
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Module options marked <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code> keep their real value in the module result instead of being replaced with <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code>. The value is registered as a secret and masked in output. See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#secret-masking-no-log"><span class="std std-ref">How masking changes no_log</span></a>.</p></li>
+<li><p>Values logged by <code class="docutils literal notranslate"><span class="pre">AnsibleModule.log()</span></code> and the module invocation log entry now use <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> in place of the previous <code class="docutils literal notranslate"><span class="pre">NOT_LOGGING_PARAMETER</span></code> and <code class="docutils literal notranslate"><span class="pre">NOT_LOGGING_PASSWORD</span></code> placeholders, and any other registered secret in the message is masked.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleModule.log()</span></code> and the module invocation log no longer apply the <code class="docutils literal notranslate"><span class="pre">heuristic_log_sanitize()</span></code> heuristics. For example, <code class="docutils literal notranslate"><span class="pre">user:password&#64;host</span></code> in a URL is no longer rewritten unless the password is a registered secret.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleModule.run_command()</span></code> no longer replaces password-like arguments such as <code class="docutils literal notranslate"><span class="pre">--password=...</span></code> with <code class="docutils literal notranslate"><span class="pre">********</span></code> in the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> value of a failure result, and no longer passes the <code class="docutils literal notranslate"><span class="pre">msg</span></code> value through <code class="docutils literal notranslate"><span class="pre">heuristic_log_sanitize()</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">uri</span></code> module no longer rewrites response keys to strip <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values. Registered secrets are masked in output instead.</p></li>
+</ul>
+<p>Only registered secrets are masked in the values above.
+Modules that pass a secret on the command line or embed one in a URL, where that secret is not a <code class="docutils literal notranslate"><span class="pre">no_log</span></code> option, should register it with <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets.register_secret()</span></code>.</p>
 </section>
 </section>
 <section id="plugins">
-<h2><a class="toc-backref" href="#id19" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id25" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
 <section id="noteworthy-plugin-changes">
-<h3><a class="toc-backref" href="#id20" role="doc-backlink">Noteworthy plugin changes</a><a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
-<p>No notable changes</p>
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Noteworthy plugin changes</a><a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The following plugin options are marked <code class="docutils literal notranslate"><span class="pre">secret:</span> <span class="pre">true</span></code> and are masked in output:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ssh</span></code> connection plugin: <code class="docutils literal notranslate"><span class="pre">password</span></code>, <code class="docutils literal notranslate"><span class="pre">private_key</span></code>, and <code class="docutils literal notranslate"><span class="pre">private_key_passphrase</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">winrm</span></code> connection plugin: <code class="docutils literal notranslate"><span class="pre">password</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">psrp</span></code> connection plugin: <code class="docutils literal notranslate"><span class="pre">password</span></code> and <code class="docutils literal notranslate"><span class="pre">certificate_key_password</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sudo</span></code>, <code class="docutils literal notranslate"><span class="pre">su</span></code>, and <code class="docutils literal notranslate"><span class="pre">runas</span></code> become plugins: <code class="docutils literal notranslate"><span class="pre">become_pass</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">url</span></code> lookup plugin: <code class="docutils literal notranslate"><span class="pre">password</span></code></p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">password</span></code> lookup registers the generated plaintext password as a secret. The <code class="docutils literal notranslate"><span class="pre">unvault</span></code> lookup registers the entire decrypted content of each file as a single secret. The <code class="docutils literal notranslate"><span class="pre">vault</span></code> and <code class="docutils literal notranslate"><span class="pre">unvault</span></code> filters register the vault password passed to them, and also register the plaintext being encrypted or decrypted as a single secret.</p></li>
+<li><p>Vault-encrypted files loaded as variables are parsed and each value is registered individually, so values inside them are masked wherever they appear on their own.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">pause</span></code> action registers user input as a secret when <code class="docutils literal notranslate"><span class="pre">echo:</span> <span class="pre">false</span></code> is set.</p></li>
+<li><p>Connection plugin authors should audit any code that displays the raw standard output or standard error of a module invocation. Secrets that a module registers during its run are returned in the raw JSON result and are not masked until the controller processes it. The connection plugins shipped with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> only display raw module output when <code class="docutils literal notranslate"><span class="pre">ANSIBLE_DEBUG</span></code> is enabled.</p></li>
+<li><p>Callback plugins receive task results with registered secrets already masked. The <code class="docutils literal notranslate"><span class="pre">junit</span></code> and <code class="docutils literal notranslate"><span class="pre">tree</span></code> callbacks pass everything they write to a file through <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> so that task and play names and other data not taken from the result are masked as well. See <a class="reference internal" href="#callback-plugins"><span class="std std-ref">Callback plugins</span></a>.</p></li>
+</ul>
 </section>
 </section>
 <section id="porting-custom-scripts">
-<h2><a class="toc-backref" href="#id21" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id27" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="networking">
-<h2><a class="toc-backref" href="#id22" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<h2><a class="toc-backref" href="#id28" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
+<p>Secret masking does not apply to the messages logged by the <code class="docutils literal notranslate"><span class="pre">persistent_log_messages</span></code> option.
+Persistent connections run in a separate <code class="docutils literal notranslate"><span class="pre">ansible-connection</span></code> process that does not receive the secrets registered by the controller, so passwords and other sensitive configuration sent over the connection are written to the log in plain text.
+Only enable this option while debugging and treat the resulting log as sensitive.</p>
 </section>
 </section>
 
