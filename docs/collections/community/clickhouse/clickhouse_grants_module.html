@@ -353,7 +353,7 @@
 <h1>community.clickhouse.clickhouse_grants module – Manage grants for ClickHouse users and roles<a class="headerlink" href="#community-clickhouse-clickhouse-grants-module-manage-grants-for-clickhouse-users-and-roles" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/clickhouse/">community.clickhouse collection</a> (version 2.3.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/clickhouse/">community.clickhouse collection</a> (version 2.4.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -418,6 +418,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 </div></td>
 <td><div class="ansible-option-cell"><p>If set to <code class="docutils literal notranslate"><span class="pre">false</span></code> (the default), the module will append the privileges specified in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges"><span class="std std-ref"><span class="pre">privileges</span></span></a></strong></code> to the privileges the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-grantee"><span class="std std-ref"><span class="pre">grantee</span></span></a></strong></code> already has.</p>
 <p>If set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the module will revoke all current privileges from the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-grantee"><span class="std std-ref"><span class="pre">grantee</span></span></a></strong></code> before granting the new ones.</p>
+<p>It only applies to <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges"><span class="std std-ref"><span class="pre">privileges</span></span></a></strong></code>, so <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges"><span class="std std-ref"><span class="pre">privileges</span></span></a></strong></code> must be set when this is <code class="docutils literal notranslate"><span class="pre">true</span></code>. It has no effect on <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-partial-revokes"><span class="std std-ref"><span class="pre">partial_revokes</span></span></a></strong></code>. To remove all privileges, use <code class="docutils literal notranslate"><span class="pre">state=absent</span></code> instead.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -474,14 +475,44 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-privileges"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges"><strong>privileges</strong></p>
-<a class="ansibleOptionLink" href="#parameter-privileges" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+<div class="ansibleOptionAnchor" id="parameter-partial_revokes"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-partial-revokes"><strong>partial_revokes</strong></p>
+<a class="ansibleOptionLink" href="#parameter-partial_revokes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+<p><em class="ansible-option-versionadded">added in community.clickhouse 2.4.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Privileges to grant. This option is required when <code class="docutils literal notranslate"><span class="pre">state</span></code> is <code class="docutils literal notranslate"><span class="pre">present</span></code>.</p>
-<p>It’s a list of dictionaries, where each dictionary specifies a set of privileges on a database object.</p>
+<td><div class="ansible-option-cell"><p>A list of privileges to partial revoke from the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-grantee"><span class="std std-ref"><span class="pre">grantee</span></span></a></strong></code>.</p>
+<p>At this moment this works only with state <code class="docutils literal notranslate"><span class="pre">present</span></code>. State <code class="docutils literal notranslate"><span class="pre">absent</span></code> will not grant any privileges.</p>
+<p>A privilege is only revoked when the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-grantee"><span class="std std-ref"><span class="pre">grantee</span></span></a></strong></code> actually holds it, either from an earlier run or because it is granted by <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges"><span class="std std-ref"><span class="pre">privileges</span></span></a></strong></code> in the same task.</p>
+<p>Removing an entry from this list does not grant the privilege back. Add it to <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges"><span class="std std-ref"><span class="pre">privileges</span></span></a></strong></code> to restore it.</p>
+<p>Partial revokes are not represented in the <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-return-diff"><span class="std std-ref"><span class="pre">diff</span></span></a></code> return value.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-partial_revokes/object"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-partial-revokes-object"><strong>object</strong></p>
+<a class="ansibleOptionLink" href="#parameter-partial_revokes/object" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The database object to revoke privileges from.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">*.*</span></code> for global privileges, <code class="docutils literal notranslate"><span class="pre">database.*</span></code> for all tables in a database, and <code class="docutils literal notranslate"><span class="pre">database.table</span></code> for a specific table.</p>
+<p>When passed single element like <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">POSTGRES</span></code> access_object will be used ex. privs READ .</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-partial_revokes/privs"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-partial-revokes-privs"><strong>privs</strong></p>
+<a class="ansibleOptionLink" href="#parameter-partial_revokes/privs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of privileges to revoke.</p>
+<p>Each privilege can be specified with or without column restrictions.</p>
+<p>Elements can be passed as separate entries in the list or as a single comma-separated string.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-privileges"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges"><strong>privileges</strong></p>
+<a class="ansibleOptionLink" href="#parameter-privileges" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Privileges to grant. This option is required when <code class="docutils literal notranslate"><span class="pre">state</span></code> is <code class="docutils literal notranslate"><span class="pre">present</span></code>, unless <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-partial-revokes"><span class="std std-ref"><span class="pre">partial_revokes</span></span></a></strong></code> is specified.</p>
+<p>It’s a list of dictionaries, where each dictionary specifies a set of privileges on a database object.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-privileges/grant_option"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges-grant-option"><strong>grant_option</strong></p>
 <a class="ansibleOptionLink" href="#parameter-privileges/grant_option" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -494,7 +525,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-privileges/object"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges-object"><strong>object</strong></p>
 <a class="ansibleOptionLink" href="#parameter-privileges/object" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -502,7 +533,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <p>Use <code class="docutils literal notranslate"><span class="pre">*.*</span></code> for global privileges, <code class="docutils literal notranslate"><span class="pre">database.*</span></code> for all tables in a database, and <code class="docutils literal notranslate"><span class="pre">database.table</span></code> for a specific table.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-privileges/privs"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges-privs"><strong>privs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-privileges/privs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -512,7 +543,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <p>Alternatively, you can use the <code class="docutils literal notranslate"><span class="pre">grant_option</span></code> parameter to apply the same setting to all privileges in this set.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -525,7 +556,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-success_on"></div><p class="ansible-option-title" id="ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-success-on"><strong>success_on</strong></p>
 <a class="ansibleOptionLink" href="#parameter-success_on" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=integer</span></p>
 <p><em class="ansible-option-versionadded">added in community.clickhouse 2.2.0</em></p>
@@ -627,6 +658,51 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <span class="w">  </span><span class="nt">community.clickhouse.clickhouse_grants</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">grantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eve</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Partially revoke a single table from a database-wide grant</span>
+<span class="w">  </span><span class="nt">community.clickhouse.clickhouse_grants</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">grantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">david</span>
+<span class="w">    </span><span class="nt">partial_revokes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">object</span><span class="p">:</span><span class="w"> </span><span class="s">'bar.foo'</span>
+<span class="w">        </span><span class="nt">privs</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SELECT</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Partially revoke single columns</span>
+<span class="w">  </span><span class="nt">community.clickhouse.clickhouse_grants</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">grantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">david</span>
+<span class="w">    </span><span class="nt">partial_revokes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">object</span><span class="p">:</span><span class="w"> </span><span class="s">'bar.foo'</span>
+<span class="w">        </span><span class="nt">privs</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SELECT(a,b)</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Partially revoke more than one statement</span>
+<span class="w">  </span><span class="nt">community.clickhouse.clickhouse_grants</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">grantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">david</span>
+<span class="w">    </span><span class="nt">partial_revokes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">object</span><span class="p">:</span><span class="w"> </span><span class="s">'bar.foo'</span>
+<span class="w">        </span><span class="nt">privs</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SELECT, INSERT</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Partially revoke more than one statement passed as separate entries</span>
+<span class="w">  </span><span class="nt">community.clickhouse.clickhouse_grants</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">grantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">david</span>
+<span class="w">    </span><span class="nt">partial_revokes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">object</span><span class="p">:</span><span class="w"> </span><span class="s">'bar.foo'</span>
+<span class="w">        </span><span class="nt">privs</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SELECT</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">INSERT</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Grant a whole database and partially revoke one table in the same task</span>
+<span class="w">  </span><span class="nt">community.clickhouse.clickhouse_grants</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">grantee</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">david</span>
+<span class="w">    </span><span class="nt">privileges</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">object</span><span class="p">:</span><span class="w"> </span><span class="s">'bar.*'</span>
+<span class="w">        </span><span class="nt">privs</span><span class="p">:</span>
+<span class="w">          </span><span class="s">"SELECT"</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">partial_revokes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">object</span><span class="p">:</span><span class="w"> </span><span class="s">'bar.foo'</span>
+<span class="w">        </span><span class="nt">privs</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SELECT</span>
 </pre></div>
 </div>
 </section>
@@ -646,6 +722,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 </div></td>
 <td><div class="ansible-option-cell"><p>Differences between the previous and current state.</p>
 <p>Only returned when diff mode is enabled (with <code class="docutils literal notranslate"><span class="pre">--diff</span></code> or in <code class="docutils literal notranslate"><span class="pre">check_mode</span></code>).</p>
+<p>Reflects the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-privileges"><span class="std std-ref"><span class="pre">privileges</span></span></a></strong></code> option only. Partial revokes made through <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-clickhouse-clickhouse-grants-module-parameter-partial-revokes"><span class="std std-ref"><span class="pre">partial_revokes</span></span></a></strong></code> are not represented, so a run that only changes them reports the same before and after state.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when diff mode is enabled or check_mode is true</p>
 </div></td>
 </tr>
@@ -683,6 +760,7 @@ see <a class="reference internal" href="#ansible-collections-community-clickhous
 <ul class="simple">
 <li><p>Andrew Klychkov (&#64;Andersson007)</p></li>
 <li><p>Fabian Kohn (&#64;fako1024)</p></li>
+<li><p>Rafal Kozlowski (&#64;rkozlo)</p></li>
 </ul>
 </section>
 <section id="collection-links">

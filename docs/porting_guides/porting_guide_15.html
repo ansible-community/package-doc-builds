@@ -92,9 +92,19 @@
 <li class="toctree-l1 current"><a class="reference internal" href="porting_guides.html">Ansible Porting Guides</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible 15 Porting Guide</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#playbook">Playbook</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#engine">Engine</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#plugin-api">Plugin API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#playbook">Playbook</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#secret-masking">Secret masking</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#engine">Engine</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Secret masking</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#plugin-api">Plugin API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#secret-masking-api">Secret masking API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#callback-plugins">Callback plugins</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#command-line">Command Line</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#deprecated">Deprecated</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a><ul>
@@ -109,14 +119,21 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#porting-custom-scripts">Porting custom scripts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#networking">Networking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v15-0-0a2">Porting Guide for v15.0.0a2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#major-changes">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#removed-features">Removed Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deprecated-features">Deprecated Features</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#porting-guide-for-v15-0-0a1">Porting Guide for v15.0.0a1</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#added-collections">Added Collections</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#known-issues">Known Issues</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#major-changes">Major Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">Breaking Changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">Major Changes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#removed-collections">Removed Collections</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#removed-features">Removed Features</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#deprecated-features">Deprecated Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id24">Removed Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id28">Deprecated Features</a></li>
 </ul>
 </li>
 </ul>
@@ -313,23 +330,24 @@
            <div itemprop="articleBody">
              
   <section id="ansible-15-porting-guide">
-<span id="porting-15-guide"></span><h1><a class="toc-backref" href="#id20" role="doc-backlink">Ansible 15 Porting Guide</a><a class="headerlink" href="#ansible-15-porting-guide" title="Link to this heading"></a></h1>
+<span id="porting-15-guide"></span><h1><a class="toc-backref" href="#id36" role="doc-backlink">Ansible 15 Porting Guide</a><a class="headerlink" href="#ansible-15-porting-guide" title="Link to this heading"></a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#ansible-15-porting-guide" id="id20">Ansible 15 Porting Guide</a></p>
+<li><p><a class="reference internal" href="#ansible-15-porting-guide" id="id36">Ansible 15 Porting Guide</a></p>
 <ul>
-<li><p><a class="reference internal" href="#introduction" id="id21">Introduction</a></p></li>
-<li><p><a class="reference internal" href="#playbook" id="id22">Playbook</a></p></li>
-<li><p><a class="reference internal" href="#engine" id="id23">Engine</a></p></li>
-<li><p><a class="reference internal" href="#plugin-api" id="id24">Plugin API</a></p></li>
-<li><p><a class="reference internal" href="#command-line" id="id25">Command Line</a></p></li>
-<li><p><a class="reference internal" href="#deprecated" id="id26">Deprecated</a></p></li>
-<li><p><a class="reference internal" href="#modules" id="id27">Modules</a></p></li>
-<li><p><a class="reference internal" href="#plugins" id="id28">Plugins</a></p></li>
-<li><p><a class="reference internal" href="#porting-custom-scripts" id="id29">Porting custom scripts</a></p></li>
-<li><p><a class="reference internal" href="#networking" id="id30">Networking</a></p></li>
-<li><p><a class="reference internal" href="#porting-guide-for-v15-0-0a1" id="id31">Porting Guide for v15.0.0a1</a></p></li>
+<li><p><a class="reference internal" href="#introduction" id="id37">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#playbook" id="id38">Playbook</a></p></li>
+<li><p><a class="reference internal" href="#engine" id="id39">Engine</a></p></li>
+<li><p><a class="reference internal" href="#plugin-api" id="id40">Plugin API</a></p></li>
+<li><p><a class="reference internal" href="#command-line" id="id41">Command Line</a></p></li>
+<li><p><a class="reference internal" href="#deprecated" id="id42">Deprecated</a></p></li>
+<li><p><a class="reference internal" href="#modules" id="id43">Modules</a></p></li>
+<li><p><a class="reference internal" href="#plugins" id="id44">Plugins</a></p></li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id45">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#networking" id="id46">Networking</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v15-0-0a2" id="id47">Porting Guide for v15.0.0a2</a></p></li>
+<li><p><a class="reference internal" href="#porting-guide-for-v15-0-0a1" id="id48">Porting Guide for v15.0.0a1</a></p></li>
 </ul>
 </li>
 </ul>
@@ -337,30 +355,145 @@
 <p>Ansible 15 is based on Ansible-core 2.22.</p>
 <p>We suggest you read this page along with the <a class="reference external" href="https://github.com/ansible-community/ansible-build-data/blob/main/15/CHANGELOG-v15.md">Ansible 15 Changelog</a> to understand what updates you may need to make.</p>
 <section id="introduction">
-<span id="id1"></span><h2><a class="toc-backref" href="#id21" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id1"></span><h2><a class="toc-backref" href="#id37" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>This release adds secret masking. Ansible now registers known secret values, such as decrypted vault content, <code class="docutils literal notranslate"><span class="pre">no_log</span></code> module options, and prompted passwords, and replaces them with <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> wherever it writes output.
+The values themselves are unchanged, so playbooks keep working with the real data and only the rendered output is masked.</p>
+<p>Most playbooks need no changes. Content that inspected the <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code> placeholder, and modules or plugins that stripped secrets from results by hand, should be reviewed.
+Authors of custom callback plugins should update them to declare support for masking, as described in <a class="reference internal" href="porting_guide_core_2.22.html#callback-plugins"><span class="std std-ref">Callback plugins</span></a>.</p>
+<p>We recommend you test your playbooks, callback plugins, and any tooling that consumes Ansible output in a staging environment with this release.
+See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#playbooks-secret-masking"><span class="std std-ref">Masking secrets in Ansible output</span></a> for the user guide and <a class="reference internal" href="../dev_guide/developing_secret_masking.html#developing-secret-masking"><span class="std std-ref">Handling secrets in modules and plugins</span></a> for the developer guide.</p>
 </section>
 <section id="playbook">
-<span id="id2"></span><h2><a class="toc-backref" href="#id22" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id2"></span><h2><a class="toc-backref" href="#id38" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
+<section id="secret-masking">
+<h3>Secret masking<a class="headerlink" href="#secret-masking" title="Link to this heading"></a></h3>
+<p>Ansible now masks registered secrets in its output. Values such as decrypted vault content, <code class="docutils literal notranslate"><span class="pre">no_log</span></code> module option values, and prompted passwords are replaced with <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> on the screen, in the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> log file, in callback output, and in module logs on the managed node. The values themselves are unchanged and remain usable by tasks. Use the new <code class="docutils literal notranslate"><span class="pre">register_secret</span></code> filter to register your own values and the <code class="docutils literal notranslate"><span class="pre">mask_secrets</span></code> filter to redact registered secrets from a string. See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#playbooks-secret-masking"><span class="std std-ref">Masking secrets in Ansible output</span></a> for details, including the minimum secret length and the limitations of masking.</p>
+<p>Module options marked with <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code> are no longer replaced with the literal <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code> in the module result. The real value is kept in the result and registered as a secret so it is masked in output. Playbooks that compared a result value against <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code> should be updated.</p>
+<p>One consequence of this change is that a <code class="docutils literal notranslate"><span class="pre">no_log</span></code> option value shorter than 4 characters is no longer hidden at all. The placeholder used to replace the value regardless of its length, but masking is subject to the <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#secret-masking-length-rules"><span class="std std-ref">minimum secret length</span></a>, so such a value is now shown in the output as is. Values of 4 to 6 characters are only masked when they appear as a whole word. If a module option must hold a value this short, set the <code class="docutils literal notranslate"><span class="pre">no_log</span></code> task keyword on the task to hide its whole result, or better, use a longer value where the system accepting it allows.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">register_secret</span></code> filter fails on a value that is not a string or is shorter than 4 characters after leading and trailing whitespace is stripped, because such a value cannot be masked. Set the filter’s <code class="docutils literal notranslate"><span class="pre">validation_action</span></code> option to <code class="docutils literal notranslate"><span class="pre">warn</span></code> or <code class="docutils literal notranslate"><span class="pre">ignore</span></code> to return the value unregistered instead of failing.</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">debug</span></code> module with <code class="docutils literal notranslate"><span class="pre">msg</span></code> or <code class="docutils literal notranslate"><span class="pre">var</span></code> to show a password or other sensitive value on the screen no longer works. The <code class="docutils literal notranslate"><span class="pre">debug</span></code> module writes through <code class="docutils literal notranslate"><span class="pre">Display</span></code>, so a registered secret is shown as <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> wherever it appears, including inside a larger variable and at any verbosity level. There is no option to disable masking for a single task.</p>
+<p>If you need to see the real value, for example to confirm that a vault variable decrypts to what you expect, write it to a file instead of displaying it. A file written by a module is not an output boundary, so the file contains the unmasked value:</p>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Write the secret to a file for inspection</span>
+<span class="w">  </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">db_password</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/tmp/db_password.txt</span>
+<span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s">"0600"</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+</pre></div>
+</div>
+<p>Read the file outside of Ansible and delete it when you are done.</p>
+</section>
 </section>
 <section id="engine">
-<span id="id3"></span><h2><a class="toc-backref" href="#id23" role="doc-backlink">Engine</a><a class="headerlink" href="#engine" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id3"></span><h2><a class="toc-backref" href="#id39" role="doc-backlink">Engine</a><a class="headerlink" href="#engine" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3>Secret masking<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>Masking is applied at the points where data leaves Ansible rather than to the data itself:</p>
+<ul class="simple">
+<li><p>All <code class="docutils literal notranslate"><span class="pre">Display</span></code> output, including the screen, the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> log file, warnings, deprecation messages, errors, and tracebacks.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">result</span></code> mapping of every task result passed to a callback plugin.</p></li>
+<li><p>Module logging to syslog and the Windows Event Log, including the module invocation entry.</p></li>
+</ul>
+<p>Secrets registered in a worker process or inside a module on a managed node are sent back to the controller and registered there, so a value discovered by one task is masked in every later task.
+Registered secrets that appear in a module’s arguments are passed to the module so module-side logging can mask them.</p>
+<p>Values shorter than 4 characters are never masked. Values of 4 to 6 characters are only masked when they appear as a whole word. Values longer than 65536 characters are matched on their first 65536 characters. Overlapping and adjacent secrets are replaced with a single placeholder. See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#secret-masking-length-rules"><span class="std std-ref">Secret length rules</span></a> for the details.
+Leading and trailing whitespace is stripped from a value before it is registered, so a secret read from a file with a trailing newline is masked with or without that newline.
+Masking only matches the exact registered string, so an encoded or hashed copy of a secret is not masked unless it is registered as well. The JSON-escaped form of a secret is the one exception and is always masked.
+Masking also only covers messages Ansible writes through <code class="docutils literal notranslate"><span class="pre">Display</span></code>. Messages that other Python libraries emit with the standard <code class="docutils literal notranslate"><span class="pre">logging</span></code> module share the <code class="docutils literal notranslate"><span class="pre">log_path</span></code> file and are not masked.</p>
+</section>
 </section>
 <section id="plugin-api">
-<span id="id4"></span><h2><a class="toc-backref" href="#id24" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
+<span id="id5"></span><h2><a class="toc-backref" href="#id40" role="doc-backlink">Plugin API</a><a class="headerlink" href="#plugin-api" title="Link to this heading"></a></h2>
+<section id="secret-masking-api">
+<h3>Secret masking API<a class="headerlink" href="#secret-masking-api" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> module is a new public API providing <code class="docutils literal notranslate"><span class="pre">register_secret()</span></code>, <code class="docutils literal notranslate"><span class="pre">register_secrets()</span></code>, and <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code>. See <a class="reference internal" href="../dev_guide/developing_secret_masking.html#developing-secret-masking"><span class="std std-ref">Handling secrets in modules and plugins</span></a>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Ansible.Secrets</span></code> C# module util provides the same API for PowerShell modules through <code class="docutils literal notranslate"><span class="pre">[Ansible.Secrets.SecretMasker]</span></code>.</p></li>
+<li><p>Plugin configuration options can set <code class="docutils literal notranslate"><span class="pre">secret:</span> <span class="pre">true</span></code> to register the resolved value as a secret regardless of the source that set it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleModule</span></code> no longer strips <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values from module results.</p></li>
+</ul>
+<p>Values registered through the secrets API are masked in <code class="docutils literal notranslate"><span class="pre">Display</span></code> output, callback output, and module logs.
+Any plugin or module that discovers a sensitive value at runtime, such as a token returned by an API, should register it as soon as it is known.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">secret</span></code> configuration keyword is only supported for the <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>, and <code class="docutils literal notranslate"><span class="pre">list</span></code> types and is not supported on <code class="docutils literal notranslate"><span class="pre">suboptions</span></code>.
+Declaring it on any other type is an error when the plugin configuration is loaded.
+The <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> connection and become plugins use it for their password and key options, and plugins that accept a password or token should do the same.</p>
+<p>Modules that relied on <code class="docutils literal notranslate"><span class="pre">remove_values()</span></code> or <code class="docutils literal notranslate"><span class="pre">sanitize_keys()</span></code> to strip <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values from their results should remove those calls.
+The values are now masked at the output boundary instead, and both helpers are deprecated.</p>
+</section>
+<section id="callback-plugins">
+<span id="id6"></span><h3>Callback plugins<a class="headerlink" href="#callback-plugins" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">result</span></code> mapping of every task result passed to a callback plugin is now masked before the callback receives it.
+Every string value and every string dictionary key in <code class="docutils literal notranslate"><span class="pre">result.result</span></code> is masked at any depth of nesting, including inside loop results.
+Existing callbacks keep working without changes and no longer see the real value of any registered secret in the result.
+Masking also changes some values that are not strings:</p>
+<ul class="simple">
+<li><p>An <code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code> whose text form is a registered secret is replaced with the placeholder string. A callback that expects a number in a result must handle receiving the string <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> instead when that number was registered as a secret.</p></li>
+<li><p>When two dictionary keys mask to the same placeholder, the second is renamed with a numeric suffix such as <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span> <span class="pre">(2)</span></code> so that no entry is lost.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdout_lines</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr_lines</span></code> are rebuilt from the masked <code class="docutils literal notranslate"><span class="pre">stdout</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr</span></code> so that a secret spanning several lines is masked in the lines as well.</p></li>
+</ul>
+<p>Only <code class="docutils literal notranslate"><span class="pre">result.result</span></code> is masked.
+Task and play names, the <code class="docutils literal notranslate"><span class="pre">warnings</span></code>, <code class="docutils literal notranslate"><span class="pre">deprecations</span></code>, and <code class="docutils literal notranslate"><span class="pre">exception</span></code> attributes of the result, the statistics passed to <code class="docutils literal notranslate"><span class="pre">v2_playbook_on_stats()</span></code>, and anything a callback derives itself are masked only when written through <code class="docutils literal notranslate"><span class="pre">Display()</span></code>.
+A callback that writes such data to a file, socket, HTTP request, database, or any other destination must pass it through <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets.mask_secrets()</span></code> first.</p>
+<p>To update a custom callback plugin:</p>
+<ol class="arabic simple">
+<li><p>Audit every place the callback writes data other than through <code class="docutils literal notranslate"><span class="pre">Display()</span></code>, and mask any data that does not come from <code class="docutils literal notranslate"><span class="pre">result.result</span></code> with <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code>.</p></li>
+<li><p>Remove any custom code that stripped <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values or checked for <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code>, as results no longer contain that placeholder.</p></li>
+<li><p>Check any code that relies on the type of a result value, since a number registered as a secret is replaced with a string.</p></li>
+</ol>
+<p>The following example supports both <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.22 and earlier versions.
+On versions before 2.22 the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> import fails and the result already has <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values removed, so <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> falls back to returning the text unchanged.
+On 2.22 and later the result is already masked and <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> covers the task name written alongside it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansible.plugins.callback</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBase</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ansible.module_utils.secrets</span><span class="w"> </span><span class="kn">import</span> <span class="n">mask_secrets</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="c1"># ansible-core &lt; 2.22 has no secret masking API. Results on those versions</span>
+    <span class="c1"># already have no_log values removed, so there is nothing to mask here.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mask_secrets</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CallbackModule</span><span class="p">(</span><span class="n">CallbackBase</span><span class="p">):</span>
+    <span class="n">CALLBACK_VERSION</span> <span class="o">=</span> <span class="mf">2.0</span>
+    <span class="n">CALLBACK_TYPE</span> <span class="o">=</span> <span class="s1">'notification'</span>
+    <span class="n">CALLBACK_NAME</span> <span class="o">=</span> <span class="s1">'namespace.collection_name.json_file'</span>
+    <span class="n">CALLBACK_NEEDS_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">v2_runner_on_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="c1"># result.result is already masked on 2.22+, but the task name is not, so mask</span>
+        <span class="c1"># the serialized form before writing it.</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'task'</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">task_name</span><span class="p">,</span> <span class="s1">'result'</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">result</span><span class="p">}</span>
+        <span class="n">entry_json</span> <span class="o">=</span> <span class="n">mask_secrets</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'/var/log/ansible-results.jsonl'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entry_json</span> <span class="o">+</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">junit</span></code> and <code class="docutils literal notranslate"><span class="pre">tree</span></code> callbacks shipped with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> are examples of callbacks that write to files and mask everything they write.
+The task <code class="docutils literal notranslate"><span class="pre">no_log</span></code> keyword continues to censor the entire result regardless of masking as it affects the <code class="docutils literal notranslate"><span class="pre">result</span></code> value provided.
+See <a class="reference internal" href="../dev_guide/developing_secret_masking.html#developing-callbacks-masking"><span class="std std-ref">Callback plugins</span></a> for more details.</p>
+</section>
 </section>
 <section id="command-line">
-<span id="id5"></span><h2><a class="toc-backref" href="#id25" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id7"></span><h2><a class="toc-backref" href="#id41" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Passwords entered for <code class="docutils literal notranslate"><span class="pre">--ask-pass</span></code>, <code class="docutils literal notranslate"><span class="pre">--ask-become-pass</span></code>, and <code class="docutils literal notranslate"><span class="pre">--ask-vault-pass</span></code> are registered as secrets and masked in output.</p></li>
+<li><p>Values entered for a <code class="docutils literal notranslate"><span class="pre">vars_prompt</span></code> with <code class="docutils literal notranslate"><span class="pre">private:</span> <span class="pre">true</span></code> (the default) are registered as secrets and masked in output.</p></li>
+</ul>
 </section>
 <section id="deprecated">
-<span id="id6"></span><h2><a class="toc-backref" href="#id26" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<span id="id8"></span><h2><a class="toc-backref" href="#id42" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic.heuristic_log_sanitize()</span></code> is deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.25. Secret values are now masked automatically. Use the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> API to handle secrets manually.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ansible.module_utils.common.parameters.remove_values()</span></code> and <code class="docutils literal notranslate"><span class="pre">sanitize_keys()</span></code> are deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.25. Secret values are now masked automatically. Use the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> API to handle secrets manually.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">live</span></code> argument of <code class="docutils literal notranslate"><span class="pre">ansible.utils.cmd_functions.run_cmd()</span></code> is deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.25 because it bypasses secret masking. Callers that need to stream output live should run the subprocess themselves and mask any secrets in the output.</p></li>
+</ul>
 </section>
 <section id="modules">
-<span id="id7"></span><h2><a class="toc-backref" href="#id27" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<span id="id9"></span><h2><a class="toc-backref" href="#id43" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
 <section id="modules-removed">
 <h3>Modules removed<a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
 <p>The following modules no longer exist:</p>
@@ -374,26 +507,284 @@
 </section>
 <section id="noteworthy-module-changes">
 <h3>Noteworthy module changes<a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
-<p>No notable changes</p>
+<ul class="simple">
+<li><p>Module options marked <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code> keep their real value in the module result instead of being replaced with <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code>. The value is registered as a secret and masked in output. See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#secret-masking-no-log"><span class="std std-ref">How masking changes no_log</span></a>.</p></li>
+<li><p>Values logged by <code class="docutils literal notranslate"><span class="pre">AnsibleModule.log()</span></code> and the module invocation log entry now use <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> in place of the previous <code class="docutils literal notranslate"><span class="pre">NOT_LOGGING_PARAMETER</span></code> and <code class="docutils literal notranslate"><span class="pre">NOT_LOGGING_PASSWORD</span></code> placeholders, and any other registered secret in the message is masked.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleModule.log()</span></code> and the module invocation log no longer apply the <code class="docutils literal notranslate"><span class="pre">heuristic_log_sanitize()</span></code> heuristics. For example, <code class="docutils literal notranslate"><span class="pre">user:password&#64;host</span></code> in a URL is no longer rewritten unless the password is a registered secret.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AnsibleModule.run_command()</span></code> no longer replaces password-like arguments such as <code class="docutils literal notranslate"><span class="pre">--password=...</span></code> with <code class="docutils literal notranslate"><span class="pre">********</span></code> in the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> value of a failure result, and no longer passes the <code class="docutils literal notranslate"><span class="pre">msg</span></code> value through <code class="docutils literal notranslate"><span class="pre">heuristic_log_sanitize()</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">uri</span></code> module no longer rewrites response keys to strip <code class="docutils literal notranslate"><span class="pre">no_log</span></code> values. Registered secrets are masked in output instead.</p></li>
+</ul>
+<p>Only registered secrets are masked in the values above.
+Modules that pass a secret on the command line or embed one in a URL, where that secret is not a <code class="docutils literal notranslate"><span class="pre">no_log</span></code> option, should register it with <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets.register_secret()</span></code>.</p>
 </section>
 </section>
 <section id="plugins">
-<h2><a class="toc-backref" href="#id28" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id44" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
 <section id="noteworthy-plugin-changes">
 <h3>Noteworthy plugin changes<a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
-<p>No notable changes</p>
+<ul class="simple">
+<li><p>The following plugin options are marked <code class="docutils literal notranslate"><span class="pre">secret:</span> <span class="pre">true</span></code> and are masked in output:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ssh</span></code> connection plugin: <code class="docutils literal notranslate"><span class="pre">password</span></code>, <code class="docutils literal notranslate"><span class="pre">private_key</span></code>, and <code class="docutils literal notranslate"><span class="pre">private_key_passphrase</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">winrm</span></code> connection plugin: <code class="docutils literal notranslate"><span class="pre">password</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">psrp</span></code> connection plugin: <code class="docutils literal notranslate"><span class="pre">password</span></code> and <code class="docutils literal notranslate"><span class="pre">certificate_key_password</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sudo</span></code>, <code class="docutils literal notranslate"><span class="pre">su</span></code>, and <code class="docutils literal notranslate"><span class="pre">runas</span></code> become plugins: <code class="docutils literal notranslate"><span class="pre">become_pass</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">url</span></code> lookup plugin: <code class="docutils literal notranslate"><span class="pre">password</span></code></p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">password</span></code> lookup registers the generated plaintext password as a secret. The <code class="docutils literal notranslate"><span class="pre">unvault</span></code> lookup registers the entire decrypted content of each file as a single secret. The <code class="docutils literal notranslate"><span class="pre">vault</span></code> and <code class="docutils literal notranslate"><span class="pre">unvault</span></code> filters register the vault password passed to them, and also register the plaintext being encrypted or decrypted as a single secret.</p></li>
+<li><p>Vault-encrypted files loaded as variables are parsed and each value is registered individually, so values inside them are masked wherever they appear on their own.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">pause</span></code> action registers user input as a secret when <code class="docutils literal notranslate"><span class="pre">echo:</span> <span class="pre">false</span></code> is set.</p></li>
+<li><p>Connection plugin authors should audit any code that displays the raw standard output or standard error of a module invocation. Secrets that a module registers during its run are returned in the raw JSON result and are not masked until the controller processes it. The connection plugins shipped with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> only display raw module output when <code class="docutils literal notranslate"><span class="pre">ANSIBLE_DEBUG</span></code> is enabled.</p></li>
+<li><p>Callback plugins receive task results with registered secrets already masked. The <code class="docutils literal notranslate"><span class="pre">junit</span></code> and <code class="docutils literal notranslate"><span class="pre">tree</span></code> callbacks pass everything they write to a file through <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> so that task and play names and other data not taken from the result are masked as well. See <a class="reference internal" href="porting_guide_core_2.22.html#callback-plugins"><span class="std std-ref">Callback plugins</span></a>.</p></li>
+</ul>
 </section>
 </section>
 <section id="porting-custom-scripts">
-<h2><a class="toc-backref" href="#id29" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id45" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="networking">
-<h2><a class="toc-backref" href="#id30" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
-<p>No notable changes</p>
+<h2><a class="toc-backref" href="#id46" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
+<p>Secret masking does not apply to the messages logged by the <code class="docutils literal notranslate"><span class="pre">persistent_log_messages</span></code> option.
+Persistent connections run in a separate <code class="docutils literal notranslate"><span class="pre">ansible-connection</span></code> process that does not receive the secrets registered by the controller, so passwords and other sensitive configuration sent over the connection are written to the log in plain text.
+Only enable this option while debugging and treat the resulting log as sensitive.</p>
+</section>
+<section id="porting-guide-for-v15-0-0a2">
+<h2><a class="toc-backref" href="#id47" role="doc-backlink">Porting Guide for v15.0.0a2</a><a class="headerlink" href="#porting-guide-for-v15-0-0a2" title="Link to this heading"></a></h2>
+<section id="breaking-changes">
+<h3>Breaking Changes<a class="headerlink" href="#breaking-changes" title="Link to this heading"></a></h3>
+<section id="community-vmware">
+<h4>community.vmware<a class="headerlink" href="#community-vmware" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Removed support for ansible-core &lt; 2.21.0.</p></li>
+</ul>
+</section>
+<section id="vmware-vmware-rest">
+<h4>vmware.vmware_rest<a class="headerlink" href="#vmware-vmware-rest" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>appliance_monitoring_query - The <code class="docutils literal notranslate"><span class="pre">interval</span></code>, <code class="docutils literal notranslate"><span class="pre">function</span></code>, <code class="docutils literal notranslate"><span class="pre">start_time</span></code> and <code class="docutils literal notranslate"><span class="pre">end_time</span></code> parameters have been grouped under a new required <code class="docutils literal notranslate"><span class="pre">item</span></code> dictionary parameter to match the vSphere 9.1.0 API specification. The module will not work with older versions of the API.</p></li>
+<li><p>appliance_networking_interfaces_ipv4 - The <code class="docutils literal notranslate"><span class="pre">state</span></code> parameter now accepts <code class="docutils literal notranslate"><span class="pre">present</span></code> instead of <code class="docutils literal notranslate"><span class="pre">set</span></code>. Playbooks that explicitly set <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">set</span></code> must be updated to <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">present</span></code>.</p></li>
+<li><p>appliance_networking_interfaces_ipv6 - The <code class="docutils literal notranslate"><span class="pre">state</span></code> parameter now accepts <code class="docutils literal notranslate"><span class="pre">present</span></code> instead of <code class="docutils literal notranslate"><span class="pre">set</span></code>. Playbooks that explicitly set <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">set</span></code> must be updated to <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">present</span></code>.</p></li>
+<li><p>appliance_system_storage - The <code class="docutils literal notranslate"><span class="pre">state</span></code> parameter now accepts <code class="docutils literal notranslate"><span class="pre">resize-ex</span></code> instead of <code class="docutils literal notranslate"><span class="pre">resize_ex</span></code>. This was done to better align with the API expectations.</p></li>
+<li><p>vcenter_folder_info - The <code class="docutils literal notranslate"><span class="pre">type</span></code> parameter (and its <code class="docutils literal notranslate"><span class="pre">filter_type</span></code> alias) has been moved into a new <code class="docutils literal notranslate"><span class="pre">filter</span></code> dictionary as <code class="docutils literal notranslate"><span class="pre">filter.type</span></code>, reflecting the <code class="docutils literal notranslate"><span class="pre">Vcenter.Folder.FilterSpec</span></code> object introduced in the vSphere 9.1.0 API specification. Playbooks that set <code class="docutils literal notranslate"><span class="pre">type</span></code> or <code class="docutils literal notranslate"><span class="pre">filter_type</span></code> at the top level must now use <code class="docutils literal notranslate"><span class="pre">filter.type</span></code>. The <code class="docutils literal notranslate"><span class="pre">folders</span></code>, <code class="docutils literal notranslate"><span class="pre">names</span></code>, <code class="docutils literal notranslate"><span class="pre">parent_folders</span></code>, and <code class="docutils literal notranslate"><span class="pre">datacenters</span></code> filters remain top-level parameters.</p></li>
+<li><p>vcenter_folder_info and vcenter_network_info - The ‘value’ return is not guaranteed to be a list. If a list is desired, the ‘info’ return will always be a list (as documented)</p></li>
+<li><p>vcenter_host_info - The <code class="docutils literal notranslate"><span class="pre">standalone</span></code> parameter has been moved into a new <code class="docutils literal notranslate"><span class="pre">filter</span></code> dictionary as <code class="docutils literal notranslate"><span class="pre">filter.standalone</span></code>, reflecting the <code class="docutils literal notranslate"><span class="pre">Vcenter.Host.FilterSpec</span></code> object introduced in the vSphere 9.1.0 API specification. Playbooks that set <code class="docutils literal notranslate"><span class="pre">standalone</span></code> at the top level must now use <code class="docutils literal notranslate"><span class="pre">filter.standalone</span></code>. The other host filters remain top-level parameters.</p></li>
+<li><p>vcenter_ovf_libraryitem - The <code class="docutils literal notranslate"><span class="pre">deployment_spec.accept_all_EULA</span></code> parameter has been renamed to <code class="docutils literal notranslate"><span class="pre">deployment_spec.accept_all_eula</span></code> (snake_case) in the vSphere 9.1.0 API specification and module arguments. The module will not work with older versions of the API.</p></li>
+<li><p>vcenter_vm_guest_filesystem_directories - The ‘present’, ‘absent’, ‘create_temporary’ states have been removed and replaced with options that better reflect the action taken by the API.</p></li>
+<li><p>vcenter_vm_guest_filesystem_directories - The state option has no default value and must be specified.</p></li>
+</ul>
+</section>
+</section>
+<section id="major-changes">
+<h3>Major Changes<a class="headerlink" href="#major-changes" title="Link to this heading"></a></h3>
+<section id="ansible-core">
+<h4>Ansible-core<a class="headerlink" href="#ansible-core" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>callback plugins - task results passed to callback plugins now always have any registered secrets replaced with <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code>, so callbacks no longer need to mask the result themselves. The <code class="docutils literal notranslate"><span class="pre">ANSIBLE_SUPPORTS_MASKING</span></code> callback class attribute introduced in ansible-core 2.22.0b1 to opt into receiving unmasked results has been removed and is now ignored.</p></li>
+</ul>
+</section>
+<section id="dellemc-openmanage">
+<h4>dellemc.openmanage<a class="headerlink" href="#dellemc-openmanage" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Added BIOS registry info module: idrac_bios_registry_info.</p></li>
+<li><p>Added network attributes info modules: idrac_network_attributes_info, and idrac_network_info.</p></li>
+<li><p>Added session info module: idrac_session_info.</p></li>
+<li><p>Complete removal of OMSDK library dependency from the collection.</p></li>
+<li><p>Enhanced idrac_certificates module with SCEP_CA_CERT support for ACME and SCEP enrollment.</p></li>
+<li><p>Enhanced idrac_lifecycle_controller_logs module with pagination, filtering, and export capabilities.</p></li>
+<li><p>Enhanced idrac_session module with self-session protection to prevent accidental lockout when deleting sessions.</p></li>
+<li><p>Removed 8 deprecated OMSDK-dependent modules: dellemc_configure_idrac_eventing, dellemc_configure_idrac_services, dellemc_idrac_lc_attributes, dellemc_system_lockdown_mode, idrac_network, idrac_timezone_ntp, dellemc_idrac_storage_volume, and idrac_syslog.</p></li>
+<li><p>Removed OMSDK requirement from idrac_system_info module.</p></li>
+<li><p>Removed OMSDK-specific code from dellemc_idrac.py utility module.</p></li>
+<li><p>Removed deprecated parameters from idrac_bios module (share_name, share_user, share_password, share_mnt, boot_sources).</p></li>
+</ul>
+</section>
+<section id="netapp-ontap">
+<h4>netapp.ontap<a class="headerlink" href="#netapp-ontap" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>na_ontap_active_directory - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_active_directory_domain_controllers - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_dns - GCNV support added to the module.</p></li>
+<li><p>na_ontap_ems_filter - GCNV support added to the module.</p></li>
+<li><p>na_ontap_export_policy - GCNV support added to the module.</p></li>
+<li><p>na_ontap_export_policy_rule - GCNV support added to the module.</p></li>
+<li><p>na_ontap_ldap_client - GCNV support added to the module.</p></li>
+<li><p>na_ontap_license - GCNV support added to the module.</p></li>
+<li><p>na_ontap_nvme - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_nvme_subsystem - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_qtree - GCNV support added to the module.</p></li>
+<li><p>na_ontap_quotas - GCNV support added to the module.</p></li>
+<li><p>na_ontap_rest_cli - GCNV support added to the module.</p></li>
+<li><p>na_ontap_rest_info - GCNV support added to the module.</p></li>
+<li><p>na_ontap_restit - GCNV support added to the module.</p></li>
+<li><p>na_ontap_security_certificates - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_security_ipsec_config - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_security_ipsec_policy - AWS Lambda support added to the module.</p></li>
+<li><p>na_ontap_snapshot - GCNV support added to the module.</p></li>
+<li><p>na_ontap_snapshot_policy - GCNV support added to the module.</p></li>
+<li><p>na_ontap_volume - GCNV support added to the module.</p></li>
+</ul>
+</section>
+<section id="id10">
+<h4>vmware.vmware_rest<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>vcenter_vm_guest_filesystem_directories - The module now raises an error when the vSphere API request fails (for example when creating a directory that already exists) instead of silently returning a successful, unchanged result. Playbooks that relied on the previous behavior should handle the failure explicitly.</p></li>
+</ul>
+</section>
+</section>
+<section id="removed-features">
+<h3>Removed Features<a class="headerlink" href="#removed-features" title="Link to this heading"></a></h3>
+<section id="id11">
+<h4>community.vmware<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>module_utils.vm_device_helper - The deprecated <code class="docutils literal notranslate"><span class="pre">PyVmomiDeviceHelper.is_nvdimm_controller</span></code> method has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2314">https://github.com/ansible-collections/community.vmware/pull/2314</a>).</p></li>
+<li><p>module_utils.vm_device_helper - The deprecated <code class="docutils literal notranslate"><span class="pre">PyVmomiDeviceHelper.is_nvdimm_device</span></code> method has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2314">https://github.com/ansible-collections/community.vmware/pull/2314</a>).</p></li>
+<li><p>module_utils.vmware - The deprecated <code class="docutils literal notranslate"><span class="pre">PyVmomi.find_vmdk_file</span></code> method has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2314">https://github.com/ansible-collections/community.vmware/pull/2314</a>).</p></li>
+<li><p>module_utils.vmware - The deprecated <code class="docutils literal notranslate"><span class="pre">PyVmomi.host_version_at_least</span></code> method has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2309">https://github.com/ansible-collections/community.vmware/issues/2309</a>).</p></li>
+<li><p>module_utils.vmware - The deprecated <code class="docutils literal notranslate"><span class="pre">PyVmomi.network_exists_by_name</span></code> method has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2314">https://github.com/ansible-collections/community.vmware/pull/2314</a>).</p></li>
+<li><p>module_utils.vmware - The deprecated <code class="docutils literal notranslate"><span class="pre">PyVmomi.vmdk_disk_path_split</span></code> method has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2314">https://github.com/ansible-collections/community.vmware/pull/2314</a>).</p></li>
+<li><p>module_utils.vmware - The deprecated <code class="docutils literal notranslate"><span class="pre">connect_to_api</span></code> function has been removed. (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2465">https://github.com/ansible-collections/community.vmware/issues/2465</a>).</p></li>
+<li><p>module_utils.vmware - The deprecated <code class="docutils literal notranslate"><span class="pre">find_host_portgroup_by_name</span></code> function and <code class="docutils literal notranslate"><span class="pre">PyVmomi.find_host_portgroup_by_name</span></code> method have been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2314">https://github.com/ansible-collections/community.vmware/pull/2314</a>).</p></li>
+<li><p>module_utils.vmware_rest_client - The deprecated <code class="docutils literal notranslate"><span class="pre">VmwareRestClient.get_folder_by_name</span></code> method has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2314">https://github.com/ansible-collections/community.vmware/pull/2314</a>).</p></li>
+<li><p>plugin_utils.inventory - The deprecated plugin util has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2292">https://github.com/ansible-collections/community.vmware/issues/2292</a>).</p></li>
+<li><p>plugins.httpapi - The deprecated <code class="docutils literal notranslate"><span class="pre">plugins.httpapi</span></code> has been removed (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2310">https://github.com/ansible-collections/community.vmware/issues/2310</a>).</p></li>
+<li><p>vcenter_folder - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.folder</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2358">https://github.com/ansible-collections/community.vmware/issues/2358</a>).</p></li>
+<li><p>vmware_cluster_ha - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.cluster_ha</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2333">https://github.com/ansible-collections/community.vmware/issues/2333</a>).</p></li>
+<li><p>vmware_cluster_info - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.cluster_info</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2261">https://github.com/ansible-collections/community.vmware/issues/2261</a>).</p></li>
+<li><p>vmware_content_deploy_ovf_template - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.deploy_content_library_ovf</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2334">https://github.com/ansible-collections/community.vmware/issues/2334</a>).</p></li>
+<li><p>vmware_content_deploy_template - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.deploy_content_library_template</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2334">https://github.com/ansible-collections/community.vmware/issues/2334</a>).</p></li>
+<li><p>vmware_content_library_manager - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.local_content_library</span></code> and <code class="docutils literal notranslate"><span class="pre">vmware.vmware.subscribed_content_library</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2359">https://github.com/ansible-collections/community.vmware/issues/2359</a>).</p></li>
+<li><p>vmware_dvs_portgroup - The deprecated option <code class="docutils literal notranslate"><span class="pre">mac_learning</span></code> has been removed. Use <code class="docutils literal notranslate"><span class="pre">network_policy.mac_learning</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2466">https://github.com/ansible-collections/community.vmware/issues/2466</a>).</p></li>
+<li><p>vmware_guest_powerstate - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.vm_powerstate</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2440">https://github.com/ansible-collections/community.vmware/issues/2440</a>).</p></li>
+<li><p>vmware_host - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.esxi_host</span></code> and <code class="docutils literal notranslate"><span class="pre">vmware.vmware.esxi_connection</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2341">https://github.com/ansible-collections/community.vmware/issues/2341</a>).</p></li>
+<li><p>vmware_host_inventory - The deprecated inventory plugin has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.esxi_hosts</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2292">https://github.com/ansible-collections/community.vmware/issues/2292</a>).</p></li>
+<li><p>vmware_maintenancemode - The deprecated module has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.esxi_maintenance_mode</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2299">https://github.com/ansible-collections/community.vmware/issues/2299</a>).</p></li>
+<li><p>vmware_vm_inventory - The deprecated inventory plugin has been removed. Use <code class="docutils literal notranslate"><span class="pre">vmware.vmware.vms</span></code> instead (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2292">https://github.com/ansible-collections/community.vmware/issues/2292</a>).</p></li>
+</ul>
+</section>
+<section id="id12">
+<h4>dellemc.openmanage<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>dellemc_configure_idrac_eventing - Use idrac_attributes as alternative.</p></li>
+<li><p>dellemc_configure_idrac_services - Use idrac_attributes as alternative.</p></li>
+<li><p>dellemc_idrac_lc_attributes - Use idrac_attributes as alternative.</p></li>
+<li><p>dellemc_idrac_storage_volume - Use idrac_storage_volume as alternative.</p></li>
+<li><p>dellemc_system_lockdown_mode - Use idrac_attributes as alternative.</p></li>
+<li><p>idrac_network - Use idrac_network_attributes as alternative.</p></li>
+<li><p>idrac_syslog - Use idrac_attributes as alternative.</p></li>
+<li><p>idrac_timezone_ntp - Use idrac_attributes as alternative.</p></li>
+</ul>
+</section>
+<section id="id13">
+<h4>vmware.vmware_rest<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>appliance_access_consolecli - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_access_consolecli_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_access_dcui - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_access_dcui_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_access_shell - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_access_shell_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_access_ssh - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_access_ssh_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_dns_domains - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_dns_domains_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_dns_hostname - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_dns_hostname_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_dns_servers - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_dns_servers_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_firewall_inbound - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_firewall_inbound_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_noproxy - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_noproxy_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_proxy - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_networking_proxy_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_ntp - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_ntp_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_system_globalfips - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_system_globalfips_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_system_time_timezone - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_system_time_timezone_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_timesync - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>appliance_timesync_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>cluster_moid - The deprecated lookup plugin has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>content_library_item_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>content_locallibrary - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>content_subscribedlibrary - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>datacenter_moid - The deprecated lookup plugin has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>datastore_moid - The deprecated lookup plugin has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>folder_moid - The deprecated lookup plugin has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>host_moid - The deprecated lookup plugin has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>network_moid - The deprecated lookup plugin has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>resource_pool_moid - The deprecated lookup plugin has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_cluster_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_host - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_guest_customization - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_guest_networking_interfaces_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_guest_power - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_adapter_sata - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_adapter_scsi - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_cdrom - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_cpu - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_cpu_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_disk - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_ethernet - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_memory - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_hardware_memory_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_libraryitem_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vm_power - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vcenter_vmtemplate_libraryitems_info - The deprecated module has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+<li><p>vm_moid - The deprecated lookup plugin has been removed (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/648">https://github.com/ansible-collections/vmware.vmware_rest/pull/648</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="deprecated-features">
+<h3>Deprecated Features<a class="headerlink" href="#deprecated-features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The cisco.ucs collection will be removed from Ansible 16.
+There is no active development happening on the collection. This has moved to cisco.intersight which is also part of the ACP.
+See <a class="reference external" href="https://forum.ansible.com/t/46220">the removal discussion for details</a>.
+After removal, users can still install this collection with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">cisco.ucs</span></code>.</p></li>
+</ul>
+<section id="id14">
+<h4>community.vmware<a class="headerlink" href="#id14" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>module_utils.vmware - The <code class="docutils literal notranslate"><span class="pre">ansible_date_time_facts</span></code> funtion is deprecated and will be removed in community.vmware 8.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2607">https://github.com/ansible-collections/community.vmware/pull/2607</a>).</p></li>
+<li><p>module_utils.vmware_rest_client - The <code class="docutils literal notranslate"><span class="pre">VmwareRestClient.get_tag_by_name</span></code> method is deprecated and will be removed in community.vmware 8.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2607">https://github.com/ansible-collections/community.vmware/pull/2607</a>).</p></li>
+<li><p>module_utils.vmware_rest_client - The <code class="docutils literal notranslate"><span class="pre">VmwareRestClient.get_tags_for_hostsystem</span></code> method is deprecated and will be removed in community.vmware 8.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2607">https://github.com/ansible-collections/community.vmware/pull/2607</a>).</p></li>
+</ul>
+</section>
+<section id="id15">
+<h4>vmware.vmware_rest<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Deprecate appliance_health_applmgmt_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_health_databasestorage_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_health_load_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_health_mem_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_health_storage_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_health_swap_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_health_system_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_networking_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_networking_interfaces_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_networking_interfaces_ipv4_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_networking_interfaces_ipv6_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_system_time_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_system_version_info module. Use vmware.vmware.appliance_info</p></li>
+<li><p>Deprecate appliance_vmon_service and appliance_vmon_service_info modules as the endpoint has been removed. Use appliance_services and appliance_services_info instead.</p></li>
+<li><p>Deprecate vcenter_folder_info module. Use vmware.vmware.folder_info</p></li>
+<li><p>Deprecate vcenter_host_info module. Use vmware.vmware.esxi_info</p></li>
+<li><p>Deprecate vcenter_vm_guest_filesystem_directories module. Use ansible.builtin.file</p></li>
+<li><p>Deprecate vcenter_vm_hardware_floppy and vcenter_vm_hardware_floppy_info modules as floppy drives are legacy hardware.</p></li>
+<li><p>Deprecate vcenter_vm_info module. Use vmware.vmware.vm_info</p></li>
+<li><p>Deprecate vcenter_vm_power_info module. Use vmware.vmware.vm_info</p></li>
+<li><p>Deprecate vcenter_vmtemplate_libraryitems module. Use vmware.vmware.deploy_content_library_template or vmware.vmware.content_template</p></li>
+</ul>
+</section>
+</section>
 </section>
 <section id="porting-guide-for-v15-0-0a1">
-<h2><a class="toc-backref" href="#id31" role="doc-backlink">Porting Guide for v15.0.0a1</a><a class="headerlink" href="#porting-guide-for-v15-0-0a1" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id48" role="doc-backlink">Porting Guide for v15.0.0a1</a><a class="headerlink" href="#porting-guide-for-v15-0-0a1" title="Link to this heading"></a></h2>
 <section id="added-collections">
 <h3>Added Collections<a class="headerlink" href="#added-collections" title="Link to this heading"></a></h3>
 <ul class="simple">
@@ -402,17 +793,17 @@
 </section>
 <section id="known-issues">
 <h3>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading"></a></h3>
-<section id="ansible-core">
-<h4>Ansible-core<a class="headerlink" href="#ansible-core" title="Link to this heading"></a></h4>
+<section id="id16">
+<h4>Ansible-core<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Secret masking - when <code class="docutils literal notranslate"><span class="pre">ANSIBLE_DEBUG=1</span></code> is set, the raw stdout and stderr of commands executed on the target, including module results, are displayed before the secrets contained in the module result have been registered for masking. Secrets which are only known to the module, such as <code class="docutils literal notranslate"><span class="pre">no_log</span></code> option values, may therefore be shown in plaintext in debug output.</p></li>
 </ul>
 </section>
 </section>
-<section id="breaking-changes">
-<h3>Breaking Changes<a class="headerlink" href="#breaking-changes" title="Link to this heading"></a></h3>
-<section id="id8">
-<h4>Ansible-core<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<section id="id17">
+<h3>Breaking Changes<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<section id="id18">
+<h4>Ansible-core<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>AnsibleModule - <code class="docutils literal notranslate"><span class="pre">log()</span></code> and the automatic invocation logging now only redact values registered as secrets (such as <code class="docutils literal notranslate"><span class="pre">no_log</span></code> option values) and no longer apply the <code class="docutils literal notranslate"><span class="pre">heuristic_log_sanitize()</span></code> heuristics, for example <code class="docutils literal notranslate"><span class="pre">user:password&#64;host</span></code> in URLs is no longer rewritten unless the password is a registered secret. <code class="docutils literal notranslate"><span class="pre">no_log</span></code> and password-like options are logged as <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> instead of <code class="docutils literal notranslate"><span class="pre">NOT_LOGGING_PARAMETER</span></code> or <code class="docutils literal notranslate"><span class="pre">NOT_LOGGING_PASSWORD</span></code>.</p></li>
 <li><p>AnsibleModule - <code class="docutils literal notranslate"><span class="pre">run_command()</span></code> no longer rewrites the <code class="docutils literal notranslate"><span class="pre">cmd</span></code> value in a failure result to replace password-like arguments (such as <code class="docutils literal notranslate"><span class="pre">--password=...</span></code>) with <code class="docutils literal notranslate"><span class="pre">********</span></code>, and the <code class="docutils literal notranslate"><span class="pre">msg</span></code> value is no longer passed through <code class="docutils literal notranslate"><span class="pre">heuristic_log_sanitize()</span></code>. Registered secrets in these values are still redacted in output. Modules that pass a secret on the command line which is not a <code class="docutils literal notranslate"><span class="pre">no_log</span></code> option should register it with <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets.register_secret()</span></code>.</p></li>
@@ -473,16 +864,15 @@
 </ul>
 </section>
 </section>
-<section id="major-changes">
-<h3>Major Changes<a class="headerlink" href="#major-changes" title="Link to this heading"></a></h3>
-<section id="id9">
-<h4>Ansible-core<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<section id="id19">
+<h3>Major Changes<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<section id="id20">
+<h4>Ansible-core<a class="headerlink" href="#id20" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Secret masking - Ansible now automatically redacts known secret values from the output it generates, such as <code class="docutils literal notranslate"><span class="pre">display</span></code> output (including verbose, warning, deprecation, and error output), module logging, and task results passed to callback plugins. Masking is non-destructive; the real value remains available to tasks, conditionals, and registered variables, only the rendered output is redacted with <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code>. Secrets shorter than 4 characters are never masked, secrets of 4 to 6 characters are only masked when they appear as a whole word or when they overlap or are adjacent to another secret, and secrets longer than 65536 characters are matched on their first 65536 characters.</p></li>
 <li><p>Secret masking - add the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> public API for working with secrets manually. It provides <code class="docutils literal notranslate"><span class="pre">register_secret</span></code> and <code class="docutils literal notranslate"><span class="pre">register_secrets</span></code> to register values that should be redacted from masked output, and <code class="docutils literal notranslate"><span class="pre">mask_secrets</span></code> to redact any registered secrets from a string. The API can be used on the controller and in Python modules; the new <code class="docutils literal notranslate"><span class="pre">Ansible.Secrets</span></code> C# module_util provides the equivalent <code class="docutils literal notranslate"><span class="pre">[Ansible.Secrets.SecretMasker]::RegisterSecret()</span></code> and <code class="docutils literal notranslate"><span class="pre">MaskString()</span></code> methods for PowerShell modules. Secrets registered inside a module or worker process are propagated back to the controller so they are also masked there.</p></li>
 <li><p>ansible - Add support for Python 3.15.</p></li>
 <li><p>ansible - Drop support for Python 3.12 on the controller.</p></li>
-<li><p>callback plugins - callback plugin authors should opt into the new secret masking behaviour by setting the class attribute <code class="docutils literal notranslate"><span class="pre">ANSIBLE_SUPPORTS_MASKING</span> <span class="pre">=</span> <span class="pre">True</span></code>. A callback that sets this receives the unmasked task result and must ensure any secrets are redacted before they are written, either by emitting output through <code class="docutils literal notranslate"><span class="pre">Display</span></code> which masks automatically, or by passing the values through <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets.mask_secrets()</span></code> before writing them elsewhere. Callbacks that do not set the attribute continue to receive task results with any registered secrets replaced by <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code>, matching the redacted results they receive today. This implicit masking exists only for backwards compatibility with existing callbacks and will be removed in a future release, at which point all callbacks will receive unmasked results and must mask them manually if not using <code class="docutils literal notranslate"><span class="pre">Display</span></code>. Task-level <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code> continues to censor the entire result regardless of this attribute.</p></li>
 </ul>
 </section>
 <section id="ansible-mysql">
@@ -497,8 +887,8 @@
 <li><p>clickhouse_named_collection - new module to add/modify/delete named collections in database.</p></li>
 </ul>
 </section>
-<section id="community-vmware">
-<h4>community.vmware<a class="headerlink" href="#community-vmware" title="Link to this heading"></a></h4>
+<section id="id21">
+<h4>community.vmware<a class="headerlink" href="#id21" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Bump required <code class="docutils literal notranslate"><span class="pre">vmware.vmware</span></code> collection version to 2.10.0 (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2568">https://github.com/ansible-collections/community.vmware/pull/2568</a>).</p></li>
 </ul>
@@ -511,8 +901,8 @@
 <li><p>Updated the Q&amp;A for importing a certificate in the fortios_certificate_remote module.</p></li>
 </ul>
 </section>
-<section id="netapp-ontap">
-<h4>netapp.ontap<a class="headerlink" href="#netapp-ontap" title="Link to this heading"></a></h4>
+<section id="id22">
+<h4>netapp.ontap<a class="headerlink" href="#id22" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>na_ontap_cg_snapshot - AWS Lambda support added to the module.</p></li>
 <li><p>na_ontap_cli_timeout - AWS Lambda support added to the module.</p></li>
@@ -555,8 +945,8 @@
 <li><p>ci - integration tests now run against both Splunk Server 9.4 and 10.4 with Enterprise Security (ES), providing full coverage across supported major versions and catching regressions against real Splunk ES instances.</p></li>
 </ul>
 </section>
-<section id="vmware-vmware-rest">
-<h4>vmware.vmware_rest<a class="headerlink" href="#vmware-vmware-rest" title="Link to this heading"></a></h4>
+<section id="id23">
+<h4>vmware.vmware_rest<a class="headerlink" href="#id23" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Update minimum required ansible-core version to 2.16 in meta/runtime.yml</p></li>
 </ul>
@@ -570,8 +960,8 @@
 </ul>
 <p>You can still install a removed collection manually with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">&lt;name-of-collection&gt;</span></code>.</p>
 </section>
-<section id="removed-features">
-<h3>Removed Features<a class="headerlink" href="#removed-features" title="Link to this heading"></a></h3>
+<section id="id24">
+<h3>Removed Features<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">netapp.cloudmanager</span></code> collection was considered unmaintained and has been removed from Ansible 15 (<a class="reference external" href="https://forum.ansible.com/t/44891">https://forum.ansible.com/t/44891</a>).
 Users can still install this collection with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">netapp.cloudmanager</span></code>.</p></li>
@@ -580,8 +970,8 @@ The collection has violated the inclusion requirements multiple times, including
 See <a class="reference external" href="https://docs.ansible.com/projects/ansible/devel/community/collection_contributors/collection_package_removal.html#collections-not-satisfying-the-collection-requirements">Collections Removal Process for collections not satisfying the collection requirements</a> for more details (<a class="reference external" href="https://forum.ansible.com/t/45816">https://forum.ansible.com/t/45816</a>).
 Users can still install this collection with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">cyberark.pas</span></code>.</p></li>
 </ul>
-<section id="id10">
-<h4>Ansible-core<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<section id="id25">
+<h4>Ansible-core<a class="headerlink" href="#id25" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Remove deprecated <code class="docutils literal notranslate"><span class="pre">ANSIBLE_CONNECTION_PATH</span></code> option</p></li>
 <li><p>Remove deprecated <code class="docutils literal notranslate"><span class="pre">DEFAULT_LIBVIRT_LXC_NOSECLABEL</span></code> option.</p></li>
@@ -589,8 +979,8 @@ Users can still install this collection with <code class="docutils literal notra
 <li><p>yum_repository - Removed deprecated parameters.</p></li>
 </ul>
 </section>
-<section id="id11">
-<h4>community.postgresql<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<section id="id26">
+<h4>community.postgresql<a class="headerlink" href="#id26" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>postgresql modules - the <code class="docutils literal notranslate"><span class="pre">login</span></code>, <code class="docutils literal notranslate"><span class="pre">host</span></code>, <code class="docutils literal notranslate"><span class="pre">unix_socket</span></code> and <code class="docutils literal notranslate"><span class="pre">port</span></code> aliases have been removed in <code class="docutils literal notranslate"><span class="pre">community.postgresql</span> <span class="pre">5.0.0</span></code>. Use the <code class="docutils literal notranslate"><span class="pre">login_user</span></code>, <code class="docutils literal notranslate"><span class="pre">login_host</span></code>, <code class="docutils literal notranslate"><span class="pre">login_unix_socket</span></code> and <code class="docutils literal notranslate"><span class="pre">login_port</span></code> options instead (<a class="reference external" href="https://github.com/ansible-collections/community.postgresql/issues/847">https://github.com/ansible-collections/community.postgresql/issues/847</a>).</p></li>
 <li><p>postgresql_copy - the <code class="docutils literal notranslate"><span class="pre">db</span></code> alias of the <code class="docutils literal notranslate"><span class="pre">login_db</span></code> option has been removed. Use the <code class="docutils literal notranslate"><span class="pre">login_db</span></code> option instead (<a class="reference external" href="https://github.com/ansible-collections/community.postgresql/issues/831">https://github.com/ansible-collections/community.postgresql/issues/831</a>).</p></li>
@@ -619,8 +1009,8 @@ Users can still install this collection with <code class="docutils literal notra
 <li><p>postgresql_user_obj_stat_info - the <code class="docutils literal notranslate"><span class="pre">db</span></code> alias of the <code class="docutils literal notranslate"><span class="pre">login_db</span></code> option has been removed. Use the <code class="docutils literal notranslate"><span class="pre">login_db</span></code> option instead (<a class="reference external" href="https://github.com/ansible-collections/community.postgresql/issues/831">https://github.com/ansible-collections/community.postgresql/issues/831</a>).</p></li>
 </ul>
 </section>
-<section id="id12">
-<h4>hetzner.hcloud<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<section id="id27">
+<h4>hetzner.hcloud<a class="headerlink" href="#id27" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>hcloud inventory - The deprecated <code class="docutils literal notranslate"><span class="pre">hcloud_datacenter</span></code> host variable was removed. Please use the <code class="docutils literal notranslate"><span class="pre">hcloud_location</span></code> host variable instead.</p></li>
 <li><p>network_info - The deprecated <code class="docutils literal notranslate"><span class="pre">hcloud_network_info[].servers[].datacenter</span></code> return value was removed. Please use the <code class="docutils literal notranslate"><span class="pre">hcloud_network_info[].servers[].location</span></code> return value instead.</p></li>
@@ -639,16 +1029,16 @@ Users can still install this collection with <code class="docutils literal notra
 </ul>
 </section>
 </section>
-<section id="deprecated-features">
-<h3>Deprecated Features<a class="headerlink" href="#deprecated-features" title="Link to this heading"></a></h3>
+<section id="id28">
+<h3>Deprecated Features<a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>The dellemc.unity collection will be removed from Ansible 16 due to violations of the Ansible inclusion requirements.
 No CI runs / sanity tests for 10 months.
 See <a class="reference external" href="https://docs.ansible.com/projects/ansible/devel/community/collection_contributors/collection_package_removal.html#collections-not-satisfying-the-collection-requirements">Collections Removal Process for collections not satisfying the collection requirements</a> for more details, including for how this can be cancelled (<a class="reference external" href="https://forum.ansible.com/t/46085">https://forum.ansible.com/t/46085</a>).
 After removal, users can still install this collection with <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">dellemc.unity</span></code>.</p></li>
 </ul>
-<section id="id13">
-<h4>Ansible-core<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<section id="id29">
+<h4>Ansible-core<a class="headerlink" href="#id29" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>AGNOSTIC_BECOME_PROMPT setting, no external tools should need this any more.</p></li>
 <li><p>Deprecate is_module in get_docstring API in favor of passing <code class="docutils literal notranslate"><span class="pre">plugin_type='module'</span></code>.</p></li>
@@ -660,8 +1050,8 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>task result - Returning <code class="docutils literal notranslate"><span class="pre">skipped</span></code> from a module or action plugin is deprecated and will be removed in ansible-core 2.25. Use task-level conditionals (<code class="docutils literal notranslate"><span class="pre">when:</span></code>) to control execution.</p></li>
 </ul>
 </section>
-<section id="id14">
-<h4>community.clickhouse<a class="headerlink" href="#id14" title="Link to this heading"></a></h4>
+<section id="id30">
+<h4>community.clickhouse<a class="headerlink" href="#id30" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>clickhouse_db - deprecate pre 22.x handling code for comments (<a class="reference external" href="https://github.com/ansible-collections/community.clickhouse/issues/217">https://github.com/ansible-collections/community.clickhouse/issues/217</a>).</p></li>
 <li><p>clickhouse_role - list based settings and profiles are marked as deprecated and sheduled for removal in 3.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.clickhouse/issues/218">https://github.com/ansible-collections/community.clickhouse/issues/218</a>).</p></li>
@@ -727,8 +1117,8 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>keycloak_userprofile - the module is moved to <code class="docutils literal notranslate"><span class="pre">middleware_automation.keycloak.keycloak_userprofile</span></code>. The module will be replaced by a deprecated redirect to that module in community.general 14.0.0, and the redirect will be removed in community.general 16.0.0. If you are using the module, please consider installing and using <code class="docutils literal notranslate"><span class="pre">middleware_automation.keycloak</span></code> now (<a class="reference external" href="https://github.com/ansible-collections/community.general/pull/12484">https://github.com/ansible-collections/community.general/pull/12484</a>).</p></li>
 </ul>
 </section>
-<section id="id15">
-<h4>community.postgresql<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<section id="id31">
+<h4>community.postgresql<a class="headerlink" href="#id31" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>postgresql_membership - the top-level <code class="docutils literal notranslate"><span class="pre">groups</span></code> option is deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">community.postgresql</span> <span class="pre">6.0.0</span></code>. <code class="docutils literal notranslate"><span class="pre">granted_by_any</span></code> with the <code class="docutils literal notranslate"><span class="pre">groups</span></code> key of <code class="docutils literal notranslate"><span class="pre">memberships</span></code> behaves the same on every version; <code class="docutils literal notranslate"><span class="pre">target_roles</span></code> stays at the top level, and an empty <code class="docutils literal notranslate"><span class="pre">memberships</span></code> list with <code class="docutils literal notranslate"><span class="pre">state=exact</span></code> replaces an empty <code class="docutils literal notranslate"><span class="pre">groups</span></code> list.</p></li>
 </ul>
@@ -741,8 +1131,8 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>collection - Python 2 support will be dropped in version 2.0.0 of this collection. Make sure you have Python 3 installed on your target machines (<a class="reference external" href="https://github.com/ansible-collections/community.rabbitmq/issues/214">https://github.com/ansible-collections/community.rabbitmq/issues/214</a>).</p></li>
 </ul>
 </section>
-<section id="id16">
-<h4>community.vmware<a class="headerlink" href="#id16" title="Link to this heading"></a></h4>
+<section id="id32">
+<h4>community.vmware<a class="headerlink" href="#id32" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>plugins.module_utils.vmware - The function <code class="docutils literal notranslate"><span class="pre">find_host_by_cluster_datacenter</span></code> is deprecated and will be removed in community.vmware 8.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2599">https://github.com/ansible-collections/community.vmware/pull/2599</a>).</p></li>
 <li><p>plugins.module_utils.vmware - The function <code class="docutils literal notranslate"><span class="pre">vmware_argument_spec</span></code> is deprecated and will be removed in community.vmware 8.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/pull/2599">https://github.com/ansible-collections/community.vmware/pull/2599</a>).</p></li>
@@ -769,8 +1159,8 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>vmware_vcenter_settings - The defaults are deprecated and will be removed where possible in community.vmware 8.0.0 (<a class="reference external" href="https://github.com/ansible-collections/community.vmware/issues/2559">https://github.com/ansible-collections/community.vmware/issues/2559</a>).</p></li>
 </ul>
 </section>
-<section id="id17">
-<h4>hetzner.hcloud<a class="headerlink" href="#id17" title="Link to this heading"></a></h4>
+<section id="id33">
+<h4>hetzner.hcloud<a class="headerlink" href="#id33" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>datacenter_info - The <code class="docutils literal notranslate"><span class="pre">datacenter_info</span></code> module is deprecated and will be removed after 1 Oct. 2026. Please use the <code class="docutils literal notranslate"><span class="pre">location_info</span></code> module instead.</p></li>
 </ul>
@@ -786,8 +1176,8 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>k8s_service - the <code class="docutils literal notranslate"><span class="pre">merge_type=json</span></code> option has been deprecated and will be removed in version 7.0.0. Use <code class="docutils literal notranslate"><span class="pre">kubernetes.core.k8s_json_patch</span></code> module instead (<a class="reference external" href="https://github.com/ansible-collections/kubernetes.core/issues/1239">https://github.com/ansible-collections/kubernetes.core/issues/1239</a>).</p></li>
 </ul>
 </section>
-<section id="id18">
-<h4>netapp_eseries.santricity<a class="headerlink" href="#id18" title="Link to this heading"></a></h4>
+<section id="id34">
+<h4>netapp_eseries.santricity<a class="headerlink" href="#id34" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>na_santricity_volume and nar_santricity_host - The <code class="docutils literal notranslate"><span class="pre">raid_level</span></code> volume option alias is deprecated and will be removed in version 3.0.0. Use <code class="docutils literal notranslate"><span class="pre">ddp_raid_level</span></code> instead.</p></li>
 </ul>
@@ -804,8 +1194,8 @@ After removal, users can still install this collection with <code class="docutil
 <li><p>activation_key - the <code class="docutils literal notranslate"><span class="pre">content_view</span></code> and <code class="docutils literal notranslate"><span class="pre">lifecycle_environment</span></code> parameters are deprecated, please use <code class="docutils literal notranslate"><span class="pre">content_view_environments</span></code> instead (<a class="reference external" href="https://github.com/theforeman/foreman-ansible-modules/pull/1982">https://github.com/theforeman/foreman-ansible-modules/pull/1982</a>)</p></li>
 </ul>
 </section>
-<section id="id19">
-<h4>vmware.vmware_rest<a class="headerlink" href="#id19" title="Link to this heading"></a></h4>
+<section id="id35">
+<h4>vmware.vmware_rest<a class="headerlink" href="#id35" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>turbo mode and the associated environment variable <code class="docutils literal notranslate"><span class="pre">VMWARE_ENABLE_TURBO</span></code> are deprecated and will be removed from <code class="docutils literal notranslate"><span class="pre">vmware.vmware_rest</span></code> 5.0.0 (<a class="reference external" href="https://github.com/ansible-collections/vmware.vmware_rest/pull/639">https://github.com/ansible-collections/vmware.vmware_rest/pull/639</a>).</p></li>
 </ul>
