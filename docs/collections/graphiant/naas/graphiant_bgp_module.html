@@ -329,7 +329,7 @@
 <h1>graphiant.naas.graphiant_bgp module – Manage Graphiant BGP peering, routing policies, and route aggregations<a class="headerlink" href="#graphiant-naas-graphiant-bgp-module-manage-graphiant-bgp-peering-routing-policies-and-route-aggregations" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.8.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.9.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -359,7 +359,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <li><p>Enables attachment and detachment of global BGP routing policies (filters) to BGP peers.</p></li>
 <li><p>Supports BGP route aggregation configuration per LAN segment.</p></li>
 <li><p>Neighbors and aggregations are independent — a segment can define either or both.</p></li>
-<li><p>All operations use Jinja2 templates for consistent configuration deployment.</p></li>
+<li><p>Supports enabling/disabling eBGP multipath per LAN segment via a segment <code class="docutils literal notranslate"><span class="pre">ebgpMultipath</span></code> field.</p></li>
 <li><p>Configuration files support Jinja2 templating for dynamic generation.</p></li>
 </ul>
 </section>
@@ -368,7 +368,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>python &gt;= 3.7</p></li>
-<li><p>graphiant-sdk &gt;= 26.8.0</p></li>
+<li><p>graphiant-sdk &gt;= 26.9.0</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -472,6 +472,17 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>Required for password-based login when no valid bearer token is available from <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-bgp-module-parameter-access-token"><span class="std std-ref"><span class="pre">access_token</span></span></a></strong></code> or <code class="docutils literal notranslate"><span class="pre">GRAPHIANT_ACCESS_TOKEN</span></code>.</p>
 </div></td>
 </tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-vault_bgp_peering_md5_passwords"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-bgp-module-parameter-vault-bgp-peering-md5-passwords"><strong>vault_bgp_peering_md5_passwords</strong></p>
+<a class="ansibleOptionLink" href="#parameter-vault_bgp_peering_md5_passwords" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Dict of device name to BGP neighbor address to MD5 password (configure only).</p>
+<p>Fills a neighbor’s MD5 password from Ansible Vault only when <code class="docutils literal notranslate"><span class="pre">md5Password</span></code> is null/absent in the config file; a non-null value in the config always wins.</p>
+<p>Pass from playbook vars loaded from an encrypted <em>vault_secrets.yml</em>; secrets stay in memory.</p>
+<p>Keys must match the device name and the neighbor <code class="docutils literal notranslate"><span class="pre">remoteIpv4Address</span></code> in the BGP config.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
+</div></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -488,10 +499,18 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-bgp-module-attribute-check-mode"><strong>check_mode</strong></p>
 <a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
-<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-partial">partial</strong></p>
-<p>The module cannot accurately determine whether changes would actually be made without querying the current state via API calls. In check mode, the module assumes that changes would be made and returns <code class="ansible-value docutils literal notranslate"><span class="pre">changed=True</span></code> for all operations (<code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">deconfigure</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">detach_policies</span></code>). This means that check mode may report changes even when the configuration is already applied. The module does not perform state comparison in check mode due to API limitations.</p>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+<p>The module fetches each device’s current BGP state and compares it against the desired configuration. In check mode the same comparison runs, but the config push is skipped; <code class="ansible-value docutils literal notranslate"><span class="pre">changed</span></code> reflects whether a push would have occurred. Devices already in the desired state are reported under <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-bgp-module-return-skipped-devices"><span class="std std-ref"><span class="pre">skipped_devices</span></span></a></code> and do not count as changes.</p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Supports check mode with partial support.</p>
+<td><div class="ansible-option-cell"><p>Full check mode support with per-device state comparison.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-bgp-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Supports diff mode; shows per-device before/after BGP state when run with <code class="docutils literal notranslate"><span class="pre">--diff</span></code>.</p>
 </div></td>
 </tr>
 </tbody>
@@ -506,16 +525,28 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <li><p>- Configure (state: present): Create BGP peering neighbors, route aggregations, and attach routing policies.</p></li>
 <li><p>- Deconfigure (state: absent): Remove BGP peering neighbors and route aggregations. Policies are detached.</p></li>
 <li><p>- Detach Policies: Detach global BGP routing policies from BGP peers without removing the peers or aggregations.</p></li>
+<li><p>Per-entry removal: within <code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>, an individual neighbor or aggregation marked with</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code> in the config file is removed while all other entries are configured normally,</p></li>
+<li><p>so a single peer/aggregation can be deleted without a full deconfigure.</p></li>
+<li><p>Per-policy detach: within <code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>, set a neighbor filter field</p></li>
+<li><p>(<code class="docutils literal notranslate"><span class="pre">ipv4InboundFilter</span></code>, <code class="docutils literal notranslate"><span class="pre">ipv4OutboundFilter</span></code>, <code class="docutils literal notranslate"><span class="pre">ipv6InboundFilter</span></code>, <code class="docutils literal notranslate"><span class="pre">ipv6OutboundFilter</span></code>)</p></li>
+<li><p>to <code class="docutils literal notranslate"><span class="pre">absent</span></code> to detach just that routing policy while keeping the neighbor and its other settings.</p></li>
+<li><p>Omitting a filter field leaves the currently attached policy unchanged.</p></li>
+<li><p>Config-file fields use camelCase (e.g. <code class="docutils literal notranslate"><span class="pre">remoteIpv4Address</span></code>, <code class="docutils literal notranslate"><span class="pre">peerAs</span></code>, <code class="docutils literal notranslate"><span class="pre">lanSegment</span></code>, <code class="docutils literal notranslate"><span class="pre">bgpAggregations</span></code>).</p></li>
+<li><p>The original snake_case field names (<code class="docutils literal notranslate"><span class="pre">remote_ipv4_address</span></code>, <code class="docutils literal notranslate"><span class="pre">peer_as</span></code>, …) are still accepted as</p></li>
+<li><p>aliases for backward compatibility; when both forms are given the camelCase value wins.</p></li>
 <li><p>Configuration files support Jinja2 templating syntax for dynamic configuration generation.</p></li>
 <li><p>The module automatically resolves device names, site names, and policy names to IDs.</p></li>
 <li><p>All operations are idempotent and safe to run multiple times.</p></li>
 <li><p>Global BGP filters must be created using <a class="reference internal" href="graphiant_global_config_module.html#ansible-collections-graphiant-naas-graphiant-global-config-module"><span class="std std-ref">graphiant.naas.graphiant_global_config</span></a> module</p></li>
 <li><p>before attaching to BGP peers.</p></li>
 <li><p>BGP Aggregation config file fields per segment entry:</p></li>
-<li><p>bgp_aggregations: list of aggregation entries, each with:</p></li>
+<li><p>bgpAggregations: list of aggregation entries, each with:</p></li>
 <li><p>prefix (required): The network prefix to aggregate, e.g. 1.1.1.0/27.</p></li>
-<li><p>as_set (optional, default false): Include AS set information in the aggregated route.</p></li>
-<li><p>summary_only (optional, default false): Suppress advertisement of more-specific routes.</p></li>
+<li><p>asSet (optional, default false): Include AS set information in the aggregated route.</p></li>
+<li><p>summaryOnly (optional, default false): Suppress advertisement of more-specific routes.</p></li>
+<li><p>state (optional): Set to ‘absent’ to remove just this aggregation under <code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>.</p></li>
+<li><p>Neighbor entries likewise accept state: absent to remove a single peer under <code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>.</p></li>
 </ul>
 </div>
 </section>
@@ -542,6 +573,42 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bgp_result</span>
+
+<span class="c1"># Load MD5 passwords from an encrypted vault file (secrets stay in memory only).</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Load BGP MD5 passwords from Ansible Vault</span>
+<span class="w">  </span><span class="nt">ansible.builtin.include_vars</span><span class="p">:</span><span class="w"> </span><span class="s">"configs/vault_secrets.yml"</span>
+<span class="w">  </span><span class="nt">no_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure BGP peering with neighbor MD5 passwords from Ansible Vault</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_bgp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure</span>
+<span class="w">    </span><span class="nt">bgp_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"sample_bgp_peering.yaml"</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="c1"># Leave md5Password null/absent in the config; vault fills it per device -&gt; neighbor address.</span>
+<span class="w">    </span><span class="nt">vault_bgp_peering_md5_passwords</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">vault_bgp_peering_md5_passwords</span> <span class="o">|</span> <span class="nf">default</span><span class="o">({})</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bgp_result</span>
+
+<span class="c1"># Remove a single neighbor/aggregation without a full deconfigure by marking</span>
+<span class="c1"># the entry with `state: absent` in the config file, e.g.:</span>
+<span class="c1">#   bgpPeering:</span>
+<span class="c1">#     - edge-1-sdktest:</span>
+<span class="c1">#         segments:</span>
+<span class="c1">#           - lanSegment: lan-7-test</span>
+<span class="c1">#             neighbors:</span>
+<span class="c1">#               - remoteIpv4Address: 10.1.17.11   # kept, configured normally</span>
+<span class="c1">#                 peerAs: 60011</span>
+<span class="c1">#               - remoteIpv4Address: 10.1.17.12   # removed</span>
+<span class="c1">#                 peerAs: 60012</span>
+<span class="c1">#                 state: absent</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure BGP peering (per-entry state:absent removes just that neighbor/aggregation)</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_bgp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure</span>
+<span class="w">    </span><span class="nt">bgp_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"sample_bgp_peering.yaml"</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Detach policies from BGP peers</span>
 <span class="w">  </span><span class="nt">graphiant.naas.graphiant_bgp</span><span class="p">:</span>
@@ -602,9 +669,27 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <a class="ansibleOptionLink" href="#return-changed" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Whether the operation made changes to the system.</p>
-<p><code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> for all configure/deconfigure/detach operations.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> only when at least one device required a config push.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> when every device already matched the desired state (idempotent no-op).</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">true</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-configured_devices"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-bgp-module-return-configured-devices"><strong>configured_devices</strong></p>
+<a class="ansibleOptionLink" href="#return-configured_devices" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Names of devices whose BGP configuration was pushed (differed from desired state).</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;edge-1-sdktest&quot;]</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-details"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-bgp-module-return-details"><strong>details</strong></p>
+<a class="ansibleOptionLink" href="#return-details" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Manager result, including the per-device <code class="docutils literal notranslate"><span class="pre">diff_plan</span></code> with before/after BGP state.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -624,6 +709,15 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>One of <code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">deconfigure</span></code>, or <code class="ansible-value docutils literal notranslate"><span class="pre">detach_policies</span></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;configure&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-skipped_devices"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-bgp-module-return-skipped-devices"><strong>skipped_devices</strong></p>
+<a class="ansibleOptionLink" href="#return-skipped_devices" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Names of devices skipped because they already matched the desired state.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;edge-2-sdktest&quot;]</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -662,7 +756,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 01, 2026.
+      <span class="lastupdated">Last updated on Oct 02, 2026.
       </span></p>
   </div>
 

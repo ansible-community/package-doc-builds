@@ -329,7 +329,7 @@
 <h1>graphiant.naas.graphiant_data_assurance module – Manage Graphiant Data Assurance policies<a class="headerlink" href="#graphiant-naas-graphiant-data-assurance-module-manage-graphiant-data-assurance-policies" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.8.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.9.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -355,6 +355,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <ul class="simple">
 <li><p>Create, update, or delete Graphiant Data Assurance policies via the portal API.</p></li>
 <li><p>Reads a structured YAML config file and applies the desired state to the Graphiant portal.</p></li>
+<li><p>Policies may also be supplied directly through the <code class="docutils literal notranslate"><span class="pre">DataAssurancePolicies</span></code> and <code class="docutils literal notranslate"><span class="pre">ContentFilterPolicies</span></code> module parameters, used instead of or together with the config file. When both are given, module parameters are overlaid on the config file per policy <code class="docutils literal notranslate"><span class="pre">name</span></code> and override the config-file values.</p></li>
 <li><p>Both assurance policies (with <code class="docutils literal notranslate"><span class="pre">flexAlgo</span></code>) and block-by-URL/app policies (without <code class="docutils literal notranslate"><span class="pre">flexAlgo</span></code>) are entries in the <code class="docutils literal notranslate"><span class="pre">DataAssurancePolicies</span></code> list and are sent to the <code class="docutils literal notranslate"><span class="pre">/v1/data/assurance/assurances/global</span></code> endpoint.</p></li>
 <li><p>Block-by-category policies are entries in the <code class="docutils literal notranslate"><span class="pre">ContentFilterPolicies</span></code> list and are sent to the <code class="docutils literal notranslate"><span class="pre">/v1/global/content-filters</span></code> endpoint. Each blocks one or more domain <code class="docutils literal notranslate"><span class="pre">categories</span></code> (by name, resolved to a domain category ID) with an optional <code class="docutils literal notranslate"><span class="pre">allowedUrlList</span></code> (“Allowed URL List”) applied as per-category exception wildcards. Both lists are managed by the same module and operations from a single config file.</p></li>
 <li><p>Configure is idempotent: compares the intended config against live portal state and</p></li>
@@ -369,7 +370,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>python &gt;= 3.7</p></li>
-<li><p>graphiant-sdk &gt;= 26.8.0</p></li>
+<li><p>graphiant-sdk &gt;= 26.9.0</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -392,8 +393,70 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ContentFilterPolicies"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-contentfilterpolicies"><strong>ContentFilterPolicies</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ContentFilterPolicies" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Block-by-category (content-filter) policies supplied directly as module parameters, as an alternative (or supplement) to the <code class="docutils literal notranslate"><span class="pre">ContentFilterPolicies</span></code> list in the config file.</p>
+<p>Merged with the config file the same way as <code class="docutils literal notranslate"><span class="pre">DataAssurancePolicies</span></code> (keyed by <code class="docutils literal notranslate"><span class="pre">name</span></code>).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ContentFilterPolicies/allowedUrlList"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-contentfilterpolicies-allowedurllist"><strong>allowedUrlList</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ContentFilterPolicies/allowedUrlList" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Wildcard URLs allowed through despite the category block (applied as per-category exceptions).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ContentFilterPolicies/categories"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-contentfilterpolicies-categories"><strong>categories</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ContentFilterPolicies/categories" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Domain category names to block (resolved to domain category IDs).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ContentFilterPolicies/lanNames"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-contentfilterpolicies-lannames"><strong>lanNames</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ContentFilterPolicies/lanNames" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LAN segment names the policy applies to. Omit to apply to all segments.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ContentFilterPolicies/name"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-contentfilterpolicies-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ContentFilterPolicies/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Policy name (unique key used to match/override config-file policies).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ContentFilterPolicies/siteListId"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-contentfilterpolicies-sitelistid"><strong>siteListId</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ContentFilterPolicies/siteListId" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Explicit site list ID (used when <code class="docutils literal notranslate"><span class="pre">siteListName</span></code> is not given).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ContentFilterPolicies/siteListName"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-contentfilterpolicies-sitelistname"><strong>siteListName</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ContentFilterPolicies/siteListName" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of a site list to scope the policy to (resolved to its portal site list ID).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ContentFilterPolicies/useAllSites"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-contentfilterpolicies-useallsites"><strong>useAllSites</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ContentFilterPolicies/useAllSites" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Apply the policy to all enterprise sites. Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">siteListName</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-data_assurance_config_file"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-data-assurance-config-file"><strong>data_assurance_config_file</strong></p>
-<a class="ansibleOptionLink" href="#parameter-data_assurance_config_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+<a class="ansibleOptionLink" href="#parameter-data_assurance_config_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Path to the Data Assurance YAML config file.</p>
 <p>Can be an absolute path or relative to the configured config_path.</p>
@@ -401,9 +464,159 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>Each <code class="docutils literal notranslate"><span class="pre">DataAssurancePolicies</span></code> entry is either an assurance policy (includes <code class="docutils literal notranslate"><span class="pre">flexAlgo</span></code>) or a block/protection policy (omits <code class="docutils literal notranslate"><span class="pre">flexAlgo</span></code>), sent to the assurances endpoint. Each <code class="docutils literal notranslate"><span class="pre">ContentFilterPolicies</span></code> entry blocks domain <code class="docutils literal notranslate"><span class="pre">categories</span></code> and is sent to the content-filters endpoint.</p>
 <p>Each entry must have at minimum a <code class="docutils literal notranslate"><span class="pre">name</span></code> field.</p>
 <p>Configuration files support Jinja2 templating syntax.</p>
+<p>Optional. Omit it to configure entirely from the <code class="docutils literal notranslate"><span class="pre">DataAssurancePolicies</span></code> and/or <code class="docutils literal notranslate"><span class="pre">ContentFilterPolicies</span></code> module parameters. At least one of <code class="docutils literal notranslate"><span class="pre">data_assurance_config_file</span></code>, <code class="docutils literal notranslate"><span class="pre">DataAssurancePolicies</span></code>, or <code class="docutils literal notranslate"><span class="pre">ContentFilterPolicies</span></code> is required.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies"><strong>DataAssurancePolicies</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Assurance and block-by-URL/app policies supplied directly as module parameters, as an alternative (or supplement) to the <code class="docutils literal notranslate"><span class="pre">DataAssurancePolicies</span></code> list in the config file.</p>
+<p>When both are provided, these entries are overlaid on the config file keyed by policy <code class="docutils literal notranslate"><span class="pre">name</span></code>: a field set here overrides the config-file value for that field, and a policy not present in the file is added.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps"><strong>apps</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Applications to assure or block.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/bucketId"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-bucketid"><strong>bucketId</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/bucketId" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Raw integer bucket ID (use instead of <code class="docutils literal notranslate"><span class="pre">profileName</span></code> for values not mapped).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/builtinAppId"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-builtinappid"><strong>builtinAppId</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/builtinAppId" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Graphiant built-in application ID (auto-filled from telemetry when omitted).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/customAppId"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-customappid"><strong>customAppId</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/customAppId" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Enterprise custom application ID (auto-filled from telemetry when omitted).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/isDomain"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-isdomain"><strong>isDomain</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/isDomain" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Whether the app name is a domain (auto-filled from telemetry when omitted).</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/name"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Application name (validated against the profile’s bucket telemetry).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/profileName"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-profilename"><strong>profileName</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/profileName" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Human-readable assurance profile name (resolved to an integer <code class="docutils literal notranslate"><span class="pre">bucketId</span></code>).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/servers"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-servers"><strong>servers</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/servers" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Specific back-end servers to scope to (auto-filled from telemetry when omitted).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/servers/ip"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-servers-ip"><strong>ip</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/servers/ip" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Server IP address.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/servers/port"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-servers-port"><strong>port</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/servers/port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Server port.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/servers/protocol"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-servers-protocol"><strong>protocol</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/servers/protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Server transport protocol (e.g. <code class="docutils literal notranslate"><span class="pre">tcp</span></code>, <code class="docutils literal notranslate"><span class="pre">udp</span></code>).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/apps/useAllServers"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-apps-useallservers"><strong>useAllServers</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/apps/useAllServers" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Scope to all observed back-end servers.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/flexAlgo"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-flexalgo"><strong>flexAlgo</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/flexAlgo" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Flex-algo name defining the SLA metric. Omit for block/protection policies.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/lanNames"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-lannames"><strong>lanNames</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/lanNames" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>LAN segment names the policy applies to. Omit to apply to all segments.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/name"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Policy name (unique key used to match/override config-file policies).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/siteListId"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-sitelistid"><strong>siteListId</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/siteListId" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Explicit site list ID (used when <code class="docutils literal notranslate"><span class="pre">siteListName</span></code> is not given).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/siteListName"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-sitelistname"><strong>siteListName</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/siteListName" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of a site list to scope the policy to (resolved to its portal site list ID).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-DataAssurancePolicies/useAllSites"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-dataassurancepolicies-useallsites"><strong>useAllSites</strong></p>
+<a class="ansibleOptionLink" href="#parameter-DataAssurancePolicies/useAllSites" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Apply the policy to all enterprise sites. Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">siteListName</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-detailed_logs"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-detailed-logs"><strong>detailed_logs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-detailed_logs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -415,7 +628,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-host"></div>
 <div class="ansibleOptionAnchor" id="parameter-base_url"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-host"><span id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-base-url"></span><strong>host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: base_url</span></p>
@@ -425,7 +638,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>Example: “<a class="reference external" href="https://api.graphiant.com">https://api.graphiant.com</a>”</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-operation"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-operation"><strong>operation</strong></p>
 <a class="ansibleOptionLink" href="#parameter-operation" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -439,7 +652,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -447,7 +660,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>Required for password-based login when no valid bearer token is available from <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-access-token"><span class="std std-ref"><span class="pre">access_token</span></span></a></strong></code> or <code class="docutils literal notranslate"><span class="pre">GRAPHIANT_ACCESS_TOKEN</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -461,7 +674,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-data-assurance-module-parameter-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -519,7 +732,10 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure Data Assurance policies from a YAML file.</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Provide policies through the config file, the inline parameters, or both — at least one of</span>
+<span class="c1"># data_assurance_config_file / DataAssurancePolicies / ContentFilterPolicies is required.</span>
+
+<span class="c1"># Configure Data Assurance policies from a YAML file.</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure Data Assurance policies</span>
 <span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_assurance</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure</span>
@@ -529,6 +745,54 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">detailed_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">da_result</span>
+<span class="w">  </span><span class="nt">no_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="c1"># Configure Data Assurance policies directly from module parameters (no config file).</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure Data Assurance policies inline</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_assurance</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure</span>
+<span class="w">    </span><span class="nt">DataAssurancePolicies</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assurance-policy-1</span>
+<span class="w">        </span><span class="nt">useAllSites</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">flexAlgo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-all-cores</span>
+<span class="w">        </span><span class="nt">apps</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tcp</span>
+<span class="w">            </span><span class="nt">profileName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">General_Assured</span>
+<span class="w">            </span><span class="nt">useAllServers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">ContentFilterPolicies</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">block-gambling</span>
+<span class="w">        </span><span class="nt">useAllSites</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">categories</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Gambling</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">  </span><span class="nt">no_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="c1"># Use a config file as the base and override one policy's field via module parameters.</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure from file with an inline override</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_assurance</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure</span>
+<span class="w">    </span><span class="nt">data_assurance_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"sample_data_assurance_policies.yaml"</span>
+<span class="w">    </span><span class="nt">DataAssurancePolicies</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assurance-policy-1</span>
+<span class="w">        </span><span class="nt">flexAlgo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hestia-all-cores</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">  </span><span class="nt">no_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="c1"># Flexible task — accept whichever source the caller supplies (file, inline, or both).</span>
+<span class="c1"># Unset vars are dropped via default(omit) so only the provided source(s) are passed.</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure Data Assurance policies from any source</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_data_assurance</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure</span>
+<span class="w">    </span><span class="nt">data_assurance_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">config_file</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">DataAssurancePolicies</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">data_assurance_policies</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">ContentFilterPolicies</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">content_filter_policies</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">omit</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">  </span><span class="nt">no_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="c1"># Deconfigure (delete) Data Assurance policies.</span>
@@ -687,7 +951,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 01, 2026.
+      <span class="lastupdated">Last updated on Oct 02, 2026.
       </span></p>
   </div>
 
