@@ -338,7 +338,7 @@
 <h1>cisco.intersight.intersight_domain module – Manage UCS Domain Profiles in Cisco Intersight<a class="headerlink" href="#cisco-intersight-intersight-domain-module-manage-ucs-domain-profiles-in-cisco-intersight" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.21.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/intersight/">cisco.intersight collection</a> (version 2.22.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -359,7 +359,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <li><p>Create, update, and delete UCS Domain Profiles (SwitchClusterProfiles) on Cisco Intersight.</p></li>
 <li><p>Manages the associated SwitchProfiles (A and B), Fabric Interconnect assignments, and policy buckets.</p></li>
 <li><p>Policies are attached to SwitchProfiles via the Intersight bulk API.</p></li>
-<li><p>This module does not manage deployment of the domain profile.</p></li>
+<li><p>Supports deployment of both associated SwitchProfiles, with optional waiting for completion.</p></li>
 <li><p>For more information see <a class="reference external" href="https://intersight.com/apidocs/fabric/SwitchClusterProfiles/post/">Cisco Intersight</a>.</p></li>
 </ul>
 </section>
@@ -373,6 +373,36 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-action"><strong>action</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Deploy both SwitchProfiles after configuration.</p>
+<p>With no configuration options, deploy an existing domain without modifying its policies or assignments.</p>
+<p>Already associated SwitchProfiles are skipped unless configuration changed.</p>
+<p>Check mode reports whether deployment is needed without submitting or waiting for an action.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;Deploy&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action_poll_interval"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-action-poll-interval"><strong>action_poll_interval</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action_poll_interval" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Seconds between deployment status polls.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">60</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action_timeout"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-action-timeout"><strong>action_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Maximum seconds to wait for each SwitchProfile deployment.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">1200</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_bearer_token"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-api-bearer-token"><strong>api_bearer_token</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_bearer_token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -381,7 +411,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>If not set, the value of the INTERSIGHT_API_BEARER_TOKEN environment variable is used.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_key_id"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-api-key-id"><strong>api_key_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_key_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -390,7 +420,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Required if <em>api_bearer_token</em> is not provided.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_private_key"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-api-private-key"><strong>api_private_key</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_private_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
@@ -403,7 +433,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Required if <em>api_bearer_token</em> is not provided.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-api_uri"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-api-uri"><strong>api_uri</strong></p>
 <a class="ansibleOptionLink" href="#parameter-api_uri" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -412,7 +442,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;https://intersight.com/api/v1&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-assigned_switch_a_serial"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-assigned-switch-a-serial"><strong>assigned_switch_a_serial</strong></p>
 <a class="ansibleOptionLink" href="#parameter-assigned_switch_a_serial" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -420,7 +450,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Resolved via the <code class="docutils literal notranslate"><span class="pre">/network/ElementSummaries</span></code> API endpoint using the <code class="docutils literal notranslate"><span class="pre">Serial</span></code> field.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-assigned_switch_b_serial"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-assigned-switch-b-serial"><strong>assigned_switch_b_serial</strong></p>
 <a class="ansibleOptionLink" href="#parameter-assigned_switch_b_serial" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -428,21 +458,21 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>Resolved via the <code class="docutils literal notranslate"><span class="pre">/network/ElementSummaries</span></code> API endpoint using the <code class="docutils literal notranslate"><span class="pre">Serial</span></code> field.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-auditd_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-auditd-policy"><strong>auditd_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-auditd_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the Audit Log Policy to associate with both Fabric Interconnects.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-certificate_management_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-certificate-management-policy"><strong>certificate_management_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-certificate_management_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the Certificate Management Policy to associate with both Fabric Interconnects.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-description"></div>
 <div class="ansibleOptionAnchor" id="parameter-descr"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-description"><span id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-descr"></span><strong>description</strong></p>
 <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: descr</span></p>
@@ -451,14 +481,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>The user-defined description of the UCS Domain Profile.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ldap_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-ldap-policy"><strong>ldap_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ldap_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the LDAP Policy to associate with both Fabric Interconnects.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -467,21 +497,21 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>SwitchProfiles are automatically named <code class="docutils literal notranslate"><span class="pre">{name}-A</span></code> and <code class="docutils literal notranslate"><span class="pre">{name}-B</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-network_connectivity_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-network-connectivity-policy"><strong>network_connectivity_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-network_connectivity_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the Network Connectivity (DNS) Policy to associate with both Fabric Interconnects.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ntp_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-ntp-policy"><strong>ntp_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ntp_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the NTP Policy to associate with both Fabric Interconnects.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-organization"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-organization"><strong>organization</strong></p>
 <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -490,28 +520,28 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-port_policy_fi_a"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-port-policy-fi-a"><strong>port_policy_fi_a</strong></p>
 <a class="ansibleOptionLink" href="#parameter-port_policy_fi_a" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the Port Policy to associate with Fabric Interconnect A.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-port_policy_fi_b"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-port-policy-fi-b"><strong>port_policy_fi_b</strong></p>
 <a class="ansibleOptionLink" href="#parameter-port_policy_fi_b" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the Port Policy to associate with Fabric Interconnect B.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-snmp_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-snmp-policy"><strong>snmp_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-snmp_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the SNMP Policy to associate with both Fabric Interconnects.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -524,36 +554,36 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-switch_control_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-switch-control-policy"><strong>switch_control_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-switch_control_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the Switch Control Policy to associate with both Fabric Interconnects.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-syslog_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-syslog-policy"><strong>syslog_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-syslog_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the Syslog Policy to associate with both Fabric Interconnects.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-system_qos_policy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-system-qos-policy"><strong>system_qos_policy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-system_qos_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the System QoS Policy to associate with both Fabric Interconnects.</p>
-<p>This policy is mandatory for UCS Domain Profiles.</p>
+<p>Required when creating or configuring a domain; optional for deployment of an existing domain.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-tags"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-tags"><strong>tags</strong></p>
 <a class="ansibleOptionLink" href="#parameter-tags" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>List of tags in Key:&lt;user-defined key&gt; Value:&lt;user-defined value&gt; format.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_proxy"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-use-proxy"><strong>use_proxy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_proxy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -565,7 +595,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-validate-certs"><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -577,32 +607,44 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vlan_policy_fi_a"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-vlan-policy-fi-a"><strong>vlan_policy_fi_a</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vlan_policy_fi_a" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the VLAN Policy to associate with Fabric Interconnect A.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vlan_policy_fi_b"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-vlan-policy-fi-b"><strong>vlan_policy_fi_b</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vlan_policy_fi_b" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the VLAN Policy to associate with Fabric Interconnect B.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vsan_policy_fi_a"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-vsan-policy-fi-a"><strong>vsan_policy_fi_a</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vsan_policy_fi_a" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the VSAN Policy to associate with Fabric Interconnect A.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-vsan_policy_fi_b"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-vsan-policy-fi-b"><strong>vsan_policy_fi_b</strong></p>
 <a class="ansibleOptionLink" href="#parameter-vsan_policy_fi_b" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the VSAN Policy to associate with Fabric Interconnect B.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-wait_for_action"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-parameter-wait-for-action"><strong>wait_for_action</strong></p>
+<a class="ansibleOptionLink" href="#parameter-wait_for_action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Wait for deployment of both SwitchProfiles to complete.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
 </div></td>
 </tr>
 </tbody>
@@ -642,6 +684,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">switch_control_policy</span><span class="p">:</span><span class="w"> </span><span class="s">"Switch-Control"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Preview deployment of an existing UCS Domain Profile</span>
+<span class="w">  </span><span class="nt">cisco.intersight.intersight_domain</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">api_key_id</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">api_key_id</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="s">"default"</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Domain-01"</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
+<span class="w">  </span><span class="nt">check_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a UCS Domain Profile</span>
 <span class="w">  </span><span class="nt">cisco.intersight.intersight_domain</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">api_private_key</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">api_private_key</span> <span class="cp">}}</span><span class="s">"</span>
@@ -668,6 +719,14 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>The API response output returned by the SwitchClusterProfile resource.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;api_response&quot;:</span> <span class="pre">{&quot;Name&quot;:</span> <span class="pre">&quot;Domain-01&quot;,</span> <span class="pre">&quot;ObjectType&quot;:</span> <span class="pre">&quot;fabric.SwitchClusterProfile&quot;,</span> <span class="pre">&quot;Organization&quot;:</span> <span class="pre">{&quot;Moid&quot;:</span> <span class="pre">&quot;675450ee69726530014753e2&quot;,</span> <span class="pre">&quot;ObjectType&quot;:</span> <span class="pre">&quot;organization.Organization&quot;},</span> <span class="pre">&quot;Tags&quot;:</span> <span class="pre">[{&quot;Key&quot;:</span> <span class="pre">&quot;Environment&quot;,</span> <span class="pre">&quot;Value&quot;:</span> <span class="pre">&quot;Production&quot;}]}}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-switch_profiles"></div><p class="ansible-option-title" id="ansible-collections-cisco-intersight-intersight-domain-module-return-switch-profiles"><strong>switch_profiles</strong></p>
+<a class="ansibleOptionLink" href="#return-switch_profiles" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Current or final A/B SwitchProfile responses when deployment is requested.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when action is Deploy</p>
 </div></td>
 </tr>
 </tbody>
@@ -702,7 +761,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 06, 2026.
+      <span class="lastupdated">Last updated on Oct 07, 2026.
       </span></p>
   </div>
 
