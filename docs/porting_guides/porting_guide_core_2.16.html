@@ -256,7 +256,7 @@
            <div itemprop="articleBody">
              
   <section id="ansible-core-2-16-porting-guide">
-<span id="porting-2-16-guide-core"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">Ansible-core 2.16 Porting Guide</a><a class="headerlink" href="#ansible-core-2-16-porting-guide" title="Link to this heading"></a></h1>
+<span id="porting-2-16-guide-core"></span><h1><a class="toc-backref" href="#id7" role="doc-backlink">Ansible-core 2.16 Porting Guide</a><a class="headerlink" href="#ansible-core-2-16-porting-guide" title="Link to this heading"></a></h1>
 <p>This section discusses the behavioral changes between <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.15 and <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.16.</p>
 <p>It is intended to assist in updating your playbooks, plugins and other parts of your Ansible infrastructure so they will work with this version of Ansible.</p>
 <p>We suggest you read this page along with <a class="reference external" href="https://github.com/ansible/ansible/blob/stable-2.16/changelogs/CHANGELOG-v2.16.rst">ansible-core Changelog for 2.16</a> to understand what updates you may need to make.</p>
@@ -264,27 +264,70 @@
 <nav class="contents" id="topics">
 <p class="topic-title">Topics</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#ansible-core-2-16-porting-guide" id="id1">Ansible-core 2.16 Porting Guide</a></p>
+<li><p><a class="reference internal" href="#ansible-core-2-16-porting-guide" id="id7">Ansible-core 2.16 Porting Guide</a></p>
 <ul>
-<li><p><a class="reference internal" href="#playbook" id="id2">Playbook</a></p></li>
-<li><p><a class="reference internal" href="#command-line" id="id3">Command Line</a></p></li>
-<li><p><a class="reference internal" href="#deprecated" id="id4">Deprecated</a></p></li>
-<li><p><a class="reference internal" href="#modules" id="id5">Modules</a></p>
+<li><p><a class="reference internal" href="#playbook" id="id8">Playbook</a></p></li>
+<li><p><a class="reference internal" href="#command-line" id="id9">Command Line</a></p></li>
+<li><p><a class="reference internal" href="#deprecated" id="id10">Deprecated</a></p>
 <ul>
-<li><p><a class="reference internal" href="#modules-removed" id="id6">Modules removed</a></p></li>
-<li><p><a class="reference internal" href="#deprecation-notices" id="id7">Deprecation notices</a></p></li>
-<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id8">Noteworthy module changes</a></p></li>
+<li><p><a class="reference internal" href="#invalid-inventory-variables" id="id11">Invalid inventory variables</a></p>
+<ul>
+<li><p><a class="reference internal" href="#example" id="id12">Example</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#plugins" id="id9">Plugins</a></p></li>
-<li><p><a class="reference internal" href="#porting-custom-scripts" id="id10">Porting custom scripts</a></p></li>
-<li><p><a class="reference internal" href="#networking" id="id11">Networking</a></p></li>
+<li><p><a class="reference internal" href="#empty-args-keyword" id="id13">Empty <code class="docutils literal notranslate"><span class="pre">args</span></code> keyword</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id14">Example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-a-mapping-for-action" id="id15">Using a mapping for <code class="docutils literal notranslate"><span class="pre">action</span></code></a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id16">Example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#task-argument-merging" id="id17">Task argument merging</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id3" id="id18">Example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#invalid-bool-filter-values" id="id19">Invalid <code class="docutils literal notranslate"><span class="pre">bool</span></code> filter values</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id4" id="id20">Example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#filters-from-yaml-and-from-yaml-all" id="id21">Filters <code class="docutils literal notranslate"><span class="pre">from_yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">from_yaml_all</span></code></a></p>
+<ul>
+<li><p><a class="reference internal" href="#id5" id="id22">Example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#accessing-templar-available-variables" id="id23">Accessing <code class="docutils literal notranslate"><span class="pre">Templar._available_variables</span></code></a></p></li>
+<li><p><a class="reference internal" href="#accessing-templar-loader" id="id24">Accessing <code class="docutils literal notranslate"><span class="pre">Templar._loader</span></code></a></p></li>
+<li><p><a class="reference internal" href="#accessing-templar-environment" id="id25">Accessing <code class="docutils literal notranslate"><span class="pre">Templar.environment</span></code></a></p></li>
+<li><p><a class="reference internal" href="#empty-conditional-expressions" id="id26">Empty conditional expressions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id6" id="id27">Example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#non-boolean-test-plugin-results" id="id28">Non-boolean test plugin results</a></p></li>
+<li><p><a class="reference internal" href="#templating-of-unknown-types" id="id29">Templating of unknown types</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#modules" id="id30">Modules</a></p>
+<ul>
+<li><p><a class="reference internal" href="#modules-removed" id="id31">Modules removed</a></p></li>
+<li><p><a class="reference internal" href="#deprecation-notices" id="id32">Deprecation notices</a></p></li>
+<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id33">Noteworthy module changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#plugins" id="id34">Plugins</a></p></li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id35">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#networking" id="id36">Networking</a></p></li>
 </ul>
 </li>
 </ul>
 </nav>
 <section id="playbook">
-<h2><a class="toc-backref" href="#id2" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Playbook</a><a class="headerlink" href="#playbook" title="Link to this heading"></a></h2>
 <ul>
 <li><p>Conditionals - due to mitigation of security issue CVE-2023-5764 in ansible-core 2.16.1,
 conditional expressions with embedded template blocks can fail with the message
@@ -313,31 +356,268 @@ has been expanded to non-task conditionals as well, such as the <code class="doc
 </ul>
 </section>
 <section id="command-line">
-<h2><a class="toc-backref" href="#id3" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Command Line</a><a class="headerlink" href="#command-line" title="Link to this heading"></a></h2>
 </section>
 <section id="deprecated">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Deprecated</a><a class="headerlink" href="#deprecated" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.16.20 backports several warnings from versions 2.19 and later, most of them deprecation warnings.
+These warnings give you advance notice of upcoming changes if you plan to upgrade across several releases at once.
+The following sections describe each warning and how to resolve it. Except where noted, you can disable these
+warnings by setting <code class="docutils literal notranslate"><span class="pre">deprecation_warnings=False</span></code> in <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code>.</p>
+<section id="invalid-inventory-variables">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Invalid inventory variables</a><a class="headerlink" href="#invalid-inventory-variables" title="Link to this heading"></a></h3>
+<p>Setting Ansible inventory variables with invalid names is deprecated. Variables must start with a letter
+or underscore character, and contain only letters, numbers and underscores. Variable names must also not
+be one of the following Jinja keywords: <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">not</span></code>.</p>
+<section id="example">
+<h4><a class="toc-backref" href="#id12" role="doc-backlink">Example</a><a class="headerlink" href="#example" title="Link to this heading"></a></h4>
+<p>An example inventory with an invalid value:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>localhost ansible_connection=local true=123
+</pre></div>
+</div>
+<p>will produce the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: Accepting inventory variable with invalid name 'true'. Variable names must be strings
+starting with a letter or underscore character, and contain only letters, numbers and underscores. This feature
+will be removed in version 2.23. Deprecation warnings can be disabled by setting deprecation_warnings=False in
+ansible.cfg.
+</pre></div>
+</div>
+<p>This can be resolved by renaming the variable to match the requirements.</p>
+</section>
+</section>
+<section id="empty-args-keyword">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Empty <code class="docutils literal notranslate"><span class="pre">args</span></code> keyword</a><a class="headerlink" href="#empty-args-keyword" title="Link to this heading"></a></h3>
+<p>Specifying the task <code class="docutils literal notranslate"><span class="pre">args</span></code> keyword without a value is deprecated.</p>
+<section id="id1">
+<h4><a class="toc-backref" href="#id14" role="doc-backlink">Example</a><a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<p>The example task below uses an empty <code class="docutils literal notranslate"><span class="pre">args</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"Hello,</span><span class="nv"> </span><span class="s">World"</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>The above task will produce the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: Ignoring empty task `args` keyword. A mapping or template which resolves to a mapping is
+required. This feature will be removed in version 2.23. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+</pre></div>
+</div>
+<p>This can be resolved by ensuring that <code class="docutils literal notranslate"><span class="pre">args</span></code> is never supplied an empty value.</p>
+</section>
+</section>
+<section id="using-a-mapping-for-action">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Using a mapping for <code class="docutils literal notranslate"><span class="pre">action</span></code></a><a class="headerlink" href="#using-a-mapping-for-action" title="Link to this heading"></a></h3>
+<p>Using a mapping for <code class="docutils literal notranslate"><span class="pre">action</span></code> is deprecated. Use a string value for <code class="docutils literal notranslate"><span class="pre">action</span></code>.</p>
+<section id="id2">
+<h4><a class="toc-backref" href="#id16" role="doc-backlink">Example</a><a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<p>The example task below uses a mapping for the <code class="docutils literal notranslate"><span class="pre">action</span></code> keyword, specifying the module to execute:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
+<span class="w">  </span><span class="nt">action</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="s">"ansible.builtin.debug"</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"Hello</span><span class="nv"> </span><span class="s">World!"</span>
+</pre></div>
+</div>
+<p>The above task will produce the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: Using a mapping for `action` is deprecated. Use a string value for `action`. This
+feature will be removed in version 2.23. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+</pre></div>
+</div>
+<p>This can be resolved by using a string for the <code class="docutils literal notranslate"><span class="pre">action</span></code> value, like so:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
+<span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="s">"ansible.builtin.debug"</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"Hello</span><span class="nv"> </span><span class="s">World!"</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="task-argument-merging">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Task argument merging</a><a class="headerlink" href="#task-argument-merging" title="Link to this heading"></a></h3>
+<p>Using <code class="docutils literal notranslate"><span class="pre">key=value</span></code> style arguments and the task <code class="docutils literal notranslate"><span class="pre">args</span></code> keyword on the same task is deprecated.</p>
+<section id="id3">
+<h4><a class="toc-backref" href="#id18" role="doc-backlink">Example</a><a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">List home directories</span>
+<span class="w">  </span><span class="nt">ansible.builtin.find</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paths="/home"</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file_type</span><span class="p">:</span><span class="w"> </span><span class="s">"directory"</span>
+</pre></div>
+</div>
+<p>The above task will produce the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: Merging legacy k=v args ('paths') into task args. Include all task args in the task
+`args` mapping. This feature will be removed in version 2.23. Deprecation warnings can be disabled by setting
+deprecation_warnings=False in ansible.cfg.
+</pre></div>
+</div>
+<p>One way to resolve this is by moving the key=value arguments into the <code class="docutils literal notranslate"><span class="pre">args</span></code> section. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">List home directories</span>
+<span class="w">  </span><span class="nt">ansible.builtin.find</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">paths</span><span class="p">:</span><span class="w"> </span><span class="s">"/home"</span>
+<span class="w">    </span><span class="nt">file_type</span><span class="p">:</span><span class="w"> </span><span class="s">"directory"</span>
+</pre></div>
+</div>
+<p>Alternatively, for this example, you could also provide the arguments with the normal (and simpler) pattern:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">List home directories</span>
+<span class="w">  </span><span class="nt">ansible.builtin.find</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">paths</span><span class="p">:</span><span class="w"> </span><span class="s">"/home"</span>
+<span class="w">    </span><span class="nt">file_type</span><span class="p">:</span><span class="w"> </span><span class="s">"directory"</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="invalid-bool-filter-values">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Invalid <code class="docutils literal notranslate"><span class="pre">bool</span></code> filter values</a><a class="headerlink" href="#invalid-bool-filter-values" title="Link to this heading"></a></h3>
+<p>Support for coercing unrecognized input values (including None) to a boolean using the <code class="docutils literal notranslate"><span class="pre">bool</span></code> filter
+has been deprecated.</p>
+<section id="id4">
+<h4><a class="toc-backref" href="#id20" role="doc-backlink">Example</a><a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="o">[]</span> <span class="o">|</span> <span class="nf">bool</span> <span class="cp">}}</span><span class="s">"</span>
+</pre></div>
+</div>
+<p>The above task will produce the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: The `bool` filter coerced invalid value [] (list) to False. This feature will be removed
+in version 2.23. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+</pre></div>
+</div>
+<p>To resolve this, use an explicit predicate with a boolean result, such as <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">length</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">truthy</span></code>.</p>
+</section>
+</section>
+<section id="filters-from-yaml-and-from-yaml-all">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Filters <code class="docutils literal notranslate"><span class="pre">from_yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">from_yaml_all</span></code></a><a class="headerlink" href="#filters-from-yaml-and-from-yaml-all" title="Link to this heading"></a></h3>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">from_yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">from_yaml_all</span></code> filters with non-string data has been deprecated.</p>
+<section id="id5">
+<h4><a class="toc-backref" href="#id22" role="doc-backlink">Example</a><a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Parse a list</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="o">[]</span> <span class="o">|</span> <span class="nf">from_yaml</span> <span class="cp">}}</span><span class="s">"</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Parse a mapping</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="o">{}</span> <span class="o">|</span> <span class="nf">from_yaml_all</span> <span class="cp">}}</span><span class="s">"</span>
+</pre></div>
+</div>
+<p>The above tasks will produce the following warnings, respectively:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: The from_yaml filter ignored non-string input of type &lt;class 'list'&gt;. This feature will be
+removed in version 2.23. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+
+[DEPRECATION WARNING]: The from_yaml_all filter ignored non-string input of type &lt;class 'dict'&gt;. This feature will be
+removed in version 2.23. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+</pre></div>
+</div>
+<p>To resolve these, make sure your inputs are of a string type.</p>
+</section>
+</section>
+<section id="accessing-templar-available-variables">
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">Accessing <code class="docutils literal notranslate"><span class="pre">Templar._available_variables</span></code></a><a class="headerlink" href="#accessing-templar-available-variables" title="Link to this heading"></a></h3>
+<p>Direct access to the <code class="docutils literal notranslate"><span class="pre">_available_variables</span></code> internal attribute of the <code class="docutils literal notranslate"><span class="pre">Templar</span></code> class is deprecated.</p>
+<p>Accessing that internal variable will result in the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: Direct access to the `_available_variables` internal attribute is deprecated. This feature
+will be removed from ansible-core version 2.23. Use `available_variables` instead.
+</pre></div>
+</div>
+<p>To resolve this, use the <code class="docutils literal notranslate"><span class="pre">Templar.available_variables</span></code> attribute instead.</p>
+</section>
+<section id="accessing-templar-loader">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Accessing <code class="docutils literal notranslate"><span class="pre">Templar._loader</span></code></a><a class="headerlink" href="#accessing-templar-loader" title="Link to this heading"></a></h3>
+<p>Direct access to the <code class="docutils literal notranslate"><span class="pre">_loader</span></code> internal attribute of the <code class="docutils literal notranslate"><span class="pre">Templar</span></code> class is deprecated.</p>
+<p>Accessing that internal variable will result in the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: Direct access to the `_loader` internal attribute is deprecated. This feature will be
+removed from ansible-core version 2.23. Use `copy_with_new_env` to create a new instance.
+</pre></div>
+</div>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">Templar.copy_with_new_env()</span></code> method if you only need a derived <code class="docutils literal notranslate"><span class="pre">Templar</span></code> instance. If you need the
+data loader itself, keep a reference to the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> you created rather than reading it back from the
+<code class="docutils literal notranslate"><span class="pre">Templar</span></code>, since the attribute it is stored in is internal and subject to change.</p>
+</section>
+<section id="accessing-templar-environment">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">Accessing <code class="docutils literal notranslate"><span class="pre">Templar.environment</span></code></a><a class="headerlink" href="#accessing-templar-environment" title="Link to this heading"></a></h3>
+<p>Direct access to the <code class="docutils literal notranslate"><span class="pre">environment</span></code> attribute of the <code class="docutils literal notranslate"><span class="pre">Templar</span></code> class is deprecated.</p>
+<p>Accessing that internal variable will result in the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: Direct access to the `environment` attribute is deprecated. This feature will be
+removed from ansible-core version 2.23. Consider using `copy_with_new_env` or passing `overrides` to `template`.
+</pre></div>
+</div>
+<p>As suggested by the deprecation warning, use the <code class="docutils literal notranslate"><span class="pre">Templar.copy_with_new_env()</span></code> method to obtain a new
+<code class="docutils literal notranslate"><span class="pre">Templar</span></code> instance, or use <code class="docutils literal notranslate"><span class="pre">Templar.template()</span></code> and set the <code class="docutils literal notranslate"><span class="pre">overrides</span></code> parameter.</p>
+</section>
+<section id="empty-conditional-expressions">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Empty conditional expressions</a><a class="headerlink" href="#empty-conditional-expressions" title="Link to this heading"></a></h3>
+<p>Conditional expressions (such as <code class="docutils literal notranslate"><span class="pre">when</span></code> in playbook tasks or <code class="docutils literal notranslate"><span class="pre">that</span></code> in the <code class="docutils literal notranslate"><span class="pre">assert</span></code> action) which are a
+literal <code class="docutils literal notranslate"><span class="pre">None</span></code> or an empty string evaluate as True and will issue a deprecation warning.</p>
+<section id="id6">
+<h4><a class="toc-backref" href="#id27" role="doc-backlink">Example</a><a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Print a message</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"test"</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
+</pre></div>
+</div>
+<p>The above task will produce the following warning:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: Empty conditional expression was evaluated as True. This feature will be removed in
+version 2.23. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+</pre></div>
+</div>
+<p>Such expressions should be removed or corrected to always ensure a strictly boolean (True or False) result.</p>
+</section>
+</section>
+<section id="non-boolean-test-plugin-results">
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">Non-boolean test plugin results</a><a class="headerlink" href="#non-boolean-test-plugin-results" title="Link to this heading"></a></h3>
+<p>Test plugins which return a non-boolean result are deprecated; the result is coerced to a boolean for now, but
+test plugins must have a boolean result in ansible-core 2.23 and later.</p>
+<p>Non-conforming test plugins will see a deprecation message like the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[DEPRECATION WARNING]: The test plugin 'my_test_plugin' returned a non-boolean result of type &lt;class 'NoneType'&gt;.
+Test plugins must have a boolean result. This feature will be removed in version 2.23. Deprecation warnings can be
+disabled by setting deprecation_warnings=False in ansible.cfg.
+</pre></div>
+</div>
+<p>To resolve this, update the test plugin to return a boolean, for example by wrapping the result in <code class="docutils literal notranslate"><span class="pre">bool()</span></code>.
+Starting with ansible-core 2.23, a non-boolean result is an error rather than a warning.</p>
+</section>
+<section id="templating-of-unknown-types">
+<h3><a class="toc-backref" href="#id29" role="doc-backlink">Templating of unknown types</a><a class="headerlink" href="#templating-of-unknown-types" title="Link to this heading"></a></h3>
+<p>A warning is now emitted when a type unknown to the templating system is encountered in a finalized template result,
+since such types are not guaranteed to behave correctly.</p>
+<p>Unlike the other warnings in this section, this is a general warning rather than a deprecation warning. Nothing is
+being removed in 2.23, and setting <code class="docutils literal notranslate"><span class="pre">deprecation_warnings=False</span></code> in <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> does not suppress it.</p>
+<p>Pinpointing the location of the use of the unknown type is not possible unless you are using <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.19
+or higher, where the origin will be displayed along with the warning. This is a best effort notification, giving the name
+of the type that is unknown to the templating system.</p>
+<p>Warnings of this type will look similar to the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[WARNING]: Encountered unknown type 'NotAVariableType' during template operation. Use supported types to avoid
+unexpected behavior. To troubleshoot further, please upgrade to Ansible core 2.19 or later to find out more about
+the origin of this type.
+</pre></div>
+</div>
+<p>Custom data types outside of Ansible will be unsupported. Normal Python data types (for example: <code class="docutils literal notranslate"><span class="pre">bool</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bytes</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>, etc) and many custom Ansible data types (for example: <code class="docutils literal notranslate"><span class="pre">AnsibleMapping</span></code>,
+<code class="docutils literal notranslate"><span class="pre">AnsibleSequence</span></code>, <code class="docutils literal notranslate"><span class="pre">HostVars</span></code>, etc) are supported.</p>
+</section>
 </section>
 <section id="modules">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id30" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
 <section id="modules-removed">
-<h3><a class="toc-backref" href="#id6" role="doc-backlink">Modules removed</a><a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id31" role="doc-backlink">Modules removed</a><a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
 </section>
 <section id="deprecation-notices">
-<h3><a class="toc-backref" href="#id7" role="doc-backlink">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id32" role="doc-backlink">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
 </section>
 <section id="noteworthy-module-changes">
-<h3><a class="toc-backref" href="#id8" role="doc-backlink">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id33" role="doc-backlink">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
 </section>
 </section>
 <section id="plugins">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id34" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
 </section>
 <section id="porting-custom-scripts">
-<h2><a class="toc-backref" href="#id10" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id35" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
 </section>
 <section id="networking">
-<h2><a class="toc-backref" href="#id11" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id36" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
 </section>
 </section>
 
@@ -352,7 +632,7 @@ has been expanded to non-task conditionals as well, such as the <code class="doc
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 08, 2026.
+      <span class="lastupdated">Last updated on Oct 09, 2026.
       </span></p>
   </div>
 
