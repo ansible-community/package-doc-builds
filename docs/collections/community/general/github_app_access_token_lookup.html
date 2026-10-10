@@ -358,7 +358,7 @@
 <h1>community.general.github_app_access_token lookup – Obtain short-lived Github App Access tokens<a class="headerlink" href="#community-general-github-app-access-token-lookup-obtain-short-lived-github-app-access-tokens" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This lookup plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.4.0).</p>
+<p>This lookup plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.5.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -403,10 +403,14 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-app_id"></div><p class="ansible-option-title" id="ansible-collections-community-general-github-app-access-token-lookup-parameter-app-id"><strong>app_id</strong></p>
-<a class="ansibleOptionLink" href="#parameter-app_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+<div class="ansibleOptionAnchor" id="parameter-app_id"></div>
+<div class="ansibleOptionAnchor" id="parameter-client_id"></div><p class="ansible-option-title" id="ansible-collections-community-general-github-app-access-token-lookup-parameter-client-id"><span id="ansible-collections-community-general-github-app-access-token-lookup-parameter-app-id"></span><strong>app_id</strong></p>
+<a class="ansibleOptionLink" href="#parameter-app_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: client_id</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Your GitHub App ID, you can find this in the Settings page.</p>
+<td><div class="ansible-option-cell"><p>Your GitHub App’s client ID or GitHub App ID. You can find these in the Settings page.</p>
+<p>GitHub recommends using the client ID instead of the numeric app ID (see <a class="reference external" href="https://github.blog/changelog/2024-08-23-client-ids-are-now-included-in-app-api-responses/">https://github.blog/changelog/2024-08-23-client-ids-are-now-included-in-app-api-responses/</a>).</p>
+<p>The <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-github-app-access-token-lookup-parameter-client-id"><span class="std std-ref"><span class="pre">client_id</span></span></a></strong></code> alias has been added in community.general 13.5.0.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -467,6 +471,16 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <span class="w">    </span><span class="nt">github_token</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
 <span class="w">      </span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">'community.general.github_app_access_token'</span><span class="o">,</span> <span class="nv">key_path</span><span class="o">=</span><span class="s1">'/home/to_your/key'</span><span class="o">,</span>
                 <span class="nv">app_id</span><span class="o">=</span><span class="s1">'123456'</span><span class="o">,</span> <span class="nv">installation_id</span><span class="o">=</span><span class="s1">'64209'</span><span class="o">)</span> <span class="cp">}}</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get access token using the GitHub App's client ID instead of its numeric app ID</span>
+<span class="w">  </span><span class="nt">ansible.builtin.git</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">      </span><span class="no">https://x-access-token:</span><span class="cp">{{</span> <span class="nv">github_token</span> <span class="cp">}}</span><span class="no">@github.com/hidden_user/super-secret-repo.git</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/srv/checkout</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">github_token</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">      </span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">'community.general.github_app_access_token'</span><span class="o">,</span> <span class="nv">key_path</span><span class="o">=</span><span class="s1">'/home/to_your/key'</span><span class="o">,</span>
+                <span class="nv">client_id</span><span class="o">=</span><span class="s1">'Iv1.a1b2c3d4e5f6g7h8'</span><span class="o">,</span> <span class="nv">installation_id</span><span class="o">=</span><span class="s1">'64209'</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
 </section>
@@ -484,6 +498,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 <a class="ansibleOptionLink" href="#return-_raw" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>A one-element list containing your GitHub access token.</p>
+<p><strong>Note</strong> on ansible-core 2.22+, the token will be registered as a secret. See <span class="xref std std-ref">Masking secrets in Ansible output</span> for more information.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 </div></td>
 </tr>
@@ -524,7 +539,7 @@ examples: <code class="docutils literal notranslate"><span class="pre">lookup('c
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 05, 2026.
+      <span class="lastupdated">Last updated on Oct 10, 2026.
       </span></p>
   </div>
 

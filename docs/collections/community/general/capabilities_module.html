@@ -358,7 +358,7 @@
 <h1>community.general.capabilities module – Manage Linux capabilities<a class="headerlink" href="#community-general-capabilities-module-manage-linux-capabilities" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.4.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.5.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -396,6 +396,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Desired capability to set (with operator and flags, if <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-capabilities-module-parameter-state"><span class="std std-ref"><span class="pre">state=present</span></span></a></code>) or remove (if <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-capabilities-module-parameter-state"><span class="std std-ref"><span class="pre">state=absent</span></span></a></code>).</p>
+<p>The value is passed to <code class="docutils literal notranslate"><span class="pre">setcap</span></code> as is, so it accepts the same syntax, including setting several capabilities at once (for example <code class="ansible-value docutils literal notranslate"><span class="pre">cap_chown,cap_fowner+ep</span></code>).</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -456,8 +457,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>The capabilities system automatically transforms operators and flags into the effective set, so for example, <code class="docutils literal notranslate"><span class="pre">cap_foo=ep</span></code> probably becomes <code class="docutils literal notranslate"><span class="pre">cap_foo+ep</span></code>.</p></li>
-<li><p>This module does not attempt to determine the final operator and flags to compare, so you want to ensure that your capabilities argument matches the final capabilities.</p></li>
+<li><p>Whether a change is required is determined with <code class="docutils literal notranslate"><span class="pre">setcap</span> <span class="pre">--verify</span></code>, so a task is reported as changed only when the capabilities on <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-capabilities-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> actually differ from the request, regardless of how the local <code class="docutils literal notranslate"><span class="pre">libcap</span></code> version normalizes operators and flags (some versions turn <code class="docutils literal notranslate"><span class="pre">cap_foo+ep</span></code> into <code class="docutils literal notranslate"><span class="pre">cap_foo=ep</span></code>).</p></li>
+<li><p>When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-capabilities-module-parameter-state"><span class="std std-ref"><span class="pre">state=present</span></span></a></code>, capabilities already set on <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-capabilities-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> that are not listed in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-capabilities-module-parameter-capability"><span class="std std-ref"><span class="pre">capability</span></span></a></strong></code> are left untouched.</p></li>
 </ul>
 </div>
 </section>
@@ -510,7 +511,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 05, 2026.
+      <span class="lastupdated">Last updated on Oct 10, 2026.
       </span></p>
   </div>
 
