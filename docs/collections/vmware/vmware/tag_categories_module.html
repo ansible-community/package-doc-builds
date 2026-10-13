@@ -330,7 +330,7 @@
 <h1>vmware.vmware.tag_categories module – Manage one or more VMware tag categories.<a class="headerlink" href="#vmware-vmware-tag-categories-module-manage-one-or-more-vmware-tag-categories" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware/">vmware.vmware collection</a> (version 2.11.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/vmware/vmware/">vmware.vmware collection</a> (version 2.12.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -511,6 +511,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-tag_categories/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the tag category.</p>
+<p>Category names must be unique in both value and case. See the examples for more information.</p>
 <p>At least one of <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-tag-categories-module-parameter-tag-categories-name"><span class="std std-ref"><span class="pre">tag_categories[].name</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-tag-categories-module-parameter-tag-categories-id"><span class="std std-ref"><span class="pre">tag_categories[].id</span></span></a></strong></code> must be provided.</p>
 <p>If only the name is provided, it will be used to search for the tag category. If a category cannot be found and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-tag-categories-module-parameter-state"><span class="std std-ref"><span class="pre">state</span></span></a></strong></code> is present, a new category will be created.</p>
 <p>If both name and ID are provided, the ID will be used to search for the category. If If a category cannot be found and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-tag-categories-module-parameter-state"><span class="std std-ref"><span class="pre">state</span></span></a></strong></code> is present, an error will be raised. If a category can be found and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-tag-categories-module-parameter-state"><span class="std std-ref"><span class="pre">state</span></span></a></strong></code> is present, the category will be updated to use <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-vmware-vmware-tag-categories-module-parameter-tag-categories-name"><span class="std std-ref"><span class="pre">tag_categories[].name</span></span></a></strong></code>.</p>
@@ -608,6 +609,28 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-test-category-2</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-test-category-3</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-test-category-4</span>
+
+<span class="c1"># Category names must be unique in both value and case</span>
+<span class="c1">## Create a lower case named category</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a lower case category</span>
+<span class="w">  </span><span class="nt">vmware.vmware.tag_categories</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">tag_categories</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all-lower-case</span>
+<span class="c1">## Use the same name, but upper case</span>
+<span class="c1">## This will fail since a category with the same value exists.</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create an upper case category</span>
+<span class="w">  </span><span class="nt">vmware.vmware.tag_categories</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">tag_categories</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ALL-LOWER-CASE</span>
+<span class="c1">## Remove a tag using the upper case name</span>
+<span class="c1">## This will report no change, since the category with the same case doesnt exist.</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete an upper case category</span>
+<span class="w">  </span><span class="nt">vmware.vmware.tag_categories</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+<span class="w">    </span><span class="nt">tag_categories</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ALL-LOWER-CASE</span>
 </pre></div>
 </div>
 </section>
@@ -696,7 +719,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 12, 2026.
+      <span class="lastupdated">Last updated on Oct 13, 2026.
       </span></p>
   </div>
 
