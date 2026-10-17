@@ -354,7 +354,6 @@ the same connection plugin name.</p>
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Run commands or put/fetch on a target via WinRM</p></li>
-<li><p>This plugin allows extra arguments to be passed that are supported by the protocol but not explicitly defined here. They should take the form of variables declared with the following pattern <code class="docutils literal notranslate"><span class="pre">ansible_winrm_&lt;option&gt;</span></code>.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -374,6 +373,44 @@ the same connection plugin name.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ca_trust_path"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-ca-trust-path"><strong>ca_trust_path</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ca_trust_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The path to a PEM encoded CA bundle or an OpenSSL CA directory to use when validating the server certificate.</p>
+<p>If not set, the <code class="docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code> or <code class="docutils literal notranslate"><span class="pre">CURL_CA_BUNDLE</span></code> environment variables are used if present, falling back to the default CA trust store of the <code class="docutils literal notranslate"><span class="pre">requests</span></code> Python library.</p>
+<p>This option is ignored if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-server-cert-validation"><span class="std std-ref"><span class="pre">server_cert_validation</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">ignore</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_ca_trust_path</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-cert_key_pem"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-cert-key-pem"><strong>cert_key_pem</strong></p>
+<a class="ansibleOptionLink" href="#parameter-cert_key_pem" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The path to a PEM encoded private key to use for authentication when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-transport"><span class="std std-ref"><span class="pre">transport</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">certificate</span></code>.</p>
+<p>The private key must not be encrypted as pywinrm only supports plaintext keys.</p>
+<p>Use <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-cert-pem"><span class="std std-ref"><span class="pre">cert_pem</span></span></a></strong></code> to specify the path to the PEM encoded certificate for this key.</p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_cert_key_pem</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-cert_pem"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-cert-pem"><strong>cert_pem</strong></p>
+<a class="ansibleOptionLink" href="#parameter-cert_pem" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The path to a PEM encoded certificate to use for authentication when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-transport"><span class="std std-ref"><span class="pre">transport</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">certificate</span></code>.</p>
+<p>Use <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-cert-key-pem"><span class="std std-ref"><span class="pre">cert_key_pem</span></span></a></strong></code> to specify the path to the PEM encoded private key for this certificate.</p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_cert_pem</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-connection_timeout"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-connection-timeout"><strong>connection_timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-connection_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -384,11 +421,29 @@ the same connection plugin name.</p>
 <p>The read timeout sets the client HTTP-request timeout and specifies how long the client (ansible controller) will wait for data from the server to come back over the HTTP-connection (timeout for waiting for in-between messages from the server). When this timer expires, an exception will be thrown and the ansible connection will be terminated with the error message ‘Read timed out’</p>
 <p>To avoid the above exception to be thrown, the read timeout will be set to 10 seconds higher than the WS-Man operation timeout, thus make the connection more robust on networks with long latency and/or many hops between server and client network wise.</p>
 <p>Setting the difference between the operation and the read timeout to 10 seconds aligns it to the defaults used in the winrm-module and the PSRP-module which also uses 10 seconds (30 seconds for read timeout and 20 seconds for operation timeout)</p>
-<p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">operation_timeout_sec</span></code> and <code class="docutils literal notranslate"><span class="pre">read_timeout_sec</span></code> args in pywinrm so avoid setting these vars with this one.</p>
-<p>The default value is whatever is set in the installed version of pywinrm.</p>
+<p>If set, this overrides both <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-operation-timeout-sec"><span class="std std-ref"><span class="pre">operation_timeout_sec</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-read-timeout-sec"><span class="std std-ref"><span class="pre">read_timeout_sec</span></span></a></strong></code> so avoid setting those options with this one.</p>
 <p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
 <ul class="simple">
 <li><p>Variable: ansible_winrm_connection_timeout</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-credssp_disable_tlsv1_2"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-credssp-disable-tlsv1-2"><strong>credssp_disable_tlsv1_2</strong></p>
+<a class="ansibleOptionLink" href="#parameter-credssp_disable_tlsv1_2" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p>Removed in: version 2.26</p>
+<p>Why: All supported Windows versions support TLSv1.2 so there is no longer a reason to disable it.</p>
+<p>Alternative: Remove the option, TLSv1.2 is always used for the CredSSP authentication channel.</p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Disables the use of TLSv1.2 on the CredSSP authentication channel when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-transport"><span class="std std-ref"><span class="pre">transport</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">credssp</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_credssp_disable_tlsv1_2</p></li>
 </ul>
 </div></td>
 </tr>
@@ -401,6 +456,37 @@ the same connection plugin name.</p>
 <p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
 <ul class="simple">
 <li><p>Variable: ansible_winrm_kinit_cmd</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-kerberos_delegation"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-kerberos-delegation"><strong>kerberos_delegation</strong></p>
+<a class="ansibleOptionLink" href="#parameter-kerberos_delegation" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Requests a forwardable Kerberos ticket so the credentials can be delegated to another server from the Windows host, also known as unconstrained delegation.</p>
+<p>This can be used to overcome the double hop problem with WinRM.</p>
+<p>If <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-kerberos-mode"><span class="std std-ref"><span class="pre">kerberos_mode</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">manual</span></code>, the ticket obtained by the user must already be forwardable for delegation to work.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_kerberos_delegation</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-kerberos_hostname_override"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-kerberos-hostname-override"><strong>kerberos_hostname_override</strong></p>
+<a class="ansibleOptionLink" href="#parameter-kerberos_hostname_override" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The hostname to use in the Service Principal Name (SPN) when requesting the Kerberos service ticket.</p>
+<p>By default the hostname from <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-remote-addr"><span class="std std-ref"><span class="pre">remote_addr</span></span></a></strong></code> is used. This allows Ansible to connect to an IP address or alias but authenticate using the DNS name of the Windows host.</p>
+<p>Only used when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-transport"><span class="std std-ref"><span class="pre">transport</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">kerberos</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_kerberos_hostname_override</p></li>
 </ul>
 </div></td>
 </tr>
@@ -423,12 +509,26 @@ the same connection plugin name.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-kerberos_service"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-kerberos-service"><strong>kerberos_service</strong></p>
+<a class="ansibleOptionLink" href="#parameter-kerberos_service" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The service part of the Service Principal Name (SPN) used when requesting the Kerberos service ticket.</p>
+<p>Only used when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-transport"><span class="std std-ref"><span class="pre">transport</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">kerberos</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;HTTP&quot;</span></code></p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_service</p></li>
+<li><p>Variable: ansible_winrm_kerberos_service</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-kinit_args"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-kinit-args"><strong>kinit_args</strong></p>
 <a class="ansibleOptionLink" href="#parameter-kinit_args" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in ansible-core 2.11</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Extra arguments to pass to <code class="docutils literal notranslate"><span class="pre">kinit</span></code> when getting the Kerberos authentication ticket.</p>
-<p>By default no extra arguments are passed into <code class="docutils literal notranslate"><span class="pre">kinit</span></code> unless <em>ansible_winrm_kerberos_delegation</em> is also set. In that case <code class="docutils literal notranslate"><span class="pre">-f</span></code> is added to the <code class="docutils literal notranslate"><span class="pre">kinit</span></code> args so a forwardable ticket is retrieved.</p>
+<p>By default no extra arguments are passed into <code class="docutils literal notranslate"><span class="pre">kinit</span></code> unless <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-kerberos-delegation"><span class="std std-ref"><span class="pre">kerberos_delegation</span></span></a></strong></code> is also set. In that case <code class="docutils literal notranslate"><span class="pre">-f</span></code> is added to the <code class="docutils literal notranslate"><span class="pre">kinit</span></code> args so a forwardable ticket is retrieved.</p>
 <p>If set, the args will overwrite any existing defaults for <code class="docutils literal notranslate"><span class="pre">kinit</span></code>, including <code class="docutils literal notranslate"><span class="pre">-f</span></code> for a delegated ticket.</p>
 <p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
 <ul class="simple">
@@ -436,7 +536,7 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-kinit_env_vars"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-kinit-env-vars"><strong>kinit_env_vars</strong></p>
 <a class="ansibleOptionLink" href="#parameter-kinit_env_vars" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in ansible-core 2.12</em></p>
@@ -457,7 +557,43 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-message_encryption"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-message-encryption"><strong>message_encryption</strong></p>
+<a class="ansibleOptionLink" href="#parameter-message_encryption" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Controls WinRM message encryption, which is separate from the TLS encryption used when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-scheme"><span class="std std-ref"><span class="pre">scheme</span></span></a></strong></code> is <code class="ansible-value docutils literal notranslate"><span class="pre">https</span></code>.</p>
+<p>Only the <code class="ansible-value docutils literal notranslate"><span class="pre">ntlm</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">kerberos</span></code>, and <code class="ansible-value docutils literal notranslate"><span class="pre">credssp</span></code> transports support message encryption.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">auto</span></code> uses message encryption only when connecting over <code class="ansible-value docutils literal notranslate"><span class="pre">http</span></code> with a transport that supports it. Over <code class="ansible-value docutils literal notranslate"><span class="pre">https</span></code> the TLS layer already encrypts the data.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">always</span></code> requires message encryption even over <code class="ansible-value docutils literal notranslate"><span class="pre">https</span></code> and will fail if the transport does not support it, for example <code class="ansible-value docutils literal notranslate"><span class="pre">basic</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">certificate</span></code>.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">never</span></code> disables message encryption even over <code class="ansible-value docutils literal notranslate"><span class="pre">http</span></code>. This is only recommended for debugging as all data will be sent in the clear.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;auto&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;always&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;never&quot;</span></code></p></li>
+</ul>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_message_encryption</p></li>
+</ul>
+</div></td>
+</tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-operation_timeout_sec"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-operation-timeout-sec"><strong>operation_timeout_sec</strong></p>
+<a class="ansibleOptionLink" href="#parameter-operation_timeout_sec" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The WS-Man operation timeout in seconds that runs on the managed Windows host.</p>
+<p>This value must be less than <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-read-timeout-sec"><span class="std std-ref"><span class="pre">read_timeout_sec</span></span></a></strong></code>.</p>
+<p>See <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-connection-timeout"><span class="std std-ref"><span class="pre">connection_timeout</span></span></a></strong></code> for more information on how the operation and read timeouts interact.</p>
+<p>This option is ignored if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-connection-timeout"><span class="std std-ref"><span class="pre">connection_timeout</span></span></a></strong></code> is set.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">20</span></code></p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_operation_timeout_sec</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-path"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-path"><strong>path</strong></p>
 <a class="ansibleOptionLink" href="#parameter-path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -469,7 +605,7 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-pipelining"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-pipelining"><strong>pipelining</strong></p>
 <a class="ansibleOptionLink" href="#parameter-pipelining" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -498,7 +634,7 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-port"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-port"><strong>port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -513,7 +649,35 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-proxy"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-proxy"><strong>proxy</strong></p>
+<a class="ansibleOptionLink" href="#parameter-proxy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The proxy URL to use when connecting to the Windows host.</p>
+<p>If not set, the proxy settings from the environment are used.</p>
+<p>Set to the string <code class="ansible-value docutils literal notranslate"><span class="pre">None</span></code> to disable the use of any proxy, including any proxy settings from the environment.</p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_proxy</p></li>
+</ul>
+</div></td>
+</tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-read_timeout_sec"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-read-timeout-sec"><strong>read_timeout_sec</strong></p>
+<a class="ansibleOptionLink" href="#parameter-read_timeout_sec" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The HTTP read timeout in seconds that the Ansible controller will wait for a response from the Windows host.</p>
+<p>This value must be greater than <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-operation-timeout-sec"><span class="std std-ref"><span class="pre">operation_timeout_sec</span></span></a></strong></code>.</p>
+<p>See <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-connection-timeout"><span class="std std-ref"><span class="pre">connection_timeout</span></span></a></strong></code> for more information on how the operation and read timeouts interact.</p>
+<p>This option is ignored if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-connection-timeout"><span class="std std-ref"><span class="pre">connection_timeout</span></span></a></strong></code> is set.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">30</span></code></p>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_read_timeout_sec</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-remote_addr"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-remote-addr"><strong>remote_addr</strong></p>
 <a class="ansibleOptionLink" href="#parameter-remote_addr" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -527,7 +691,7 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-remote_password"></div>
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-remote-password"><span id="ansible-collections-ansible-builtin-winrm-connection-parameter-password"></span><strong>remote_password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-remote_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: password</span></p>
@@ -542,7 +706,7 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-remote_user"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-remote-user"><strong>remote_user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-remote_user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -556,7 +720,7 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-scheme"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-scheme"><strong>scheme</strong></p>
 <a class="ansibleOptionLink" href="#parameter-scheme" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -573,13 +737,66 @@ the same connection plugin name.</p>
 </ul>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-send_cbt"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-send-cbt"><strong>send_cbt</strong></p>
+<a class="ansibleOptionLink" href="#parameter-send_cbt" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Sends the Channel Binding Token (CBT) when authenticating with the <code class="ansible-value docutils literal notranslate"><span class="pre">ntlm</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">kerberos</span></code> transports over <code class="ansible-value docutils literal notranslate"><span class="pre">https</span></code>.</p>
+<p>CBT binds the TLS channel to the authentication exchange to protect against man in the middle attacks.</p>
+<p>This should only be disabled for debugging purposes.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_send_cbt</p></li>
+</ul>
+</div></td>
+</tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-server_cert_validation"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-server-cert-validation"><strong>server_cert_validation</strong></p>
+<a class="ansibleOptionLink" href="#parameter-server_cert_validation" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The HTTPS server certificate validation behaviour.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">validate</span></code> will validate the server certificate against the CA trust store and check that the certificate matches the hostname requested.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">ignore</span></code> will skip all certificate validation checks. This is not recommended outside of testing as it disables the server identity verification checks.</p>
+<p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-ca-trust-path"><span class="std std-ref"><span class="pre">ca_trust_path</span></span></a></strong></code> can be used to specify a custom CA trust store to use for the validation.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;validate&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ignore&quot;</span></code></p></li>
+</ul>
+<p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
+<ul class="simple">
+<li><p>Variable: ansible_winrm_server_cert_validation</p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-transport"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-winrm-connection-parameter-transport"><strong>transport</strong></p>
 <a class="ansibleOptionLink" href="#parameter-transport" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>List of winrm transports to attempt to use (ssl, plaintext, kerberos, etc)</p>
 <p>If None (the default) the plugin will try to automatically guess the correct list. It will use <code class="ansible-value docutils literal notranslate"><span class="pre">kerberos</span></code> if the username looks like a UPN <code class="ansible-value docutils literal notranslate"><span class="pre">user&#64;domain</span></code>, otherwise it will use <code class="ansible-value docutils literal notranslate"><span class="pre">basic</span></code>.</p>
-<p>The choices available depend on your version of pywinrm</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">basic</span></code> is Basic authentication which only works for local accounts.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">certificate</span></code> is Certificate authentication which only works for local accounts and over HTTPS endpoints.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">ntlm</span></code> is NTLM authentication and works for both local and domain accounts. NTLM is an older protocol and should only be used over HTTPS endpoints.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">kerberos</span></code> is Kerberos authentication which only works for domain accounts. This is a secure protocol and is safe to use over HTTP.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">credssp</span></code> is CredSSP authentication which works for both local and domain accounts. It will delegate the user’s credentials to the remote server, only use if the target host is trusted.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">plaintext</span></code> is an alias for <code class="ansible-value docutils literal notranslate"><span class="pre">basic</span></code> authentication over HTTP.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">ssl</span></code> is an alias for <code class="ansible-value docutils literal notranslate"><span class="pre">basic</span></code> over HTTPS or <code class="ansible-value docutils literal notranslate"><span class="pre">certificate</span></code> if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-winrm-connection-parameter-cert-pem"><span class="std std-ref"><span class="pre">cert_pem</span></span></a></strong></code> is set.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;basic&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;certificate&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ntlm&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;kerberos&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;credssp&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;plaintext&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ssl&quot;</span></code></p></li>
+</ul>
 <p class="ansible-option-line"><strong class="ansible-option-configuration">Configuration:</strong></p>
 <ul class="simple">
 <li><p>Variable: ansible_winrm_transport</p></li>
@@ -626,7 +843,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 16, 2026.
+      <span class="lastupdated">Last updated on Oct 17, 2026.
       </span></p>
   </div>
 
