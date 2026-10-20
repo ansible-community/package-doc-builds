@@ -288,21 +288,25 @@ The complete list of porting guides can be found at <a class="reference internal
 </ul>
 </li>
 <li><p><a class="reference internal" href="#command-line" id="id19">Command Line</a></p></li>
-<li><p><a class="reference internal" href="#deprecated" id="id20">Deprecated</a></p></li>
-<li><p><a class="reference internal" href="#modules" id="id21">Modules</a></p>
+<li><p><a class="reference internal" href="#deprecated" id="id20">Deprecated</a></p>
 <ul>
-<li><p><a class="reference internal" href="#modules-removed" id="id22">Modules removed</a></p></li>
-<li><p><a class="reference internal" href="#deprecation-notices" id="id23">Deprecation notices</a></p></li>
-<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id24">Noteworthy module changes</a></p></li>
+<li><p><a class="reference internal" href="#failure-inference-from-non-zero-rc" id="id21">Failure inference from non-zero <code class="docutils literal notranslate"><span class="pre">rc</span></code></a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#plugins" id="id25">Plugins</a></p>
+<li><p><a class="reference internal" href="#modules" id="id22">Modules</a></p>
 <ul>
-<li><p><a class="reference internal" href="#noteworthy-plugin-changes" id="id26">Noteworthy plugin changes</a></p></li>
+<li><p><a class="reference internal" href="#modules-removed" id="id23">Modules removed</a></p></li>
+<li><p><a class="reference internal" href="#deprecation-notices" id="id24">Deprecation notices</a></p></li>
+<li><p><a class="reference internal" href="#noteworthy-module-changes" id="id25">Noteworthy module changes</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#porting-custom-scripts" id="id27">Porting custom scripts</a></p></li>
-<li><p><a class="reference internal" href="#networking" id="id28">Networking</a></p></li>
+<li><p><a class="reference internal" href="#plugins" id="id26">Plugins</a></p>
+<ul>
+<li><p><a class="reference internal" href="#noteworthy-plugin-changes" id="id27">Noteworthy plugin changes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#porting-custom-scripts" id="id28">Porting custom scripts</a></p></li>
+<li><p><a class="reference internal" href="#networking" id="id29">Networking</a></p></li>
 </ul>
 </li>
 </ul>
@@ -444,22 +448,28 @@ See <a class="reference internal" href="../dev_guide/developing_secret_masking.h
 <li><p><code class="docutils literal notranslate"><span class="pre">ansible.module_utils.common.parameters.remove_values()</span></code> and <code class="docutils literal notranslate"><span class="pre">sanitize_keys()</span></code> are deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.25. Secret values are now masked automatically. Use the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.secrets</span></code> API to handle secrets manually.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">live</span></code> argument of <code class="docutils literal notranslate"><span class="pre">ansible.utils.cmd_functions.run_cmd()</span></code> is deprecated and will be removed in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.25 because it bypasses secret masking. Callers that need to stream output live should run the subprocess themselves and mask any secrets in the output.</p></li>
 </ul>
+<section id="failure-inference-from-non-zero-rc">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Failure inference from non-zero <code class="docutils literal notranslate"><span class="pre">rc</span></code></a><a class="headerlink" href="#failure-inference-from-non-zero-rc" title="Link to this heading"></a></h3>
+<p>Failure inference for modules and actions that return a non-zero <code class="docutils literal notranslate"><span class="pre">rc</span></code> value and no <code class="docutils literal notranslate"><span class="pre">failed</span></code> value is deprecated and emits a runtime deprecation warning.
+Modules and actions may use any logic desired to determine failure (including consulting <code class="docutils literal notranslate"><span class="pre">rc</span></code>), but failures must be explicitly communicated in the task result by setting <code class="docutils literal notranslate"><span class="pre">failed</span></code> true, or via methods that do so implicitly, such as <code class="docutils literal notranslate"><span class="pre">fail_json</span></code> or raising an unhandled error.
+When failure inference is removed in <code class="docutils literal notranslate"><span class="pre">2.24</span></code>, the <code class="docutils literal notranslate"><span class="pre">rc</span></code> key will receive no special attention during task result processing.</p>
+</section>
 </section>
 <section id="modules">
-<span id="id9"></span><h2><a class="toc-backref" href="#id21" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<span id="id9"></span><h2><a class="toc-backref" href="#id22" role="doc-backlink">Modules</a><a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
 <section id="modules-removed">
-<h3><a class="toc-backref" href="#id22" role="doc-backlink">Modules removed</a><a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">Modules removed</a><a class="headerlink" href="#modules-removed" title="Link to this heading"></a></h3>
 <p>The following modules no longer exist:</p>
 <ul class="simple">
 <li><p>No notable changes</p></li>
 </ul>
 </section>
 <section id="deprecation-notices">
-<h3><a class="toc-backref" href="#id23" role="doc-backlink">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Deprecation notices</a><a class="headerlink" href="#deprecation-notices" title="Link to this heading"></a></h3>
 <p>No notable changes</p>
 </section>
 <section id="noteworthy-module-changes">
-<h3><a class="toc-backref" href="#id24" role="doc-backlink">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">Noteworthy module changes</a><a class="headerlink" href="#noteworthy-module-changes" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Module options marked <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">true</span></code> keep their real value in the module result instead of being replaced with <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code>. The value is registered as a secret and masked in output. See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#secret-masking-no-log"><span class="std std-ref">How masking changes no_log</span></a>.</p></li>
 <li><p>Values logged by <code class="docutils literal notranslate"><span class="pre">AnsibleModule.log()</span></code> and the module invocation log entry now use <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> in place of the previous <code class="docutils literal notranslate"><span class="pre">NOT_LOGGING_PARAMETER</span></code> and <code class="docutils literal notranslate"><span class="pre">NOT_LOGGING_PASSWORD</span></code> placeholders, and any other registered secret in the message is masked.</p></li>
@@ -472,9 +482,9 @@ Modules that pass a secret on the command line or embed one in a URL, where that
 </section>
 </section>
 <section id="plugins">
-<h2><a class="toc-backref" href="#id25" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id26" role="doc-backlink">Plugins</a><a class="headerlink" href="#plugins" title="Link to this heading"></a></h2>
 <section id="noteworthy-plugin-changes">
-<h3><a class="toc-backref" href="#id26" role="doc-backlink">Noteworthy plugin changes</a><a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Noteworthy plugin changes</a><a class="headerlink" href="#noteworthy-plugin-changes" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>The following plugin options are marked <code class="docutils literal notranslate"><span class="pre">secret:</span> <span class="pre">true</span></code> and are masked in output:</p>
 <ul>
@@ -494,11 +504,11 @@ Modules that pass a secret on the command line or embed one in a URL, where that
 </section>
 </section>
 <section id="porting-custom-scripts">
-<h2><a class="toc-backref" href="#id27" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id28" role="doc-backlink">Porting custom scripts</a><a class="headerlink" href="#porting-custom-scripts" title="Link to this heading"></a></h2>
 <p>No notable changes</p>
 </section>
 <section id="networking">
-<h2><a class="toc-backref" href="#id28" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Networking</a><a class="headerlink" href="#networking" title="Link to this heading"></a></h2>
 <p>Secret masking does not apply to the messages logged by the <code class="docutils literal notranslate"><span class="pre">persistent_log_messages</span></code> option.
 Persistent connections run in a separate <code class="docutils literal notranslate"><span class="pre">ansible-connection</span></code> process that does not receive the secrets registered by the controller, so passwords and other sensitive configuration sent over the connection are written to the log in plain text.
 Only enable this option while debugging and treat the resulting log as sensitive.</p>
@@ -516,7 +526,7 @@ Only enable this option while debugging and treat the resulting log as sensitive
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 19, 2026.
+      <span class="lastupdated">Last updated on Oct 20, 2026.
       </span></p>
   </div>
 
