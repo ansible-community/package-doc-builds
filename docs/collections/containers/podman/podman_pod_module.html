@@ -331,7 +331,7 @@
 <h1>containers.podman.podman_pod module – Manage Podman pods<a class="headerlink" href="#containers-podman-podman-pod-module-manage-podman-pods" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/containers/podman/">containers.podman collection</a> (version 1.21.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/containers/podman/">containers.podman collection</a> (version 1.21.2).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -509,7 +509,10 @@ see <a class="reference internal" href="#ansible-collections-containers-podman-p
 <div class="ansibleOptionAnchor" id="parameter-generate_systemd"></div><p class="ansible-option-title" id="ansible-collections-containers-podman-podman-pod-module-parameter-generate-systemd"><strong>generate_systemd</strong></p>
 <a class="ansibleOptionLink" href="#parameter-generate_systemd" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Generate systemd unit file for container.</p>
+<td><div class="ansible-option-cell"><p>Generate systemd unit files for the pod and its containers.</p>
+<p>With <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-containers-podman-podman-pod-module-parameter-state"><span class="std std-ref"><span class="pre">state</span></span></a></strong></code> set to <code class="ansible-value docutils literal notranslate"><span class="pre">created</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">started</span></code>, the module reconciles the pod configuration before generating units. Configuration differences can recreate the pod, removing all containers belonging to it. Omitting previously configured parameters, such as <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-containers-podman-podman-pod-module-parameter-publish"><span class="std std-ref"><span class="pre">publish</span></span></a></strong></code>, can also cause a difference.</p>
+<p>When creating a pod and generating its units in separate tasks, supply the same pod configuration to both tasks. Use <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code> to share these parameters without duplicating them; see the example below.</p>
+<p>Setting <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-containers-podman-podman-pod-module-parameter-recreate"><span class="std std-ref"><span class="pre">recreate</span></span></a></strong></code> to <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> disables forced recreation; configuration differences can still trigger recreation.</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">{}</span></code></p>
 </div></td>
 </tr>
@@ -1070,6 +1073,33 @@ see <a class="reference internal" href="#ansible-collections-containers-podman-p
 <span class="w">    </span><span class="nt">add_host</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"google:5.5.5.5"</span>
 
+<span class="c1"># Share pod configuration when creating a pod and generating its systemd units</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create the application pod and generate its units</span>
+<span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">containers.podman.podman_pod</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">      </span><span class="nt">publish</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"127.0.0.1:9000:80"</span>
+<span class="w">      </span><span class="c1"># Add other pod configuration here, such as network or userns.</span>
+<span class="w">  </span><span class="nt">block</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create the pod</span>
+<span class="w">      </span><span class="nt">containers.podman.podman_pod</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">created</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create the application container</span>
+<span class="w">      </span><span class="nt">containers.podman.podman_container</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app-web</span>
+<span class="w">        </span><span class="nt">pod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.io/library/nginx:alpine</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">created</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Generate units after adding containers</span>
+<span class="w">      </span><span class="nt">containers.podman.podman_pod</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">created</span>
+<span class="w">        </span><span class="nt">generate_systemd</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/systemd/system</span>
+<span class="w">          </span><span class="nt">restart_policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+
 <span class="c1"># Create a Quadlet file for a pod</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containers.podman.podman_pod</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qpod</span>
@@ -1133,7 +1163,7 @@ see <a class="reference internal" href="#ansible-collections-containers-podman-p
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 20, 2026.
+      <span class="lastupdated">Last updated on Oct 21, 2026.
       </span></p>
   </div>
 
