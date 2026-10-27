@@ -463,6 +463,7 @@ the same module name.</p>
 </div></td>
 <td><div class="ansible-option-cell"><p>One or more (shell or regex) patterns, which type is controlled by <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-use-regex"><span class="std std-ref"><span class="pre">use_regex</span></span></a></strong></code> option.</p>
 <p>Items whose base names match an <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-excludes"><span class="std std-ref"><span class="pre">excludes</span></span></a></strong></code> pattern are culled from <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-patterns"><span class="std std-ref"><span class="pre">patterns</span></span></a></strong></code> matches. Multiple patterns can be specified using a list.</p>
+<p>To skip descending into directories entirely, use <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-prune"><span class="std std-ref"><span class="pre">prune</span></span></a></strong></code>.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -563,6 +564,18 @@ the same module name.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-prune"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-find-module-parameter-prune"><strong>prune</strong></p>
+<a class="ansibleOptionLink" href="#parameter-prune" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=path</span></p>
+<p><em class="ansible-option-versionadded">added in ansible-core 2.23</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of directory paths that are not descended into during the search.</p>
+<p>Unlike <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-excludes"><span class="std std-ref"><span class="pre">excludes</span></span></a></strong></code>, which only filters the results, this stops the traversal, so nothing inside these directories is examined.</p>
+<p>Paths are compared against the full path of each directory found while walking <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-paths"><span class="std std-ref"><span class="pre">paths</span></span></a></strong></code>.</p>
+<p>Pruned directories are themselves excluded from the results, even with the <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-file-type"><span class="std std-ref"><span class="pre">file_type=directory</span></span></a></code>.</p>
+<p>A path listed in both <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-paths"><span class="std std-ref"><span class="pre">paths</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-ansible-builtin-find-module-parameter-prune"><span class="std std-ref"><span class="pre">prune</span></span></a></strong></code> is skipped entirely and produces a warning.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-read_whole_file"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-find-module-parameter-read-whole-file"><strong>read_whole_file</strong></p>
 <a class="ansibleOptionLink" href="#parameter-read_whole_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in ansible-core 2.11</em></p>
@@ -577,7 +590,7 @@ the same module name.</p>
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-recurse"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-find-module-parameter-recurse"><strong>recurse</strong></p>
 <a class="ansibleOptionLink" href="#parameter-recurse" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -589,7 +602,7 @@ the same module name.</p>
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-size"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-find-module-parameter-size"><strong>size</strong></p>
 <a class="ansibleOptionLink" href="#parameter-size" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -599,7 +612,7 @@ the same module name.</p>
 <p>Size is not evaluated for directories.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_regex"></div><p class="ansible-option-title" id="ansible-collections-ansible-builtin-find-module-parameter-use-regex"><strong>use_regex</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_regex" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -733,6 +746,16 @@ the same module name.</p>
 <span class="w">    </span><span class="nt">use_regex</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">recurse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Find all files under / without descending into pseudo-filesystems</span>
+<span class="w">  </span><span class="nt">ansible.builtin.find</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">paths</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">    </span><span class="nt">recurse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">file_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">any</span>
+<span class="w">    </span><span class="nt">prune</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/proc</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sys</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/dev</span>
 </pre></div>
 </div>
 </section>
@@ -816,7 +839,7 @@ the same module name.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 26, 2026.
+      <span class="lastupdated">Last updated on Oct 27, 2026.
       </span></p>
   </div>
 
