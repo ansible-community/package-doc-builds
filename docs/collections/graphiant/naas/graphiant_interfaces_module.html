@@ -330,7 +330,7 @@
 <h1>graphiant.naas.graphiant_interfaces module – Manage Graphiant interfaces and circuits<a class="headerlink" href="#graphiant-naas-graphiant-interfaces-module-manage-graphiant-interfaces-and-circuits" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.9.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.10.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -368,7 +368,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>python &gt;= 3.7</p></li>
-<li><p>graphiant-sdk &gt;= 26.9.0</p></li>
+<li><p>graphiant-sdk &gt;= 26.10.0</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -529,6 +529,14 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <td><div class="ansible-option-cell"><p>Supports check mode. In check mode, no configuration is pushed to the devices but payloads that would be pushed are logged with <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code>.</p>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-interfaces-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Supports diff mode. When run with <code class="docutils literal notranslate"><span class="pre">--diff</span></code>, a per-device before/after of the interface and circuit payload that would be pushed is returned.</p>
+</div></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -543,9 +551,10 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <li><p>- Circuits only: Update circuit configurations including static routes without touching interfaces.</p></li>
 <li><p>Configuration files support Jinja2 templating syntax for dynamic configuration generation.</p></li>
 <li><p>The module automatically resolves device names to IDs and validates configurations.</p></li>
-<li><p>Deconfigure operations are idempotent and safe to run multiple times.</p></li>
-<li><p>Configure operations always push the desired config (they may report changed even if the device is already configured).</p></li>
+<li><p>Prerequisite: LAN segments referenced by <code class="docutils literal notranslate"><span class="pre">lan:</span></code> on an interface or subinterface must already exist in the enterprise. Create them first (e.g. <code class="docutils literal notranslate"><span class="pre">lan_segments_management.yml</span> <span class="pre">--tag</span> <span class="pre">configure</span></code>). Configure operations validate referenced LAN segment names against live portal state and fail fast (listing the available segments) when one is missing.</p></li>
+<li><p>Both configure and deconfigure operations are field-level idempotent and safe to run repeatedly: each device’s desired config is compared against live state and devices already in the desired state are skipped (reported under <code class="docutils literal notranslate"><span class="pre">skipped_devices</span></code>), so <code class="docutils literal notranslate"><span class="pre">changed</span></code> is accurate.</p></li>
 <li><p>Check mode (<code class="docutils literal notranslate"><span class="pre">--check</span></code>): No config is pushed; payloads that would be pushed are logged with <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code>.</p></li>
+<li><p>Per-entry <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code> — LAN only. Within <code class="ansible-value docutils literal notranslate"><span class="pre">configure_interfaces</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">configure_lan_interfaces</span></code> you can remove an individual LAN interface or LAN subinterface without a full deconfigure run. On a LAN subinterface: only <code class="docutils literal notranslate"><span class="pre">vlan</span></code> is required alongside <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code>; the subinterface is deleted while the parent and all other entries are configured normally. On a LAN main interface: only <code class="docutils literal notranslate"><span class="pre">name</span></code> is required; a non-default LAN attachment is reset to the enterprise default LAN (its subinterfaces are left untouched — remove them individually with per-sub <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code>). WAN interfaces, WAN subinterfaces, and circuits are never affected by <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">absent</span></code> — they are skipped, including within <code class="ansible-value docutils literal notranslate"><span class="pre">configure_wan_circuits_interfaces</span></code>. All are idempotent — if the LAN interface/subinterface is already absent the device is skipped.</p></li>
 <li><p>LAN segment move: When an interface or subinterface is moved to a different LAN segment, the API requires a two-step push (segment-only then full config). The module does this automatically; in check mode both payloads are shown.</p></li>
 <li><p>WAN static-route cleanup (important):</p></li>
 <li><p>- Detaching a WAN interface from a circuit may be treated by the backend as a circuit removal.</p></li>
@@ -642,6 +651,48 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 <span class="w">    </span><span class="nt">interface_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"sample_interface_config.yaml"</span>
 <span class="w">    </span><span class="nt">circuit_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"sample_circuit_config.yaml"</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
+
+<span class="c1"># Remove a single subinterface (VLAN 19) while keeping everything else configured.</span>
+<span class="c1"># In the config file, mark the subinterface with state: absent:</span>
+<span class="c1">#</span>
+<span class="c1">#   interfaces:</span>
+<span class="c1">#     - edge-1:</span>
+<span class="c1">#       - name: GigabitEthernet7/0/0</span>
+<span class="c1">#         lan: lan-1-test</span>
+<span class="c1">#         ipv4: 10.1.11.1/24</span>
+<span class="c1">#         subinterfaces:</span>
+<span class="c1">#           - vlan: 18</span>
+<span class="c1">#             lan: lan-7-test</span>
+<span class="c1">#             ipv4: 10.1.17.1/24   # kept — configured normally</span>
+<span class="c1">#           - vlan: 19</span>
+<span class="c1">#             state: absent         # removed — sends {"interface": null} for VLAN 19</span>
+<span class="c1">#</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove a specific subinterface (idempotent — skipped if already absent)</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_interfaces</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure_interfaces</span>
+<span class="w">    </span><span class="nt">interface_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"sample_interface_config.yaml"</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
+
+<span class="c1"># Remove a single main interface while configuring everything else normally.</span>
+<span class="c1"># In the config file, mark the interface with state: absent — only name is required:</span>
+<span class="c1">#</span>
+<span class="c1">#   interfaces:</span>
+<span class="c1">#     - edge-1:</span>
+<span class="c1">#       - name: GigabitEthernet5/0/0</span>
+<span class="c1">#         state: absent              # resets LAN attachment to enterprise default; subinterfaces untouched</span>
+<span class="c1">#       - name: GigabitEthernet7/0/0</span>
+<span class="c1">#         lan: lan-1-test            # configured normally</span>
+<span class="c1">#         ipv4: 10.1.11.1/24</span>
+<span class="c1">#</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove a specific interface (idempotent — skipped if already at default state)</span>
+<span class="w">  </span><span class="nt">graphiant.naas.graphiant_interfaces</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure_interfaces</span>
+<span class="w">    </span><span class="nt">interface_config_file</span><span class="p">:</span><span class="w"> </span><span class="s">"sample_interface_config.yaml"</span>
 <span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_host</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_username</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">graphiant_password</span> <span class="cp">}}</span><span class="s">"</span>
@@ -752,7 +803,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 29, 2026.
+      <span class="lastupdated">Last updated on Oct 30, 2026.
       </span></p>
   </div>
 

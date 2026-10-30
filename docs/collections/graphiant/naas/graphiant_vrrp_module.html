@@ -330,7 +330,7 @@
 <h1>graphiant.naas.graphiant_vrrp module – Manage Graphiant VRRP (Virtual Router Redundancy Protocol) configuration<a class="headerlink" href="#graphiant-naas-graphiant-vrrp-module-manage-graphiant-vrrp-virtual-router-redundancy-protocol-configuration" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.9.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.10.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -357,9 +357,8 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <ul class="simple">
 <li><p>This module provides comprehensive VRRP management for Graphiant Edge devices.</p></li>
 <li><p>Supports VRRP configuration, deconfiguration, and enable operations on both main interfaces and subinterfaces (VLANs).</p></li>
-<li><p>All operations use Jinja2 templates for consistent configuration deployment.</p></li>
 <li><p>Configuration files support Jinja2 templating for dynamic generation.</p></li>
-<li><p>All operations are idempotent - safe to run multiple times without causing errors or unintended changes.</p></li>
+<li><p><code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">enable</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">deconfigure</span></code> are all idempotent - see Idempotency Details below.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -367,7 +366,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>python &gt;= 3.7</p></li>
-<li><p>graphiant-sdk &gt;= 26.9.0</p></li>
+<li><p>graphiant-sdk &gt;= 26.10.0</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -487,9 +486,17 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-vrrp-module-attribute-check-mode"><strong>check_mode</strong></p>
 <a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
 <td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
-<p>When run with <code class="docutils literal notranslate"><span class="pre">--check</span></code>, the module logs the exact payloads that would be pushed with a <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code> prefix so you can see what configuration would be applied. The module does not perform state comparison, so <code class="ansible-value docutils literal notranslate"><span class="pre">changed</span></code> may be <code class="ansible-value docutils literal notranslate"><span class="pre">True</span></code> even when the configuration is already applied.</p>
+<p>When run with <code class="docutils literal notranslate"><span class="pre">--check</span></code>, the module logs the exact payloads that would be pushed with a <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code> prefix so you can see what configuration would be applied. All operations compare against live state and report <code class="ansible-value docutils literal notranslate"><span class="pre">changed=False</span></code> when every device is already in the desired state.</p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Supports check mode. In check mode, no configuration is pushed to the devices but payloads that would be pushed are logged with <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-vrrp-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Supports diff mode. With <code class="docutils literal notranslate"><span class="pre">--diff</span></code>, a per-device before/after of the VRRP groups that would change is returned.</p>
 </div></td>
 </tr>
 </tbody>
@@ -501,9 +508,12 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p>Check mode (<code class="docutils literal notranslate"><span class="pre">--check</span></code>): No config is pushed; payloads that would be pushed are logged with <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code>.</p></li>
+<li><p>Diff mode (<code class="docutils literal notranslate"><span class="pre">--diff</span></code>): Shows a per-device before/after of the VRRP groups that would change.</p></li>
 <li><p>VRRP Operations:</p></li>
 <li><p>- configure: Configure VRRP groups on interfaces and subinterfaces.
-Creates new VRRP configurations with specified virtual router IDs and IP addresses.</p></li>
+Creates/updates VRRP configurations with specified virtual router IDs and IP addresses.
+Idempotent - compares each interface against live state and pushes only the interfaces that
+differ; unchanged interfaces and devices are skipped.</p></li>
 <li><p>- deconfigure: Disable VRRP groups from interfaces and subinterfaces.
 Idempotent - skips if VRRP is already disabled.</p></li>
 <li><p>- enable: Enable existing VRRP configurations. Fails if VRRP doesn’t exist.
@@ -511,7 +521,7 @@ Idempotent - skips if already enabled.</p></li>
 <li><p>Configuration files support Jinja2 templating syntax for dynamic configuration generation.</p></li>
 <li><p>The module automatically resolves device names to IDs.</p></li>
 <li><p>Idempotency Details:</p></li>
-<li><p>The module queries existing VRRP state before making changes. For deconfigure operations, it checks if VRRP is already disabled and skips if so. For enable operations, it checks if VRRP is already enabled and skips if so. This ensures safe repeated execution without errors.</p></li>
+<li><p><code class="ansible-value docutils literal notranslate"><span class="pre">deconfigure</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">enable</span></code> query existing VRRP state and skip if already disabled/enabled. <code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code> queries existing state and pushes only the interfaces whose desired VRRP groups differ from live state (a merge PUT); unchanged interfaces and devices are skipped.</p></li>
 <li><p>Interfaces must be configured first before applying VRRP using <a class="reference internal" href="graphiant_interfaces_module.html#ansible-collections-graphiant-naas-graphiant-interfaces-module"><span class="std std-ref">graphiant.naas.graphiant_interfaces</span></a> module.</p></li>
 </ul>
 </div>
@@ -658,7 +668,7 @@ Idempotent - skips if already enabled.</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 29, 2026.
+      <span class="lastupdated">Last updated on Oct 30, 2026.
       </span></p>
   </div>
 

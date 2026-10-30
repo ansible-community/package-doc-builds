@@ -330,7 +330,7 @@
 <h1>graphiant.naas.graphiant_sites module – Manage Graphiant sites and object attachments<a class="headerlink" href="#graphiant-naas-graphiant-sites-module-manage-graphiant-sites-and-object-attachments" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.9.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/graphiant/naas/">graphiant.naas collection</a> (version 26.10.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -368,7 +368,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
 <li><p>python &gt;= 3.7</p></li>
-<li><p>graphiant-sdk &gt;= 26.9.0</p></li>
+<li><p>graphiant-sdk &gt;= 26.10.0</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -494,7 +494,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-graphiant-naas-graphiant-sites-module-attribute-check-mode"><strong>check_mode</strong></p>
 <a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
 <td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
-<p>When run with <code class="docutils literal notranslate"><span class="pre">--check</span></code>, the module logs the exact payloads that would be pushed with a <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code> prefix so you can see what configuration would be applied. The module does not perform state comparison, so <code class="ansible-value docutils literal notranslate"><span class="pre">changed</span></code> may be <code class="ansible-value docutils literal notranslate"><span class="pre">True</span></code> even when the configuration is already applied.</p>
+<p>When run with <code class="docutils literal notranslate"><span class="pre">--check</span></code>, the module logs the exact payloads that would be pushed with a <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code> prefix so you can see what configuration would be applied. <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-sites-module-parameter-operation"><span class="std std-ref"><span class="pre">operation=configure_sites</span></span></a></code>/<code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-sites-module-parameter-operation"><span class="std std-ref"><span class="pre">operation=deconfigure_sites</span></span></a></code> check existing state first, so <code class="ansible-value docutils literal notranslate"><span class="pre">changed</span></code> is accurate in check mode too. <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-sites-module-parameter-operation"><span class="std std-ref"><span class="pre">operation=attach_objects</span></span></a></code>/ <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-sites-module-parameter-operation"><span class="std std-ref"><span class="pre">operation=detach_objects</span></span></a></code> only detect a no-op via an error from the real API call, which check mode never makes - so <code class="ansible-value docutils literal notranslate"><span class="pre">changed</span></code> is always <code class="ansible-value docutils literal notranslate"><span class="pre">True</span></code> for them (and for <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-sites-module-parameter-operation"><span class="std std-ref"><span class="pre">operation=configure</span></span></a></code>/<code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-graphiant-naas-graphiant-sites-module-parameter-operation"><span class="std std-ref"><span class="pre">operation=deconfigure</span></span></a></code>‘s attach/detach step) under <code class="docutils literal notranslate"><span class="pre">--check</span></code>.</p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Supports check mode. In check mode, no configuration is pushed to the devices but payloads that would be pushed are logged with <code class="docutils literal notranslate"><span class="pre">[check_mode]</span></code>.</p>
 </div></td>
@@ -519,7 +519,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <li><p>- <code class="ansible-value docutils literal notranslate"><span class="pre">detach_objects</span></code>: Detach global objects from sites (sites remain).</p></li>
 <li><p>Configuration files support Jinja2 templating syntax for dynamic configuration generation.</p></li>
 <li><p>The module automatically resolves site names and global object names to IDs.</p></li>
-<li><p>All operations are idempotent and safe to run multiple times.</p></li>
+<li><p>All operations are idempotent in a live run. <code class="ansible-value docutils literal notranslate"><span class="pre">attach_objects</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">detach_objects</span></code> (and <code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">deconfigure</span></code>‘s attach/detach step) cannot detect a no-op in check mode - see the <code class="docutils literal notranslate"><span class="pre">check_mode</span></code> attribute details below.</p></li>
 <li><p>Global objects must be created using <a class="reference internal" href="graphiant_global_config_module.html#ansible-collections-graphiant-naas-graphiant-global-config-module"><span class="std std-ref">graphiant.naas.graphiant_global_config</span></a> module before attaching to sites.</p></li>
 </ul>
 </div>
@@ -616,7 +616,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 <a class="ansibleOptionLink" href="#return-changed" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Whether the operation made changes to the system.</p>
-<p><code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> for all configure/deconfigure/attach/detach operations.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> when nothing needed changing. In check mode, <code class="ansible-value docutils literal notranslate"><span class="pre">attach_objects</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">detach_objects</span></code> (and <code class="ansible-value docutils literal notranslate"><span class="pre">configure</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">deconfigure</span></code>‘s attach/detach step) always report <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> instead - see the <code class="docutils literal notranslate"><span class="pre">check_mode</span></code> attribute details below.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">true</span></code></p>
 </div></td>
@@ -685,7 +685,7 @@ see <a class="reference internal" href="#ansible-collections-graphiant-naas-grap
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 29, 2026.
+      <span class="lastupdated">Last updated on Oct 30, 2026.
       </span></p>
   </div>
 
