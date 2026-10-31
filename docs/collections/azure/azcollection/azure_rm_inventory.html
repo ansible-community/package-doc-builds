@@ -333,7 +333,7 @@
 <h1>azure.azcollection.azure_rm inventory – Azure Resource Manager inventory plugin<a class="headerlink" href="#azure-azcollection-azure-rm-inventory-azure-resource-manager-inventory-plugin" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 4.1.0).</p>
+<p>This inventory plugin is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 4.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -358,6 +358,10 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <li><p>Query VM details from Azure Resource Manager</p></li>
 <li><p>Requires a YAML configuration file whose name ends with ‘azure_rm.(yml|yaml)’</p></li>
 <li><p>By default, sets <code class="docutils literal notranslate"><span class="pre">ansible_host</span></code> to the first public IP address found (preferring the primary NIC). If no public IPs are found, the first private IP (also preferring the primary NIC). The default may be overridden via <code class="docutils literal notranslate"><span class="pre">hostvar_expressions</span></code>; see examples.</p></li>
+<li><p>Host filters (<code class="docutils literal notranslate"><span class="pre">exclude_host_filters</span></code>, <code class="docutils literal notranslate"><span class="pre">default_host_filters</span></code>, <code class="docutils literal notranslate"><span class="pre">include_host_filters</span></code>) that only refer to host variables known from the VM list response (for example <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">location</span></code>, <code class="docutils literal notranslate"><span class="pre">resource_group</span></code>, <code class="docutils literal notranslate"><span class="pre">os_profile</span></code>, <code class="docutils literal notranslate"><span class="pre">provisioning_state</span></code>) can be evaluated before the per-VM instance view, network interface and public IP requests are sent, so hosts they exclude cost no further API calls. Filters that refer to <code class="docutils literal notranslate"><span class="pre">powerstate</span></code>, <code class="docutils literal notranslate"><span class="pre">computer_name</span></code>, <code class="docutils literal notranslate"><span class="pre">os_name</span></code>, <code class="docutils literal notranslate"><span class="pre">os_version</span></code>, <code class="docutils literal notranslate"><span class="pre">hyper_v_generation</span></code> or network-related host variables are evaluated after those requests complete.</p></li>
+<li><p>Exclude filters (<code class="docutils literal notranslate"><span class="pre">exclude_host_filters</span></code> followed by <code class="docutils literal notranslate"><span class="pre">default_host_filters</span></code>) are evaluated early in order and early evaluation stops at the first filter that needs data from those requests. With the default <code class="docutils literal notranslate"><span class="pre">default_host_filters</span></code>, the <code class="docutils literal notranslate"><span class="pre">provisioning_state</span></code> check therefore runs after them. List exclude filters on VM list variables first to benefit from early evaluation.</p></li>
+<li><p>A host whose <code class="docutils literal notranslate"><span class="pre">include_host_filters</span></code> all evaluate early to false is excluded without fetching its details, so an exclude filter that needs those details and would fail to evaluate for that host does not raise an error under <code class="docutils literal notranslate"><span class="pre">fail_on_template_errors</span></code>.</p></li>
+<li><p>Early evaluation is skipped when a filter uses lookups, <code class="docutils literal notranslate"><span class="pre">vars</span></code> or names that are not host variables, and when <code class="docutils literal notranslate"><span class="pre">cache</span></code> is enabled so that cached results keep every host.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -1135,7 +1139,7 @@ For example, an ansible.cfg entry (further up in the list) is overwritten by an 
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 30, 2026.
+      <span class="lastupdated">Last updated on Oct 31, 2026.
       </span></p>
   </div>
 

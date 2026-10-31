@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="azure.azcollection.azure_rm_recoveryservicesvaultconfig module – Set Azure Backup Vault Config" href="azure_rm_recoveryservicesvaultconfig_module.html" />
-    <link rel="prev" title="azure.azcollection.azure_rm_recoveryservicesvault module – Create and Delete Azure Recovery Services vault" href="azure_rm_recoveryservicesvault_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="azure.azcollection.azure_rm_recoveryservicesvault module – Create, update and delete Azure Recovery Services vault" href="azure_rm_recoveryservicesvault_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -333,7 +333,7 @@
 <h1>azure.azcollection.azure_rm_recoveryservicesvault_info module – Get or list the Azure Recovery Services vault Details<a class="headerlink" href="#azure-azcollection-azure-rm-recoveryservicesvault-info-module-get-or-list-the-azure-recovery-services-vault-details" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 4.1.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/azure/azcollection/">azure.azcollection collection</a> (version 4.2.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -503,6 +503,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </div></td>
 <td><div class="ansible-option-cell"><p>If this parameter is not configured, all Vaults in the resource group are listed.</p>
 <p>The name of the Azure Recovery Service Vault.</p>
+<p>Azure only returns the security and redundancy settings of a vault when it is requested by name.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -638,6 +639,15 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 <span class="w">  </span><span class="nt">azure_rm_recoveryservicesvault_info</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="s">'myResourceGroup'</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">'testVault'</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vault_info</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Reuse the soft delete settings of a vault on another vault</span>
+<span class="w">  </span><span class="nt">azure_rm_recoveryservicesvault</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">resource_group</span><span class="p">:</span><span class="w"> </span><span class="s">'myResourceGroup'</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">'otherVault'</span>
+<span class="w">    </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="s">'eastus'</span>
+<span class="w">    </span><span class="nt">security_settings</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">soft_delete_settings</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">vault_info.recoveryservicesvaults</span><span class="o">[</span><span class="m">0</span><span class="o">]</span><span class="nv">.properties.security_settings.soft_delete_settings</span> <span class="cp">}}</span><span class="s">"</span>
 </pre></div>
 </div>
 </section>
@@ -652,10 +662,102 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults"><strong>recoveryservicesvaults</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+<p><em class="ansible-option-versionadded">added in azure.azcollection 4.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of recovery services vaults, with snake_case keys.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/etag"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-etag"><strong>etag</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/etag" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A unique read-only string that changes whenever the resource is updated.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;W/datetime'2026-10-22T02%3A44%3A27.834293Z'&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/id"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-id"><strong>id</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/id" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Resource ID.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;/subscriptions/xxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.RecoveryServices/vaults/testVault&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/identity"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-identity"><strong>identity</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/identity" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The managed identity of the recovery services vault.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when-used</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;principal_id&quot;:</span> <span class="pre">&quot;xxxxxxx&quot;,</span> <span class="pre">&quot;tenant_id&quot;:</span> <span class="pre">&quot;xxxxxxx&quot;,</span> <span class="pre">&quot;type&quot;:</span> <span class="pre">&quot;SystemAssigned&quot;}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/location"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-location"><strong>location</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/location" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The location of the resource.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;eastus&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/name"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the recovery services vault.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;testVault&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/properties"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-properties"><strong>properties</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/properties" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The recovery services vault properties.</p>
+<p>The settings managed by <a class="reference internal" href="azure_rm_recoveryservicesvault_module.html#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-module"><span class="std std-ref">azure.azcollection.azure_rm_recoveryservicesvault</span></a> use the same names as its options, for example <code class="docutils literal notranslate"><span class="pre">properties.security_settings.soft_delete_settings</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;provisioning_state&quot;:</span> <span class="pre">&quot;Succeeded&quot;,</span> <span class="pre">&quot;public_network_access&quot;:</span> <span class="pre">&quot;Enabled&quot;,</span> <span class="pre">&quot;security_settings&quot;:</span> <span class="pre">{&quot;soft_delete_settings&quot;:</span> <span class="pre">{&quot;enhanced_security_state&quot;:</span> <span class="pre">&quot;Enabled&quot;,</span> <span class="pre">&quot;soft_delete_retention_period_in_days&quot;:</span> <span class="pre">30,</span> <span class="pre">&quot;soft_delete_state&quot;:</span> <span class="pre">&quot;AlwaysON&quot;}}}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/sku"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-sku"><strong>sku</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/sku" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The SKU of the recovery services vault.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;name&quot;:</span> <span class="pre">&quot;Standard&quot;}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/tags"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-tags"><strong>tags</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/tags" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The resource tags.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when-used</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;key1&quot;:</span> <span class="pre">&quot;value&quot;}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-recoveryservicesvaults/type"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults-type"><strong>type</strong></p>
+<a class="ansibleOptionLink" href="#return-recoveryservicesvaults/type" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The type of the recovery services vault.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Microsoft.RecoveryServices/vaults&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-response"></div><p class="ansible-option-title" id="ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-response"><strong>response</strong></p>
 <a class="ansibleOptionLink" href="#return-response" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">complex</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The response about the current state of the recovery services vault.</p>
+<p>Deprecated, will be removed in version 5.0.0. Use <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module-return-recoveryservicesvaults"><span class="std std-ref"><span class="pre">recoveryservicesvaults</span></span></a></code> instead, which returns the same information in snake_case.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 </div></td>
 </tr>
@@ -756,7 +858,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="azure_rm_recoveryservicesvault_module.html" class="btn btn-neutral float-left" title="azure.azcollection.azure_rm_recoveryservicesvault module – Create and Delete Azure Recovery Services vault" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="azure_rm_recoveryservicesvault_module.html" class="btn btn-neutral float-left" title="azure.azcollection.azure_rm_recoveryservicesvault module – Create, update and delete Azure Recovery Services vault" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="azure_rm_recoveryservicesvaultconfig_module.html" class="btn btn-neutral float-right" title="azure.azcollection.azure_rm_recoveryservicesvaultconfig module – Set Azure Backup Vault Config" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -764,7 +866,7 @@ see <a class="reference internal" href="#ansible-collections-azure-azcollection-
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 30, 2026.
+      <span class="lastupdated">Last updated on Oct 31, 2026.
       </span></p>
   </div>
 

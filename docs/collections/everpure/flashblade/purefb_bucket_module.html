@@ -333,7 +333,7 @@
 <h1>everpure.flashblade.purefb_bucket module – Manage Object Store Buckets on a Everpure FlashBlade.<a class="headerlink" href="#everpure-flashblade-purefb-bucket-module-manage-object-store-buckets-on-a-everpure-flashblade" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flashblade/">everpure.flashblade collection</a> (version 1.28.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flashblade/">everpure.flashblade collection</a> (version 1.29.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -446,8 +446,9 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 <p><em class="ansible-option-versionadded">added in everpure.flashblade 1.12.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The retention period, in days, used to apply locks on new objects if none is specified by the S3 client</p>
-<p>Valid values between 1 and 365000</p>
+<p>Valid values between 1 and 365000, given as a number of days (a trailing <code class="docutils literal notranslate"><span class="pre">d</span></code> is accepted, for example <code class="docutils literal notranslate"><span class="pre">7d</span></code>)</p>
 <p>Use “” to clear</p>
+<p>On an existing bucket this is compared with the current value and changed when it differs. On a <em>ratcheted</em> bucket it can only be raised.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -480,8 +481,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 <a class="ansibleOptionLink" href="#parameter-eradication_delay" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flashblade 1.17.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Minimum eradication delay in days. Automatically eradicate destroyed buckets after the delay time passes unless automatic eradication is delayed due to other configuration values.</p>
-<p>Valid values are integer days from 1 to 30. Default is 1.</p>
+<td><div class="ansible-option-cell"><p>Not settable per bucket. A bucket inherits its eradication delay from the array-wide eradication config (REST <code class="docutils literal notranslate"><span class="pre">PATCH</span> <span class="pre">/arrays</span></code> <em>eradication_config.eradication_delay</em>, CLI <code class="docutils literal notranslate"><span class="pre">purearray</span> <span class="pre">eradication-config</span> <span class="pre">setattr</span></code>); the REST API rejects the field on a bucket and this module fails when it is set.</p>
+<p>The inherited value is reported by <a class="reference internal" href="purefb_info_module.html#ansible-collections-everpure-flashblade-purefb-info-module"><span class="std std-ref">everpure.flashblade.purefb_info</span></a> under <em>buckets.&lt;name&gt;.eradication_config</em>.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -490,6 +491,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 <p><em class="ansible-option-versionadded">added in everpure.flashblade 1.17.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The eradication mode of the bucket.</p>
+<p>This is the only per-bucket eradication setting the REST API accepts.</p>
+<p>Switching to <em>retention-based</em> requires object lock on the bucket and is one-way; the array refuses to change the mode back to <em>permission-based</em>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;permission-based&quot;</span></code></p></li>
@@ -511,6 +514,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 </div></td>
 <td><div class="ansible-option-cell"><p>If set to true, a locked object will be read-only and no new versions of the object may be created due to modifications</p>
 <p>After enabling, can be disabled only by contacting Pure Technical Services</p>
+<p>The array rejects <em>freeze_locked_objects=true</em> together with <em>versioning=enabled</em> as an invalid combination</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -565,7 +569,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 <a class="ansibleOptionLink" href="#parameter-manual_eradication" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flashblade 1.17.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The manual eradication status of the bucket. If false, the bucket cannot be eradicated after it has been destroyed, unless it is empty. If true, the bucket can be eradicated.</p>
+<td><div class="ansible-option-cell"><p>Not settable per bucket. A bucket inherits its manual eradication status from the array-wide eradication config (REST <code class="docutils literal notranslate"><span class="pre">PATCH</span> <span class="pre">/arrays</span></code> <em>eradication_config.manual_eradication</em>, CLI <code class="docutils literal notranslate"><span class="pre">purearray</span> <span class="pre">eradication-config</span> <span class="pre">setattr</span></code>); the REST API rejects the field on a bucket and this module fails when it is set.</p>
+<p>The inherited value is reported by <a class="reference internal" href="purefb_info_module.html#ansible-collections-everpure-flashblade-purefb-info-module"><span class="std std-ref">everpure.flashblade.purefb_info</span></a> under <em>buckets.&lt;name&gt;.eradication_config</em>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -808,7 +813,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 30, 2026.
+      <span class="lastupdated">Last updated on Oct 31, 2026.
       </span></p>
   </div>
 

@@ -333,7 +333,7 @@
 <h1>everpure.flashblade.purefb_user module – Create, modify or delete FlashBlade user accounts<a class="headerlink" href="#everpure-flashblade-purefb-user-module-create-modify-or-delete-flashblade-user-accounts" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flashblade/">everpure.flashblade collection</a> (version 1.28.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flashblade/">everpure.flashblade collection</a> (version 1.29.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -401,6 +401,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 <p><em class="ansible-option-versionadded">added in everpure.flashblade 1.21.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Define whether to create an API token for this user</p>
+<p>An existing token is replaced, so this is not idempotent.</p>
 <p>Token can be exposed using the <em>debug</em> module</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
@@ -529,8 +530,11 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 <a class="ansibleOptionLink" href="#parameter-public_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flashblade 1.8.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The API clients PEM formatted (Base64 encoded) RSA public key.</p>
-<p>Include the <em>—–BEGIN PUBLIC KEY—–</em> and <em>—–END PUBLIC KEY—–</em> lines</p>
+<td><div class="ansible-option-cell"><p>SSH public key for the user in OpenSSH <code class="docutils literal notranslate"><span class="pre">authorized_keys</span></code> format, for example <code class="docutils literal notranslate"><span class="pre">ssh-rsa</span> <span class="pre">AAAA...</span> <span class="pre">comment</span></code> or <code class="docutils literal notranslate"><span class="pre">ssh-ed25519</span> <span class="pre">AAAA...</span> <span class="pre">comment</span></code>.</p>
+<p>The array accepts at most two keys, one per line.</p>
+<p>PEM blocks (<em>-----BEGIN PUBLIC KEY-----</em>) are rejected. That is the key format of <a class="reference internal" href="purefb_apiclient_module.html#ansible-collections-everpure-flashblade-purefb-apiclient-module"><span class="std std-ref">everpure.flashblade.purefb_apiclient</span></a>; the array treats every line of a PEM block as a separate SSH key.</p>
+<p>Keys are compared by type and key material, so a different comment or whitespace is not a change. When the array masks the stored key (reported as <code class="docutils literal notranslate"><span class="pre">****</span></code>) only its presence can be checked; clear it with <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> before setting a different key.</p>
+<p>An empty string removes the user’s public key.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -539,9 +543,11 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 <p><em class="ansible-option-versionadded">added in everpure.flashblade 1.21.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Sets the local user’s access level to the system</p>
+<p>A new local user is created with <em>readonly</em> when no role is given.</p>
+<p>When omitted for an existing user the current role is left unchanged.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;readonly&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;readonly&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ops_admin&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;storage_admin&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;array_admin&quot;</span></code></p></li>
@@ -568,6 +574,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 </div></td>
 <td><div class="ansible-option-cell"><p>The duration of API token validity.</p>
 <p>Valid values are weeks (w), days(d), hours(h), minutes(m) and seconds(s).</p>
+<p>The default of <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> creates a token that does not expire.</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code></p>
 </div></td>
 </tr>
@@ -658,7 +665,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flashblade
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Oct 30, 2026.
+      <span class="lastupdated">Last updated on Oct 31, 2026.
       </span></p>
   </div>
 
