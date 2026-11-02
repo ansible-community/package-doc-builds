@@ -27,8 +27,8 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="everpure.flasharray.purefa_ntp module – Configure Everpure FlashArray NTP settings" href="purefa_ntp_module.html" />
-    <link rel="prev" title="everpure.flasharray.purefa_messages module – List FlashArray Alert Messages" href="purefa_messages_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="next" title="everpure.flasharray.purefa_network_access_policy module – Manage FlashArray Network Access Policies" href="purefa_network_access_policy_module.html" />
+    <link rel="prev" title="everpure.flasharray.purefa_metrics module – Collect OpenMetrics data from a Everpure FlashArray" href="purefa_metrics_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_network module – Manage network interfaces in a Everpure FlashArray<a class="headerlink" href="#everpure-flasharray-purefa-network-module-manage-network-interfaces-in-a-everpure-flasharray" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -367,7 +367,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <ul class="simple">
 <li><p>python &gt;= 3.3</p></li>
 <li><p>purestorage &gt;= 1.19</p></li>
-<li><p>py-pure-client &gt;= 1.90.0</p></li>
+<li><p>py-pure-client &gt;= 1.88.0</p></li>
 <li><p>netaddr</p></li>
 <li><p>requests</p></li>
 <li><p>pycountry</p></li>
@@ -500,6 +500,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Interface name (physical or virtual).</p>
+<p>Newer Purity releases store a virtual interface that is attached to a file server under the server’s name, as <code class="docutils literal notranslate"><span class="pre">&lt;server&gt;::&lt;name&gt;</span></code>, and report it that way. Such an interface may be given here either as the bare <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> it was created with or as the <code class="docutils literal notranslate"><span class="pre">&lt;server&gt;::&lt;name&gt;</span></code> the array reports. With the bare name, <em>server</em> picks the file server when it is given, otherwise the interface is matched under whichever file server it is attached to.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -520,6 +521,18 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-server"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-network-module-parameter-server"><strong>server</strong></p>
+<a class="ansibleOptionLink" href="#parameter-server" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in everpure.flasharray 1.46.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Name of the file server the interface is attached to for data ingress.</p>
+<p>An Ethernet interface can be attached to at most one file server. File servers themselves are managed by <a class="reference internal" href="purefa_server_module.html#ansible-collections-everpure-flasharray-purefa-server-module"><span class="std std-ref">everpure.flasharray.purefa_server</span></a>.</p>
+<p>Omit this to leave the attachment alone. A newly created interface is then attached to the array’s default <code class="docutils literal notranslate"><span class="pre">_array_server</span></code>, which is what the array does when the attachment is not specified.</p>
+<p>Set to an empty string to attach the interface to no file server at all, which detaches an existing interface from the server it is on.</p>
+<p>Only applies to Ethernet interfaces.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-servicelist"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-network-module-parameter-servicelist"><strong>servicelist</strong></p>
 <a class="ansibleOptionLink" href="#parameter-servicelist" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flasharray 1.15.0</em></p>
@@ -543,7 +556,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-network-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -555,7 +568,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subinterfaces"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-network-module-parameter-subinterfaces"><strong>subinterfaces</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subinterfaces" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flasharray 1.22.0</em></p>
@@ -564,7 +577,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <p>Only the ‘eth’ name needs to be provided, such as ‘eth6’. This interface on all controllers will be assigned to the interface.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subnet"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-network-module-parameter-subnet"><strong>subnet</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subnet" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flasharray 1.22.0</em></p>
@@ -572,7 +585,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <td><div class="ansible-option-cell"><p>Name of the subnet which interface is to be attached</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-subordinates"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-network-module-parameter-subordinates"><strong>subordinates</strong></p>
 <a class="ansibleOptionLink" href="#parameter-subordinates" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flasharray 1.22.0</em></p>
@@ -581,7 +594,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <p>Subordinates must be on the same controller, therefore the full device needs to be provided.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-network-module-parameter-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flasharray 1.43.0</em></p>
@@ -598,6 +611,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
+<li><p><em>server</em> requires Purity//FA REST API 2.44 or higher, which is where file servers first appear.</p></li>
+<li><p><em>server</em> attaches only the interface it is given. To manage the full set of interfaces a file server is reachable on, use the <em>network_interfaces</em> option of <a class="reference internal" href="purefa_server_module.html#ansible-collections-everpure-flasharray-purefa-server-module"><span class="std std-ref">everpure.flasharray.purefa_server</span></a>, which is declarative and detaches any interface it is not given.</p></li>
 <li><p>This module requires the <code class="docutils literal notranslate"><span class="pre">py-pure-client</span></code> Python library.</p></li>
 <li><p>Additional Python libraries may be required for specific modules.</p></li>
 <li><p>You must set <code class="docutils literal notranslate"><span class="pre">PUREFA_URL</span></code> and <code class="docutils literal notranslate"><span class="pre">PUREFA_API</span></code> environment variables if <em>fa_url</em> and <em>api_token</em> arguments are not passed to the module directly.</p></li>
@@ -646,6 +661,27 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">replication</span>
 <span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
 <span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c6033033-fe69-2515-a9e8-966bb7fe4b40</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a file VIF attached to a file server</span>
+<span class="w">  </span><span class="nt">everpure.flasharray.purefa_network</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filevif1</span>
+<span class="w">    </span><span class="nt">interface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vif</span>
+<span class="w">    </span><span class="nt">subinterfaces</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth6</span>
+<span class="w">    </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="s">"10.21.200.30/24"</span>
+<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.21.200.1</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filesvr1</span>
+<span class="w">    </span><span class="nt">servicelist</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">file</span>
+<span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c6033033-fe69-2515-a9e8-966bb7fe4b40</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Detach a file VIF from the file server it is attached to</span>
+<span class="w">  </span><span class="nt">everpure.flasharray.purefa_network</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filevif1</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
+<span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c6033033-fe69-2515-a9e8-966bb7fe4b40</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -670,15 +706,15 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="purefa_messages_module.html" class="btn btn-neutral float-left" title="everpure.flasharray.purefa_messages module – List FlashArray Alert Messages" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="purefa_ntp_module.html" class="btn btn-neutral float-right" title="everpure.flasharray.purefa_ntp module – Configure Everpure FlashArray NTP settings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="purefa_metrics_module.html" class="btn btn-neutral float-left" title="everpure.flasharray.purefa_metrics module – Collect OpenMetrics data from a Everpure FlashArray" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="purefa_network_access_policy_module.html" class="btn btn-neutral float-right" title="everpure.flasharray.purefa_network_access_policy module – Manage FlashArray Network Access Policies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 

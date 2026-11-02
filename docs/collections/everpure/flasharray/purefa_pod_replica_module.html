@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_pod_replica module – Manage ActiveDR pod replica links between Everpure FlashArrays<a class="headerlink" href="#everpure-flasharray-purefa-pod-replica-module-manage-activedr-pod-replica-links-between-everpure-flasharrays" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -356,6 +356,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>This module manages ActiveDR pod replica links between Everpure FlashArrays.</p></li>
+<li><p>From Purity//FA 6.10.5 an ActiveCluster stretched pod can be the source of a replica link (multi-site continuous replication). Earlier Purity versions reject a stretched pod as the source and the module fails with a clear message.</p></li>
+<li><p>A stretched pod cannot be the target of a replica link.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -364,7 +366,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <ul class="simple">
 <li><p>python &gt;= 3.3</p></li>
 <li><p>purestorage &gt;= 1.19</p></li>
-<li><p>py-pure-client &gt;= 1.90.0</p></li>
+<li><p>py-pure-client &gt;= 1.88.0</p></li>
 <li><p>netaddr</p></li>
 <li><p>requests</p></li>
 <li><p>pycountry</p></li>
@@ -552,6 +554,15 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
 <span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e31060a7-21fc-e277-6240-25983c6c4592</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a replica link from stretched pod foo to arrayC (Purity//FA 6.10.5+)</span>
+<span class="w">  </span><span class="nt">everpure.flasharray.purefa_pod_replica</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
+<span class="w">    </span><span class="nt">target_array</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arrayC</span>
+<span class="w">    </span><span class="nt">target_pod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo-dr</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e31060a7-21fc-e277-6240-25983c6c4592</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pause an pod replica link</span>
 <span class="w">  </span><span class="nt">everpure.flasharray.purefa_pod_replica</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
@@ -597,7 +608,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 

@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="everpure.flasharray.purefa_user module – Create, modify or delete FlashArray local user account" href="purefa_user_module.html" />
-    <link rel="prev" title="everpure.flasharray.purefa_timeout module – Configure Everpure FlashArray GUI idle timeout" href="purefa_timeout_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="everpure.flasharray.purefa_tls_policy module – Manage Everpure FlashArray TLS policies" href="purefa_tls_policy_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_token module – Create or delete an API token for an existing admin user<a class="headerlink" href="#everpure-flasharray-purefa-token-module-create-or-delete-an-api-token-for-an-existing-admin-user" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -354,6 +354,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <ul class="simple">
 <li><p>Create or delete an API token for an existing admin user.</p></li>
 <li><p>Uses username/password to create/delete the API token.</p></li>
+<li><p>Logging in with a username and password creates the user’s API token when none exists yet, so by the time the module inspects the user the token is always present. <em>state=present</em> therefore returns the token and reports no change; it cannot tell a token created by this run from one that already existed.</p></li>
+<li><p>Use <em>recreate=true</em> to force a new token. This always reports a change.</p></li>
+<li><p><em>timeout</em> gives the new token a lifetime. The array only accepts a lifetime when the token is created, so a timeout replaces the existing token on every run and always reports a change, exactly like <em>recreate</em>.</p></li>
+<li><p><em>state=absent</em> deletes the token and reports a change.</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -396,7 +400,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-recreate"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-token-module-parameter-recreate"><strong>recreate</strong></p>
 <a class="ansibleOptionLink" href="#parameter-recreate" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Recreates the API token, overwriting the existing API token if present</p>
+<td><div class="ansible-option-cell"><p>Recreates the API token, overwriting the existing API token if present.</p>
+<p>This is the only way to be sure of a new token and is always reported as a change.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -409,6 +414,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Create or delete API token</p>
+<p>The module logs in with the user’s own username and password, and that login creates the user’s API token when none exists, so <em>absent</em> finds a token to delete on every run and always reports a change.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;present&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -422,6 +428,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-cell"><p>The duration of API token validity.</p>
 <p>Valid values are weeks (w), days(d), hours(h), minutes(m) and seconds(s).</p>
+<p>Only used with <em>state=present</em>. The existing token is deleted and a new one created with this lifetime, so this is always a change.</p>
+<p>Requires Purity 6.x, where the REST 1.x apitoken endpoint accepts a token lifetime.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -473,7 +481,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#return-purefa_token" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>API token for user</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> changed</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <em>state=present</em>, whether or not the module reports a change</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;e649f439-49be-3806-f774-a35cbbc4c2d2&quot;</span></code></p>
 </div></td>
 </tr>
@@ -501,7 +509,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="purefa_timeout_module.html" class="btn btn-neutral float-left" title="everpure.flasharray.purefa_timeout module – Configure Everpure FlashArray GUI idle timeout" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="purefa_tls_policy_module.html" class="btn btn-neutral float-left" title="everpure.flasharray.purefa_tls_policy module – Manage Everpure FlashArray TLS policies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="purefa_user_module.html" class="btn btn-neutral float-right" title="everpure.flasharray.purefa_user module – Create, modify or delete FlashArray local user account" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -509,7 +517,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 

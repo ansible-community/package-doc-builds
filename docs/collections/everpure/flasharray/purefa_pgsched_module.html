@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_pgsched module – Manage protection groups replication schedules on Everpure FlashArrays<a class="headerlink" href="#everpure-flasharray-purefa-pgsched-module-manage-protection-groups-replication-schedules-on-everpure-flasharrays" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -364,7 +364,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <ul class="simple">
 <li><p>python &gt;= 3.3</p></li>
 <li><p>purestorage &gt;= 1.19</p></li>
-<li><p>py-pure-client &gt;= 1.90.0</p></li>
+<li><p>py-pure-client &gt;= 1.88.0</p></li>
 <li><p>netaddr</p></li>
 <li><p>requests</p></li>
 <li><p>pycountry</p></li>
@@ -401,6 +401,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the time at which to restart replication.</p>
 <p>Provide a time in 12-hour AM/PM format, eg. 5PM</p>
+<p>Sent to the array as seconds since midnight.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -409,6 +410,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the time at which to suspend replication.</p>
 <p>Provide a time in 12-hour AM/PM format, eg. 11AM</p>
+<p>Sent to the array as seconds since midnight.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -456,10 +458,11 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Enable the schedule being configured.</p>
+<p>When not specified the current enabled state is left unchanged.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -535,6 +538,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-replicate_at" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Provide a time in 12-hour AM/PM format, eg. 11AM</p>
+<p>Sent to the array as seconds since midnight, which is the unit the array stores and returns for the <code class="docutils literal notranslate"><span class="pre">at</span></code> value.</p>
 <p>Only valid if <em>replicate_frequency</em> is an exact multiple of 86400, ie 1 day.</p>
 <p>Set to an empty string “” to clear an existing at value (sends -1 to the API).</p>
 <p>Automatically cleared when <em>replicate_frequency</em> changes to a non-day multiple.</p>
@@ -545,6 +549,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-replicate_frequency" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the replication frequency in seconds.</p>
+<p>Converted to milliseconds for the array, which stores frequencies in milliseconds.</p>
 <p>Range 900 - 34560000 (FA-405, //M10, //X10 and Cloud Block Store).</p>
 <p>Range 300 - 34560000 (all other arrays).</p>
 </div></td>
@@ -566,6 +571,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-snap_at" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Provide a time in 12-hour AM/PM format, eg. 11AM</p>
+<p>Sent to the array as seconds since midnight, which is the unit the array stores and returns for the <code class="docutils literal notranslate"><span class="pre">at</span></code> value.</p>
 <p>Only valid if <em>snap_frequency</em> is an exact multiple of 86400, ie 1 day.</p>
 <p>Set to an empty string “” to clear an existing at value (sends -1 to the API).</p>
 <p>Automatically cleared when <em>snap_frequency</em> changes to a non-day multiple.</p>
@@ -576,6 +582,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-snap_frequency" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the snapshot frequency in seconds.</p>
+<p>Converted to milliseconds for the array, which stores frequencies in milliseconds.</p>
 <p>Range available 300 - 34560000.</p>
 </div></td>
 </tr>
@@ -730,7 +737,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 

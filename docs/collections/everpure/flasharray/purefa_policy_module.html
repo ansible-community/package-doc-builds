@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_policy module – Manage FlashArray File System Policies<a class="headerlink" href="#everpure-flasharray-purefa-policy-module-manage-flasharray-file-system-policies" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -364,7 +364,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <ul class="simple">
 <li><p>python &gt;= 3.3</p></li>
 <li><p>purestorage &gt;= 1.19</p></li>
-<li><p>py-pure-client &gt;= 1.90.0</p></li>
+<li><p>py-pure-client &gt;= 1.88.0</p></li>
 <li><p>netaddr</p></li>
 <li><p>requests</p></li>
 <li><p>pycountry</p></li>
@@ -734,6 +734,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-quota_enforced" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Defines if the directory quota is enforced.</p>
+<p>The array refuses an unenforced rule whose <em>quota_limit</em> exceeds 80% of an enforced rule that has a notification target in the same policy.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
@@ -805,6 +806,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-smb_anon_allowed" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies whether access to information is allowed for anonymous users</p>
+<p>The array requires every client rule of an SMB policy to share the same anonymous access setting (“Access option must be the same for all SMB export policy rules”).</p>
+<p>Changing this on an existing client rule replaces the rule, as SMB client rules cannot be modified in place.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -839,6 +842,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-snap_client_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The customizable portion of the client visible snapshot name.</p>
+<p>When a rule with this client name already exists, differing <em>snap_every</em>, <em>snap_keep_for</em> or <em>snap_at</em> values modify that rule in place.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -1026,8 +1030,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <span class="w">  </span><span class="nt">everpure.flasharray.purefa_policy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
 <span class="w">    </span><span class="nt">directory</span><span class="p">:</span>
-<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"foo:root"</span>
-<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"bar:bin"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"foo:root"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"bar:bin"</span>
 <span class="w">    </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">quota</span>
 <span class="w">    </span><span class="nt">quota_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10G</span>
 <span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
@@ -1052,7 +1056,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <span class="w">  </span><span class="nt">everpure.flasharray.purefa_policy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">quota1</span>
 <span class="w">    </span><span class="nt">directory</span><span class="p">:</span>
-<span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"foo:bar"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"foo:bar"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 <span class="w">    </span><span class="nt">policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">quota</span>
 <span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
@@ -1128,7 +1132,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 

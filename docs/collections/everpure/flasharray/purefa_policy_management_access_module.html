@@ -27,7 +27,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="everpure.flasharray.purefa_proxy module – Configure FlashArray phonehome HTTPs proxy settings" href="purefa_proxy_module.html" />
+    <link rel="next" title="everpure.flasharray.purefa_preset module – Manage Fusion fleet block workload presets" href="purefa_preset_module.html" />
     <link rel="prev" title="everpure.flasharray.purefa_policy module – Manage FlashArray File System Policies" href="purefa_policy_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_policy_management_access module – Manage management-access (RBAC) policies on Everpure FlashArrays<a class="headerlink" href="#everpure-flasharray-purefa-policy-management-access-module-manage-management-access-rbac-policies-on-everpure-flasharrays" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -366,7 +366,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <ul class="simple">
 <li><p>python &gt;= 3.3</p></li>
 <li><p>purestorage &gt;= 1.19</p></li>
-<li><p>py-pure-client &gt;= 1.90.0</p></li>
+<li><p>py-pure-client &gt;= 1.88.0</p></li>
 <li><p>netaddr</p></li>
 <li><p>requests</p></li>
 <li><p>pycountry</p></li>
@@ -389,9 +389,10 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <td><div class="ansible-option-cell"><p>How the permissions from this policy combine with other policies that apply to the same user.</p>
 <p><code class="docutils literal notranslate"><span class="pre">least-common-permissions</span></code> restricts users to no more than the access defined here.</p>
 <p><code class="docutils literal notranslate"><span class="pre">all-permissions</span></code> allows users to also receive access from other policies that apply to them.</p>
+<p>A new policy uses <code class="docutils literal notranslate"><span class="pre">all-permissions</span></code> unless otherwise specified. When omitted on an existing policy the current setting is left unchanged.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;all-permissions&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;all-permissions&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;least-common-permissions&quot;</span></code></p></li>
 </ul>
 </div></td>
@@ -439,10 +440,11 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Define whether the policy is enabled and grants its permissions.</p>
+<p>A new policy is enabled unless this is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>. When omitted on an existing policy the current setting is left unchanged.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -532,7 +534,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <div class="ansibleOptionAnchor" id="parameter-rules/role"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-policy-management-access-module-parameter-rules-role"><strong>role</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rules/role" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the role granted by this rule, for example <code class="docutils literal notranslate"><span class="pre">storage</span></code> or <code class="docutils literal notranslate"><span class="pre">array_admin</span></code>.</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the role granted by this rule.</p>
+<p>The array accepts only <code class="docutils literal notranslate"><span class="pre">viewer</span></code>, <code class="docutils literal notranslate"><span class="pre">support</span></code>, <code class="docutils literal notranslate"><span class="pre">admin</span></code> and <code class="docutils literal notranslate"><span class="pre">storage</span></code> in a management-access policy.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -629,14 +632,14 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="purefa_policy_module.html" class="btn btn-neutral float-left" title="everpure.flasharray.purefa_policy module – Manage FlashArray File System Policies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="purefa_proxy_module.html" class="btn btn-neutral float-right" title="everpure.flasharray.purefa_proxy module – Configure FlashArray phonehome HTTPs proxy settings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="purefa_preset_module.html" class="btn btn-neutral float-right" title="everpure.flasharray.purefa_preset module – Manage Fusion fleet block workload presets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 

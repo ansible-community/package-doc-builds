@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_dns module – Configure FlashArray DNS settings<a class="headerlink" href="#everpure-flasharray-purefa-dns-module-configure-flasharray-dns-settings" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -358,6 +358,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <li><p>Set or erase configuration for the DNS settings.</p></li>
 <li><p>Nameservers provided will overwrite any existing nameservers.</p></li>
 <li><p>From Purity//FA 6.3.3 DNS setting for FA-File can be configured separately to the management DNS settings</p></li>
+<li><p>A DNS configuration may also be created without any service. Such a configuration is not used by the array itself, but can be given to a file server with <a class="reference internal" href="purefa_server_module.html#ansible-collections-everpure-flasharray-purefa-server-module"><span class="std std-ref">everpure.flasharray.purefa_server</span></a>, which is how each file server on an array gets its own DNS settings.</p></li>
+<li><p>The array allows at most one configuration per service. Only the configuration named <code class="docutils literal notranslate"><span class="pre">management</span></code> can carry the <code class="docutils literal notranslate"><span class="pre">management</span></code> service.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -366,7 +368,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <ul class="simple">
 <li><p>python &gt;= 3.3</p></li>
 <li><p>purestorage &gt;= 1.19</p></li>
-<li><p>py-pure-client &gt;= 1.90.0</p></li>
+<li><p>py-pure-client &gt;= 1.88.0</p></li>
 <li><p>netaddr</p></li>
 <li><p>requests</p></li>
 <li><p>pycountry</p></li>
@@ -469,7 +471,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <p><em class="ansible-option-versionadded">added in everpure.flasharray 1.14.0</em></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the DNS configuration.</p>
-<p>Default value only supported for management service</p>
+<p>The management DNS configuration is always named <code class="docutils literal notranslate"><span class="pre">management</span></code>.</p>
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;management&quot;</span></code></p>
 </div></td>
 </tr>
@@ -502,10 +504,12 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <a class="ansibleOptionLink" href="#parameter-service" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><em class="ansible-option-versionadded">added in everpure.flasharray 1.14.0</em></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Type of service the DNS will work with</p>
+<td><div class="ansible-option-cell"><p>Type of service the DNS will work with.</p>
+<p>When omitted a new configuration is created without a service, for use by a file server. The service of an existing configuration is never changed.</p>
+<p>The configuration named <code class="docutils literal notranslate"><span class="pre">management</span></code> is always the management service, whether or not this is set.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
-<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;management&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;management&quot;</span></code></p></li>
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;file&quot;</span></code></p></li>
 </ul>
 </div></td>
@@ -582,6 +586,22 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
 <span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e31060a7-21fc-e277-6240-25983c6c4592</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a DNS configuration with no service, for a file server</span>
+<span class="w">  </span><span class="nt">everpure.flasharray.purefa_dns</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">domain</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lab.everpuredata.com</span>
+<span class="w">    </span><span class="nt">nameservers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0.0.53</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filesvr2-dns</span>
+<span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e31060a7-21fc-e277-6240-25983c6c4592</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Give a file server that DNS configuration</span>
+<span class="w">  </span><span class="nt">everpure.flasharray.purefa_server</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filesvr2</span>
+<span class="w">    </span><span class="nt">dns</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filesvr2-dns</span>
+<span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
+<span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e31060a7-21fc-e277-6240-25983c6c4592</span>
+
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete file DNS settings</span>
 <span class="w">  </span><span class="nt">everpure.flasharray.purefa_dns</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
@@ -620,7 +640,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 

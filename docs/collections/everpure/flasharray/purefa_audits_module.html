@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_audits module – List FlashArray Audit Events<a class="headerlink" href="#everpure-flasharray-purefa-audits-module-list-flasharray-audit-events" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -350,6 +350,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
 <li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id6">Return Values</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
@@ -364,7 +365,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <ul class="simple">
 <li><p>python &gt;= 3.3</p></li>
 <li><p>purestorage &gt;= 1.19</p></li>
-<li><p>py-pure-client &gt;= 1.90.0</p></li>
+<li><p>py-pure-client &gt;= 1.88.0</p></li>
 <li><p>netaddr</p></li>
 <li><p>requests</p></li>
 <li><p>pycountry</p></li>
@@ -475,7 +476,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <div class="ansibleOptionAnchor" id="parameter-start"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-parameter-start"><strong>start</strong></p>
 <a class="ansibleOptionLink" href="#parameter-start" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Start date and time (based on array local time)</p>
+<td><div class="ansible-option-cell"><p>Only audit events logged at or after this date and time are returned.</p>
+<p>Interpreted in the timezone given by <em>timezone</em>, or in the timezone resolved when <em>timezone</em> is not provided.</p>
 <p>If not provided epoch is assumed</p>
 <p>Expected format “YYYY-MM-DD hh:mm:ss”</p>
 </div></td>
@@ -484,8 +486,8 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <div class="ansibleOptionAnchor" id="parameter-timezone"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-parameter-timezone"><strong>timezone</strong></p>
 <a class="ansibleOptionLink" href="#parameter-timezone" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The timezone of the FlashArray</p>
-<p>If not provided, the module will attempt to get the current local timezone from the server however from Purity//FA 6.5.3 this value will calculated automatically from the FlashArray</p>
+<td><div class="ansible-option-cell"><p>The timezone in which <em>start</em> is interpreted and in which the <code class="docutils literal notranslate"><span class="pre">time</span></code> of each returned audit event is reported, for example <code class="docutils literal notranslate"><span class="pre">America/New_York</span></code>.</p>
+<p>If not provided, the timezone configured on the FlashArray is used (Purity//FA 6.5.3 and later). On older Purity versions the local timezone of the host running the module is used instead, falling back to UTC.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -527,6 +529,83 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <span class="w">    </span><span class="nt">api_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">89a9356f-c203-d263-8a89-c229486a13ba</span>
 </pre></div>
 </div>
+</section>
+<section id="return-values">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-purefa_audits"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-return-purefa-audits"><strong>purefa_audits</strong></p>
+<a class="ansibleOptionLink" href="#return-purefa_audits" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The audit events read from the array, keyed by audit record name.</p>
+<p>A field the array did not record for an event is returned as <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;1044&quot;:</span> <span class="pre">{&quot;arguments&quot;:</span> <span class="pre">&quot;--size</span> <span class="pre">10G</span> <span class="pre">vol1&quot;,</span> <span class="pre">&quot;command&quot;:</span> <span class="pre">&quot;purevol&quot;,</span> <span class="pre">&quot;origin&quot;:</span> <span class="pre">&quot;arrayA&quot;,</span> <span class="pre">&quot;subcommand&quot;:</span> <span class="pre">&quot;create&quot;,</span> <span class="pre">&quot;time&quot;:</span> <span class="pre">&quot;2024-06-29</span> <span class="pre">12:31:34</span> <span class="pre">EDT&quot;,</span> <span class="pre">&quot;user&quot;:</span> <span class="pre">&quot;pureuser&quot;}}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-purefa_audits/arguments"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-return-purefa-audits-arguments"><strong>arguments</strong></p>
+<a class="ansibleOptionLink" href="#return-purefa_audits/arguments" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The arguments provided to the command.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;--size</span> <span class="pre">10G</span> <span class="pre">vol1&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-purefa_audits/command"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-return-purefa-audits-command"><strong>command</strong></p>
+<a class="ansibleOptionLink" href="#return-purefa_audits/command" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The top level command, which by convention starts with <code class="docutils literal notranslate"><span class="pre">pure</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;purevol&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-purefa_audits/origin"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-return-purefa-audits-origin"><strong>origin</strong></p>
+<a class="ansibleOptionLink" href="#return-purefa_audits/origin" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the array from which the command originated.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;arrayA&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-purefa_audits/subcommand"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-return-purefa-audits-subcommand"><strong>subcommand</strong></p>
+<a class="ansibleOptionLink" href="#return-purefa_audits/subcommand" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The <code class="docutils literal notranslate"><span class="pre">command</span></code> and <code class="docutils literal notranslate"><span class="pre">subcommand</span></code> combination determines which action the user attempted to perform.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;create&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-purefa_audits/time"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-return-purefa-audits-time"><strong>time</strong></p>
+<a class="ansibleOptionLink" href="#return-purefa_audits/time" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>When the command was run, as <code class="docutils literal notranslate"><span class="pre">YYYY-MM-DD</span> <span class="pre">HH:MM:SS</span> <span class="pre">ZONE</span></code> in the timezone given by <em>timezone</em> or the timezone resolved when <em>timezone</em> is not provided.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;2024-06-29</span> <span class="pre">12:31:34</span> <span class="pre">EDT&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-purefa_audits/user"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-audits-module-return-purefa-audits-user"><strong>user</strong></p>
+<a class="ansibleOptionLink" href="#return-purefa_audits/user" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The user who ran the command.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;pureuser&quot;</span></code></p>
+</div></td>
+</tr>
+</tbody>
+</table>
 <section id="authors">
 <h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
 <ul class="simple">
@@ -557,7 +636,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 

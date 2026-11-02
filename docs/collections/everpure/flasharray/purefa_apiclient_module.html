@@ -333,7 +333,7 @@
 <h1>everpure.flasharray.purefa_apiclient module – Manage FlashArray API Clients<a class="headerlink" href="#everpure-flasharray-purefa-apiclient-module-manage-flasharray-api-clients" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.45.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/everpure/flasharray/">everpure.flasharray collection</a> (version 1.46.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -364,7 +364,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <ul class="simple">
 <li><p>python &gt;= 3.3</p></li>
 <li><p>purestorage &gt;= 1.19</p></li>
-<li><p>py-pure-client &gt;= 1.90.0</p></li>
+<li><p>py-pure-client &gt;= 1.88.0</p></li>
 <li><p>netaddr</p></li>
 <li><p>requests</p></li>
 <li><p>pycountry</p></li>
@@ -518,9 +518,9 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <div class="ansibleOptionAnchor" id="parameter-token_ttl"></div><p class="ansible-option-title" id="ansible-collections-everpure-flasharray-purefa-apiclient-module-parameter-token-ttl"><strong>token_ttl</strong></p>
 <a class="ansibleOptionLink" href="#parameter-token_ttl" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Time To Live length in seconds for the exchanged access token</p>
-<p>Range is 1 second to 1 day (86400 seconds)</p>
-<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">86400</span></code></p>
+<td><div class="ansible-option-cell"><p>Time To Live, in seconds, of the access tokens exchanged for this client’s ID tokens. The array stores the value in milliseconds, so the module multiplies the value given here by 1000.</p>
+<p>Range is 1 second to 1 day (86400 seconds).</p>
+<p>If not specified when creating a client, defaults to 86400.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -540,6 +540,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
+<li><p>The array only allows the enabled state of an existing API client to be changed. <em>public_key</em>, <em>issuer</em>, <em>role</em> and <em>token_ttl</em> cannot be changed in place, so when a supplied value differs from the array the module warns and leaves the client as it is. Delete and recreate the client to apply a new value.</p></li>
 <li><p>This module requires the <code class="docutils literal notranslate"><span class="pre">py-pure-client</span></code> Python library.</p></li>
 <li><p>Additional Python libraries may be required for specific modules.</p></li>
 <li><p>You must set <code class="docutils literal notranslate"><span class="pre">PUREFA_URL</span></code> and <code class="docutils literal notranslate"><span class="pre">PUREFA_API</span></code> environment variables if <em>fa_url</em> and <em>api_token</em> arguments are not passed to the module directly.</p></li>
@@ -553,7 +554,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 <span class="w">  </span><span class="nt">everpure.flasharray.purefa_apiclient</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible-token</span>
 <span class="w">    </span><span class="nt">issuer</span><span class="p">:</span><span class="w"> </span><span class="s">"Everpure"</span>
-<span class="w">    </span><span class="nt">token_ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3000</span>
+<span class="w">    </span><span class="nt">token_ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3000</span><span class="w">  </span><span class="c1"># seconds, sent to the array as 3000000 milliseconds</span>
 <span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array_admin</span>
 <span class="w">    </span><span class="nt">public_key</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span><span class="nv">lookup</span><span class="o">(</span><span class="s1">'file'</span><span class="o">,</span> <span class="s1">'public_pem_file'</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">fa_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.10.10.2</span>
@@ -611,7 +612,7 @@ see <a class="reference internal" href="#ansible-collections-everpure-flasharray
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 01, 2026.
+      <span class="lastupdated">Last updated on Nov 02, 2026.
       </span></p>
   </div>
 
