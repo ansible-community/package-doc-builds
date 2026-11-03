@@ -339,7 +339,7 @@
 <h1>cisco.aci.aci_domain_to_encap_pool module – Bind Domain to Encap Pools (infra:RsVlanNs)<a class="headerlink" href="#cisco-aci-aci-domain-to-encap-pool-module-bind-domain-to-encap-pools-infra-rsvlanns" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/aci/">cisco.aci collection</a> (version 2.13.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/aci/">cisco.aci collection</a> (version 3.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -405,9 +405,11 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-domain_type"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-domain-to-encap-pool-module-parameter-domain-type"><strong>domain_type</strong></p>
-<a class="ansibleOptionLink" href="#parameter-domain_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+<a class="ansibleOptionLink" href="#parameter-domain_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>Determines if the Domain is physical (phys) or virtual (vmm).</p>
+<td><div class="ansible-option-cell"><p>Domain type to use for the binding.</p>
+<p>Required when creating or removing a binding, or when querying a specific domain.</p>
+<p>Optional for a query without <code class="docutils literal notranslate"><span class="pre">domain</span></code>, where it filters results to the selected domain type.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;fc&quot;</span></code></p></li>
@@ -644,6 +646,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-vm_provider" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The VM platform for VMM Domains.</p>
+<p>Optional when querying all VMM domains; omit to include every provider.</p>
 <p>Support for Kubernetes was added in ACI v3.0.</p>
 <p>Support for CloudFoundry, OpenShift and Red Hat was added in ACI v3.1.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
@@ -723,6 +726,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SomeSecretPassword</span>
 <span class="w">    </span><span class="nt">domain</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">phys_dom</span>
+<span class="w">    </span><span class="nt">domain_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">phys</span>
 <span class="w">    </span><span class="nt">pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_pool</span>
 <span class="w">    </span><span class="nt">pool_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vlan</span>
 <span class="w">    </span><span class="nt">pool_allocation_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynamic</span>
@@ -735,9 +739,29 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apic</span>
 <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
 <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SomeSecretPassword</span>
+<span class="w">    </span><span class="nt">pool_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vlan</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query_result</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Query all physical domain to VLAN pool bindings</span>
+<span class="w">  </span><span class="nt">cisco.aci.aci_domain_to_encap_pool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SomeSecretPassword</span>
 <span class="w">    </span><span class="nt">domain_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">phys</span>
 <span class="w">    </span><span class="nt">pool_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vlan</span>
-<span class="w">    </span><span class="nt">pool_allocation_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynamic</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query_result</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Query all VMM domain to VLAN pool bindings across providers</span>
+<span class="w">  </span><span class="nt">cisco.aci.aci_domain_to_encap_pool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SomeSecretPassword</span>
+<span class="w">    </span><span class="nt">domain_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vmm</span>
+<span class="w">    </span><span class="nt">pool_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vlan</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query</span>
 <span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query_result</span>

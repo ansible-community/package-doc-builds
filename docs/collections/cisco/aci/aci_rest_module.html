@@ -339,7 +339,7 @@
 <h1>cisco.aci.aci_rest module – Direct access to the Cisco APIC REST API<a class="headerlink" href="#cisco-aci-aci-rest-module-direct-access-to-the-cisco-apic-rest-api" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/aci/">cisco.aci collection</a> (version 2.13.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/aci/">cisco.aci collection</a> (version 3.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -487,6 +487,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <a class="ansibleOptionLink" href="#parameter-page" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The page number to return.</p>
+<p>This has no effect when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is not an ACI MIT endpoint, as the <code class="docutils literal notranslate"><span class="pre">page</span></code>/<code class="docutils literal notranslate"><span class="pre">page-size</span></code> query parameters only apply to paths that return a MO/Class response.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -494,6 +495,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <a class="ansibleOptionLink" href="#parameter-page_size" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The number of items to return in a single page.</p>
+<p>This has no effect when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is not an ACI MIT endpoint, as the <code class="docutils literal notranslate"><span class="pre">page</span></code>/<code class="docutils literal notranslate"><span class="pre">page-size</span></code> query parameters only apply to paths that return a MO/Class response.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -512,7 +514,8 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>URI being used to execute API calls.</p>
-<p>Must end in <code class="docutils literal notranslate"><span class="pre">.xml</span></code> or <code class="docutils literal notranslate"><span class="pre">.json</span></code>.</p>
+<p>ACI Managed Object (MO) and Class API paths (e.g. <code class="docutils literal notranslate"><span class="pre">/api/mo/*</span></code> or <code class="docutils literal notranslate"><span class="pre">/api/class/*</span></code>, optionally under <code class="docutils literal notranslate"><span class="pre">/api/node/</span></code>) must end in <code class="docutils literal notranslate"><span class="pre">.xml</span></code> or <code class="docutils literal notranslate"><span class="pre">.json</span></code>.</p>
+<p>Any other path, for example <code class="docutils literal notranslate"><span class="pre">/api/workflows/*</span></code> or <code class="docutils literal notranslate"><span class="pre">/connector/Systems.json</span></code>, is not required to use a file extension and is treated as a generic JSON API.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -541,6 +544,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <a class="ansibleOptionLink" href="#parameter-rsp_subtree_preserve" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Preserve the response for the provided path.</p>
+<p>This has no effect when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is not an ACI MIT endpoint, as the <code class="docutils literal notranslate"><span class="pre">rsp-subtree</span></code> query parameter only applies to paths that return a MO/Class response.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
@@ -675,6 +679,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <li><p>XML payloads require the <code class="docutils literal notranslate"><span class="pre">lxml</span></code> and <code class="docutils literal notranslate"><span class="pre">xmljson</span></code> python libraries. For JSON payloads nothing special is needed.</p></li>
 <li><p>If you do not have any attributes, it may be necessary to add the “attributes” key with an empty dictionnary “{}” for value as the APIC does expect the entry to precede any children.</p></li>
 <li><p>Annotation set directly in c(src) or <code class="docutils literal notranslate"><span class="pre">content</span></code> will take precedent over the <code class="docutils literal notranslate"><span class="pre">annotation</span></code> parameter.</p></li>
+<li><p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is treated as returning a MIT MO/Class response only when it matches <code class="docutils literal notranslate"><span class="pre">/api/[node/]mo/*</span></code> or <code class="docutils literal notranslate"><span class="pre">/api/[node/]class/*</span></code>, in which case it must end in <code class="docutils literal notranslate"><span class="pre">.xml</span></code> or <code class="docutils literal notranslate"><span class="pre">.json</span></code>. Any other path, for example <code class="docutils literal notranslate"><span class="pre">/api/workflows/*</span></code> or <code class="docutils literal notranslate"><span class="pre">/connector/Systems.json</span></code>, is treated as a generic JSON API and is not required to use a file extension. Its response is returned under <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-return-data"><span class="std std-ref"><span class="pre">data</span></span></a></code> instead of <code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-return-imdata"><span class="std std-ref"><span class="pre">imdata</span></span></a></code>/<code class="ansible-return-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-return-totalcount"><span class="std std-ref"><span class="pre">totalCount</span></span></a></code>, and MO-specific behavior (such as <code class="docutils literal notranslate"><span class="pre">rsp-subtree</span></code>/pagination query parameters and error code/text extraction) does not apply.</p></li>
 </ul>
 </div>
 </section>
@@ -821,6 +826,15 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <span class="w">  </span><span class="nt">delay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
 <span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">  </span><span class="nt">run_once</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check the workflows cluster status (non-MIT endpoint)</span>
+<span class="w">  </span><span class="nt">cisco.aci.aci_rest</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SomeSecretPassword</span>
+<span class="w">    </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/api/workflows/v1/cluster/status</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster_status</span>
 </pre></div>
 </div>
 </section>
@@ -835,33 +849,42 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-data"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-data"><strong>data</strong></p>
+<a class="ansibleOptionLink" href="#return-data" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>JSON output returned by APIC APIs that do not follow the MIT MO/Class response structure</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is not an ACI MIT endpoint</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;status&quot;:</span> <span class="pre">{&quot;state&quot;:</span> <span class="pre">&quot;Completed&quot;}}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-error_code"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-error-code"><strong>error_code</strong></p>
 <a class="ansibleOptionLink" href="#return-error_code" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The REST ACI return code, useful for troubleshooting on failure</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> failure, when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is an ACI MIT endpoint</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">122</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-error_text"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-error-text"><strong>error_text</strong></p>
 <a class="ansibleOptionLink" href="#return-error_text" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The REST ACI descriptive text, useful for troubleshooting on failure</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> failure, when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is an ACI MIT endpoint</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;unknown</span> <span class="pre">managed</span> <span class="pre">object</span> <span class="pre">class</span> <span class="pre">foo&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-imdata"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-imdata"><strong>imdata</strong></p>
 <a class="ansibleOptionLink" href="#return-imdata" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Converted output returned by the APIC REST (register this for post-processing)</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is an ACI MIT endpoint</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;[{'error':</span> <span class="pre">{'attributes':</span> <span class="pre">{'code':</span> <span class="pre">'122',</span> <span class="pre">'text':</span> <span class="pre">'unknown</span> <span class="pre">managed</span> <span class="pre">object</span> <span class="pre">class</span> <span class="pre">foo'}}}]&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-payload"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-payload"><strong>payload</strong></p>
 <a class="ansibleOptionLink" href="#return-payload" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -870,7 +893,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;&lt;foo</span> <span class="pre">bar=\&quot;boo\&quot;/&gt;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-raw"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-raw"><strong>raw</strong></p>
 <a class="ansibleOptionLink" href="#return-raw" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -879,7 +902,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;&lt;?xml</span> <span class="pre">version=\&quot;1.0\&quot;</span> <span class="pre">encoding=\&quot;UTF-8\&quot;?&gt;&lt;imdata</span> <span class="pre">totalCount=\&quot;1\&quot;&gt;&lt;error</span> <span class="pre">code=\&quot;122\&quot;</span> <span class="pre">text=\&quot;unknown</span> <span class="pre">managed</span> <span class="pre">object</span> <span class="pre">class</span> <span class="pre">foo\&quot;/&gt;&lt;/imdata&gt;&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-response"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-response"><strong>response</strong></p>
 <a class="ansibleOptionLink" href="#return-response" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -888,7 +911,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;HTTP</span> <span class="pre">Error</span> <span class="pre">400:</span> <span class="pre">Bad</span> <span class="pre">Request&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-status"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-status"><strong>status</strong></p>
 <a class="ansibleOptionLink" href="#return-status" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -897,16 +920,16 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">400</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-totalCount"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-totalcount"><strong>totalCount</strong></p>
 <a class="ansibleOptionLink" href="#return-totalCount" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Number of items in the imdata array</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code> is an ACI MIT endpoint</p>
 <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-url"></div><p class="ansible-option-title" id="ansible-collections-cisco-aci-aci-rest-module-return-url"><strong>url</strong></p>
 <a class="ansibleOptionLink" href="#return-url" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -922,7 +945,7 @@ see <a class="reference internal" href="#ansible-collections-cisco-aci-aci-rest-
 <ul class="simple">
 <li><p>Dag Wieers (&#64;dagwieers)</p></li>
 <li><p>Cindy Zhao (&#64;cizhao)</p></li>
-<li><p>Samita Bhattacharjee (&#64;samitab)</p></li>
+<li><p>Samita Bhattacharjee (&#64;samiib)</p></li>
 </ul>
 </section>
 <section id="collection-links">

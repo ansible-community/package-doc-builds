@@ -339,7 +339,7 @@
 <h1>cisco.aci.aci_l4l7_concrete_interface module – Manage L4-L7 Concrete Interfaces (vns:CIf)<a class="headerlink" href="#cisco-aci-aci-l4l7-concrete-interface-module-manage-l4-l7-concrete-interfaces-vns-cif" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/aci/">cisco.aci collection</a> (version 2.13.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/aci/">cisco.aci collection</a> (version 3.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -425,6 +425,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>The path to the physical interface.</p>
 <p>For single ports, this is the port name, e.g. “eth1/15”.</p>
 <p>For Port-channels and vPCs, this is the Interface Policy Group name.</p>
+<p>When provided with a non-empty value, <em>pod_id</em> and <em>node_id</em> are required.</p>
+<p>When set to an empty string, the existing path binding will be removed.</p>
+<p>When not provided, the existing path binding will not be modified.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -454,6 +457,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>The unique identifier for the node where the concrete interface is located.</p>
 <p>For Ports and Port-channels, this is represented as a single node ID.</p>
 <p>For virtual Port Channels (vPCs), this is represented as a hyphen-separated pair of node IDs, such as “201-202”.</p>
+<p>Required when <em>interface</em> is provided.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -495,6 +499,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-pod_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The unique identifier for the pod where the concrete interface is located.</p>
+<p>Required when <em>interface</em> is provided.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -738,6 +743,32 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query</span>
 <span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query_result</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a new concrete interface without a path binding</span>
+<span class="w">  </span><span class="nt">cisco.aci.aci_l4l7_concrete_interface</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SomeSecretPassword</span>
+<span class="w">    </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_tenant</span>
+<span class="w">    </span><span class="nt">device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_device</span>
+<span class="w">    </span><span class="nt">concrete_device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_concrete_device</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_concrete_interface</span>
+<span class="w">    </span><span class="nt">vnic_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_vnic</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove the path binding from an existing concrete interface</span>
+<span class="w">  </span><span class="nt">cisco.aci.aci_l4l7_concrete_interface</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apic</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SomeSecretPassword</span>
+<span class="w">    </span><span class="nt">tenant</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_tenant</span>
+<span class="w">    </span><span class="nt">device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_device</span>
+<span class="w">    </span><span class="nt">concrete_device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_concrete_device</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_concrete_interface</span>
+<span class="w">    </span><span class="nt">interface</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a concrete interface</span>
 <span class="w">  </span><span class="nt">cisco.aci.aci_l4l7_concrete_interface</span><span class="p">:</span>
