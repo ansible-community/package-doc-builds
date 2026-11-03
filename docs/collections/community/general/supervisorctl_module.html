@@ -359,7 +359,7 @@
 <h1>community.general.supervisorctl module – Manage the state of a program or group of programs managed by <code class="docutils literal notranslate"><span class="pre">supervisord</span></code><a class="headerlink" href="#community-general-supervisorctl-module-manage-the-state-of-a-program-or-group-of-programs-managed-by-supervisord" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 14.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -480,6 +480,23 @@ see <a class="reference internal" href="#ansible-collections-community-general-s
 <td><div class="ansible-option-cell"><p>Username to use for authentication.</p>
 </div></td>
 </tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-wait"></div><p class="ansible-option-title" id="ansible-collections-community-general-supervisorctl-module-parameter-wait"><strong>wait</strong></p>
+<a class="ansibleOptionLink" href="#parameter-wait" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 14.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-supervisorctl-module-parameter-state"><span class="std std-ref"><span class="pre">state=started</span></span></a></code> or <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-supervisorctl-module-parameter-state"><span class="std std-ref"><span class="pre">state=restarted</span></span></a></code>, wait while the programs are in the <code class="docutils literal notranslate"><span class="pre">STARTING</span></code> or <code class="docutils literal notranslate"><span class="pre">BACKOFF</span></code> states, and fail if any of them does not reach the <code class="docutils literal notranslate"><span class="pre">RUNNING</span></code> state.</p>
+<p>This includes programs that were already in the <code class="docutils literal notranslate"><span class="pre">STARTING</span></code> or <code class="docutils literal notranslate"><span class="pre">BACKOFF</span></code> states, for example after being added with <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-supervisorctl-module-parameter-state"><span class="std std-ref"><span class="pre">state=present</span></span></a></code> and <code class="docutils literal notranslate"><span class="pre">autostart=true</span></code>.</p>
+<p>When a program fails to start but <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> is still retrying it (see <code class="docutils literal notranslate"><span class="pre">startretries</span></code> in the <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> configuration), the module keeps waiting instead of failing.</p>
+<p>Depending on the <code class="docutils literal notranslate"><span class="pre">startsecs</span></code> and <code class="docutils literal notranslate"><span class="pre">startretries</span></code> settings of the programs, the wait may take a long time.</p>
+<p>This option is ignored in check mode.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -559,6 +576,12 @@ see <a class="reference internal" href="#ansible-collections-community-general-s
 <span class="w">  </span><span class="nt">community.general.supervisorctl</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarted</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Start my_app and fail unless it reaches the RUNNING state</span>
+<span class="w">  </span><span class="nt">community.general.supervisorctl</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_app</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">    </span><span class="nt">wait</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 <section id="authors">
@@ -596,7 +619,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-s
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 02, 2026.
+      <span class="lastupdated">Last updated on Nov 03, 2026.
       </span></p>
   </div>
 

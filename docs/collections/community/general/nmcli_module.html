@@ -359,7 +359,7 @@
 <h1>community.general.nmcli module – Manage Networking<a class="headerlink" href="#community-general-nmcli-module-manage-networking" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 14.0.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -1055,6 +1055,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 </div></td>
 <td><div class="ansible-option-cell"><p>Configuration method to be used for IPv4.</p>
 <p>If <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-ip4"><span class="std std-ref"><span class="pre">ip4</span></span></a></strong></code> is set, <code class="docutils literal notranslate"><span class="pre">ipv4.method</span></code> is automatically set to <code class="ansible-value docutils literal notranslate"><span class="pre">manual</span></code> and this parameter is not needed.</p>
+<p>NetworkManager does not allow IPv4 addresses with <code class="ansible-value docutils literal notranslate"><span class="pre">disabled</span></code>. To disable IPv4 on a connection that has addresses, also set <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-ip4"><span class="std std-ref"><span class="pre">ip4=[]</span></span></a></code> to remove them.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code></p></li>
@@ -1073,6 +1074,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <td><div class="ansible-option-cell"><p>Configuration method to be used for IPv6.</p>
 <p>If <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-ip6"><span class="std std-ref"><span class="pre">ip6</span></span></a></strong></code> is set, <code class="docutils literal notranslate"><span class="pre">ipv6.method</span></code> is automatically set to <code class="ansible-value docutils literal notranslate"><span class="pre">manual</span></code> and this parameter is not needed.</p>
 <p><code class="ansible-value docutils literal notranslate"><span class="pre">disabled</span></code> was added in community.general 3.3.0.</p>
+<p>NetworkManager does not allow IPv6 addresses with <code class="ansible-value docutils literal notranslate"><span class="pre">ignore</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">disabled</span></code>. To set one of these methods on a connection that has addresses, also set <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-ip6"><span class="std std-ref"><span class="pre">ip6=[]</span></span></a></code> to remove them.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;ignore&quot;</span></code></p></li>
@@ -1176,6 +1178,26 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-route_table4"></div><p class="ansible-option-title" id="ansible-collections-community-general-nmcli-module-parameter-route-table4"><strong>route_table4</strong></p>
+<a class="ansibleOptionLink" href="#parameter-route_table4" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 14.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set the routing table used for IPv4 routes of this connection, including device routes, DHCP and default routes.</p>
+<p>This enables policy routing for IPv4. Static routes in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-routes4-extended"><span class="std std-ref"><span class="pre">routes4_extended</span></span></a></strong></code> can still set their own table with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-routes4-extended-table"><span class="std std-ref"><span class="pre">routes4_extended[].table</span></span></a></strong></code>.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">0</span></code> leaves the routing table unset. NetworkManager then uses the global default, which usually means the <code class="docutils literal notranslate"><span class="pre">main</span></code> table.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-route_table6"></div><p class="ansible-option-title" id="ansible-collections-community-general-nmcli-module-parameter-route-table6"><strong>route_table6</strong></p>
+<a class="ansibleOptionLink" href="#parameter-route_table6" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 14.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set the routing table used for IPv6 routes of this connection, including device routes, SLAAC, DHCPv6 and default routes.</p>
+<p>This enables policy routing for IPv6. Static routes in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-routes6-extended"><span class="std std-ref"><span class="pre">routes6_extended</span></span></a></strong></code> can still set their own table with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-routes6-extended-table"><span class="std std-ref"><span class="pre">routes6_extended[].table</span></span></a></strong></code>.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">0</span></code> leaves the routing table unset. NetworkManager then uses the global default, which usually means the <code class="docutils literal notranslate"><span class="pre">main</span></code> table.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-routes4"></div><p class="ansible-option-title" id="ansible-collections-community-general-nmcli-module-parameter-routes4"><strong>routes4</strong></p>
 <a class="ansibleOptionLink" href="#parameter-routes4" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 <p><em class="ansible-option-versionadded">added in community.general 2.0.0</em></p>
@@ -1245,7 +1267,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <a class="ansibleOptionLink" href="#parameter-routes4_extended/table" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The table to add this route to.</p>
-<p>The default depends on <code class="docutils literal notranslate"><span class="pre">ipv4.route-table</span></code>.</p>
+<p>If not set, the route goes to the table set with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-route-table4"><span class="std std-ref"><span class="pre">route_table4</span></span></a></strong></code>, or to the <code class="docutils literal notranslate"><span class="pre">main</span></code> table when that is not set either.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -1325,7 +1347,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <a class="ansibleOptionLink" href="#parameter-routes6_extended/table" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The table to add this route to.</p>
-<p>The default depends on <code class="docutils literal notranslate"><span class="pre">ipv6.route-table</span></code>.</p>
+<p>If not set, the route goes to the table set with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-nmcli-module-parameter-route-table6"><span class="std std-ref"><span class="pre">route_table6</span></span></a></strong></code>, or to the <code class="docutils literal notranslate"><span class="pre">main</span></code> table when that is not set either.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -2577,6 +2599,14 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2002:db8::cafe</span>
 <span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disable IPv6 and remove the existing IPv6 addresses</span>
+<span class="w">      </span><span class="nt">community.general.nmcli</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">conn_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-eth1</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ethernet</span>
+<span class="w">        </span><span class="nt">method6</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disabled</span>
+<span class="w">        </span><span class="nt">ip6</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add VxLan</span>
 <span class="w">      </span><span class="nt">community.general.nmcli</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vxlan</span>
@@ -2792,6 +2822,19 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 <span class="w">    </span><span class="nt">routing_rules4</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"priority</span><span class="nv"> </span><span class="s">0</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">192.168.1.50</span><span class="nv"> </span><span class="s">table</span><span class="nv"> </span><span class="s">200"</span>
 
+<span class="c1">## Putting all routes of a second interface, including its default route, into table 100</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use routing table 100 for eth1</span>
+<span class="w">  </span><span class="nt">community.general.nmcli</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ethernet</span>
+<span class="w">    </span><span class="nt">conn_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth1</span>
+<span class="w">    </span><span class="nt">ifname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eth1</span>
+<span class="w">    </span><span class="nt">ip4</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.10/24</span>
+<span class="w">    </span><span class="nt">gw4</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.1</span>
+<span class="w">    </span><span class="nt">route_table4</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">    </span><span class="nt">routing_rules4</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"priority</span><span class="nv"> </span><span class="s">100</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">192.168.2.10</span><span class="nv"> </span><span class="s">table</span><span class="nv"> </span><span class="s">100"</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
 <span class="c1">## Creating an OVS bridge and attaching a port</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create OVS Bridge</span>
 <span class="w">  </span><span class="nt">community.general.nmcli</span><span class="p">:</span>
@@ -2853,7 +2896,7 @@ see <a class="reference internal" href="#ansible-collections-community-general-n
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 02, 2026.
+      <span class="lastupdated">Last updated on Nov 03, 2026.
       </span></p>
   </div>
 
