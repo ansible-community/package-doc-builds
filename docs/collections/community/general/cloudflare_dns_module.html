@@ -184,6 +184,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../everpure/index.html">Collections in the Everpure Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
@@ -358,7 +359,7 @@
 <h1>community.general.cloudflare_dns module – Manage Cloudflare DNS records<a class="headerlink" href="#community-general-cloudflare-dns-module-manage-cloudflare-dns-records" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.5.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 13.5.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -370,8 +371,9 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
 <li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#attributes" id="id3">Attributes</a></p></li>
-<li><p><a class="reference internal" href="#examples" id="id4">Examples</a></p></li>
-<li><p><a class="reference internal" href="#return-values" id="id5">Return Values</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id6">Return Values</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
@@ -709,8 +711,18 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </tbody>
 </table>
 </section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The Cloudflare API matches the record content case-insensitively when looking up existing records. For <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-cloudflare-dns-module-parameter-type"><span class="std std-ref"><span class="pre">type=TXT</span></span></a></code>, a record whose value differs from <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-cloudflare-dns-module-parameter-value"><span class="std std-ref"><span class="pre">value</span></span></a></strong></code> only in letter case may be considered as already present, and left unchanged, unless <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-cloudflare-dns-module-parameter-solo"><span class="std std-ref"><span class="pre">solo=true</span></span></a></code>. With <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-cloudflare-dns-module-parameter-state"><span class="std std-ref"><span class="pre">state=absent</span></span></a></code>, such a record is deleted.</p></li>
+<li><p>Cloudflare stores <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-general-cloudflare-dns-module-parameter-type"><span class="std std-ref"><span class="pre">type=TXT</span></span></a></code> values longer than 255 characters split into several quoted strings. The module may not find an existing record with such a value, so it may fail or report a change on every run.</p></li>
+</ul>
+</div>
+</section>
 <section id="examples">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a test.example.net A record to point to 127.0.0.1</span>
 <span class="w">  </span><span class="nt">community.general.cloudflare_dns</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.net</span>
@@ -853,7 +865,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div>
 </section>
 <section id="return-values">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
 <p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
 <table class="longtable ansible-option-table docutils align-default" style="width: 100%">
 <thead>
@@ -1081,7 +1093,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 02, 2026.
+      <span class="lastupdated">Last updated on Nov 04, 2026.
       </span></p>
   </div>
 
