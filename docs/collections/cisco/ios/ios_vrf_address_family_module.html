@@ -339,7 +339,7 @@
 <h1>cisco.ios.ios_vrf_address_family module – Resource module to configure VRF definitions.<a class="headerlink" href="#cisco-ios-ios-vrf-address-family-module-resource-module-to-configure-vrf-definitions" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/ios/">cisco.ios collection</a> (version 11.6.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/cisco/ios/">cisco.ios collection</a> (version 11.7.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -3354,6 +3354,71 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1">#              map: "ran-map"</span>
 <span class="c1">#       safi: unicast</span>
 <span class="c1">#     name: test</span>
+
+<span class="c1"># Using a bare address-family entry alongside top-level route-targets</span>
+<span class="c1"># (Multiprotocol VRF Configuration with Common Policies)</span>
+<span class="c1">#</span>
+<span class="c1"># This pattern mirrors the Cisco IOS-XE "common policies" example from the</span>
+<span class="c1"># MPLS Layer 3 VPNs Configuration Guide: route-targets are defined at the VRF</span>
+<span class="c1"># level so they apply to all address families, and each address-family block</span>
+<span class="c1"># is declared without repeating the route-target policy.</span>
+<span class="c1">#</span>
+<span class="c1"># Reference: https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/</span>
+<span class="c1">#   configuration/xe-3s/mp-l3-vpns-xe-3s-book/mp-vpn-ipv4-ipv6.html</span>
+<span class="c1">#</span>
+<span class="c1"># The two tasks together produce:</span>
+<span class="c1">#</span>
+<span class="c1">#   vrf definition vrf2</span>
+<span class="c1">#    rd 2:2</span>
+<span class="c1">#    route-target export 2:2</span>
+<span class="c1">#    route-target import 2:2</span>
+<span class="c1">#    !</span>
+<span class="c1">#    address-family ipv4</span>
+<span class="c1">#    exit-address-family</span>
+<span class="c1">#    !</span>
+<span class="c1">#    address-family ipv6</span>
+<span class="c1">#    exit-address-family</span>
+<span class="c1">#   !</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create VRF with common top-level route-targets via ios_vrf_global</span>
+<span class="w">  </span><span class="nt">cisco.ios.ios_vrf_global</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">vrfs</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vrf2</span>
+<span class="w">          </span><span class="nt">rd</span><span class="p">:</span><span class="w"> </span><span class="s">"2:2"</span>
+<span class="w">          </span><span class="nt">route_target</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">exports</span><span class="p">:</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"2:2"</span>
+<span class="w">            </span><span class="nt">imports</span><span class="p">:</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"2:2"</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">merged</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Declare address-family blocks via ios_vrf_address_family</span>
+<span class="w">  </span><span class="nt">cisco.ios.ios_vrf_address_family</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vrf2</span>
+<span class="w">        </span><span class="nt">address_families</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">afi</span><span class="p">:</span><span class="w"> </span><span class="s">"ipv4"</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">afi</span><span class="p">:</span><span class="w"> </span><span class="s">"ipv6"</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">merged</span>
+
+<span class="c1"># Task Output (ios_vrf_address_family):</span>
+<span class="c1"># ------------</span>
+<span class="c1">#</span>
+<span class="c1"># before: []</span>
+<span class="c1">#</span>
+<span class="c1"># commands:</span>
+<span class="c1"># - vrf definition vrf2</span>
+<span class="c1"># - address-family ipv4</span>
+<span class="c1"># - address-family ipv6</span>
+<span class="c1">#</span>
+<span class="c1"># after:</span>
+<span class="c1"># - name: vrf2</span>
+<span class="c1">#   address_families:</span>
+<span class="c1">#     - afi: ipv4</span>
+<span class="c1">#       safi: unicast</span>
+<span class="c1">#     - afi: ipv6</span>
+<span class="c1">#       safi: unicast</span>
 </pre></div>
 </div>
 </section>
@@ -3453,7 +3518,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 12, 2026.
+      <span class="lastupdated">Last updated on Nov 13, 2026.
       </span></p>
   </div>
 
