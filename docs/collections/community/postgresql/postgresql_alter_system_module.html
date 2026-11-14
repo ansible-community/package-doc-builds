@@ -355,7 +355,7 @@
 <h1>community.postgresql.postgresql_alter_system module – Change a PostgreSQL server configuration parameter<a class="headerlink" href="#community-postgresql-postgresql-alter-system-module-change-a-postgresql-server-configuration-parameter" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/postgresql/">community.postgresql collection</a> (version 5.1.1).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/postgresql/">community.postgresql collection</a> (version 5.1.2).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -572,6 +572,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 <td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-partial">partial</strong></p>
 <p>The module is not idempotent when <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-postgresql-postgresql-alter-system-module-parameter-value"><span class="std std-ref"><span class="pre">value=_RESET</span></span></a></code> — it always runs <code class="docutils literal notranslate"><span class="pre">ALTER</span> <span class="pre">SYSTEM</span> <span class="pre">RESET</span></code> and reports changed=true.</p>
 <p>For all other values, the module compares the desired value against the current setting in <code class="docutils literal notranslate"><span class="pre">pg_catalog.pg_settings</span></code> and reports changed=false when they match.</p>
+<p>When the parameter waits for a restart (<code class="docutils literal notranslate"><span class="pre">pending_restart=true</span></code>), the module compares the desired value against the last entry in <code class="docutils literal notranslate"><span class="pre">pg_catalog.pg_file_settings</span></code> instead, because <code class="docutils literal notranslate"><span class="pre">pg_catalog.pg_settings</span></code> still shows the running value. If the session cannot read <code class="docutils literal notranslate"><span class="pre">pg_catalog.pg_file_settings</span></code>, the module uses the running value and can report changed=true until PostgreSQL is restarted.</p>
 </div></td>
 <td><div class="ansible-option-cell"><p>When run twice in a row outside check mode, with the same arguments, the second invocation indicates no change.</p>
 <p>This assumes that the system controlled/queried by the module has not changed in a relevant way.</p>
@@ -712,7 +713,7 @@ see <a class="reference internal" href="#ansible-collections-community-postgresq
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 13, 2026.
+      <span class="lastupdated">Last updated on Nov 14, 2026.
       </span></p>
   </div>
 
