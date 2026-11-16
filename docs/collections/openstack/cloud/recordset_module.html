@@ -332,7 +332,7 @@
 <h1>openstack.cloud.recordset module – Manage OpenStack DNS recordsets<a class="headerlink" href="#openstack-cloud-recordset-module-manage-openstack-dns-recordsets" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/openstack/cloud/">openstack.cloud collection</a> (version 2.6.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/openstack/cloud/">openstack.cloud collection</a> (version 2.7.0).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -456,6 +456,7 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rec
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the recordset. It must be ended with name of dns zone.</p>
+<p>A recordset is identified by <em>zone</em>, <em>name</em> and <em>recordset_type</em> because DNS allows several recordsets to share a name as long as their types differ.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -472,6 +473,7 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rec
 </div></td>
 <td><div class="ansible-option-cell"><p>Recordset type</p>
 <p>Required when <em>state=present</em>.</p>
+<p>Used to identify the recordset, together with <em>zone</em> and <em>name</em>. When <em>state=absent</em> and this option is omitted, the recordset is looked up by name only, which fails when its name carries more than one type, e.g. at the apex of a zone where SOA and NS recordsets share the name of the zone.</p>
 <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
 <ul class="simple">
 <li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code></p></li>
@@ -609,12 +611,25 @@ see <a class="reference internal" href="#ansible-collections-openstack-cloud-rec
 <span class="w">    </span><span class="nt">records</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'10.1.1.1'</span><span class="p p-Indicator">]</span>
 <span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7200</span>
 
-<span class="c1"># Delete recordset named "www.example.net."</span>
+<span class="c1"># Create a recordset at the apex of zone "example.net.", where the SOA and NS</span>
+<span class="c1"># recordsets created with the zone share its name</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">openstack.cloud.recordset</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cloud</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mycloud</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.net.</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.net.</span>
+<span class="w">    </span><span class="nt">recordset_type</span><span class="p">:</span><span class="w"> </span><span class="s">"a"</span>
+<span class="w">    </span><span class="nt">records</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'10.1.1.1'</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3600</span>
+
+<span class="c1"># Delete the "a" recordset named "www.example.net.", leaving recordsets of</span>
+<span class="c1"># other types with that name untouched</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">openstack.cloud.recordset</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">cloud</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mycloud</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 <span class="w">    </span><span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.net.</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">www.example.net.</span>
+<span class="w">    </span><span class="nt">recordset_type</span><span class="p">:</span><span class="w"> </span><span class="s">"a"</span>
 </pre></div>
 </div>
 </section>
