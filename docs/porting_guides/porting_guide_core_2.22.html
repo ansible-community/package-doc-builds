@@ -316,7 +316,7 @@ The complete list of porting guides can be found at <a class="reference internal
 <p>This release adds secret masking. Ansible now registers known secret values, such as decrypted vault content, <code class="docutils literal notranslate"><span class="pre">no_log</span></code> module options, and prompted passwords, and replaces them with <code class="docutils literal notranslate"><span class="pre">$REDACTED$</span></code> wherever it writes output.
 The values themselves are unchanged, so playbooks keep working with the real data and only the rendered output is masked.</p>
 <p>Most playbooks need no changes. Content that inspected the <code class="docutils literal notranslate"><span class="pre">VALUE_SPECIFIED_IN_NO_LOG_PARAMETER</span></code> placeholder, and modules or plugins that stripped secrets from results by hand, should be reviewed.
-Authors of custom callback plugins should update them to declare support for masking, as described in <a class="reference internal" href="#callback-plugins"><span class="std std-ref">Callback plugins</span></a>.</p>
+Authors of custom callback plugins should update them to declare support for masking, as described in <a class="reference internal" href="porting_guide_15.html#callback-plugins"><span class="std std-ref">Callback plugins</span></a>.</p>
 <p>We recommend you test your playbooks, callback plugins, and any tooling that consumes Ansible output in a staging environment with this release.
 See <a class="reference internal" href="../playbook_guide/playbooks_secret_masking.html#playbooks-secret-masking"><span class="std std-ref">Masking secrets in Ansible output</span></a> for the user guide and <a class="reference internal" href="../dev_guide/developing_secret_masking.html#developing-secret-masking"><span class="std std-ref">Handling secrets in modules and plugins</span></a> for the developer guide.</p>
 </section>
@@ -499,7 +499,7 @@ Modules that pass a secret on the command line or embed one in a URL, where that
 <li><p>Vault-encrypted files loaded as variables are parsed and each value is registered individually, so values inside them are masked wherever they appear on their own.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">pause</span></code> action registers user input as a secret when <code class="docutils literal notranslate"><span class="pre">echo:</span> <span class="pre">false</span></code> is set.</p></li>
 <li><p>Connection plugin authors should audit any code that displays the raw standard output or standard error of a module invocation. Secrets that a module registers during its run are returned in the raw JSON result and are not masked until the controller processes it. The connection plugins shipped with <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> only display raw module output when <code class="docutils literal notranslate"><span class="pre">ANSIBLE_DEBUG</span></code> is enabled.</p></li>
-<li><p>Callback plugins receive task results with registered secrets already masked. The <code class="docutils literal notranslate"><span class="pre">junit</span></code> and <code class="docutils literal notranslate"><span class="pre">tree</span></code> callbacks pass everything they write to a file through <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> so that task and play names and other data not taken from the result are masked as well. See <a class="reference internal" href="#callback-plugins"><span class="std std-ref">Callback plugins</span></a>.</p></li>
+<li><p>Callback plugins receive task results with registered secrets already masked. The <code class="docutils literal notranslate"><span class="pre">junit</span></code> and <code class="docutils literal notranslate"><span class="pre">tree</span></code> callbacks pass everything they write to a file through <code class="docutils literal notranslate"><span class="pre">mask_secrets()</span></code> so that task and play names and other data not taken from the result are masked as well. See <a class="reference internal" href="porting_guide_15.html#callback-plugins"><span class="std std-ref">Callback plugins</span></a>.</p></li>
 </ul>
 </section>
 </section>
@@ -526,7 +526,7 @@ Only enable this option while debugging and treat the resulting log as sensitive
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 17, 2026.
+      <span class="lastupdated">Last updated on Nov 18, 2026.
       </span></p>
   </div>
 
