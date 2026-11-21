@@ -150,6 +150,12 @@
 <li class="toctree-l1"><a class="reference internal" href="tower.html">Red Hat Ansible Automation Platform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="automationhub.html">Ansible Automation Hub</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Logging Ansible output</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#color-output">Color output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#named-colors">Named colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#color-formats">256-color formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#terminal-compatibility">Terminal compatibility</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#protecting-sensitive-data-with-no-log">Protecting sensitive data with <code class="docutils literal notranslate"><span class="pre">no_log</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#masking-registered-secrets">Masking registered secrets</a></li>
 </ul>
@@ -269,6 +275,72 @@
 <li><p>To save Ansible output in separate logs, one on each managed node, set the <code class="docutils literal notranslate"><span class="pre">no_target_syslog</span></code> and <code class="docutils literal notranslate"><span class="pre">syslog_facility</span></code> <a class="reference internal" href="../installation_guide/intro_configuration.html#intro-configuration"><span class="std std-ref">configuration file settings</span></a>.</p></li>
 <li><p>To save Ansible output to a secure database, use AWX or <a class="reference internal" href="tower.html#ansible-platform"><span class="std std-ref">Red Hat Ansible Automation Platform</span></a>. You can then review history based on hosts, projects, and particular inventories over time, using graphs and/or a REST API.</p></li>
 </ul>
+<section id="color-output">
+<h2>Color output<a class="headerlink" href="#color-output" title="Link to this heading"></a></h2>
+<p>Ansible uses ANSI escape sequences to colorize command-line output. You can customize colors through the color-related configuration settings.</p>
+<section id="named-colors">
+<h3>Named colors<a class="headerlink" href="#named-colors" title="Link to this heading"></a></h3>
+<p>You can configure colors in <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code>:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[colors]</span>
+<span class="na">changed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">bright green</span>
+</pre></div>
+</div>
+<p>Alternatively, use the corresponding environment variable:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ANSIBLE_COLOR_CHANGED</span><span class="o">=</span><span class="s2">"bright green"</span>
+</pre></div>
+</div>
+<p>Ansible supports these predefined color names:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">black</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">gray</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blue</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">white</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">green</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">blue</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cyan</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">green</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">red</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">cyan</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">purple</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">red</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yellow</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">purple</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dark</span> <span class="pre">gray</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">yellow</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">magenta</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">magenta</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normal</span></code></p></li>
+</ul>
+<p>Some names produce the same ANSI color code:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">purple</span></code> and <code class="docutils literal notranslate"><span class="pre">magenta</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">purple</span></code> and <code class="docutils literal notranslate"><span class="pre">bright</span> <span class="pre">magenta</span></code></p></li>
+</ul>
+</section>
+<section id="color-formats">
+<h3>256-color formats<a class="headerlink" href="#color-formats" title="Link to this heading"></a></h3>
+<p>Ansible also supports the following formats:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">colorNNN</span></code> specifies a color using a 256-color palette index. For example, <code class="docutils literal notranslate"><span class="pre">color196</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rgbXYZ</span></code> specifies a color using the RGB color cube. Each digit must be between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">5</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">rgb500</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grayNN</span></code> specifies a grayscale color. For example, <code class="docutils literal notranslate"><span class="pre">gray10</span></code>.</p></li>
+</ul>
+<p>Examples:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rgb000</span></code> maps to palette index <code class="docutils literal notranslate"><span class="pre">16</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rgb555</span></code> maps to palette index <code class="docutils literal notranslate"><span class="pre">231</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">color196</span></code> and <code class="docutils literal notranslate"><span class="pre">rgb500</span></code> refer to the same palette index.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">color231</span></code> and <code class="docutils literal notranslate"><span class="pre">rgb555</span></code> refer to the same palette index.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gray0</span></code> maps to palette index <code class="docutils literal notranslate"><span class="pre">232</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gray23</span></code> maps to palette index <code class="docutils literal notranslate"><span class="pre">255</span></code>.</p></li>
+</ul>
+<p>The parser does not explicitly validate the numeric ranges for <code class="docutils literal notranslate"><span class="pre">colorNNN</span></code> or <code class="docutils literal notranslate"><span class="pre">grayNN</span></code>. Use conventional palette indices from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">255</span></code> and grayscale values from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">23</span></code>.</p>
+</section>
+<section id="terminal-compatibility">
+<h3>Terminal compatibility<a class="headerlink" href="#terminal-compatibility" title="Link to this heading"></a></h3>
+<p>Color rendering depends on terminal emulator support for ANSI color sequences. The appearance of colors can vary between terminal implementations.</p>
+</section>
+</section>
 <section id="protecting-sensitive-data-with-no-log">
 <h2>Protecting sensitive data with <code class="docutils literal notranslate"><span class="pre">no_log</span></code><a class="headerlink" href="#protecting-sensitive-data-with-no-log" title="Link to this heading"></a></h2>
 <p>If you save Ansible output to a log, you expose any secret data in your Ansible output, such as passwords and usernames. To keep sensitive values out of your logs, mark tasks that expose them with the <code class="docutils literal notranslate"><span class="pre">no_log:</span> <span class="pre">True</span></code> attribute. However, the <code class="docutils literal notranslate"><span class="pre">no_log</span></code> attribute does not affect debugging output, so be careful not to debug playbooks in a production environment. See <a class="reference internal" href="faq.html#keep-secret-data"><span class="std std-ref">How do I keep secret data in my playbook?</span></a> for an example.</p>
@@ -293,7 +365,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Nov 20, 2026.
+      <span class="lastupdated">Last updated on Nov 21, 2026.
       </span></p>
   </div>
 
