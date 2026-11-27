@@ -3,8 +3,8 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<meta content="2.23.0" name="antsibull-docs" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="2.29.2" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.docker.docker_swarm_service module – docker swarm service &mdash; Ansible Community Documentation</title>
@@ -20,8 +20,8 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -181,6 +181,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../everpure/index.html">Collections in the Everpure Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
@@ -355,7 +356,7 @@
 <h1>community.docker.docker_swarm_service module – docker swarm service<a class="headerlink" href="#community-docker-docker-swarm-service-module-docker-swarm-service" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/docker/">community.docker collection</a> (version 5.2.2).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/docker/">community.docker collection</a> (version 5.4.1).</p>
 <p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
 It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
@@ -418,6 +419,8 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </div></td>
 <td><div class="ansible-option-cell"><p>List arguments to be passed to the container.</p>
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">ARG</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
+<p>When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command-as-args"><span class="std std-ref"><span class="pre">command_as_args=true</span></span></a></code>, these values are appended after <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command"><span class="std std-ref"><span class="pre">command</span></span></a></strong></code> and both are sent as ContainerSpec.Args (matching the Docker CLI).</p>
+<p>When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command-as-args"><span class="std std-ref"><span class="pre">command_as_args=false</span></span></a></code>, <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-args"><span class="std std-ref"><span class="pre">args</span></span></a></strong></code> is sent as <code class="docutils literal notranslate"><span class="pre">ContainerSpec.Args</span></code> while <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command"><span class="std std-ref"><span class="pre">command</span></span></a></strong></code> is sent as ContainerSpec.Command.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -480,9 +483,27 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <td><div class="ansible-option-cell"><p>Command to execute when the container starts.</p>
 <p>A command may be either a string or a list or a list of strings.</p>
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
+<p>When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command-as-args"><span class="std std-ref"><span class="pre">command_as_args=false</span></span></a></code>, this is sent as <code class="docutils literal notranslate"><span class="pre">ContainerSpec.Command</span></code>, which replaces the image <code class="docutils literal notranslate"><span class="pre">ENTRYPOINT</span></code>. This is the historical module behavior.</p>
+<p>When <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command-as-args"><span class="std std-ref"><span class="pre">command_as_args=true</span></span></a></code>, this is combined with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-args"><span class="std std-ref"><span class="pre">args</span></span></a></strong></code> and sent as <code class="docutils literal notranslate"><span class="pre">ContainerSpec.Args</span></code> (same as the Docker CLI <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span> <span class="pre">IMAGE</span> <span class="pre">[COMMAND]</span> <span class="pre">[ARG...]</span></code>), so the image <code class="docutils literal notranslate"><span class="pre">ENTRYPOINT</span></code> is preserved. Use this for flag-style commands (for example <code class="ansible-value docutils literal notranslate"><span class="pre">--config.file=...</span></code>) that must be passed as arguments to the image entrypoint (see <a class="reference external" href="https://github.com/ansible-collections/community.docker/issues/1044">https://github.com/ansible-collections/community.docker/issues/1044</a>).</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-command_as_args"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-command-as-args"><strong>command_as_args</strong></p>
+<a class="ansibleOptionLink" href="#parameter-command_as_args" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.docker 5.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Controls how <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command"><span class="std std-ref"><span class="pre">command</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-args"><span class="std std-ref"><span class="pre">args</span></span></a></strong></code> are mapped to the service <code class="docutils literal notranslate"><span class="pre">ContainerSpec</span></code>.</p>
+<p>If <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code> (default), <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command"><span class="std std-ref"><span class="pre">command</span></span></a></strong></code> is written to <code class="docutils literal notranslate"><span class="pre">ContainerSpec.Command</span></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-args"><span class="std std-ref"><span class="pre">args</span></span></a></strong></code> to <code class="docutils literal notranslate"><span class="pre">ContainerSpec.Args</span></code>. This matches the historical module behavior (ContainerSpec.Command replaces the image <code class="docutils literal notranslate"><span class="pre">ENTRYPOINT</span></code>).</p>
+<p>If <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code>, <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-command"><span class="std std-ref"><span class="pre">command</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-args"><span class="std std-ref"><span class="pre">args</span></span></a></strong></code> are concatenated and written only to <code class="docutils literal notranslate"><span class="pre">ContainerSpec.Args</span></code>, matching <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span> <span class="pre">IMAGE</span> <span class="pre">[COMMAND]</span> <span class="pre">[ARG...]</span></code> so the image <code class="docutils literal notranslate"><span class="pre">ENTRYPOINT</span></code> is preserved.</p>
+<p>The current default will eventually be depreacted and change to <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-configs"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-configs"><strong>configs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-configs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -491,49 +512,49 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.30.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-configs/config_id"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-configs-config-id"><strong>config_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-configs/config_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Config’s ID.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-configs/config_name"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-configs-config-name"><strong>config_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-configs/config_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Config’s name as defined at its creation.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-configs/filename"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-configs-filename"><strong>filename</strong></p>
 <a class="ansibleOptionLink" href="#parameter-configs/filename" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the file containing the config. Defaults to the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-configs-config-name"><span class="std std-ref"><span class="pre">configs[].config_name</span></span></a></strong></code> if not specified.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-configs/gid"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-configs-gid"><strong>gid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-configs/gid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>GID of the config file’s group.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-configs/mode"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-configs-mode"><strong>mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-configs/mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>File access mode inside the container. Must be an octal number (like <code class="ansible-value docutils literal notranslate"><span class="pre">0644</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">0444</span></code>).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-configs/uid"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-configs-uid"><strong>uid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-configs/uid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>UID of the config file’s owner.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-container_labels"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-container-labels"><strong>container_labels</strong></p>
 <a class="ansibleOptionLink" href="#parameter-container_labels" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -541,7 +562,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--container-label</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-debug"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-debug"><strong>debug</strong></p>
 <a class="ansibleOptionLink" href="#parameter-debug" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -553,7 +574,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dns"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-dns"><strong>dns</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dns" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -561,7 +582,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--dns</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dns_options"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-dns-options"><strong>dns_options</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dns_options" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -569,7 +590,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--dns-option</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dns_search"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-dns-search"><strong>dns_search</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dns_search" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -577,7 +598,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--dns-search</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-docker_host"></div>
 <div class="ansibleOptionAnchor" id="parameter-docker_url"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-docker-url"><span id="ansible-collections-community-docker-docker-swarm-service-module-parameter-docker-host"></span><strong>docker_host</strong></p>
 <a class="ansibleOptionLink" href="#parameter-docker_host" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: docker_url</span></p>
@@ -588,7 +609,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;unix:///var/run/docker.sock&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-endpoint_mode"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-endpoint-mode"><strong>endpoint_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-endpoint_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -601,7 +622,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-env"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-env"><strong>env</strong></p>
 <a class="ansibleOptionLink" href="#parameter-env" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
 </div></td>
@@ -611,7 +632,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--env</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-env_files"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-env-files"><strong>env_files</strong></p>
 <a class="ansibleOptionLink" href="#parameter-env_files" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=path</span></p>
 </div></td>
@@ -620,7 +641,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>If variable also present in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-env"><span class="std std-ref"><span class="pre">env</span></span></a></strong></code>, then <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-env"><span class="std std-ref"><span class="pre">env</span></span></a></strong></code> value will override.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-force_update"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-force-update"><strong>force_update</strong></p>
 <a class="ansibleOptionLink" href="#parameter-force_update" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -633,7 +654,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-groups"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-groups"><strong>groups</strong></p>
 <a class="ansibleOptionLink" href="#parameter-groups" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -641,7 +662,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--group</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">update</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-healthcheck"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck"><strong>healthcheck</strong></p>
 <a class="ansibleOptionLink" href="#parameter-healthcheck" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -649,28 +670,28 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p><code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck-interval"><span class="std std-ref"><span class="pre">healthcheck.interval</span></span></a></strong></code>, <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck-timeout"><span class="std std-ref"><span class="pre">healthcheck.timeout</span></span></a></strong></code>, and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck-start-period"><span class="std std-ref"><span class="pre">healthcheck.start_period</span></span></a></strong></code> are specified as durations. They accept duration as a string in a format that look like: <code class="ansible-value docutils literal notranslate"><span class="pre">5h34m56s</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">1m30s</span></code>, and so on. The supported units are <code class="ansible-value docutils literal notranslate"><span class="pre">us</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">ms</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">s</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">m</span></code> and <code class="ansible-value docutils literal notranslate"><span class="pre">h</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-healthcheck/interval"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck-interval"><strong>interval</strong></p>
 <a class="ansibleOptionLink" href="#parameter-healthcheck/interval" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Time between running the check.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-healthcheck/retries"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck-retries"><strong>retries</strong></p>
 <a class="ansibleOptionLink" href="#parameter-healthcheck/retries" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Consecutive failures needed to report unhealthy. It accept integer value.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-healthcheck/start_period"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck-start-period"><strong>start_period</strong></p>
 <a class="ansibleOptionLink" href="#parameter-healthcheck/start_period" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Start period for the container to initialize before starting health-retries countdown.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-healthcheck/test"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck-test"><strong>test</strong></p>
 <a class="ansibleOptionLink" href="#parameter-healthcheck/test" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">any</span></p>
 </div></td>
@@ -678,14 +699,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Must be either a string or a list. If it is a list, the first item must be one of <code class="ansible-value docutils literal notranslate"><span class="pre">NONE</span></code>, <code class="ansible-value docutils literal notranslate"><span class="pre">CMD</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">CMD-SHELL</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-healthcheck/timeout"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-healthcheck-timeout"><strong>timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-healthcheck/timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Maximum time to allow one check to run.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-hostname"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-hostname"><strong>hostname</strong></p>
 <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -693,7 +714,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--hostname</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-hosts"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-hosts"><strong>hosts</strong></p>
 <a class="ansibleOptionLink" href="#parameter-hosts" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -701,7 +722,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--host</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-image"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-image"><strong>image</strong></p>
 <a class="ansibleOptionLink" href="#parameter-image" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -709,7 +730,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">IMAGE</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-init"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-init"><strong>init</strong></p>
 <a class="ansibleOptionLink" href="#parameter-init" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -723,7 +744,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-labels"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-labels"><strong>labels</strong></p>
 <a class="ansibleOptionLink" href="#parameter-labels" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -731,14 +752,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--label</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-limits"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-limits"><strong>limits</strong></p>
 <a class="ansibleOptionLink" href="#parameter-limits" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Configures service resource limits.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-limits/cpus"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-limits-cpus"><strong>cpus</strong></p>
 <a class="ansibleOptionLink" href="#parameter-limits/cpus" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">float</span></p>
 </div></td>
@@ -746,7 +767,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--limit-cpu</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-limits/memory"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-limits-memory"><strong>memory</strong></p>
 <a class="ansibleOptionLink" href="#parameter-limits/memory" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -756,14 +777,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--limit-memory</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-logging"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-logging"><strong>logging</strong></p>
 <a class="ansibleOptionLink" href="#parameter-logging" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Logging configuration for the service.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-logging/driver"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-logging-driver"><strong>driver</strong></p>
 <a class="ansibleOptionLink" href="#parameter-logging/driver" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -771,7 +792,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--log-driver</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-logging/options"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-logging-options"><strong>options</strong></p>
 <a class="ansibleOptionLink" href="#parameter-logging/options" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -779,7 +800,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--log-opt</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mode"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mode"><strong>mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -795,7 +816,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts"><strong>mounts</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -803,7 +824,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--mount</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/driver_config"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-driver-config"><strong>driver_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/driver_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
@@ -811,28 +832,28 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Can only be used when <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-type"><span class="std std-ref"><span class="pre">mounts[].type=volume</span></span></a></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/driver_config/name"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-driver-config-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/driver_config/name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Name of the volume-driver plugin to use for the volume.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/driver_config/options"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-driver-config-options"><strong>options</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/driver_config/options" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Options as key-value pairs to pass to the driver for this volume.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/labels"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-labels"><strong>labels</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/labels" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Volume labels to apply.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/no_copy"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-no-copy"><strong>no_copy</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/no_copy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -845,7 +866,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/propagation"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-propagation"><strong>propagation</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/propagation" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -862,7 +883,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/readonly"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-readonly"><strong>readonly</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/readonly" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -874,7 +895,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/source"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-source"><strong>source</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/source" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -882,14 +903,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Must be specified if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-type"><span class="std std-ref"><span class="pre">mounts[].type</span></span></a></strong></code> is not <code class="ansible-value docutils literal notranslate"><span class="pre">tmpfs</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/target"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-target"><strong>target</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/target" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Container path.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/tmpfs_mode"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-tmpfs-mode"><strong>tmpfs_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/tmpfs_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -897,7 +918,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Can only be used when <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-type"><span class="std std-ref"><span class="pre">mounts[].type=tmpfs</span></span></a></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/tmpfs_size"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-tmpfs-size"><strong>tmpfs_size</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/tmpfs_size" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -905,7 +926,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Can only be used when <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-type"><span class="std std-ref"><span class="pre">mounts[].type=tmpfs</span></span></a></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-mounts/type"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-mounts-type"><strong>type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-mounts/type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -920,7 +941,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -928,7 +949,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--name</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-networks"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-networks"><strong>networks</strong></p>
 <a class="ansibleOptionLink" href="#parameter-networks" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=any</span></p>
 </div></td>
@@ -938,14 +959,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--network</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-placement"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-placement"><strong>placement</strong></p>
 <a class="ansibleOptionLink" href="#parameter-placement" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Configures service placement preferences and constraints.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-placement/constraints"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-placement-constraints"><strong>constraints</strong></p>
 <a class="ansibleOptionLink" href="#parameter-placement/constraints" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
@@ -953,7 +974,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--constraint</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-placement/preferences"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-placement-preferences"><strong>preferences</strong></p>
 <a class="ansibleOptionLink" href="#parameter-placement/preferences" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -962,7 +983,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.27.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-placement/replicas_max_per_node"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-placement-replicas-max-per-node"><strong>replicas_max_per_node</strong></p>
 <a class="ansibleOptionLink" href="#parameter-placement/replicas_max_per_node" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><em class="ansible-option-versionadded">added in community.docker 1.3.0</em></p>
@@ -972,7 +993,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.40.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-publish"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-publish"><strong>publish</strong></p>
 <a class="ansibleOptionLink" href="#parameter-publish" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -980,7 +1001,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--publish</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-publish/mode"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-publish-mode"><strong>mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-publish/mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -993,7 +1014,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-publish/protocol"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-publish-protocol"><strong>protocol</strong></p>
 <a class="ansibleOptionLink" href="#parameter-publish/protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1005,21 +1026,21 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-publish/published_port"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-publish-published-port"><strong>published_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-publish/published_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The port to make externally available.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-publish/target_port"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-publish-target-port"><strong>target_port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-publish/target_port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The port inside the container to expose.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-read_only"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-read-only"><strong>read_only</strong></p>
 <a class="ansibleOptionLink" href="#parameter-read_only" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1032,7 +1053,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-replicas"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-replicas"><strong>replicas</strong></p>
 <a class="ansibleOptionLink" href="#parameter-replicas" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -1043,14 +1064,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">-1</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reservations"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-reservations"><strong>reservations</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reservations" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Configures service resource reservations.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reservations/cpus"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-reservations-cpus"><strong>cpus</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reservations/cpus" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">float</span></p>
 </div></td>
@@ -1058,7 +1079,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--reserve-cpu</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-reservations/memory"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-reservations-memory"><strong>memory</strong></p>
 <a class="ansibleOptionLink" href="#parameter-reservations/memory" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1068,7 +1089,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--reserve-memory</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-resolve_image"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-resolve-image"><strong>resolve_image</strong></p>
 <a class="ansibleOptionLink" href="#parameter-resolve_image" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1081,14 +1102,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-restart_config"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-restart-config"><strong>restart_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-restart_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Configures if and how to restart containers when they exit.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-restart_config/condition"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-restart-config-condition"><strong>condition</strong></p>
 <a class="ansibleOptionLink" href="#parameter-restart_config/condition" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1102,7 +1123,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-restart_config/delay"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-restart-config-delay"><strong>delay</strong></p>
 <a class="ansibleOptionLink" href="#parameter-restart_config/delay" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1111,7 +1132,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--restart-delay</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-restart_config/max_attempts"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-restart-config-max-attempts"><strong>max_attempts</strong></p>
 <a class="ansibleOptionLink" href="#parameter-restart_config/max_attempts" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -1119,7 +1140,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--restart-condition</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-restart_config/window"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-restart-config-window"><strong>window</strong></p>
 <a class="ansibleOptionLink" href="#parameter-restart_config/window" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1128,14 +1149,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--restart-window</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rollback_config"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-rollback-config"><strong>rollback_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rollback_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Configures how the service should be rolled back in case of a failing update.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rollback_config/delay"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-rollback-config-delay"><strong>delay</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rollback_config/delay" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1145,7 +1166,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.28.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rollback_config/failure_action"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-rollback-config-failure-action"><strong>failure_action</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rollback_config/failure_action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1159,7 +1180,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rollback_config/max_failure_ratio"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-rollback-config-max-failure-ratio"><strong>max_failure_ratio</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rollback_config/max_failure_ratio" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">float</span></p>
 </div></td>
@@ -1168,7 +1189,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.28.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rollback_config/monitor"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-rollback-config-monitor"><strong>monitor</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rollback_config/monitor" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1178,7 +1199,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.28.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rollback_config/order"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-rollback-config-order"><strong>order</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rollback_config/order" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1187,7 +1208,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.29.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-rollback_config/parallelism"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-rollback-config-parallelism"><strong>parallelism</strong></p>
 <a class="ansibleOptionLink" href="#parameter-rollback_config/parallelism" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -1196,7 +1217,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.28.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secrets"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-secrets"><strong>secrets</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secrets" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
@@ -1204,7 +1225,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--secret</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secrets/filename"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-secrets-filename"><strong>filename</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secrets/filename" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1212,42 +1233,42 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">target</span></code> key of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span> <span class="pre">--secret</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secrets/gid"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-secrets-gid"><strong>gid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secrets/gid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>GID of the secret file’s group.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secrets/mode"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-secrets-mode"><strong>mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secrets/mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>File access mode inside the container. Must be an octal number (like <code class="ansible-value docutils literal notranslate"><span class="pre">0644</span></code> or <code class="ansible-value docutils literal notranslate"><span class="pre">0444</span></code>).</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secrets/secret_id"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-secrets-secret-id"><strong>secret_id</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secrets/secret_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Secret’s ID.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secrets/secret_name"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-secrets-secret-name"><strong>secret_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secrets/secret_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Secret’s name as defined at its creation.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-secrets/uid"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-secrets-uid"><strong>uid</strong></p>
 <a class="ansibleOptionLink" href="#parameter-secrets/uid" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>UID of the secret file’s owner.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1260,7 +1281,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-stop_grace_period"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-stop-grace-period"><strong>stop_grace_period</strong></p>
 <a class="ansibleOptionLink" href="#parameter-stop_grace_period" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1269,7 +1290,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--stop-grace-period</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-stop_signal"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-stop-signal"><strong>stop_signal</strong></p>
 <a class="ansibleOptionLink" href="#parameter-stop_signal" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1277,7 +1298,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--stop-signal</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-sysctls"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-sysctls"><strong>sysctls</strong></p>
 <a class="ansibleOptionLink" href="#parameter-sysctls" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 <p><em class="ansible-option-versionadded">added in community.docker 3.10.0</em></p>
@@ -1285,7 +1306,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <td><div class="ansible-option-cell"><p>Dictionary of key, value pairs.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-timeout"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-timeout"><strong>timeout</strong></p>
 <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -1294,7 +1315,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">60</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-tls"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-tls"><strong>tls</strong></p>
 <a class="ansibleOptionLink" href="#parameter-tls" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1307,7 +1328,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-tls_hostname"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-tls-hostname"><strong>tls_hostname</strong></p>
 <a class="ansibleOptionLink" href="#parameter-tls_hostname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1317,7 +1338,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p><strong>Note:</strong> this option is no longer supported for Docker SDK for Python 7.0.0+. Specifying it with Docker SDK for Python 7.0.0 or newer will lead to an error.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-tty"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-tty"><strong>tty</strong></p>
 <a class="ansibleOptionLink" href="#parameter-tty" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -1330,14 +1351,14 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_config"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-update-config"><strong>update_config</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_config" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Configures how the service should be updated. Useful for configuring rolling updates.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_config/delay"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-update-config-delay"><strong>delay</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_config/delay" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1346,7 +1367,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--update-delay</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_config/failure_action"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-update-config-failure-action"><strong>failure_action</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_config/failure_action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1361,7 +1382,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_config/max_failure_ratio"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-update-config-max-failure-ratio"><strong>max_failure_ratio</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_config/max_failure_ratio" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">float</span></p>
 </div></td>
@@ -1369,7 +1390,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--update-max-failure-ratio</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_config/monitor"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-update-config-monitor"><strong>monitor</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_config/monitor" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1378,7 +1399,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--update-monitor</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_config/order"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-update-config-order"><strong>order</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_config/order" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1387,7 +1408,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Requires API version &gt;= 1.29.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-update_config/parallelism"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-update-config-parallelism"><strong>parallelism</strong></p>
 <a class="ansibleOptionLink" href="#parameter-update_config/parallelism" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -1395,7 +1416,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--update-parallelism</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-use_ssh_client"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-use-ssh-client"><strong>use_ssh_client</strong></p>
 <a class="ansibleOptionLink" href="#parameter-use_ssh_client" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in community.docker 1.5.0</em></p>
@@ -1409,7 +1430,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-user"><strong>user</strong></p>
 <a class="ansibleOptionLink" href="#parameter-user" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1419,7 +1440,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">--user</span></code> option of <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">service</span> <span class="pre">create</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
 <div class="ansibleOptionAnchor" id="parameter-tls_verify"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-validate-certs"><span id="ansible-collections-community-docker-docker-swarm-service-module-parameter-tls-verify"></span><strong>validate_certs</strong></p>
 <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: tls_verify</span></p>
@@ -1434,7 +1455,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-working_dir"></div><p class="ansible-option-title" id="ansible-collections-community-docker-docker-swarm-service-module-parameter-working-dir"><strong>working_dir</strong></p>
 <a class="ansibleOptionLink" href="#parameter-working_dir" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -1507,13 +1528,21 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <section id="examples">
 <h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set command and arguments</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set command and arguments (historical mapping)</span>
 <span class="w">  </span><span class="nt">community.docker.docker_swarm_service</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myservice</span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpine</span>
 <span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sleep</span>
 <span class="w">    </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;3600&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"3600"</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pass flags to the image ENTRYPOINT (CLI-compatible mapping)</span>
+<span class="w">  </span><span class="nt">community.docker.docker_swarm_service</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loki</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/loki:main</span>
+<span class="w">    </span><span class="nt">command_as_args</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'-config.file=/etc/loki/loki-config.yaml'</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set a bind mount</span>
 <span class="w">  </span><span class="nt">community.docker.docker_swarm_service</span><span class="p">:</span>
@@ -1529,8 +1558,8 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myservice</span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpine</span>
 <span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">com.example.description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Accounting</span><span class="nv"> </span><span class="s">webapp&quot;</span>
-<span class="w">      </span><span class="nt">com.example.department</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Finance&quot;</span>
+<span class="w">      </span><span class="nt">com.example.description</span><span class="p">:</span><span class="w"> </span><span class="s">"Accounting</span><span class="nv"> </span><span class="s">webapp"</span>
+<span class="w">      </span><span class="nt">com.example.department</span><span class="p">:</span><span class="w"> </span><span class="s">"Finance"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set environment variables</span>
 <span class="w">  </span><span class="nt">community.docker.docker_swarm_service</span><span class="p">:</span>
@@ -1550,8 +1579,8 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <span class="w">    </span><span class="nt">logging</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fluentd</span>
 <span class="w">      </span><span class="nt">options</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">fluentd-address</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;127.0.0.1:24224&quot;</span>
-<span class="w">        </span><span class="nt">fluentd-async-connect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">        </span><span class="nt">fluentd-address</span><span class="p">:</span><span class="w"> </span><span class="s">"127.0.0.1:24224"</span>
+<span class="w">        </span><span class="nt">fluentd-async-connect</span><span class="p">:</span><span class="w"> </span><span class="s">"true"</span>
 <span class="w">        </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myservice</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set restart policies</span>
@@ -1602,7 +1631,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpine:edge</span>
 <span class="w">    </span><span class="nt">configs</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">config_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myconfig_name</span>
-<span class="w">        </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/tmp/config.txt&quot;</span>
+<span class="w">        </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="s">"/tmp/config.txt"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set networks</span>
 <span class="w">  </span><span class="nt">community.docker.docker_swarm_service</span><span class="p">:</span>
@@ -1616,9 +1645,9 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myservice</span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpine:edge</span>
 <span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mynetwork&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"mynetwork"</span>
 <span class="w">        </span><span class="nt">aliases</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;mynetwork_alias&quot;</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"mynetwork_alias"</span>
 <span class="w">        </span><span class="nt">options</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">foo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bar</span>
 
@@ -1628,16 +1657,16 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpine:edge</span>
 <span class="w">    </span><span class="nt">secrets</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">secret_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysecret_name</span>
-<span class="w">        </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/run/secrets/secret.txt&quot;</span>
+<span class="w">        </span><span class="nt">filename</span><span class="p">:</span><span class="w"> </span><span class="s">"/run/secrets/secret.txt"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Start service with healthcheck</span>
 <span class="w">  </span><span class="nt">community.docker.docker_swarm_service</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myservice</span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:1.13</span>
 <span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
-<span class="w">      </span><span class="c1"># Check if nginx server is healthy by curl&#39;ing the server.</span>
+<span class="w">      </span><span class="c1"># Check if nginx server is healthy by curl'ing the server.</span>
 <span class="w">      </span><span class="c1"># If this fails or timeouts, the healthcheck fails.</span>
-<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;CMD&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;curl&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;--fail&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;http://nginx.host.com&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"CMD"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"curl"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"--fail"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"http://nginx.host.com"</span><span class="p p-Indicator">]</span>
 <span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m30s</span>
 <span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
 <span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
@@ -1741,7 +1770,7 @@ see <a class="reference internal" href="#ansible-collections-community-docker-do
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 21, 2026.
+      <span class="lastupdated">Last updated on Nov 27, 2026.
       </span></p>
   </div>
 

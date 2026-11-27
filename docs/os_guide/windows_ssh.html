@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Windows SSH &mdash; Ansible Community Documentation</title>
@@ -19,15 +19,15 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using Ansible and Windows" href="windows_usage.html" />
-    <link rel="prev" title="Windows performance" href="windows_performance.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="PowerShell 7 Support" href="windows_pwsh.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -105,6 +105,8 @@
 <li class="toctree-l3"><a class="reference internal" href="windows_app_control.html">Windows App Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="windows_dsc.html">Desired State Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="windows_performance.html">Windows performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_pwsh.html">PowerShell 7 Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windows_pwsh.html#see-also">See Also</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Windows SSH</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#ssh-setup">SSH Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#ansible-configuration">Ansible Configuration</a></li>
@@ -318,22 +320,22 @@
 <span class="nb">Set-Service</span> <span class="n">-Name</span> <span class="n">sshd</span> <span class="n">-StartupType</span> <span class="n">Automatic</span> <span class="n">-Status</span> <span class="n">Running</span>
 
 <span class="nv">$firewallParams</span> <span class="p">=</span> <span class="p">@{</span>
-    <span class="n">Name</span>        <span class="p">=</span> <span class="s1">&#39;sshd-Server-In-TCP&#39;</span>
-    <span class="n">DisplayName</span> <span class="p">=</span> <span class="s1">&#39;Inbound rule for OpenSSH Server (sshd) on TCP port 22&#39;</span>
-    <span class="n">Action</span>      <span class="p">=</span> <span class="s1">&#39;Allow&#39;</span>
-    <span class="n">Direction</span>   <span class="p">=</span> <span class="s1">&#39;Inbound&#39;</span>
-    <span class="n">Enabled</span>     <span class="p">=</span> <span class="s1">&#39;True&#39;</span>  <span class="c"># This is not a boolean but an enum</span>
-    <span class="n">Profile</span>     <span class="p">=</span> <span class="s1">&#39;Any&#39;</span>
-    <span class="n">Protocol</span>    <span class="p">=</span> <span class="s1">&#39;TCP&#39;</span>
+    <span class="n">Name</span>        <span class="p">=</span> <span class="s1">'sshd-Server-In-TCP'</span>
+    <span class="n">DisplayName</span> <span class="p">=</span> <span class="s1">'Inbound rule for OpenSSH Server (sshd) on TCP port 22'</span>
+    <span class="n">Action</span>      <span class="p">=</span> <span class="s1">'Allow'</span>
+    <span class="n">Direction</span>   <span class="p">=</span> <span class="s1">'Inbound'</span>
+    <span class="n">Enabled</span>     <span class="p">=</span> <span class="s1">'True'</span>  <span class="c"># This is not a boolean but an enum</span>
+    <span class="n">Profile</span>     <span class="p">=</span> <span class="s1">'Any'</span>
+    <span class="n">Protocol</span>    <span class="p">=</span> <span class="s1">'TCP'</span>
     <span class="n">LocalPort</span>   <span class="p">=</span> <span class="n">22</span>
 <span class="p">}</span>
 <span class="nb">New-NetFirewallRule</span> <span class="nv">@firewallParams</span>
 
 <span class="nv">$shellParams</span> <span class="p">=</span> <span class="p">@{</span>
-    <span class="n">Path</span>         <span class="p">=</span> <span class="s1">&#39;HKLM:\SOFTWARE\OpenSSH&#39;</span>
-    <span class="n">Name</span>         <span class="p">=</span> <span class="s1">&#39;DefaultShell&#39;</span>
-    <span class="n">Value</span>        <span class="p">=</span> <span class="s1">&#39;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&#39;</span>
-    <span class="n">PropertyType</span> <span class="p">=</span> <span class="s1">&#39;String&#39;</span>
+    <span class="n">Path</span>         <span class="p">=</span> <span class="s1">'HKLM:\SOFTWARE\OpenSSH'</span>
+    <span class="n">Name</span>         <span class="p">=</span> <span class="s1">'DefaultShell'</span>
+    <span class="n">Value</span>        <span class="p">=</span> <span class="s1">'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'</span>
+    <span class="n">PropertyType</span> <span class="p">=</span> <span class="s1">'String'</span>
     <span class="n">Force</span>        <span class="p">=</span> <span class="nv">$true</span>
 <span class="p">}</span>
 <span class="nb">New-ItemProperty</span> <span class="nv">@shellParams</span>
@@ -344,10 +346,10 @@
 <p>By default, OpenSSH on Windows uses <code class="docutils literal notranslate"><span class="pre">cmd.exe</span></code> as the default shell. While Ansible can work with this default shell it is recommended to change this to <code class="docutils literal notranslate"><span class="pre">powershell.exe</span></code> as it is better tested and should be faster than having <code class="docutils literal notranslate"><span class="pre">cmd.exe</span></code> as the default. To change the default shell you can use the following PowerShell script:</p>
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Set default to powershell.exe</span>
 <span class="nv">$shellParams</span> <span class="p">=</span> <span class="p">@{</span>
-    <span class="n">Path</span>         <span class="p">=</span> <span class="s1">&#39;HKLM:\SOFTWARE\OpenSSH&#39;</span>
-    <span class="n">Name</span>         <span class="p">=</span> <span class="s1">&#39;DefaultShell&#39;</span>
-    <span class="n">Value</span>        <span class="p">=</span> <span class="s1">&#39;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&#39;</span>
-    <span class="n">PropertyType</span> <span class="p">=</span> <span class="s1">&#39;String&#39;</span>
+    <span class="n">Path</span>         <span class="p">=</span> <span class="s1">'HKLM:\SOFTWARE\OpenSSH'</span>
+    <span class="n">Name</span>         <span class="p">=</span> <span class="s1">'DefaultShell'</span>
+    <span class="n">Value</span>        <span class="p">=</span> <span class="s1">'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'</span>
+    <span class="n">PropertyType</span> <span class="p">=</span> <span class="s1">'String'</span>
     <span class="n">Force</span>        <span class="p">=</span> <span class="nv">$true</span>
 <span class="p">}</span>
 <span class="nb">New-ItemProperty</span> <span class="nv">@shellParams</span>
@@ -486,7 +488,7 @@ Valid<span class="w"> </span>starting<span class="w">     </span>Expires<span cl
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="windows_performance.html" class="btn btn-neutral float-left" title="Windows performance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="windows_pwsh.html" class="btn btn-neutral float-left" title="PowerShell 7 Support" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="windows_usage.html" class="btn btn-neutral float-right" title="Using Ansible and Windows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -494,7 +496,7 @@ Valid<span class="w"> </span>starting<span class="w">     </span>Expires<span cl
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 21, 2026.
+      <span class="lastupdated">Last updated on Nov 27, 2026.
       </span></p>
   </div>
 

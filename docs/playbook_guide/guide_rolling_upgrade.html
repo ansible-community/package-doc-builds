@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Playbook Example: Continuous Delivery and Rolling Upgrades &mdash; Ansible Community Documentation</title>
@@ -19,15 +19,15 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Executing playbooks" href="playbooks_execution.html" />
-    <link rel="prev" title="Play Argument Validation" href="playbooks_variables_validation.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="Masking secrets in Ansible output" href="playbooks_secret_masking.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -122,6 +122,7 @@
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html">Play Argument Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html#specification-format">Specification Format</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html#sample-specification">Sample Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_secret_masking.html">Masking secrets in Ansible output</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Playbook Example: Continuous Delivery and Rolling Upgrades</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#what-is-continuous-delivery">What is continuous delivery?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#site-deployment">Site deployment</a></li>
@@ -135,6 +136,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks_execution.html">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbook_pathing.html">Search paths in Ansible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced playbook syntax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="complex_data_manipulation.html">Manipulating data</a></li>
 </ul>
@@ -350,7 +352,7 @@ as push updates to all of the servers:</p>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
 
 <span class="c1"># Configure and deploy the web servers. Note that we include two roles</span>
-<span class="c1"># here, the &#39;base-apache&#39; role which simply sets up Apache, and &#39;web&#39;</span>
+<span class="c1"># here, the 'base-apache' role which simply sets up Apache, and 'web'</span>
 <span class="c1"># which includes our example web application.</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
@@ -421,15 +423,15 @@ NTP server that our machines should use for time synchronization.</p>
 <p>These variables are used in a variety of places. You can use them in playbooks, like this, in <code class="docutils literal notranslate"><span class="pre">roles/db/tasks/main.yml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create Application Database</span>
 <span class="w">  </span><span class="nt">mysql_db</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">dbname</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">dbname</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create Application DB User</span>
 <span class="w">  </span><span class="nt">mysql_user</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">dbuser</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">upassword</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">    </span><span class="nt">priv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.*:ALL&quot;</span>
-<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%&#39;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">dbuser</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">upassword</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">    </span><span class="nt">priv</span><span class="p">:</span><span class="w"> </span><span class="s">"*.*:ALL"</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">'%'</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 </pre></div>
 </div>
@@ -450,7 +452,7 @@ keys /etc/ntp/keys
 inside the curly braces is Jinja2, and you can do all sorts of operations and apply different filters to the
 data inside. In templates, you can also use for loops and if statements to handle more complex situations,
 like this, in <code class="docutils literal notranslate"><span class="pre">roles/common/templates/iptables.j2</span></code>:</p>
-<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">inventory_hostname</span> <span class="k">in</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;dbservers&#39;</span><span class="o">]</span> <span class="cp">%}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">inventory_hostname</span> <span class="k">in</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">'dbservers'</span><span class="o">]</span> <span class="cp">%}</span>
 <span class="x">-A INPUT -p tcp  --dport 3306 -j  ACCEPT</span>
 <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
 </pre></div>
@@ -458,7 +460,7 @@ like this, in <code class="docutils literal notranslate"><span class="pre">roles
 <p>This is testing to see if the inventory name of the machine we’re currently operating on (<code class="docutils literal notranslate"><span class="pre">inventory_hostname</span></code>)
 exists in the inventory group <code class="docutils literal notranslate"><span class="pre">dbservers</span></code>. If so, that machine will get an iptables ACCEPT line for port 3306.</p>
 <p>Here’s another example, from the same template:</p>
-<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">host</span> <span class="k">in</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">&#39;monitoring&#39;</span><span class="o">]</span> <span class="cp">%}</span>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">host</span> <span class="k">in</span> <span class="nv">groups</span><span class="o">[</span><span class="s1">'monitoring'</span><span class="o">]</span> <span class="cp">%}</span>
 <span class="x">-A INPUT -p tcp -s </span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">host</span><span class="o">]</span><span class="nv">.ansible_default_ipv4.address</span> <span class="cp">}}</span><span class="x"> --dport 5666 -j ACCEPT</span>
 <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
 </pre></div>
@@ -492,15 +494,15 @@ refers to orchestration as ‘conducting machines like an orchestra’, and has 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disable nagios alerts for this host webserver service</span>
 <span class="w">  </span><span class="nt">nagios</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disable_alerts</span>
-<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">    </span><span class="nt">services</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webserver</span>
-<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">groups.monitoring</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">groups.monitoring</span><span class="nv"> </span><span class="s">}}"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disable the server in haproxy</span>
-<span class="w">  </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;disable server myapplb/{{ inventory_hostname }}&quot; | socat stdio /var/lib/haproxy/stats</span>
-<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">groups.lbservers</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "disable server myapplb/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">groups.lbservers</span><span class="nv"> </span><span class="s">}}"</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -523,17 +525,17 @@ This has some consequences on play behavior. For example, if all hosts in a batc
 <p>Finally, in the <code class="docutils literal notranslate"><span class="pre">post_tasks</span></code> section, we reverse the changes to the Nagios configuration and put the web server back in the load balancing pool:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">post_tasks</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable the server in haproxy</span>
-<span class="w">  </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;enable server myapplb/{{ inventory_hostname }}&quot; | socat stdio /var/lib/haproxy/stats</span>
-<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">groups.lbservers</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "enable server myapplb/{{ inventory_hostname }}" | socat stdio /var/lib/haproxy/stats</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">groups.lbservers</span><span class="nv"> </span><span class="s">}}"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">re-enable nagios alerts</span>
 <span class="w">  </span><span class="nt">nagios</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enable_alerts</span>
-<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">inventory_hostname</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">    </span><span class="nt">services</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webserver</span>
-<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">groups.monitoring</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">groups.monitoring</span><span class="nv"> </span><span class="s">}}"</span>
 </pre></div>
 </div>
 <p>Again, if you were using a Netscaler or F5 or Elastic Load Balancer, you would just substitute in the appropriate modules instead.</p>
@@ -571,7 +573,7 @@ This has some consequences on play behavior. For example, if all hosts in a batc
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="playbooks_variables_validation.html" class="btn btn-neutral float-left" title="Play Argument Validation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbooks_secret_masking.html" class="btn btn-neutral float-left" title="Masking secrets in Ansible output" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="playbooks_execution.html" class="btn btn-neutral float-right" title="Executing playbooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -579,7 +581,7 @@ This has some consequences on play behavior. For example, if all hosts in a batc
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 21, 2026.
+      <span class="lastupdated">Last updated on Nov 27, 2026.
       </span></p>
   </div>
 

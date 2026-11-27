@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lookups &mdash; Ansible Community Documentation</title>
@@ -19,8 +19,8 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
@@ -126,10 +126,12 @@
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html">Play Argument Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html#specification-format">Specification Format</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html#sample-specification">Sample Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_secret_masking.html">Masking secrets in Ansible output</a></li>
 <li class="toctree-l3"><a class="reference internal" href="guide_rolling_upgrade.html">Playbook Example: Continuous Delivery and Rolling Upgrades</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks_execution.html">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbook_pathing.html">Search paths in Ansible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced playbook syntax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="complex_data_manipulation.html">Manipulating data</a></li>
 </ul>
@@ -304,10 +306,10 @@
 <span id="lookups-and-variables"></span><h2>The lookup function<a class="headerlink" href="#the-lookup-function" title="Link to this heading"></a></h2>
 <p>You can use the <code class="docutils literal notranslate"><span class="pre">lookup</span></code> function to populate variables dynamically. Ansible evaluates the value each time it is executed in a task (or template).</p>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">motd_value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;file&#39;</span><span class="o">,</span> <span class="s1">&#39;/etc/motd&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">  </span><span class="nt">motd_value</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">'file'</span><span class="o">,</span> <span class="s1">'/etc/motd'</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="nt">tasks</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;motd</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">motd_value</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"motd</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">motd_value</span> <span class="cp">}}</span><span class="s">"</span>
 </pre></div>
 </div>
 <p>The first argument to the <code class="docutils literal notranslate"><span class="pre">lookup</span></code> function is required and specifies the name of the lookup plugin. If the lookup plugin is in a collection, the fully qualified name must be provided, since the <a class="reference internal" href="../collections_guide/collections_using_playbooks.html#collections-keyword"><span class="std std-ref">collections keyword</span></a> does not apply to lookup plugins.</p>
@@ -319,12 +321,12 @@
 <p>This function is shorthand for <code class="docutils literal notranslate"><span class="pre">lookup(...,</span> <span class="pre">wantlist=True)</span></code>. These are equivalent:</p>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nt">block</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">&#39;ns.col.lookup_items&#39;</span><span class="o">,</span> <span class="nv">wantlist</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">lookup</span><span class="o">(</span><span class="s1">'ns.col.lookup_items'</span><span class="o">,</span> <span class="nv">wantlist</span><span class="o">=</span><span class="kp">True</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
-<span class="w">    </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">q</span><span class="o">(</span><span class="s1">&#39;ns.col.lookup_items&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">      </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">"</span>
+<span class="w">    </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">q</span><span class="o">(</span><span class="s1">'ns.col.lookup_items'</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
 </pre></div>
 </div>
 <p>For more details and a list of lookup plugins in ansible-core, see <a class="reference internal" href="../plugins/plugins.html#plugins-lookup"><span class="std std-ref">Working with plugins</span></a>. You may also find lookup plugins in collections. You can review a list of lookup plugins installed on your control machine with the command <code class="docutils literal notranslate"><span class="pre">ansible-doc</span> <span class="pre">-l</span> <span class="pre">-t</span> <span class="pre">lookup</span></code>.</p>
@@ -360,7 +362,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 21, 2026.
+      <span class="lastupdated">Last updated on Nov 27, 2026.
       </span></p>
   </div>
 

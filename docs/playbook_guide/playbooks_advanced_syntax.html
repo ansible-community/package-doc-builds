@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Advanced playbook syntax &mdash; Ansible Community Documentation</title>
@@ -19,15 +19,15 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Manipulating data" href="complex_data_manipulation.html" />
-    <link rel="prev" title="Controlling playbook execution: strategies and more" href="playbooks_strategies.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+    <link rel="prev" title="Search paths in Ansible" href="playbook_pathing.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
 
@@ -99,6 +99,7 @@
 <li class="toctree-l2"><a class="reference internal" href="playbooks_intro.html">Ansible playbooks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks.html">Working with playbooks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks_execution.html">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbook_pathing.html">Search paths in Ansible</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Advanced playbook syntax</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#unsafe-or-raw-strings">Unsafe or raw strings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#yaml-anchors-and-aliases-sharing-variable-values">YAML anchors and aliases: sharing variable values</a></li>
@@ -285,7 +286,7 @@ You can find additional information about Python-specific YAML in the official <
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
 <span class="nt">vars</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">my_unsafe_variable</span><span class="p">:</span><span class="w"> </span><span class="kt">!unsafe</span><span class="w"> </span><span class="s">&#39;unsafe</span><span class="nv"> </span><span class="s">%</span><span class="nv"> </span><span class="s">value&#39;</span>
+<span class="w">  </span><span class="nt">my_unsafe_variable</span><span class="p">:</span><span class="w"> </span><span class="kt">!unsafe</span><span class="w"> </span><span class="s">'unsafe</span><span class="nv"> </span><span class="s">%</span><span class="nv"> </span><span class="s">value'</span>
 <span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </pre></div>
@@ -293,11 +294,11 @@ You can find additional information about Python-specific YAML in the official <
 <p>For complex variables such as hashes or arrays, use <code class="docutils literal notranslate"><span class="pre">!unsafe</span></code> on the individual elements:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="nt">my_unsafe_array</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!unsafe</span><span class="w"> </span><span class="s">&#39;unsafe</span><span class="nv"> </span><span class="s">element&#39;</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;safe</span><span class="nv"> </span><span class="s">element&#39;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="kt">!unsafe</span><span class="w"> </span><span class="s">'unsafe</span><span class="nv"> </span><span class="s">element'</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'safe</span><span class="nv"> </span><span class="s">element'</span>
 
 <span class="nt">my_unsafe_hash</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">unsafe_key</span><span class="p">:</span><span class="w"> </span><span class="kt">!unsafe</span><span class="w"> </span><span class="s">&#39;unsafe</span><span class="nv"> </span><span class="s">value&#39;</span>
+<span class="w">  </span><span class="nt">unsafe_key</span><span class="p">:</span><span class="w"> </span><span class="kt">!unsafe</span><span class="w"> </span><span class="s">'unsafe</span><span class="nv"> </span><span class="s">value'</span>
 </pre></div>
 </div>
 </section>
@@ -310,7 +311,7 @@ You define an anchor with <code class="docutils literal notranslate"><span class
 <span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">app1</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">jvm</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;jvm_opts</span>
-<span class="w">      </span><span class="nt">opts</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-Xms1G</span><span class="nv"> </span><span class="s">-Xmx2G&#39;</span>
+<span class="w">      </span><span class="nt">opts</span><span class="p">:</span><span class="w"> </span><span class="s">'-Xms1G</span><span class="nv"> </span><span class="s">-Xmx2G'</span>
 <span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
 <span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/lib/app1</span>
 <span class="w">  </span><span class="nt">app2</span><span class="p">:</span>
@@ -333,7 +334,7 @@ The value for <code class="docutils literal notranslate"><span class="pre">path<
 <span class="w">  </span><span class="nt">webapp</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;my_version</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
 <span class="w">      </span><span class="nt">custom_name</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ToDo_App&quot;</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"ToDo_App"</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nv">*my_version</span>
 </pre></div>
 </div>
@@ -345,12 +346,12 @@ The value for <code class="docutils literal notranslate"><span class="pre">path<
 <span class="w">    </span><span class="nt">webapp</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;my_version</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
 <span class="w">      </span><span class="nt">custom_name</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;ToDo_App&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"ToDo_App"</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nv">*my_version</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Using Anchor value</span>
 <span class="w">    </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My app is called &quot;{{ webapp.custom_name | join(&#39;-&#39;) }}&quot;.</span>
+<span class="w">      </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My app is called "{{ webapp.custom_name | join('-') }}".</span>
 </pre></div>
 </div>
 <p>You’ve anchored the value of <code class="docutils literal notranslate"><span class="pre">version</span></code> with the <code class="docutils literal notranslate"><span class="pre">&amp;my_version</span></code> anchor and reused it with the <code class="docutils literal notranslate"><span class="pre">*my_version</span></code> alias. Anchors and aliases let you access nested values inside dictionaries.</p>
@@ -374,7 +375,7 @@ The value for <code class="docutils literal notranslate"><span class="pre">path<
           
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="playbooks_strategies.html" class="btn btn-neutral float-left" title="Controlling playbook execution: strategies and more" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playbook_pathing.html" class="btn btn-neutral float-left" title="Search paths in Ansible" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="complex_data_manipulation.html" class="btn btn-neutral float-right" title="Manipulating data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -382,7 +383,7 @@ The value for <code class="docutils literal notranslate"><span class="pre">path<
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 21, 2026.
+      <span class="lastupdated">Last updated on Nov 27, 2026.
       </span></p>
   </div>
 

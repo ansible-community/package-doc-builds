@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Conditionals &mdash; Ansible Community Documentation</title>
@@ -19,8 +19,8 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
@@ -127,10 +127,12 @@
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html">Play Argument Validation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html#specification-format">Specification Format</a></li>
 <li class="toctree-l3"><a class="reference internal" href="playbooks_variables_validation.html#sample-specification">Sample Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="playbooks_secret_masking.html">Masking secrets in Ansible output</a></li>
 <li class="toctree-l3"><a class="reference internal" href="guide_rolling_upgrade.html">Playbook Example: Continuous Delivery and Rolling Upgrades</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks_execution.html">Executing playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="playbook_pathing.html">Search paths in Ansible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="playbooks_advanced_syntax.html">Advanced playbook syntax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="complex_data_manipulation.html">Manipulating data</a></li>
 </ul>
@@ -349,7 +351,7 @@
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql_connect_any</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">persistent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_selinux.status == &quot;enabled&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_selinux.status == "enabled"</span>
 <span class="w">    </span><span class="c1"># all variables can be used directly in conditionals without double curly braces</span>
 </pre></div>
 </div>
@@ -373,15 +375,15 @@
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down Debian flavored systems</span>
 <span class="w">    </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sbin/shutdown -t now</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;] == &quot;Debian&quot;</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts['os_family'] == "Debian"</span>
 </pre></div>
 </div>
 <p>If you have multiple conditions, you can group them with parentheses:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down CentOS 6 and Debian 7 systems</span>
 <span class="w">    </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sbin/shutdown -t now</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(ansible_facts[&#39;distribution&#39;] == &quot;CentOS&quot; and ansible_facts[&#39;distribution_major_version&#39;] == &quot;6&quot;) or</span>
-<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">(ansible_facts[&#39;distribution&#39;] == &quot;Debian&quot; and ansible_facts[&#39;distribution_major_version&#39;] == &quot;7&quot;)</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "6") or</span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">(ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7")</span>
 </pre></div>
 </div>
 <p>You can use <a class="reference external" href="https://jinja.palletsprojects.com/en/latest/templates/#logic">logical operators</a> to combine conditions. When you have multiple conditions that all need to be true (that is, a logical <code class="docutils literal notranslate"><span class="pre">and</span></code>), you can specify them as a list:</p>
@@ -389,25 +391,25 @@
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down CentOS 6 systems</span>
 <span class="w">    </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sbin/shutdown -t now</span>
 <span class="w">    </span><span class="nt">when</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;distribution&#39;] == &quot;CentOS&quot;</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;distribution_major_version&#39;] == &quot;6&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts['distribution'] == "CentOS"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts['distribution_major_version'] == "6"</span>
 </pre></div>
 </div>
 <p>If a fact or variable is a string, and you need to run a mathematical comparison on it, use a filter to ensure that Ansible reads the value as an integer:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;only on Red Hat 6, derivatives, and later&quot;</span>
-<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;] == &quot;RedHat&quot; and ansible_facts[&#39;lsb&#39;][&#39;major_release&#39;] | int &gt;= 6</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "only on Red Hat 6, derivatives, and later"</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int &gt;= 6</span>
 </pre></div>
 </div>
 <p>You can store Ansible facts as variables to use for conditional logic, as in the following example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get the CPU temperature</span>
 <span class="w">      </span><span class="nt">set_fact</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">ansible_facts[&#39;cpu_temperature&#39;]</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">        </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">ansible_facts['cpu_temperature']</span><span class="nv"> </span><span class="s">}}"</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart the system if the temperature is too high</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">temperature | float &gt; 90</span>
-<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;reboot&quot;</span>
+<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="s">"reboot"</span>
 </pre></div>
 </div>
 </section>
@@ -431,8 +433,8 @@
 <span class="w">        </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motd_contents</span>
 
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use the variable in conditional statement</span>
-<span class="w">        </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;motd contains the word hi&quot;</span>
-<span class="w">        </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motd_contents.stdout.find(&#39;hi&#39;) != -1</span>
+<span class="w">        </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "motd contains the word hi"</span>
+<span class="w">        </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motd_contents.stdout.find('hi') != -1</span>
 </pre></div>
 </div>
 <p>You can use registered results in the loop of a task if the variable is a list. If the variable is not a list, you can convert it into a list, with either <code class="docutils literal notranslate"><span class="pre">stdout_lines</span></code> or with <code class="docutils literal notranslate"><span class="pre">variable.stdout.split()</span></code>. You can also split the lines by other fields:</p>
@@ -449,8 +451,8 @@
 <span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mnt/bkspool/{{ item }}</span>
 <span class="w">        </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/{{ item }}</span>
 <span class="w">        </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">link</span>
-<span class="w">      </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">home_dirs.stdout_lines</span><span class="nv"> </span><span class="s">}}&quot;</span>
-<span class="w">      </span><span class="c1"># same as loop: &quot;{{ home_dirs.stdout.split() }}&quot;</span>
+<span class="w">      </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">home_dirs.stdout_lines</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">      </span><span class="c1"># same as loop: "{{ home_dirs.stdout.split() }}"</span>
 </pre></div>
 </div>
 <p>The string content of a registered variable can be empty. If you want to run another task only on hosts where the stdout of your registered variable is empty, check the registered variable’s string contents for emptiness:</p>
@@ -465,8 +467,8 @@
 
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check contents for emptiness</span>
 <span class="w">        </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Directory</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">empty&quot;</span>
-<span class="w">        </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">contents.stdout == &quot;&quot;</span>
+<span class="w">          </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">"Directory</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">empty"</span>
+<span class="w">        </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">contents.stdout == ""</span>
 </pre></div>
 </div>
 <p>Ansible always registers something in a registered variable for every host, even on hosts where a task fails or Ansible skips a task because a condition is not met. To run a follow-up task on these hosts, query the registered variable for <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">skipped</span></code> (not for “undefined” or “default”). See <a class="reference internal" href="playbooks_variables.html#registered-variables"><span class="std std-ref">Registering variables</span></a> for more information. Here are sample conditionals based on the success or failure of a task. Remember to ignore errors if you want Ansible to continue executing on a host when a failure occurs:</p>
@@ -476,19 +478,19 @@
 <span class="w">    </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result</span>
 <span class="w">    </span><span class="nt">ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the &quot;result&quot; variable fails</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the "result" variable fails</span>
 <span class="w">    </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/something</span>
 <span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result is failed</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the &quot;result&quot; variable succeeds</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the "result" variable succeeds</span>
 <span class="w">    </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/something_else</span>
 <span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result is succeeded</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the &quot;result&quot; variable is skipped</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the "result" variable is skipped</span>
 <span class="w">    </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/still/something_else</span>
 <span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result is skipped</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the &quot;result&quot; variable changed something.</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run only if the task that registered the "result" variable changed something.</span>
 <span class="w">    </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/still/something_else</span>
 <span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">result is changed</span>
 </pre></div>
@@ -497,34 +499,58 @@
 <p class="admonition-title">Note</p>
 <p>Older versions of Ansible used <code class="docutils literal notranslate"><span class="pre">success</span></code> and <code class="docutils literal notranslate"><span class="pre">fail</span></code>, but <code class="docutils literal notranslate"><span class="pre">succeeded</span></code> and <code class="docutils literal notranslate"><span class="pre">failed</span></code> use the correct tense. All of these options are now valid.</p>
 </div>
+<p>In loops, you can use the implicit <code class="docutils literal notranslate"><span class="pre">_task</span></code> variable to access the previous iteration’s result in <code class="docutils literal notranslate"><span class="pre">when</span></code> conditionals.
+Since conditionals are evaluated during iteration, you must provide a default value for the first iteration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run each step only if the previous one ran and succeeded</span>
+<span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="s">"/opt/scripts/{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}.sh"</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">initialize</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">validate</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_task.result | default({}) is not failed and _task.result | default({}) is not skipped</span>
+</pre></div>
+</div>
+<p>You can also use <code class="docutils literal notranslate"><span class="pre">_task.loop_result</span></code> to access all accumulated results during iteration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Stop after processing two items</span>
+<span class="w">  </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/process {{ item }}</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">4</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">6</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(_task.loop_result.results | default([]) | length) &lt; 2</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">default</span></code> filter is required in conditionals because they are evaluated during each iteration.
+In contrast, register projections are evaluated after the task completes, so <code class="docutils literal notranslate"><span class="pre">default</span></code> is not needed there.
+See <a class="reference internal" href="playbooks_loops.html#playbooks-loops"><span class="std std-ref">Loops</span></a> for examples of using <code class="docutils literal notranslate"><span class="pre">_task.loop_result</span></code> in register projections.</p>
+</div>
 </section>
 <section id="conditionals-based-on-variables">
 <h3><a class="toc-backref" href="#id6" role="doc-backlink">Conditionals based on variables</a><a class="headerlink" href="#conditionals-based-on-variables" title="Link to this heading"></a></h3>
 <p>You can also create conditionals based on variables defined in the playbooks or inventory. Because conditionals require boolean input (a test must evaluate as True to trigger the condition), you must apply the <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">bool</span></code> filter to non-boolean variables, such as string variables with content like ‘yes’, ‘on’, ‘1’, or ‘true’. You can define variables like this:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">epic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">monumental</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;yes&quot;</span>
+<span class="w">  </span><span class="nt">monumental</span><span class="p">:</span><span class="w"> </span><span class="s">"yes"</span>
 </pre></div>
 </div>
 <p>With the variables above, Ansible would run one of these tasks and skip the other:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the command if &quot;epic&quot; or &quot;monumental&quot; is true</span>
-<span class="w">      </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;This certainly is epic!&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the command if "epic" or "monumental" is true</span>
+<span class="w">      </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "This certainly is epic!"</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">epic or monumental | bool</span>
 
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the command if &quot;epic&quot; is false</span>
-<span class="w">      </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;This certainly isn&#39;t epic!&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the command if "epic" is false</span>
+<span class="w">      </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "This certainly isn't epic!"</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">not epic</span>
 </pre></div>
 </div>
 <p>If a required variable has not been set, you can skip or fail using Jinja2’s <cite>defined</cite> test. For example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the command if &quot;foo&quot; is defined</span>
-<span class="w">      </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;I&#39;ve got &#39;{{ foo }}&#39; and am not afraid to use it!&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the command if "foo" is defined</span>
+<span class="w">      </span><span class="nt">ansible.builtin.shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo "I've got '{{ foo }}' and am not afraid to use it!"</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo is defined</span>
 
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fail if &quot;bar&quot; is undefined</span>
-<span class="w">      </span><span class="nt">ansible.builtin.fail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msg=&quot;Bailing out. This play requires &#39;bar&#39;&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fail if "bar" is undefined</span>
+<span class="w">      </span><span class="nt">ansible.builtin.fail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">msg="Bailing out. This play requires 'bar'"</span>
 <span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bar is undefined</span>
 </pre></div>
 </div>
@@ -544,14 +570,14 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 <p>If you need to skip the whole task when the loop variable is undefined, use the <cite>|default</cite> filter to provide an empty iterator. For example, when looping over a list:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Skip the whole task when a loop variable is undefined</span>
 <span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo {{ item }}</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">mylist|default([])</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">mylist|default([])</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item &gt; 5</span>
 </pre></div>
 </div>
 <p>You can do the same thing when looping over a dict:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The same as above using a dict</span>
 <span class="w">  </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo {{ item.key }}</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">query(&#39;dict&#39;,</span><span class="nv"> </span><span class="s">mydict|default({}))</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">query('dict',</span><span class="nv"> </span><span class="s">mydict|default({}))</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">item.value &gt; 5</span>
 </pre></div>
 </div>
@@ -565,7 +591,7 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use a custom fact</span>
 <span class="w">      </span><span class="nt">ansible.builtin.command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/bin/thingy</span>
-<span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_custom_fact_just_retrieved_from_the_remote_system == &#39;1234&#39;</span>
+<span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_custom_fact_just_retrieved_from_the_remote_system == '1234'</span>
 </pre></div>
 </div>
 </section>
@@ -579,7 +605,7 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 <span class="c1"># main.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">import_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">other_tasks.yml</span><span class="w"> </span><span class="c1"># note &quot;import&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">import_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">other_tasks.yml</span><span class="w"> </span><span class="c1"># note "import"</span>
 <span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
 
 <span class="c1"># other_tasks.yml</span>
@@ -599,7 +625,7 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 <span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
 <span class="w">  </span><span class="c1"># this task sets a value for x</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Do the task if &quot;x&quot; is not defined</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Do the task if "x" is not defined</span>
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">x</span>
 <span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
@@ -612,7 +638,7 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 <span class="c1"># main.yml</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">include_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">other_tasks.yml</span><span class="w"> </span><span class="c1"># note &quot;include&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">include_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">other_tasks.yml</span><span class="w"> </span><span class="c1"># note "include"</span>
 <span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">x is not defined</span>
 </pre></div>
 </div>
@@ -672,7 +698,7 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
 <span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
 <span class="w">     </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debian_stock_config</span>
-<span class="w">       </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts[&#39;os_family&#39;] == &#39;Debian&#39;</span>
+<span class="w">       </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts['os_family'] == 'Debian'</span>
 </pre></div>
 </div>
 </section>
@@ -701,16 +727,16 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webservers</span>
 <span class="w">  </span><span class="nt">remote_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span>
 <span class="w">  </span><span class="nt">vars_files</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;vars/common.yml&quot;</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="s">&quot;vars/{{</span><span class="nv"> </span><span class="s">ansible_facts[&#39;os_family&#39;]</span><span class="nv"> </span><span class="s">}}.yml&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;vars/os_defaults.yml&quot;</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"vars/common.yml"</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="s">"vars/{{</span><span class="nv"> </span><span class="s">ansible_facts['os_family']</span><span class="nv"> </span><span class="s">}}.yml"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"vars/os_defaults.yml"</span><span class="w"> </span><span class="p p-Indicator">]</span>
 <span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Make sure apache is started</span>
 <span class="w">    </span><span class="nt">ansible.builtin.service</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">apache</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv"> </span><span class="s">apache</span><span class="nv"> </span><span class="s">}}'</span>
 <span class="w">      </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
 </pre></div>
 </div>
-<p>Ansible gathers facts on the hosts in the webservers group, then interpolates the variable “ansible_facts[‘os_family’]” into a list of file names. If you have hosts with Red Hat operating systems (CentOS, for example), Ansible looks for ‘vars/RedHat.yml’. If that file does not exist, Ansible attempts to load ‘vars/os_defaults.yml’. For Debian hosts, Ansible first looks for ‘vars/Debian.yml’, before falling back on ‘vars/os_defaults.yml’. If no files in the list are found, Ansible raises an error.</p>
+<p>Ansible gathers facts on the hosts in the webservers group, then interpolates the variable “ansible_facts[‘os_family’]” into a list of file names. If you have hosts with Red Hat operating systems (CentOS, for example), Ansible looks for ‘vars/RedHat.yml’. If that file does not exist, Ansible attempts to load ‘vars/os_defaults.yml’. For Debian hosts, Ansible first looks for ‘vars/Debian.yml’, before falling back on ‘vars/os_defaults.yml’.</p>
 </section>
 <section id="selecting-files-and-templates-based-on-facts">
 <h4><a class="toc-backref" href="#id15" role="doc-backlink">Selecting files and templates based on facts</a><a class="headerlink" href="#selecting-files-and-templates-based-on-facts" title="Link to this heading"></a></h4>
@@ -718,14 +744,14 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 <p>For example, you can template out a configuration file that is very different between, say, CentOS and Debian:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Template a file</span>
 <span class="w">  </span><span class="nt">ansible.builtin.template</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">item</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/myapp/foo.conf</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">query(&#39;first_found&#39;,</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">&#39;files&#39;:</span><span class="nv"> </span><span class="s">myfiles,</span><span class="nv"> </span><span class="s">&#39;paths&#39;:</span><span class="nv"> </span><span class="s">mypaths})</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">query('first_found',</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">'files':</span><span class="nv"> </span><span class="s">myfiles,</span><span class="nv"> </span><span class="s">'paths':</span><span class="nv"> </span><span class="s">mypaths})</span><span class="nv"> </span><span class="s">}}"</span>
 <span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">myfiles</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">ansible_facts[&#39;distribution&#39;]</span><span class="nv"> </span><span class="s">}}.conf&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">ansible_facts['distribution']</span><span class="nv"> </span><span class="s">}}.conf"</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">default.conf</span>
-<span class="w">    </span><span class="nt">mypaths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;search_location_one/somedir/&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;/opt/other_location/somedir/&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">mypaths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'search_location_one/somedir/'</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">'/opt/other_location/somedir/'</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 </section>
@@ -740,7 +766,7 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check test for rc value as string</span>
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bar_status.rc == &quot;127&quot;</span>
+<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bar_status.rc == "127"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check test for rc value as integer</span>
 <span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
@@ -749,17 +775,17 @@ As the examples show, you do not need to use <cite>{{ }}</cite> to use variables
 </div>
 <div class="highlight-ansible-output notranslate"><div class="highlight"><pre><span></span><span class="k">TASK</span> <span class="p">[</span><span class="l">check value of return code</span><span class="p">]</span> <span class="nv">*********************************************************************************</span>
 <span class="k">ok</span><span class="p">:</span> <span class="p">[</span><span class="nv">foo-1</span><span class="p">]</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nt">&quot;bar_status.rc&quot;</span><span class="p">:</span> <span class="s">&quot;127&quot;</span>
+    <span class="nt">"bar_status.rc"</span><span class="p">:</span> <span class="s">"127"</span>
 <span class="p">}</span>
 
 <span class="k">TASK</span> <span class="p">[</span><span class="l">check test for rc value as string</span><span class="p">]</span> <span class="nv">**************************************************************************</span>
 <span class="k">ok</span><span class="p">:</span> <span class="p">[</span><span class="nv">foo-1</span><span class="p">]</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nt">&quot;bar_status.rc == \&quot;127\&quot;&quot;</span><span class="p">:</span> <span class="kc">false</span>
+    <span class="nt">"bar_status.rc == \"127\""</span><span class="p">:</span> <span class="kc">false</span>
 <span class="p">}</span>
 
 <span class="k">TASK</span> <span class="p">[</span><span class="l">check test for rc value as integer</span><span class="p">]</span> <span class="nv">*************************************************************************</span>
 <span class="k">ok</span><span class="p">:</span> <span class="p">[</span><span class="nv">foo-1</span><span class="p">]</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nt">&quot;bar_status.rc == 127&quot;</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="nt">"bar_status.rc == 127"</span><span class="p">:</span> <span class="kc">true</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -852,7 +878,7 @@ Windows
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 21, 2026.
+      <span class="lastupdated">Last updated on Nov 27, 2026.
       </span></p>
   </div>
 

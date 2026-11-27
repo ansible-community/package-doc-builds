@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Patterns: targeting hosts and groups &mdash; Ansible Community Documentation</title>
@@ -19,14 +19,14 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Connection methods and details" href="connection_details.html" />
+    <link rel="next" title="Implicit ‘localhost’" href="implicit_localhost.html" />
     <link rel="prev" title="Working with dynamic inventory" href="intro_dynamic_inventory.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 <script src="https://www.redhat.com/dtm.js"></script>
 
@@ -111,6 +111,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#patterns-and-ansible-playbook-flags">Patterns and ansible-playbook flags</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="implicit_localhost.html">Implicit ‘localhost’</a></li>
 <li class="toctree-l2"><a class="reference internal" href="connection_details.html">Connection methods and details</a></li>
 </ul>
 </li>
@@ -310,11 +311,11 @@ Ansible executes on all inventory hosts included in the pattern.</p>
 <section id="using-patterns">
 <h2><a class="toc-backref" href="#id2" role="doc-backlink">Using patterns</a><a class="headerlink" href="#using-patterns" title="Link to this heading"></a></h2>
 <p>You use a pattern almost any time you execute an ad hoc command or a playbook. The pattern is the only element of an <a class="reference internal" href="../command_guide/intro_adhoc.html#intro-adhoc"><span class="std std-ref">ad hoc command</span></a> that has no flag. It is usually the second element:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>&lt;pattern&gt;<span class="w"> </span>-m<span class="w"> </span>&lt;module_name&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;&lt;module options&gt;&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>&lt;pattern&gt;<span class="w"> </span>-m<span class="w"> </span>&lt;module_name&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">"&lt;module options&gt;"</span>
 </pre></div>
 </div>
 <p>For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>webservers<span class="w"> </span>-m<span class="w"> </span>service<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;name=httpd state=restarted&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible<span class="w"> </span>webservers<span class="w"> </span>-m<span class="w"> </span>service<span class="w"> </span>-a<span class="w"> </span><span class="s2">"name=httpd state=restarted"</span>
 </pre></div>
 </div>
 <p>In a playbook, the pattern is the content of the <code class="docutils literal notranslate"><span class="pre">hosts:</span></code> line for each play:</p>
@@ -495,25 +496,25 @@ You can also limit the hosts you target on a particular run with the <code class
 <ul class="simple">
 <li><p>Limit to one host</p></li>
 </ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-m<span class="w"> </span>&lt;module&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;&lt;module options&gt;&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="s2">&quot;host1&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-m<span class="w"> </span>&lt;module&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">"&lt;module options&gt;"</span><span class="w"> </span>--limit<span class="w"> </span><span class="s2">"host1"</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>Limit to multiple hosts</p></li>
 </ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-m<span class="w"> </span>&lt;module&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;&lt;module options&gt;&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="s2">&quot;host1,host2&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-m<span class="w"> </span>&lt;module&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">"&lt;module options&gt;"</span><span class="w"> </span>--limit<span class="w"> </span><span class="s2">"host1,host2"</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>Negated limit. Note that single quotes MUST be used to prevent bash interpolation.</p></li>
 </ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-m<span class="w"> </span>&lt;module&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;&lt;module options&gt;&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="s1">&#39;all:!host1&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-m<span class="w"> </span>&lt;module&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">"&lt;module options&gt;"</span><span class="w"> </span>--limit<span class="w"> </span><span class="s1">'all:!host1'</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>Limit to host group</p></li>
 </ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-m<span class="w"> </span>&lt;module&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;&lt;module options&gt;&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="s1">&#39;group1&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible<span class="w"> </span>all<span class="w"> </span>-m<span class="w"> </span>&lt;module&gt;<span class="w"> </span>-a<span class="w"> </span><span class="s2">"&lt;module options&gt;"</span><span class="w"> </span>--limit<span class="w"> </span><span class="s1">'group1'</span>
 </pre></div>
 </div>
 </section>
@@ -553,14 +554,14 @@ You can also limit the hosts you target on a particular run with the <code class
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="intro_dynamic_inventory.html" class="btn btn-neutral float-left" title="Working with dynamic inventory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="connection_details.html" class="btn btn-neutral float-right" title="Connection methods and details" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="implicit_localhost.html" class="btn btn-neutral float-right" title="Implicit ‘localhost’" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 21, 2026.
+      <span class="lastupdated">Last updated on Nov 27, 2026.
       </span></p>
   </div>
 

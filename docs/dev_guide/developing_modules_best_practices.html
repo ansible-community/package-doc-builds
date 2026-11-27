@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Conventions, tips, and pitfalls &mdash; Ansible Community Documentation</title>
@@ -19,8 +19,8 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=c7b8e248"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/js/theme.js"></script>
@@ -147,6 +147,7 @@
 <li class="toctree-l2"><a class="reference internal" href="developing_api.html">Python API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_rebasing.html">Rebasing a pull request</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_module_utilities.html">Using and developing module utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developing_secret_masking.html">Handling secrets in modules and plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_collections_path.html">Ansible collection creator path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="developing_collections.html">Developing collections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="migrating_roles.html">Migrating Roles to Roles in Collections on Galaxy</a></li>
@@ -367,7 +368,7 @@
 <li><p>Include a <code class="docutils literal notranslate"><span class="pre">main</span></code> function that wraps the normal execution.</p></li>
 <li><p>Call your <code class="docutils literal notranslate"><span class="pre">main</span></code> function from a conditional so you can import it into unit tests - for example:</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -395,7 +396,7 @@
 </div>
 <p>Then in <code class="docutils literal notranslate"><span class="pre">main()</span></code>, just after the argspec, do</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">HAS_LIB</span><span class="p">:</span>
-    <span class="n">module</span><span class="o">.</span><span class="n">fail_json</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">missing_required_lib</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">),</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">fail_json</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">missing_required_lib</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">),</span>
                      <span class="n">exception</span><span class="o">=</span><span class="n">LIB_IMP_ERR</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -470,7 +471,7 @@
 <li><p>If you must use the shell, you must pass <code class="docutils literal notranslate"><span class="pre">use_unsafe_shell=True</span></code> to <code class="docutils literal notranslate"><span class="pre">module.run_command</span></code>.</p></li>
 <li><p>If any variables in your module can come from user input with <code class="docutils literal notranslate"><span class="pre">use_unsafe_shell=True</span></code>, you must wrap them with <code class="docutils literal notranslate"><span class="pre">pipes.quote(x)</span></code>.</p></li>
 <li><p>When fetching URLs, use <code class="docutils literal notranslate"><span class="pre">fetch_url</span></code> or <code class="docutils literal notranslate"><span class="pre">open_url</span></code> from <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.urls</span></code>. Do not use <code class="docutils literal notranslate"><span class="pre">urllib2</span></code>, which does not natively verify TLS certificates and so is insecure for https.</p></li>
-<li><p>Sensitive values marked with <code class="docutils literal notranslate"><span class="pre">no_log=True</span></code> will automatically have that value stripped from module return values. If your module could return these sensitive values as part of a dictionary key name, you should call the <code class="docutils literal notranslate"><span class="pre">ansible.module_utils.basic.sanitize_keys()</span></code> function to strip the values from the keys. See the <code class="docutils literal notranslate"><span class="pre">uri</span></code> module for an example.</p></li>
+<li><p>Sensitive values marked with <code class="docutils literal notranslate"><span class="pre">no_log=True</span></code> are automatically hidden from Ansible output. Since <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code> 2.22 the value is preserved in the result and redacted in the output, on earlier versions the value is redacted in the result itself. See <a class="reference internal" href="developing_secret_masking.html#developing-secret-masking"><span class="std std-ref">Handling secrets in modules and plugins</span></a> for details.</p></li>
 </ul>
 </section>
 </section>
@@ -489,7 +490,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright Ansible project contributors.
-      <span class="lastupdated">Last updated on Aug 21, 2026.
+      <span class="lastupdated">Last updated on Nov 27, 2026.
       </span></p>
   </div>
 
